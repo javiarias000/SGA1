@@ -1,0 +1,258 @@
+{% extends 'classes/base.html' %}
+
+{% block title %}{{ student.name }}{% endblock %}
+{% block page_title %}👤 {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="student-detail-header">
+    <div class="student-info-card">
+        <div class="student-avatar-large">{{ student.name.0 }}</div>
+        <div>
+            <h2>{{ student.name }}</h2>
+            <p><strong>Año:</strong> {{ student.grade }}</p>
+            {% if student.parent_name %}
+            <p><strong>Padre/Madre:</strong> {{ student.parent_name }}</p>
+            {% endif %}
+            {% if student.parent_phone %}
+            <p><strong>Teléfono:</strong> {{ student.parent_phone }}</p>
+            {% endif %}
+            {% if student.parent_email %}
+            <p><strong>Email:</strong> {{ student.parent_email }}</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="stats-mini">
+        <div class="stat-mini">
+            <h3>{{ activities.count }}</h3>
+            <p>Clases Totales</p>
+        </div>
+        {% for subject, count in subjects_stats.items %}
+        <div class="stat-mini">
+            <h3>{{ count }}</h3>
+            <p>{{ subject }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- BOTONES DE ACCIÓN -->
+<div style="display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
+    <a href="{% url 'student_edit' student.id %}" class="btn btn-primary">✏️ Editar Información</a>
+    <a href="{% url 'student_code' student.id %}" class="btn btn-orange">🔑 Ver Código</a>
+    <a href="{% url 'report_card' student.id %}" class="btn btn-view">📒 Libreta Completa</a>
+    
+    {% if student.parent_phone %}
+        <a href="{% url 'whatsapp_grades' student.id %}" class="btn" style="background: #25D366; color: white;" target="_blank">
+            💬 Calificaciones (WhatsApp)
+        </a>
+        <a href="{% url 'whatsapp_attendance' student.id %}" class="btn" style="background: #128C7E; color: white;" target="_blank">
+            💬 Asistencia (WhatsApp)
+        </a>
+    {% else %}
+        <span class="btn" style="background: #E5E7EB; color: #6B7280; cursor: not-allowed;">
+            ⚠️ Sin Teléfono Configurado
+        </span>
+    {% endif %}
+    
+    {% if student.parent_email %}
+        <a href="{% url 'send_grades_email' student.id %}" class="btn" style="background: #3B82F6; color: white;">
+            📧 Enviar Calificaciones
+        </a>
+    {% endif %}
+</div>
+
+<div class="tabs-section mt-20">
+    <div class="tabs">
+        <button class="tab active" onclick="showSection('activities')">📚 Clases</button>
+        <button class="tab" onclick="showSection('grades')">📊 Calificaciones</button>
+    </div>
+    
+    <div id="activities-section" class="tab-section active">
+        <h3 class="mt-20">📚 Historial de Clases</h3>
+        {% for activity in activities %}
+        <div class="activity-card mt-20">
+            <div class="activity-header">
+                <div>
+                    <h4>Clase #{{ activity.class_number }} - {{ activity.subject }}</h4>
+                    <p>{{ activity.date|date:"d \\d\\e F \\d\\e Y" }}</p>
+                </div>
+                <span class="badge badge-{{ activity.performance|lower|slugify }}">{{ activity.performance }}</span>
+            </div>
+            <div style="margin-top: 15px;">
+                <p><strong>Temas:</strong> {{ activity.topics_worked|default:"-" }}</p>
+                <p><strong>Repertorio:</strong> {{ activity.pieces|default:"-" }}</p>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <a href="{% url 'download_parent' activity.id %}" class="btn btn-secondary">🏠 Informe Padres</a>
+                <a href="{% url 'download_teacher' activity.id %}" class="btn btn-purple">📄 Informe Docente</a>
+                <a href="{% url 'activity_edit' activity.id %}" class="btn btn-view">✏️ Editar</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-state">No hay clases registradas para este estudiante</p>
+        {% endfor %}
+    </div>
+    
+    <div id="grades-section" class="tab-section">
+        <h3 class="mt-20">📊 Calificaciones</h3>
+        {% for grade in grades %}
+        <div class="grade-card mt-20">
+            <div class="flex-between">
+                <div>
+                    <h4>{{ grade.subject }}</h4>
+                    <p>{{ grade.period }}</p>
+                    <p style="font-size: 13px; color: #6B7280;">{{ grade.date|date:"d M Y" }}</p>
+                </div>
+                <div class="grade-score">
+                    <h2>{{ grade.score }}</h2>
+                    <p>/ 10</p>
+                </div>
+            </div>
+            {% if grade.comments %}
+            <p class="mt-20"><strong>Comentarios:</strong> {{ grade.comments }}</p>
+            {% endif %}
+            <div style="display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #E5E7EB;">
+                <a href="{% url 'grade_edit' grade.id %}" class="btn btn-view" style="font-size: 13px;">✏️ Editar</a>
+                <a href="{% url 'grade_delete' grade.id %}" class="btn btn-danger" style="font-size: 13px; padding: 8px 15px;">🗑️ Eliminar</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-state">No hay calificaciones registradas</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-20">
+    <a href="{% url 'estudiantes' %}" class="btn btn-view">← Volver a Estudiantes</a>
+</div>
+
+<script>
+function showSection(section) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(section + '-section').classList.add('active');
+}
+</script>
+
+<style>
+.student-detail-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.student-info-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.student-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.stats-mini {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.stat-mini {
+    padding: 15px 0;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.stat-mini:last-child {
+    border-bottom: none;
+}
+
+.stat-mini h3 {
+    font-size: 2em;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.tabs-section .tabs {
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.tabs-section .tab {
+    flex: 1;
+    padding: 15px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tabs-section .tab:hover {
+    background: #F3F4F6;
+}
+
+.tabs-section .tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tab-section {
+    display: none;
+}
+
+.tab-section.active {
+    display: block;
+}
+
+.grade-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.grade-score {
+    text-align: center;
+}
+
+.grade-score h2 {
+    font-size: 3em;
+    color: #667eea;
+    margin: 0;
+}
+
+.grade-score p {
+    color: #6B7280;
+}
+
+@media (max-width: 768px) {
+    .student-detail-header {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

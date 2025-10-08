@@ -1,0 +1,107 @@
+{% extends 'classes/base.html' %}
+
+{% block title %}Estudiantes{% endblock %}
+{% block page_title %}👥 Mis Estudiantes{% endblock %}
+
+{% block content %}
+<div class="add-student-section">
+    <h3>➕ Agregar Nuevo Estudiante</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.name.label_tag }}
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                {{ form.grade.label_tag }}
+                {{ form.grade }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.parent_name.label_tag }}
+                {{ form.parent_name }}
+            </div>
+            <div class="form-group">
+                {{ form.parent_phone.label_tag }}
+                {{ form.parent_phone }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ form.parent_email.label_tag }}
+            {{ form.parent_email }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.notes.label_tag }}
+            {{ form.notes }}
+        </div>
+        
+        <button type="submit" class="btn btn-orange">➕ Agregar Estudiante</button>
+    </form>
+</div>
+
+<div class="search-section mt-20">
+    <form method="get" class="form-row">
+        <div class="form-group">
+            <label>Buscar</label>
+            <input type="text" name="search" value="{{ search }}" placeholder="Nombre del estudiante..." class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Filtrar por año</label>
+            <select name="grade" class="form-control" onchange="this.form.submit()">
+                <option value="">Todos los años</option>
+                {% for grade_code, grade_name in form.fields.grade.choices %}
+                    <option value="{{ grade_code }}" {% if grade_filter == grade_code %}selected{% endif %}>{{ grade_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" style="display: flex; align-items: end;">
+            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+        </div>
+    </form>
+</div>
+
+<div class="students-grid mt-20">
+    {% for student in students %}
+    <div class="student-card">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="student-avatar">{{ student.name.0 }}</div>
+            <div style="flex: 1;">
+                <h3 style="margin-bottom: 5px;">{{ student.name }}</h3>
+                <p style="color: #6B7280;">{{ student.grade }}</p>
+                <p style="color: #9CA3AF; font-size: 14px; margin-top: 10px;">
+                    📄 {{ student.class_count }} clases registradas
+                </p>
+                {% if student.parent_name %}
+                <p style="color: #9CA3AF; font-size: 13px;">
+                    👨‍👩‍👧 {{ student.parent_name }}
+                </p>
+                {% endif %}
+                {% if student.parent_email %}
+                <p style="color: #10B981; font-size: 13px;">
+                    📧 {{ student.parent_email }}
+                </p>
+                {% else %}
+                <p style="color: #EF4444; font-size: 13px;">
+                    ⚠️ Sin email configurado
+                </p>
+                {% endif %}
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="{% url 'student_detail' student.id %}" class="btn btn-view">👁️ Ver Detalle</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state" style="grid-column: 1/-1;">
+        <h3>👥</h3>
+        <h3>No hay estudiantes</h3>
+        <p>Agrega tu primer estudiante usando el formulario de arriba</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

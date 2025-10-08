@@ -1,0 +1,74 @@
+{% extends 'classes/base.html' %}
+
+{% block title %}Editar Clase{% endblock %}
+{% block page_title %}✏️ Editar Clase #{{ activity.class_number }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div style="background: #EFF6FF; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+        <p><strong>Estudiante:</strong> {{ activity.student.name }}</p>
+        <p><strong>Materia:</strong> {{ activity.subject }}</p>
+        <p><strong>Clase:</strong> #{{ activity.class_number }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Fecha de clase</label>
+            {{ form.date }}
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué temas trabajaron en clase?</label>
+            {{ form.topics_worked }}
+        </div>
+        
+        <div class="form-group">
+            <label>Técnicas desarrolladas</label>
+            {{ form.techniques }}
+        </div>
+        
+        <div class="form-group">
+            <label>Piezas musicales / Repertorio trabajado</label>
+            {{ form.pieces }}
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>¿Cómo cumplió con la actividad?</label>
+                {{ form.performance }}
+            </div>
+            <div class="form-group">
+                <label>Tiempo de práctica diaria (minutos)</label>
+                {{ form.practice_time }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Fortalezas observadas</label>
+            {{ form.strengths }}
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué debería mejorar?</label>
+            {{ form.areas_to_improve }}
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué tiene que estudiar en casa?</label>
+            {{ form.homework }}
+        </div>
+        
+        <div class="form-group">
+            <label>Observaciones adicionales</label>
+            {{ form.observations }}
+        </div>
+        
+        <div style="display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+            <a href="{% url 'informes' %}" class="btn btn-view">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

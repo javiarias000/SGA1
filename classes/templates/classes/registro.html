@@ -1,0 +1,119 @@
+{% extends 'classes/base.html' %}
+
+{% block title %}Registrar Clase{% endblock %}
+{% block page_title %}📝 Registrar Nueva Clase{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form method="post" id="classForm">
+        {% csrf_token %}
+        
+        <div class="form-row-3">
+            <div class="form-group">
+                <label>Materia *</label>
+                {{ form.subject }}
+            </div>
+            <div class="form-group">
+                <label>Estudiante *</label>
+                {{ form.student }}
+            </div>
+            <div class="form-group">
+                <label>Fecha de clase</label>
+                {{ form.date }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>Número de clase</label>
+                <input type="number" id="classNumber" readonly value="1" class="form-control" style="background: #F3F4F6; font-weight: bold;">
+            </div>
+            <div style="display: flex; align-items: end;">
+                <p style="color: #6B7280; font-size: 14px; padding: 12px;">
+                    📊 <span id="classCountInfo">Seleccione estudiante y materia</span>
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué temas trabajaron en clase?</label>
+            {{ form.topics_worked }}
+        </div>
+        
+        <div class="form-group">
+            <label>Técnicas desarrolladas</label>
+            {{ form.techniques }}
+        </div>
+        
+        <div class="form-group">
+            <label>Piezas musicales / Repertorio trabajado</label>
+            {{ form.pieces }}
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>¿Cómo cumplió con la actividad?</label>
+                {{ form.performance }}
+            </div>
+            <div class="form-group">
+                <label>Tiempo de práctica diaria (minutos)</label>
+                {{ form.practice_time }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Fortalezas observadas</label>
+            {{ form.strengths }}
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué debería mejorar?</label>
+            {{ form.areas_to_improve }}
+        </div>
+        
+        <div class="form-group">
+            <label>¿Qué tiene que estudiar en casa?</label>
+            {{ form.homework }}
+        </div>
+        
+        <div class="form-group">
+            <label>Observaciones adicionales (opcional)</label>
+            {{ form.observations }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">💾 Guardar Registro</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const studentSelect = document.getElementById('id_student');
+    const subjectSelect = document.getElementById('id_subject');
+    
+    function updateClassNumber() {
+        const studentId = studentSelect.value;
+        const subject = subjectSelect.value;
+        
+        if (!studentId || !subject) {
+            document.getElementById('classNumber').value = 1;
+            document.getElementById('classCountInfo').textContent = 'Seleccione estudiante y materia';
+            return;
+        }
+        
+        fetch(`/api/class-number/?student_id=${studentId}&subject=${subject}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('classNumber').value = data.class_number;
+                const studentName = studentSelect.options[studentSelect.selectedIndex].text;
+                document.getElementById('classCountInfo').textContent = 
+                    `Este estudiante tiene ${data.total_classes} clases en ${subject}. Esta será la clase #${data.class_number}`;
+            });
+    }
+    
+    studentSelect.addEventListener('change', updateClassNumber);
+    subjectSelect.addEventListener('change', updateClassNumber);
+});
+</script>
+{% endblock %}

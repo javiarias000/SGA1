@@ -1,0 +1,89 @@
+{% extends 'classes/base_student.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<h1 class="page-title">⚙️ Mi Perfil</h1>
+<p class="page-subtitle">Información personal y contacto</p>
+
+<!-- INFORMACIÓN DEL ESTUDIANTE -->
+<div style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 2px solid #3B82F6; padding: 40px; border-radius: 20px; margin-bottom: 30px;">
+    <div style="display: flex; align-items: center; gap: 30px; margin-bottom: 30px;">
+        <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #10B981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4em; font-weight: bold;">
+            {{ student.name.0 }}
+        </div>
+        <div>
+            <h2 style="font-size: 2em; color: #1F2937; margin-bottom: 5px;">{{ student.name }}</h2>
+            <p style="color: #6B7280; font-size: 1.1em;">{{ student.grade }}</p>
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div>
+            <p style="color: #6B7280; font-size: 0.9em; margin-bottom: 5px;">Profesor</p>
+            <p style="color: #1F2937; font-size: 1.1em; font-weight: 600;">{{ student.teacher.full_name }}</p>
+        </div>
+        
+        {% if student.parent_name %}
+        <div>
+            <p style="color: #6B7280; font-size: 0.9em; margin-bottom: 5px;">Padre/Madre</p>
+            <p style="color: #1F2937; font-size: 1.1em; font-weight: 600;">{{ student.parent_name }}</p>
+        </div>
+        {% endif %}
+        
+        {% if student.parent_email %}
+        <div>
+            <p style="color: #6B7280; font-size: 0.9em; margin-bottom: 5px;">Email de Contacto</p>
+            <p style="color: #1F2937; font-size: 1.1em; font-weight: 600;">{{ student.parent_email }}</p>
+        </div>
+        {% endif %}
+        
+        {% if student.parent_phone %}
+        <div>
+            <p style="color: #6B7280; font-size: 0.9em; margin-bottom: 5px;">Teléfono</p>
+            <p style="color: #1F2937; font-size: 1.1em; font-weight: 600;">{{ student.parent_phone }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- ESTADÍSTICAS GENERALES -->
+<h2 style="color: #1F2937; font-size: 1.5em; margin-bottom: 20px;">📊 Mis Estadísticas</h2>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+    <div style="background: white; border: 2px solid #E5E7EB; padding: 25px; border-radius: 15px; text-align: center;">
+        <div style="font-size: 3em; margin-bottom: 10px;">📚</div>
+        <div style="font-size: 2.5em; font-weight: bold; color: #10B981;">{{ student.get_class_count }}</div>
+        <p style="color: #6B7280; margin-top: 5px;">Clases Totales</p>
+    </div>
+    
+    <div style="background: white; border: 2px solid #E5E7EB; padding: 25px; border-radius: 15px; text-align: center;">
+        <div style="font-size: 3em; margin-bottom: 10px;">🎵</div>
+        <div style="font-size: 2.5em; font-weight: bold; color: #3B82F6;">{{ student.get_subjects.count }}</div>
+        <p style="color: #6B7280; margin-top: 5px;">Materias</p>
+    </div>
+    
+    <div style="background: white; border: 2px solid #E5E7EB; padding: 25px; border-radius: 15px; text-align: center;">
+        <div style="font-size: 3em; margin-bottom: 10px;">📊</div>
+        <div style="font-size: 2.5em; font-weight: bold; color: #8B5CF6;">{{ student.grades.count }}</div>
+        <p style="color: #6B7280; margin-top: 5px;">Calificaciones</p>
+    </div>
+</div>
+
+<!-- MATERIAS CURSANDO -->
+<div style="margin-top: 40px;">
+    <h2 style="color: #1F2937; font-size: 1.5em; margin-bottom: 20px;">🎼 Mis Materias</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        {% for subject in student.get_subjects %}
+        <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid #10B981; padding: 25px; border-radius: 15px;">
+            <h3 style="color: #065F46; font-size: 1.2em; margin-bottom: 10px;">
+                {% if 'Guitarra' in subject %}🎸{% elif 'Conjunto' in subject %}🎺{% else %}🎵{% endif %}
+                {{ subject }}
+            </h3>
+            <p style="color: #059669;">{{ student.get_class_count }} clases registradas</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

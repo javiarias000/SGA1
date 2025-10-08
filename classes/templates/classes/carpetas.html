@@ -1,0 +1,149 @@
+{% extends 'classes/base.html' %}
+
+{% block title %}Carpetas{% endblock %}
+{% block page_title %}📁 Carpetas de Estudiantes{% endblock %}
+
+{% block content %}
+<div class="form-group">
+    <label>Seleccionar estudiante</label>
+    <form method="get">
+        <select name="student" class="form-control" onchange="this.form.submit()">
+            <option value="">Seleccionar estudiante...</option>
+            {% for student in students %}
+                <option value="{{ student.id }}" {% if selected_student and selected_student.id == student.id %}selected{% endif %}>
+                    {{ student.name }} - {{ student.grade }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+{% if selected_student %}
+    {% if activities_by_subject %}
+        <div class="folder-header">
+            <h2>📁 Carpeta de {{ selected_student.name }}</h2>
+            <p style="color: #6B7280; margin-top: 5px;">Año escolar: {{ selected_student.grade }}</p>
+            <p style="color: #6B7280;">Total de clases: {{ selected_student.get_class_count }}</p>
+        </div>
+        
+        {% for subject, activities in activities_by_subject.items %}
+        <div class="subject-folder">
+            <h3>
+                {% if 'Guitarra' in subject %}🎸{% elif 'Conjunto' in subject %}🎺{% else %}🎵{% endif %}
+                {{ subject }} ({{ activities|length }} clases)
+            </h3>
+            <div class="classes-list">
+                {% for activity in activities %}
+                <div class="class-item">
+                    <div class="class-item-info">
+                        <strong>Clase #{{ activity.class_number }}</strong>
+                        <span>• {{ activity.date|date:"d M Y" }}</span>
+                        <p>{{ activity.pieces|default:activity.topics_worked|default:"Sin descripción"|truncatewords:10 }}</p>
+                    </div>
+                    <div class="class-item-actions">
+                        <a href="{% url 'download_parent' activity.id %}" class="btn btn-secondary btn-sm">
+                            🏠 Padres
+                        </a>
+                        <a href="{% url 'download_teacher' activity.id %}" class="btn btn-purple btn-sm">
+                            📄 Docente
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <h3>📁</h3>
+            <h3>Carpeta vacía</h3>
+            <p>No hay informes para {{ selected_student.name }}</p>
+        </div>
+    {% endif %}
+{% endif %}
+
+<style>
+.folder-header {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin: 20px 0;
+}
+
+.subject-folder {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.subject-folder h3 {
+    color: #374151;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+}
+
+.classes-list {
+    display: grid;
+    gap: 10px;
+}
+
+.class-item {
+    background: #F9FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.class-item:hover {
+    background: #F3F4F6;
+}
+
+.class-item-info strong {
+    color: #1F2937;
+    margin-right: 10px;
+}
+
+.class-item-info span {
+    color: #6B7280;
+}
+
+.class-item-info p {
+    color: #9CA3AF;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.class-item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-sm {
+    padding: 8px 15px;
+    font-size: 13px;
+}
+
+@media (max-width: 768px) {
+    .class-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .class-item-actions {
+        width: 100%;
+    }
+    
+    .class-item-actions a {
+        flex: 1;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
