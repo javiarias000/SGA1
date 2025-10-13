@@ -5,10 +5,14 @@
 
 {% block content %}
 <div class="attendance-header">
-    <h2>📅 Asistencia de Hoy - {{ activity.date|date:"d \\d\\e F \\d\\e Y" }}</h2>
+    <h2>📅 Asistencia de Hoy - {% now "d/m/Y" %}</h2>
 </div>
 
-<div class="add-attendance-section">
+<!-- Botón para mostrar/ocultar -->
+<button id="toggle-grade-form" class="btn btn-secondary">➕ Registrar Asistencia</button>
+
+<!-- Div que contiene el formulario -->
+<div class="add-grade-section" id="grade-form" style="display: none; margin-top: 10px;">
     <h3>➕ Registrar Asistencia</h3>
     <form method="post">
         {% csrf_token %}
@@ -72,6 +76,21 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-grade-form');
+    const gradeForm = document.getElementById('grade-form');
+    
+    toggleBtn.addEventListener('click', () => {
+        if (gradeForm.style.display === 'none') {
+            gradeForm.style.display = 'block';
+            toggleBtn.textContent = '❌ Ocultar Formulario';
+        } else {
+            gradeForm.style.display = 'none';
+            toggleBtn.textContent = '➕ Registrar Calificación';
+        }
+    });
+    </script>
 
 <style>
 .attendance-header {

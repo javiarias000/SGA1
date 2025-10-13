@@ -1,149 +1,450 @@
 {% extends 'classes/base.html' %}
 
 {% block title %}Carpetas{% endblock %}
-{% block page_title %}📁 Carpetas de Estudiantes{% endblock %}
+{% block page_title %}📁 Carpetas por Materia{% endblock %}
 
 {% block content %}
-<div class="form-group">
-    <label>Seleccionar estudiante</label>
-    <form method="get">
-        <select name="student" class="form-control" onchange="this.form.submit()">
-            <option value="">Seleccionar estudiante...</option>
-            {% for student in students %}
-                <option value="{{ student.id }}" {% if selected_student and selected_student.id == student.id %}selected{% endif %}>
-                    {{ student.name }} - {{ student.grade }}
-                </option>
-            {% endfor %}
-        </select>
-    </form>
+<div class="folder-header">
+    <div class="breadcrumb" id="breadcrumb">
+        <span class="breadcrumb-item active" onclick="showSubjects()">
+            📁 Todas las Materias
+        </span>
+    </div>
+    <p style="color: #6B7280; margin-top: 10px;">Organización: Materias → Estudiantes → Clases</p>
 </div>
 
-{% if selected_student %}
-    {% if activities_by_subject %}
-        <div class="folder-header">
-            <h2>📁 Carpeta de {{ selected_student.name }}</h2>
-            <p style="color: #6B7280; margin-top: 5px;">Año escolar: {{ selected_student.grade }}</p>
-            <p style="color: #6B7280;">Total de clases: {{ selected_student.get_class_count }}</p>
+<!-- Vista 1: MATERIAS -->
+<div id="subjects-view" class="folders-grid">
+    {% for subject, data in folders_by_subject.items %}
+    <div class="folder-card" onclick="openSubject({{ forloop.counter }}, '{{ subject|escapejs }}', {{ data.student_count }}, {{ data.total_classes }})">
+        <div class="folder-icon">
+            {% if 'Guitarra' in subject %}
+                <span class="folder-emoji">🎸</span>
+            {% elif 'Conjunto' in subject %}
+                <span class="folder-emoji">🎺</span>
+            {% else %}
+                <span class="folder-emoji">🎵</span>
+            {% endif %}
+            <svg class="folder-svg" viewBox="0 0 24 24" fill="none">
+                <path d="M10 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V8C22 6.89543 21.1046 6 20 6H12L10 4Z" fill="#8B5CF6" stroke="#7C3AED" stroke-width="2"/>
+            </svg>
         </div>
-        
-        {% for subject, activities in activities_by_subject.items %}
-        <div class="subject-folder">
-            <h3>
-                {% if 'Guitarra' in subject %}🎸{% elif 'Conjunto' in subject %}🎺{% else %}🎵{% endif %}
-                {{ subject }} ({{ activities|length }} clases)
-            </h3>
-            <div class="classes-list">
-                {% for activity in activities %}
-                <div class="class-item">
-                    <div class="class-item-info">
-                        <strong>Clase #{{ activity.class_number }}</strong>
-                        <span>• {{ activity.date|date:"d M Y" }}</span>
-                        <p>{{ activity.pieces|default:activity.topics_worked|default:"Sin descripción"|truncatewords:10 }}</p>
+        <div class="folder-name">{{ subject }}</div>
+        <div class="folder-count">{{ data.student_count }} estudiante{{ data.student_count|pluralize }} • {{ data.total_classes }} clase{{ data.total_classes|pluralize }}</div>
+    </div>
+    {% empty %}
+    <div class="empty-state-inline">
+        <p>No hay materias registradas aún</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Vista 2: ESTUDIANTES POR MATERIA -->
+<div id="students-view" style="display: none;">
+    {% for subject, data in folders_by_subject.items %}
+    <div class="students-container" id="students-{{ forloop.counter }}" style="display: none;">
+        <div class="folders-grid">
+            {% for student_data in data.students %}
+            <div class="folder-card" onclick="openStudent({{ forloop.parentloop.counter }}, '{{ subject|escapejs }}', '{{ student_data.student.name|escapejs }}', {{ student_data.student.id }}, {{ student_data.class_count }})">
+                <div class="folder-icon">
+                    <span class="folder-emoji">👤</span>
+                    <svg class="folder-svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M10 4H4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V8C22 6.89543 21.1046 6 20 6H12L10 4Z" fill="#10B981" stroke="#059669" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="folder-name">{{ student_data.student.name }}</div>
+                <div class="folder-count">{{ student_data.student.grade }} • {{ student_data.class_count }} clase{{ student_data.class_count|pluralize }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Vista 3: CLASES DEL ESTUDIANTE -->
+<div id="classes-view" style="display: none;">
+    {% for subject, data in folders_by_subject.items %}
+        {% for student_data in data.students %}
+        <div class="files-container" id="classes-{{ forloop.parentloop.counter }}-{{ student_data.student.id }}" style="display: none;">
+            <div class="files-list">
+                {% for activity in student_data.activities %}
+                <div class="file-item">
+                    <div class="file-icon">📄</div>
+                    <div class="file-info">
+                        <div class="file-name">Clase #{{ activity.class_number }}</div>
+                        <div class="file-meta">
+                            <span>{{ activity.date|date:"d M Y" }}</span>
+                            <span>•</span>
+                            <span>{{ activity.pieces|default:activity.topics_worked|default:"Sin descripción"|truncatewords:8 }}</span>
+                        </div>
                     </div>
-                    <div class="class-item-actions">
-                        <a href="{% url 'download_parent' activity.id %}" class="btn btn-secondary btn-sm">
+                    <div class="file-actions">
+                        <a href="{% url 'download_parent' activity.id %}" class="btn btn-secondary btn-sm" title="Descargar versión para padres">
                             🏠 Padres
                         </a>
-                        <a href="{% url 'download_teacher' activity.id %}" class="btn btn-purple btn-sm">
+                        <a href="{% url 'download_teacher' activity.id %}" class="btn btn-purple btn-sm" title="Descargar versión para docente">
                             📄 Docente
                         </a>
                     </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <h3>📂</h3>
+                    <h3>No hay clases</h3>
+                    <p>Aún no se han registrado clases para este estudiante</p>
                 </div>
                 {% endfor %}
             </div>
         </div>
         {% endfor %}
-    {% else %}
-        <div class="empty-state">
-            <h3>📁</h3>
-            <h3>Carpeta vacía</h3>
-            <p>No hay informes para {{ selected_student.name }}</p>
-        </div>
-    {% endif %}
-{% endif %}
+    {% endfor %}
+</div>
 
 <style>
 .folder-header {
     background: white;
-    padding: 25px;
+    padding: 20px 25px;
     border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     margin: 20px 0;
 }
 
-.subject-folder {
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #6B7280;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 5px 0;
+}
+
+.breadcrumb-item:hover {
+    color: #8B5CF6;
+}
+
+.breadcrumb-item.active {
+    color: #1F2937;
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    color: #D1D5DB;
+}
+
+.folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.folder-card {
     background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
     padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-align: center;
 }
 
-.subject-folder h3 {
-    color: #374151;
-    margin-bottom: 20px;
-    font-size: 1.3em;
+.folder-card:hover {
+    border-color: #8B5CF6;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
 }
 
-.classes-list {
+.folder-icon {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+}
+
+.folder-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.folder-emoji {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    z-index: 1;
+}
+
+.folder-name {
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 5px;
+    font-size: 15px;
+    word-break: break-word;
+}
+
+.folder-count {
+    color: #6B7280;
+    font-size: 13px;
+}
+
+.files-list {
     display: grid;
     gap: 10px;
 }
 
-.class-item {
-    background: #F9FAFB;
+.file-item {
+    background: white;
     border: 2px solid #E5E7EB;
     border-radius: 10px;
-    padding: 15px;
+    padding: 15px 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 15px;
+    transition: all 0.2s;
 }
 
-.class-item:hover {
-    background: #F3F4F6;
+.file-item:hover {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
 }
 
-.class-item-info strong {
+.file-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-weight: 600;
     color: #1F2937;
-    margin-right: 10px;
+    margin-bottom: 3px;
 }
 
-.class-item-info span {
+.file-meta {
     color: #6B7280;
+    font-size: 13px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.class-item-info p {
-    color: #9CA3AF;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.class-item-actions {
+.file-actions {
     display: flex;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .btn-sm {
     padding: 8px 15px;
     font-size: 13px;
+    white-space: nowrap;
+}
+
+.empty-state {
+    background: white;
+    padding: 60px 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.empty-state h3:first-child {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3:nth-child(2) {
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #6B7280;
+}
+
+.empty-state-inline {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #6B7280;
 }
 
 @media (max-width: 768px) {
-    .class-item {
-        flex-direction: column;
-        align-items: flex-start;
+    .folders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 15px;
     }
     
-    .class-item-actions {
-        width: 100%;
+    .folder-card {
+        padding: 20px;
     }
     
-    .class-item-actions a {
-        flex: 1;
-        justify-content: center;
+    .folder-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .folder-emoji {
+        font-size: 24px;
+    }
+    
+    .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .file-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .file-actions a {
+        width: 100%;
+        text-align: center;
     }
 }
 </style>
+
+<script>
+let currentSubjectIndex = null;
+let currentSubject = null;
+let currentStudent = null;
+let currentStudentId = null;
+
+// Nivel 1: Mostrar materias
+function showSubjects() {
+    console.log('Mostrando materias');
+    currentSubjectIndex = null;
+    currentSubject = null;
+    currentStudent = null;
+    currentStudentId = null;
+    
+    document.getElementById('subjects-view').style.display = 'grid';
+    document.getElementById('students-view').style.display = 'none';
+    document.getElementById('classes-view').style.display = 'none';
+    
+    document.getElementById('breadcrumb').innerHTML = `
+        <span class="breadcrumb-item active">📁 Todas las Materias</span>
+    `;
+}
+
+// Nivel 2: Abrir materia y mostrar estudiantes
+function openSubject(subjectIndex, subject, studentCount, totalClasses) {
+    console.log('Abriendo materia:', subjectIndex, subject);
+    currentSubjectIndex = subjectIndex;
+    currentSubject = subject;
+    currentStudent = null;
+    currentStudentId = null;
+    
+    document.getElementById('subjects-view').style.display = 'none';
+    document.getElementById('students-view').style.display = 'block';
+    document.getElementById('classes-view').style.display = 'none';
+    
+    // Ocultar todos los contenedores de estudiantes
+    document.querySelectorAll('.students-container').forEach(container => {
+        container.style.display = 'none';
+    });
+    
+    // Mostrar solo los estudiantes de esta materia usando el índice
+    const studentsContainer = document.getElementById('students-' + subjectIndex);
+    console.log('Buscando contenedor:', 'students-' + subjectIndex);
+    if (studentsContainer) {
+        studentsContainer.style.display = 'block';
+        console.log('Contenedor mostrado');
+    } else {
+        console.error('No se encontró el contenedor de estudiantes');
+    }
+    
+    updateBreadcrumb();
+}
+
+// Nivel 3: Abrir estudiante y mostrar clases
+function openStudent(subjectIndex, subject, studentName, studentId, classCount) {
+    console.log('Abriendo estudiante:', subjectIndex, studentId, studentName);
+    currentSubjectIndex = subjectIndex;
+    currentSubject = subject;
+    currentStudent = studentName;
+    currentStudentId = studentId;
+    
+    document.getElementById('subjects-view').style.display = 'none';
+    document.getElementById('students-view').style.display = 'none';
+    document.getElementById('classes-view').style.display = 'block';
+    
+    // Ocultar todos los contenedores de clases
+    document.querySelectorAll('.files-container').forEach(container => {
+        container.style.display = 'none';
+    });
+    
+    // Mostrar solo las clases de este estudiante usando índice de materia + ID de estudiante
+    const classesId = 'classes-' + subjectIndex + '-' + studentId;
+    console.log('Buscando contenedor de clases:', classesId);
+    const classesContainer = document.getElementById(classesId);
+    if (classesContainer) {
+        classesContainer.style.display = 'block';
+        console.log('Contenedor de clases mostrado');
+    } else {
+        console.error('No se encontró el contenedor de clases:', classesId);
+        // Debug: mostrar todos los IDs disponibles
+        console.log('IDs disponibles:');
+        document.querySelectorAll('.files-container').forEach(c => {
+            console.log('  -', c.id);
+        });
+    }
+    
+    updateBreadcrumb();
+}
+
+// Actualizar breadcrumb
+function updateBreadcrumb() {
+    const emoji = getEmojiForSubject(currentSubject);
+    let breadcrumbHTML = `<span class="breadcrumb-item" onclick="showSubjects()">📁 Todas las Materias</span>`;
+    
+    if (currentSubject) {
+        breadcrumbHTML += `
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item ${!currentStudent ? 'active' : ''}" onclick="openSubject(${currentSubjectIndex}, '${escapeJs(currentSubject)}', 0, 0)">
+                ${emoji} ${currentSubject}
+            </span>
+        `;
+    }
+    
+    if (currentStudent) {
+        breadcrumbHTML += `
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item active">
+                👤 ${currentStudent}
+            </span>
+        `;
+    }
+    
+    document.getElementById('breadcrumb').innerHTML = breadcrumbHTML;
+}
+
+// Escapar comillas para JS
+function escapeJs(text) {
+    return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
+
+// Obtener emoji según materia
+function getEmojiForSubject(subject) {
+    if (!subject) return '🎵';
+    if (subject.includes('Guitarra')) return '🎸';
+    if (subject.includes('Conjunto')) return '🎺';
+    return '🎵';
+}
+</script>
 {% endblock %}

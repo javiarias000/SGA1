@@ -1562,3 +1562,73 @@ def whatsapp_attendance_report(request, student_id):
     whatsapp_url = generate_whatsapp_url(student.parent_phone, message)
     
     return redirect(whatsapp_url)
+
+    #=================================
+    #Carpetas
+    #=================================
+
+@login_required
+def carpetas_view(request):
+    """Vista para ver carpetas organizadas por Materia → Estudiante → Clases"""
+    teacher = request.user.teacher_profile
+    
+    # Obtener todas las actividades del docente
+    activities = Activity.objects.filter(
+        student__teacher=teacher,
+        student__active=True
+    ).select_related('student').order_by('subject', 'student__name', 'class_number')
+    
+    # DEBUG: Imprimir para verificar
+    print(f"Total actividades encontradas: {activities.count()}")
+    for act in activities:
+        print(f"  - {act.subject} | {act.student.name} | Clase #{act.class_number}")
+    
+    # Organizar por: Materia → Estudiante → Clases
+    folders_by_subject = {}
+    
+    for activity in activities:
+        subject = activity.subject
+        
+        # Inicializar materia si no existe
+        if subject not in folders_by_subject:
+            folders_by_subject[subject] = {
+                'student_count': 0,
+                'total_classes': 0,
+                'students': {}
+            }
+        
+        # Inicializar estudiante si no existe en esta materia
+        student_id = activity.student.id
+        if student_id not in folders_by_subject[subject]['students']:
+            folders_by_subject[subject]['students'][student_id] = {
+                'student': activity.student,
+                'class_count': 0,
+                'activities': []
+            }
+            folders_by_subject[subject]['student_count'] += 1
+        
+        # Agregar clase
+        folders_by_subject[subject]['students'][student_id]['activities'].append(activity)
+        folders_by_subject[subject]['students'][student_id]['class_count'] += 1
+        folders_by_subject[subject]['total_classes'] += 1
+    
+    # Convertir dict de estudiantes a lista para el template
+    for subject in folders_by_subject:
+        folders_by_subject[subject]['students'] = list(
+            folders_by_subject[subject]['students'].values()
+        )
+        # Ordenar estudiantes por nombre
+        folders_by_subject[subject]['students'].sort(
+            key=lambda x: x['student'].name
+        )
+    
+    # DEBUG: Imprimir estructura final
+    print("\nEstructura de carpetas:")
+    for subject, data in folders_by_subject.items():
+        print(f"\n{subject}: {data['student_count']} estudiantes, {data['total_classes']} clases")
+        for student_data in data['students']:
+            print(f"  - {student_data['student'].name}: {student_data['class_count']} clases")
+    
+    return render(request, 'classes/carpetas.html', {
+        'folders_by_subject': folders_by_subject
+    })

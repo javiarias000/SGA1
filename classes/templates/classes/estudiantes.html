@@ -4,7 +4,11 @@
 {% block page_title %}👥 Mis Estudiantes{% endblock %}
 
 {% block content %}
-<div class="add-student-section">
+<!-- Botón para mostrar/ocultar -->
+<button id="toggle-grade-form" class="btn btn-secondary">➕ Registrar Estudiante</button>
+
+<!-- Div que contiene el formulario -->
+<div class="add-grade-section" id="grade-form" style="display: none; margin-top: 10px;">
     <h3>➕ Agregar Nuevo Estudiante</h3>
     <form method="post">
         {% csrf_token %}
@@ -104,4 +108,19 @@
     </div>
     {% endfor %}
 </div>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-grade-form');
+    const gradeForm = document.getElementById('grade-form');
+    
+    toggleBtn.addEventListener('click', () => {
+        if (gradeForm.style.display === 'none') {
+            gradeForm.style.display = 'block';
+            toggleBtn.textContent = '❌ Ocultar Formulario';
+        } else {
+            gradeForm.style.display = 'none';
+            toggleBtn.textContent = '➕ Registrar Calificación';
+        }
+    });
+    </script>
 {% endblock %}

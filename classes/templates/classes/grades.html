@@ -4,8 +4,12 @@
 {% block page_title %}📊 Calificaciones{% endblock %}
 
 {% block content %}
-<div class="add-grade-section">
-    <h3>➕ Registrar Calificación</h3>
+<!-- Botón para mostrar/ocultar -->
+<button id="toggle-grade-form" class="btn btn-secondary">➕ Registrar Calificación</button>
+
+<!-- Div que contiene el formulario -->
+<div class="add-grade-section" id="grade-form" style="display: none; margin-top: 10px;">
+    <h3>Registrar Calificación</h3>
     <form method="post">
         {% csrf_token %}
         <div class="form-row">
@@ -42,6 +46,7 @@
         <button type="submit" class="btn btn-primary">💾 Guardar Calificación</button>
     </form>
 </div>
+
 
 <div class="filters-section mt-20">
     <form method="get" class="form-row">
@@ -104,6 +109,21 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-grade-form');
+    const gradeForm = document.getElementById('grade-form');
+    
+    toggleBtn.addEventListener('click', () => {
+        if (gradeForm.style.display === 'none') {
+            gradeForm.style.display = 'block';
+            toggleBtn.textContent = '❌ Ocultar Formulario';
+        } else {
+            gradeForm.style.display = 'none';
+            toggleBtn.textContent = '➕ Registrar Calificación';
+        }
+    });
+    </script>
 
 <style>
 .add-grade-section {
