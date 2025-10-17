@@ -1,0 +1,88 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Mi Portal - {{ student.name }}{% endblock %}
+
+{% block content %}
+<h1 class="page-title">👋 ¡Hola, {{ student.name }}!</h1>
+<p class="page-subtitle">Bienvenido a tu portal de música</p>
+
+<!-- ESTADÍSTICAS -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">{{ total_classes }}</div>
+        <div class="stat-label">Clases Totales</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-color: #3B82F6;">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value" style="color: #1E40AF;">{{ promedio|floatformat:1 }}</div>
+        <div class="stat-label" style="color: #1E3A8A;">Promedio General</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg: #FEF3C7 0%, #FDE68A 100%); border-color: #F59E0B;">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value" style="color: #D97706;">{{ asistencia_porcentaje|floatformat:0 }}%</div>
+        <div class="stat-label" style="color: #92400E;">Asistencia del Mes</div>
+    </div>
+    
+    <div class="stat-card" style="background: linear-gradient(135deg, #E9D5FF 0%, #D8B4FE 100%); border-color: #8B5CF6;">
+        <div class="stat-icon">🎵</div>
+        <div class="stat-value" style="color: #7C3AED;">{{ subjects.count }}</div>
+        <div class="stat-label" style="color: #5B21B6;">Materias</div>
+    </div>
+</div>
+
+<!-- ÚLTIMAS CLASES -->
+<div style="margin-top: 40px;">
+    <h2 style="color: #1F2937; font-size: 1.8em; margin-bottom: 20px;">📚 Mis Últimas Clases</h2>
+    
+    {% for activity in recent_activities %}
+    <div style="background: #F9FAFB; border-left: 4px solid #10B981; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="color: #1F2937; font-size: 1.2em; margin-bottom: 5px;">
+                    {{ activity.subject }} - Clase #{{ activity.class_number }}
+                </h3>
+                <p style="color: #6B7280; font-size: 0.9em;">{{ activity.date|date:"d F Y" }}</p>
+            </div>
+            <span style="padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9em;
+                {% if activity.performance == 'Excelente' %}background: #D1FAE5; color: #065F46;
+                {% elif activity.performance == 'Muy Bueno' or activity.performance == 'Bueno' %}background: #FEF3C7; color: #92400E;
+                {% else %}background: #FED7AA; color: #9A3412;{% endif %}">
+                {{ activity.performance }}
+            </span>
+        </div>
+        <div style="margin-top: 15px; color: #374151;">
+            <p><strong>📖 Temas:</strong> {{ activity.topics_worked|default:"No especificado" }}</p>
+            <p style="margin-top: 5px;"><strong>🏠 Tarea:</strong> {{ activity.homework|default:"Sin tareas" }}</p>
+            <p style="margin-top: 5px;"><strong>⏱️ Práctica:</strong> {{ activity.practice_time }} minutos/día</p>
+        </div>
+    </div>
+    {% empty %}
+    <p style="color: #6B7280; text-align: center; padding: 40px;">No tienes clases registradas aún</p>
+    {% endfor %}
+</div>
+
+<!-- ÚLTIMAS CALIFICACIONES -->
+{% if recent_grades %}
+<div style="margin-top: 40px;">
+    <h2 style="color: #1F2937; font-size: 1.8em; margin-bottom: 20px;">📊 Últimas Calificaciones</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        {% for grade in recent_grades %}
+        <div style="background: white; border: 2px solid #E5E7EB; padding: 25px; border-radius: 15px; text-align: center;">
+            <h3 style="color: #374151; margin-bottom: 10px;">{{ grade.subject }}</h3>
+            <div style="font-size: 3em; font-weight: bold; 
+                {% if grade.score >= 9 %}color: #10B981;
+                {% elif grade.score >= 7 %}color: #F59E0B;
+                {% else %}color: #EF4444;{% endif %}">
+                {{ grade.score }}
+            </div>
+            <p style="color: #6B7280; margin-top: 5px;">{{ grade.period }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

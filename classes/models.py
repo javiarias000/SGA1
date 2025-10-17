@@ -5,89 +5,64 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from teachers.models import Teacher
+from students.models import Student
 
-
-class Teacher(models.Model):
-    """Perfil extendido del docente"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher_profile')
-    full_name = models.CharField(max_length=200, verbose_name="Nombre completo")
-    specialization = models.CharField(max_length=100, blank=True, verbose_name="Especialización")
-    phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono")
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        verbose_name = "Docente"
-        verbose_name_plural = "Docentes"
-        ordering = ['full_name']
-    
-    def __str__(self):
-        return self.full_name
-    
-    def get_total_students(self):
-        return self.students.count()
-    
-    def get_total_classes(self):
-        return Activity.objects.filter(student__teacher=self).count()
-
-
-class Student(models.Model):
-    """Modelo de Estudiante"""
-    GRADE_CHOICES = [
-        ('2do Básica', '2do Básica'),
-        ('3ro Básica', '3ro Básica'),
-        ('4to Básica', '4to Básica'),
-        ('5to Básica', '5to Básica'),
-        ('6to Básica', '6to Básica'),
-        ('7mo Básica', '7mo Básica'),
-        ('8vo Básica', '8vo Básica'),
-        ('1ro Bachillerato', '1ro Bachillerato'),
-        ('2do Bachillerato', '2do Bachillerato'),
-        ('3ro Bachillerato', '3ro Bachillerato'),
+class Clase(models.Model):
+    """Modelo para Clases/Cursos teóricos donde los estudiantes se matriculan"""
+    SUBJECT_CHOICES = [
+        ('Guitarra Clásica', '🎸 Guitarra Clásica'),
+        ('Conjunto Instrumental', '🎺 Conjunto Instrumental'),
+        ('Creación y Arreglos Musicales', '🎵 Creación y Arreglos Musicales'),
     ]
     
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='students', verbose_name="Docente")
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='student_profile', verbose_name="Usuario del estudiante")
-    name = models.CharField(max_length=200, verbose_name="Nombre completo")
-    grade = models.CharField(max_length=50, choices=GRADE_CHOICES, verbose_name="Año escolar")
-    parent_name = models.CharField(max_length=200, blank=True, verbose_name="Nombre del padre/madre")
-    parent_email = models.EmailField(blank=True, verbose_name="Email del padre/madre")
-    parent_phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono del padre/madre")
-    notes = models.TextField(blank=True, verbose_name="Notas adicionales")
-    active = models.BooleanField(default=True, verbose_name="Activo")
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='clases_teoricas', verbose_name="Docente")
+    name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
+    subject = models.CharField(max_length=100, choices=SUBJECT_CHOICES, verbose_name="Materia")
+    description = models.TextField(blank=True, verbose_name="Descripción")
+    schedule = models.CharField(max_length=200, blank=True, verbose_name="Horario")
+    room = models.CharField(max_length=100, blank=True, verbose_name="Aula/Salón")
+    max_students = models.PositiveIntegerField(default=30, verbose_name="Capacidad máxima")
+    active = models.BooleanField(default=True, verbose_name="Activa")
+    fecha = models.DateField(verbose_name="Fecha", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ['name']
-        verbose_name = "Estudiante"
-        verbose_name_plural = "Estudiantes"
+        verbose_name = "Clase Teórica"
+        verbose_name_plural = "Clases Teóricas"
+        ordering = ['subject', 'name']
     
     def __str__(self):
-        return f"{self.name} - {self.grade}"
+        return f"{self.subject} - {self.name}"
     
-    def can_take_subject(self, subject):
-        grade_number = int(''.join(filter(str.isdigit, self.grade)))
-        is_bachillerato = 'Bachillerato' in self.grade
-        
-        if subject == 'Guitarra Clásica':
-            return True
-        elif subject == 'Conjunto Instrumental':
-            return grade_number >= 6
-        elif subject == 'Creación y Arreglos Musicales':
-            return is_bachillerato and grade_number == 2
-        return False
+    def get_enrolled_count(self):
+        """Número de estudiantes matriculados"""
+        return self.enrollments.filter(active=True).count()
     
-    def get_class_count(self, subject=None):
-        if subject:
-            return self.activities.filter(subject=subject).count()
-        return self.activities.count()
-    
-    def get_subjects(self):
-        return self.activities.values_list('subject', flat=True).distinct()
-    
-    def has_user_account(self):
-        """Verifica si el estudiante tiene cuenta de usuario"""
-        return self.user is not None
+    def has_space(self):
+        """Verifica si hay espacio disponible"""
+        return self.get_enrolled_count() < self.max_students
 
+#==========================================
+#MATRICULA ESTUDIANTES
+#==========================================
+
+class Enrollment(models.Model):
+    """Matrícula de estudiantes en clases teóricas"""
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="enrollments")
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="enrollments")
+    date_enrolled = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('student', 'clase')
+        verbose_name = "Matrícula"
+        verbose_name_plural = "Matrículas"
+
+    def __str__(self):
+        return f"{self.student.name} en {self.clase.name}"
 
 class Activity(models.Model):
     """Modelo de Actividad/Clase"""
@@ -106,6 +81,7 @@ class Activity(models.Model):
     ]
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='activities', verbose_name="Estudiante")
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='activities')
     subject = models.CharField(max_length=100, choices=SUBJECT_CHOICES, verbose_name="Materia")
     class_number = models.PositiveIntegerField(verbose_name="Número de clase")
     date = models.DateField(verbose_name="Fecha de clase")
@@ -210,8 +186,7 @@ class Attendance(models.Model):
 # ============================================
 # SIGNALS - Mantener los mismos
 # ============================================
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 
 @receiver(post_save, sender=User)
 def create_teacher_profile(sender, instance, created, **kwargs):
@@ -231,3 +206,7 @@ def save_teacher_profile(sender, instance, **kwargs):
     """Guardar perfil de docente"""
     if not instance.is_superuser and hasattr(instance, 'teacher_profile'):
         instance.teacher_profile.save()
+
+
+
+

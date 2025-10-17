@@ -1,0 +1,180 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Calificaciones{% endblock %}
+{% block page_title %}📊 Calificaciones{% endblock %}
+
+{% block content %}
+<!-- Botón para mostrar/ocultar -->
+<button id="toggle-grade-form" class="btn btn-secondary">➕ Registrar Calificación</button>
+
+<!-- Div que contiene el formulario -->
+<div class="add-grade-section" id="grade-form" style="display: none; margin-top: 10px;">
+    <h3>Registrar Calificación</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.student.label_tag }}
+                {{ form.student }}
+            </div>
+            <div class="form-group">
+                {{ form.subject.label_tag }}
+                {{ form.subject }}
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.period.label_tag }}
+                {{ form.period }}
+            </div>
+            <div class="form-group">
+                {{ form.score.label_tag }}
+                {{ form.score }}
+            </div>
+            <div class="form-group">
+                {{ form.date.label_tag }}
+                {{ form.date }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ form.comments.label_tag }}
+            {{ form.comments }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">💾 Guardar Calificación</button>
+    </form>
+</div>
+
+
+<div class="filters-section mt-20">
+    <form method="get" class="form-row">
+        <div class="form-group">
+            <label>Filtrar por estudiante</label>
+            <select name="student" class="form-control" onchange="this.form.submit()">
+                <option value="">Todos los estudiantes</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}" {% if selected_student == student.id|stringformat:"s" %}selected{% endif %}>
+                        {{ student.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Filtrar por materia</label>
+            <select name="subject" class="form-control" onchange="this.form.submit()">
+                <option value="">Todas las materias</option>
+                <option value="Guitarra Clásica" {% if selected_subject == 'Guitarra Clásica' %}selected{% endif %}>🎸 Guitarra Clásica</option>
+                <option value="Conjunto Instrumental" {% if selected_subject == 'Conjunto Instrumental' %}selected{% endif %}>🎺 Conjunto Instrumental</option>
+                <option value="Creación y Arreglos Musicales" {% if selected_subject == 'Creación y Arreglos Musicales' %}selected{% endif %}>🎵 Creación y Arreglos</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+<div class="grades-container mt-20">
+    {% if grades %}
+        {% for grade in grades %}
+        <div class="grade-card-full">
+            <div class="grade-header">
+                <div>
+                    <h3>{{ grade.student.name }}</h3>
+                    <p>{{ grade.student.grade }}</p>
+                </div>
+                <div class="grade-score-large">
+                    <h2>{{ grade.score }}</h2>
+                    <p>/ 10</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <a href="{% url 'teachers:grade_edit' grade.id %}" class="btn btn-view">✏️ Editar</a>
+                <a href="{% url 'teachers:grade_delete' grade.id %}" class="btn btn-danger">🗑️ Eliminar</a>
+            </div>
+            <div class="grade-details">
+                <p><strong>Materia:</strong> {{ grade.subject }}</p>
+                <p><strong>Período:</strong> {{ grade.period }}</p>
+                <p><strong>Fecha:</strong> {{ grade.date|date:"d M Y" }}</p>
+                {% if grade.comments %}
+                <p><strong>Comentarios:</strong> {{ grade.comments }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <h3>📊</h3>
+            <h3>No hay calificaciones</h3>
+            <p>Registra la primera calificación usando el formulario de arriba</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    const toggleBtn = document.getElementById('toggle-grade-form');
+    const gradeForm = document.getElementById('grade-form');
+    
+    toggleBtn.addEventListener('click', () => {
+        if (gradeForm.style.display === 'none') {
+            gradeForm.style.display = 'block';
+            toggleBtn.textContent = '❌ Ocultar Formulario';
+        } else {
+            gradeForm.style.display = 'none';
+            toggleBtn.textContent = '➕ Registrar Calificación';
+        }
+    });
+    </script>
+
+<style>
+.add-grade-section {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.grade-card-full {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+
+.grade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #E5E7EB;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.grade-score-large {
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 15px;
+}
+
+.grade-score-large h2 {
+    font-size: 3em;
+    margin: 0;
+}
+
+.grade-score-large p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.grade-details p {
+    margin: 8px 0;
+    color: #6B7280;
+}
+
+.grade-details strong {
+    color: #374151;
+}
+</style>
+{% endblock %}

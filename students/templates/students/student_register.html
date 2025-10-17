@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Estudiantes - Sistema Musical</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        .register-header { text-align: center; margin-bottom: 30px; }
+        .register-header h1 { color: #10B981; font-size: 2em; margin-bottom: 10px; }
+        .info-box { background: #EFF6FF; border-left: 4px solid #3B82F6; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #374151; }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D1D5DB;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: #10B981; }
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); }
+        .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .alert-error { background: #FEE2E2; color: #991B1B; border-left: 4px solid #EF4444; }
+        .login-link { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #E5E7EB; }
+        .login-link a { color: #10B981; text-decoration: none; font-weight: bold; }
+        .hint { font-size: 12px; color: #6B7280; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>🎓 Registro de Estudiante</h1>
+            <p>Crea tu cuenta para acceder al portal</p>
+        </div>
+        
+        <div class="info-box">
+            <strong>ℹ️ Necesitas:</strong>
+            <p style="margin-top: 5px;">Tu código de estudiante que te proporcionó tu profesor</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Código de Estudiante *</label>
+                <input type="text" name="student_code" class="form-control" placeholder="Tu código (número)" required>
+                <p class="hint">Pregunta a tu profesor por tu código</p>
+            </div>
+            <div class="form-group">
+                <label>Nombre de usuario *</label>
+                <input type="text" name="username" class="form-control" placeholder="usuario123" required>
+                <p class="hint">Elige un nombre de usuario único</p>
+            </div>
+            <div class="form-group">
+                <label>Correo electrónico *</label>
+                <input type="email" name="email" class="form-control" placeholder="tucorreo@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña *</label>
+                <input type="password" name="password1" class="form-control" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <div class="form-group">
+                <label>Confirmar contraseña *</label>
+                <input type="password" name="password2" class="form-control" placeholder="Repite tu contraseña" required>
+            </div>
+            <button type="submit" class="btn-register">✅ Crear Cuenta</button>
+        </form>
+        
+        <div class="login-link">
+            <p>¿Ya tienes cuenta? <a href="{% url 'students:student_login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+</html>

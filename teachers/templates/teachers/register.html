@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Sistema Musical Docentes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: #6B7280;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D1D5DB;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-error {
+            background: #FEE2E2;
+            color: #991B1B;
+            border-left: 4px solid #EF4444;
+        }
+        
+        .alert-success {
+            background: #D1FAE5;
+            color: #065F46;
+            border-left: 4px solid #10B981;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E5E7EB;
+        }
+        
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-hint {
+            font-size: 12px;
+            color: #6B7280;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .register-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>🎼</h1>
+            <h1>Crear Cuenta</h1>
+            <p>Regístrate como docente de música</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre *</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="Tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Apellidos *</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Tus apellidos" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre de usuario *</label>
+                <input type="text" name="username" class="form-control" placeholder="usuario (sin espacios)" required>
+                <p class="password-hint">Este será tu nombre para iniciar sesión</p>
+            </div>
+            
+            <div class="form-group">
+                <label>Correo electrónico *</label>
+                <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" name="phone" class="form-control" placeholder="0999999999">
+            </div>
+            
+            <div class="form-group">
+                <label>Especialización</label>
+                <input type="text" name="specialization" class="form-control" placeholder="Ej: Guitarra Clásica, Piano...">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Contraseña *</label>
+                    <input type="password" name="password1" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirmar contraseña *</label>
+                    <input type="password" name="password2" class="form-control" placeholder="Repite tu contraseña" required>
+                </div>
+            </div>
+            
+            <p class="password-hint" style="margin-bottom: 20px;">
+                * Campos obligatorios
+            </p>
+            
+            <button type="submit" class="btn-register">✅ Crear Cuenta</button>
+        </form>
+        
+        <div class="login-link">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'teachers:login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+</html>

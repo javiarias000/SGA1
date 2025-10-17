@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Musical - Docentes{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if user.is_authenticated and user.teacher_profile %}
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🎼 Sistema Musical</h2>
+                <p>{{ request.user.teacher_profile.full_name }}</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{% url 'teachers:dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="{% url 'teachers:registro' %}" class="nav-item {% if request.resolver_match.url_name == 'registro' %}active{% endif %}">
+                    <span class="icon">📝</span>
+                    <span>Registrar Clase</span>
+                </a>
+                
+                <a href="{% url 'teachers:estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
+                    <span class="icon">👥</span>
+                    <span>Estudiantes</span>
+                </a>
+                
+                <a href="{% url 'teachers:informes' %}" class="nav-item {% if request.resolver_match.url_name == 'informes' %}active{% endif %}">
+                    <span class="icon">📋</span>
+                    <span>Informes</span>
+                </a>
+                
+                <a href="{% url 'teachers:carpetas' %}" class="nav-item {% if request.resolver_match.url_name == 'carpetas' %}active{% endif %}">
+                    <span class="icon">📁</span>
+                    <span>Carpetas</span>
+                </a>
+                
+                <a href="{% url 'teachers:grades' %}" class="nav-item {% if request.resolver_match.url_name == 'grades' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Calificaciones</span>
+                </a>
+                
+                <a href="{% url 'teachers:attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+                    <span class="icon">✅</span>
+                    <span>Asistencia</span>
+                </a>
+                
+                <a href="{% url 'teachers:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                    <span class="icon">👤</span>
+                    <span>Mi Perfil</span>
+                </a>
+                
+                <a href="{% url 'teachers:logout' %}" class="nav-item logout">
+                    <span class="icon">🚪</span>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <div class="content-header">
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="content-body">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    {% else %}
+    <div class="auth-container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block auth_content %}{% endblock %}
+    </div>
+    {% endif %}
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

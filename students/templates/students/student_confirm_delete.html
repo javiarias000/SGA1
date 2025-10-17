@@ -1,0 +1,51 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock %}
+{% block page_title %}⚠️ Confirmar Acción{% endblock %}
+
+{% block content %}
+<div class="confirm-delete-card">
+    <div class="warning-icon">⚠️</div>
+    <h2>¿Desactivar estudiante?</h2>
+    <p>¿Estás seguro de que deseas desactivar a <strong>{{ student.name }}</strong>?</p>
+    <p style="color: #6B7280; margin-top: 10px;">
+        El estudiante no se eliminará, solo se marcará como inactivo. Sus clases y datos se conservarán.
+    </p>
+    
+    <form method="post" style="margin-top: 30px;">
+        {% csrf_token %}
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="{% url 'stundets:estudiantes' %}" class="btn btn-view">← Cancelar</a>
+            <button type="submit" class="btn btn-danger">Desactivar Estudiante</button>
+        </div>
+    </form>
+</div>
+
+<style>
+.confirm-delete-card {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    text-align: center;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.warning-icon {
+    font-size: 5em;
+    margin-bottom: 20px;
+}
+
+.confirm-delete-card h2 {
+    margin-bottom: 15px;
+    color: #EF4444;
+}
+
+.confirm-delete-card p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+</style>
+{% endblock %}
+            

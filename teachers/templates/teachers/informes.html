@@ -1,0 +1,106 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Informes{% endblock %}
+{% block page_title %}📄 Informes de Clases{% endblock %}
+
+{% block content %}
+<div class="filters-section">
+    <form method="get" class="form-row">
+        <div class="form-group">
+            <label>Filtrar por materia</label>
+            <select name="subject" class="form-control" onchange="this.form.submit()">
+                <option value="">Todas las materias</option>
+                <option value="Guitarra Clásica" {% if selected_subject == 'Guitarra Clásica' %}selected{% endif %}>🎸 Guitarra Clásica</option>
+                <option value="Conjunto Instrumental" {% if selected_subject == 'Conjunto Instrumental' %}selected{% endif %}>🎺 Conjunto Instrumental</option>
+                <option value="Creación y Arreglos Musicales" {% if selected_subject == 'Creación y Arreglos Musicales' %}selected{% endif %}>🎵 Creación y Arreglos</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Filtrar por estudiante</label>
+            <select name="student" class="form-control" onchange="this.form.submit()">
+                <option value="">Todos los estudiantes</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}" {% if selected_student == student.id|stringformat:"s" %}selected{% endif %}>
+                        {{ student.name }} - {{ student.grade }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    
+    <form method="get" class="form-row mt-20">
+        <div class="form-group">
+            <label>Desde</label>
+            <input type="date" name="date_from" value="{{ date_from }}" class="form-control" onchange="this.form.submit()">
+        </div>
+        <div class="form-group">
+            <label>Hasta</label>
+            <input type="date" name="date_to" value="{{ date_to }}" class="form-control" onchange="this.form.submit()">
+        </div>
+    </form>
+</div>
+
+<div class="activities-container">
+    {% if activities %}
+        {% for activity in activities %}
+        <div class="activity-card">
+            <div class="activity-header">
+                <div>
+                    <h3>{{ activity.student.name }} - {{ activity.student.grade }}</h3>
+                    <span class="subject-badge subject-{{ activity.subject|slugify }}">
+                        {% if 'Guitarra' in activity.subject %}🎸{% elif 'Conjunto' in activity.subject %}🎺{% else %}🎵{% endif %}
+                        {{ activity.subject }}
+                    </span>
+                    <p style="color: #6B7280; margin-top: 8px;">
+                        {{ activity.date|date:"d \\d\\e F \\d\\e Y" }}
+                        <strong style="margin-left: 10px;">• Clase #{{ activity.class_number }}</strong>
+                    </p>
+                </div>
+                <span class="badge badge-{{ activity.performance|lower|slugify }}">{{ activity.performance }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+                <div>
+                    <p style="font-size: 12px; font-weight: bold; color: #6B7280;">Temas:</p>
+                    <p>{{ activity.topics_worked|default:"-"|truncatewords:15 }}</p>
+                </div>
+                <div>
+                    <p style="font-size: 12px; font-weight: bold; color: #6B7280;">Repertorio:</p>
+                    <p>{{ activity.pieces|default:"-" }}</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                <a href="{% url 'teachers:download_parent' activity.id %}" class="btn btn-secondary">🏠 Informe Padres</a>
+                <a href="{% url 'teachers:download_teacher' activity.id %}" class="btn btn-purple">📄 Informe Docente</a>
+                
+                {% if activity.student.parent_phone %}
+                    <a href="{% url 'teachers:whatsapp_class' activity.id %}" class="btn" style="background: #25D366; color: white; padding: 10px 20px; font-size: 14px;" target="_blank">
+                        💬 WhatsApp
+                    </a>
+                {% else %}
+                    <span class="btn" style="background: #E5E7EB; color: #6B7280; cursor: not-allowed; padding: 10px 20px; font-size: 14px;">
+                        💬 Sin Teléfono
+                    </span>
+                {% endif %}
+                
+                {% if activity.student.parent_email %}
+                    <a href="{% url 'teachers:send_report_email' activity.id %}" class="btn btn-orange" style="padding: 10px 20px; font-size: 14px;">
+                        📧 Email
+                    </a>
+                {% endif %}
+                
+                <a href="{% url 'teachers:activity_edit' activity.id %}" class="btn btn-view">✏️ Editar</a>
+                <a href="{% url 'teachers:activity_delete' activity.id %}" class="btn btn-danger" style="padding: 10px 20px; font-size: 14px;">🗑️ Eliminar</a>
+            </div>
+            """
+            
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <h3>📄</h3>
+            <h3>No hay registros</h3>
+            <p>No se encontraron clases con los filtros seleccionados</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

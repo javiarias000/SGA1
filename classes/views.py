@@ -10,300 +10,20 @@ from datetime import datetime, date, timedelta
 from urllib.parse import quote
 from functools import wraps
 
-from .models import Teacher, Student, Activity, Grade, Attendance
+from .models import Teacher, Student, Activity, Grade, Attendance, Clase
 from .forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
 
-# ============================================
-# DECORADORES PERSONALIZADOS
-# ============================================
-
-def teacher_required(view_func):
-    """Decorador para vistas que requieren ser docente"""
-    @wraps(view_func)
-    @login_required
-    def wrapper(request, *args, **kwargs):
-        if not hasattr(request.user, 'teacher_profile'):
-            messages.error(request, '⚠️ No tienes permiso para acceder a esta área')
-            if hasattr(request.user, 'student_profile'):
-                return redirect('student_dashboard')
-            return redirect('login')
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
-
-def student_required(view_func):
-    """Decorador para vistas que requieren ser estudiante"""
-    @wraps(view_func)
-    @login_required
-    def wrapper(request, *args, **kwargs):
-        if not hasattr(request.user, 'student_profile'):
-            messages.error(request, '⚠️ No tienes permiso para acceder a esta área')
-            return redirect('dashboard')
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
-
-# ============================================
-# AUTENTICACIÓN
-# ============================================
-
-def login_view(request):
-    """Login para docentes"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'student_profile'):
-            return redirect('student_dashboard')
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            if hasattr(user, 'student_profile'):
-                messages.error(request, '⚠️ Esta es el área de docentes. Usa el login de estudiantes.')
-                return render(request, 'classes/login.html')
-            
-            login(request, user)
-            messages.success(request, f'¡Bienvenido {user.first_name or user.username}!')
-            return redirect('dashboard')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-    
-    return render(request, 'classes/login.html')
-
-
-def student_login_view(request):
-    """Login para estudiantes"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'teacher_profile'):
-            return redirect('dashboard')
-        return redirect('student_dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            if not hasattr(user, 'student_profile'):
-                messages.error(request, '⚠️ Esta cuenta no es de estudiante. Usa el login de docentes.')
-                return render(request, 'classes/student_login.html')
-            
-            login(request, user)
-            messages.success(request, f'¡Bienvenido {user.student_profile.name}!')
-            return redirect('student_dashboard')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-    
-    return render(request, 'classes/student_login.html')
-
-
-def logout_view(request):
-    """Cerrar sesión"""
-    logout(request)
-    messages.success(request, 'Has cerrado sesión correctamente')
-    return redirect('login')
-
-
-def register_view(request):
-    """Registro de nuevos docentes"""
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        phone = request.POST.get('phone', '')
-        specialization = request.POST.get('specialization', '')
-        
-        if not all([username, email, password1, password2, first_name, last_name]):
-            messages.error(request, 'Por favor completa todos los campos obligatorios')
-            return render(request, 'classes/register.html')
-        
-        if password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden')
-            return render(request, 'classes/register.html')
-        
-        if len(password1) < 6:
-            messages.error(request, 'La contraseña debe tener al menos 6 caracteres')
-            return render(request, 'classes/register.html')
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso')
-            return render(request, 'classes/register.html')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'El correo electrónico ya está registrado')
-            return render(request, 'classes/register.html')
-        
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1,
-                first_name=first_name,
-                last_name=last_name
-            )
-            
-            teacher = user.teacher_profile
-            teacher.full_name = f"{first_name} {last_name}"
-            teacher.phone = phone
-            teacher.specialization = specialization
-            teacher.save()
-            
-            messages.success(request, f'¡Cuenta creada! Ya puedes iniciar sesión como {username}')
-            return redirect('login')
-            
-        except Exception as e:
-            messages.error(request, f'Error al crear la cuenta: {str(e)}')
-    
-    return render(request, 'classes/register.html')
-
-
-def student_register_view(request):
-    """Registro de estudiantes"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'student_profile'):
-            return redirect('student_dashboard')
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        student_code = request.POST.get('student_code')
-        
-        if not all([username, email, password1, password2, student_code]):
-            messages.error(request, 'Por favor completa todos los campos')
-            return render(request, 'classes/student_register.html')
-        
-        if password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden')
-            return render(request, 'classes/student_register.html')
-        
-        if len(password1) < 6:
-            messages.error(request, 'La contraseña debe tener al menos 6 caracteres')
-            return render(request, 'classes/student_register.html')
-        
-        try:
-            student = Student.objects.get(id=int(student_code), active=True)
-        except (Student.DoesNotExist, ValueError):
-            messages.error(request, 'Código de estudiante inválido')
-            return render(request, 'classes/student_register.html')
-        
-        if student.user:
-            messages.error(request, 'Este estudiante ya tiene una cuenta')
-            return render(request, 'classes/student_register.html')
-        
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso')
-            return render(request, 'classes/student_register.html')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'El correo ya está registrado')
-            return render(request, 'classes/student_register.html')
-        
-        try:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1,
-                first_name=student.name.split()[0],
-                last_name=' '.join(student.name.split()[1:]) if len(student.name.split()) > 1 else ''
-            )
-            
-            student.user = user
-            student.save()
-            
-            messages.success(request, '¡Cuenta creada! Ya puedes iniciar sesión')
-            return redirect('student_login')
-            
-        except Exception as e:
-            messages.error(request, f'Error: {str(e)}')
-    
-    return render(request, 'classes/student_register.html')
-
-
-# ============================================
-# DASHBOARD DOCENTE - CORREGIDO
-# ============================================
-
-@teacher_required
-def dashboard_view(request):
-    """Dashboard principal del docente - SIN BUCLE"""
-    teacher = request.user.teacher_profile
-    
-    total_students = teacher.students.filter(active=True).count()
-    total_classes = Activity.objects.filter(student__teacher=teacher).count()
-    
-    today_classes = Activity.objects.filter(
-        student__teacher=teacher,
-        date=date.today()
-    ).select_related('student')
-    
-    recent_students = teacher.students.filter(active=True).order_by('-created_at')[:5]
-    recent_activities = Activity.objects.filter(
-        student__teacher=teacher
-    ).select_related('student').order_by('-created_at')[:10]
-    
-    context = {
-        'teacher': teacher,
-        'total_students': total_students,
-        'total_classes': total_classes,
-        'today_classes': today_classes,
-        'recent_students': recent_students,
-        'recent_activities': recent_activities,
-    }
-    
-    return render(request, 'classes/dashboard.html', context)
-
-
-# ============================================
-# DASHBOARD ESTUDIANTE
-# ============================================
-
-@student_required
-def student_dashboard_view(request):
-    """Dashboard estudiante"""
-    student = request.user.student_profile
-    
-    total_classes = student.get_class_count()
-    subjects = student.get_subjects()
-    recent_activities = student.activities.all().order_by('-date')[:5]
-    recent_grades = student.grades.all().order_by('-date')[:3]
-    
-    all_grades = student.grades.all()
-    promedio = sum(float(g.score) for g in all_grades) / len(all_grades) if all_grades else 0
-    
-    today = date.today()
-    month_start = today.replace(day=1)
-    month_attendances = student.attendances.filter(date__gte=month_start)
-    presente_mes = month_attendances.filter(status='Presente').count()
-    total_mes = month_attendances.count()
-    asistencia_porcentaje = (presente_mes / total_mes * 100) if total_mes > 0 else 0
-    
-    context = {
-        'student': student,
-        'total_classes': total_classes,
-        'subjects': subjects,
-        'recent_activities': recent_activities,
-        'recent_grades': recent_grades,
-        'promedio': promedio,
-        'asistencia_porcentaje': asistencia_porcentaje,
-        'presente_mes': presente_mes,
-        'total_mes': total_mes,
-    }
-    
-    return render(request, 'classes/student/dashboard.html', context)
+from functools import wraps
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
+from django.db.models import Q, Avg
+from django.shortcuts import render, redirect
+from users.views.decorators import teacher_required, student_required
 
 
 # ============================================
@@ -420,6 +140,27 @@ def student_code_view(request, student_id):
     student = get_object_or_404(Student, id=student_id, teacher=teacher)
     
     return render(request, 'classes/student_code.html', {'student': student})
+
+
+#==========================================
+#MATRICULA ESTUDIANTES
+#==========================================
+
+@student_required
+def enroll_in_class_view(request, clase_id):
+    """Permite que el estudiante se matricule a una clase"""
+    student = request.user.student_profile
+    clase = get_object_or_404(Clase, id=clase_id)
+
+    # Verificar si ya está matriculado
+    if Enrollment.objects.filter(student=student, clase=clase).exists():
+        messages.info(request, "Ya estás matriculado en esta clase.")
+    else:
+        Enrollment.objects.create(student=student, clase=clase)
+        messages.success(request, f"Te has matriculado correctamente en {clase.name}")
+
+    return redirect('student_classes')
+
 
 
 # ============================================
@@ -776,7 +517,7 @@ def student_classes_view(request):
     student = request.user.student_profile
     subject_filter = request.GET.get('subject', '')
     
-    activities = student.activities.all().order_by('-date')
+    activities = Activity.objects.filter(student=student).order_by('-date')
     
     if subject_filter:
         activities = activities.filter(subject=subject_filter)
@@ -799,7 +540,7 @@ def student_classes_view(request):
 def student_grades_view(request):
     """Calificaciones del estudiante"""
     student = request.user.student_profile
-    grades = student.grades.all().order_by('subject', '-date')
+    grades = Grade.objects.filter(student=student).order_by('subject', '-date')
     
     grades_by_subject = {}
     for grade in grades:
@@ -814,9 +555,12 @@ def student_grades_view(request):
         subject_grades = grades_by_subject[subject]['grades']
         if subject_grades:
             avg = sum(float(g.score) for g in subject_grades) / len(subject_grades)
-            grades_by_subject[subject]['average'] = avg
+            grades_by_subject[subject]['average'] = round(avg, 2)
     
-    promedio_general = sum(float(g.score) for g in grades) / len(grades) if grades else 0
+    promedio_general = 0
+    if grades:
+        promedio_general = sum(float(g.score) for g in grades) / len(grades)
+        promedio_general = round(promedio_general, 2)
     
     return render(request, 'classes/student/grades.html', {
         'student': student,
@@ -829,7 +573,7 @@ def student_grades_view(request):
 def student_attendance_view(request):
     """Asistencia del estudiante"""
     student = request.user.student_profile
-    attendances = student.attendances.all().order_by('-date')
+    attendances = Attendance.objects.filter(student=student).order_by('-date')
     
     total = attendances.count()
     presente = attendances.filter(status='Presente').count()
@@ -847,7 +591,7 @@ def student_attendance_view(request):
         'ausente': ausente,
         'tardanza': tardanza,
         'justificado': justificado,
-        'presente_pct': presente_pct,
+        'presente_pct': round(presente_pct, 1),
     })
 
 

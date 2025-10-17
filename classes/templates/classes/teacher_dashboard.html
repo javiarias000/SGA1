@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Sistema Musical{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <!-- Stats Cards -->
+    <div class="stats-container">
+        <div class="stat-card stat-blue">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <h3>{{ total_students }}</h3>
+                <p>Estudiantes Activos</p>
+            </div>
+        </div>
+        
+        <div class="stat-card stat-green">
+            <div class="stat-icon">📚</div>
+            <div class="stat-content">
+                <h3>{{ total_classes }}</h3>
+                <p>Clases Registradas</p>
+            </div>
+        </div>
+        
+        <div class="stat-card stat-orange">
+            <div class="stat-icon">📅</div>
+            <div class="stat-content">
+                <h3>{{ today_classes.count }}</h3>
+                <p>Clases de Hoy</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Clases de Hoy -->
+    {% if today_classes %}
+    <div class="dashboard-section">
+        <h2>📅 Clases de Hoy</h2>
+        <div class="classes-today">
+            {% for activity in today_classes %}
+            <div class="class-card">
+                <div class="class-info">
+                    <h4>{{ activity.student.name }}</h4>
+                    <p>{{ activity.subject }} - Clase #{{ activity.class_number }}</p>
+                </div>
+                <span class="badge badge-{{ activity.performance|lower|slugify }}">{{ activity.performance }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Estudiantes Recientes -->
+    <div class="dashboard-section">
+        <h2>👥 Estudiantes Recientes</h2>
+        <div class="student-list">
+            {% for student in recent_students %}
+            <div class="student-item">
+                <div class="student-avatar">{{ student.name.0 }}</div>
+                <div class="student-info">
+                    <h4>{{ student.name }}</h4>
+                    <p>{{ student.grade }} • {{ student.get_class_count }} clases</p>
+                </div>
+                <a href="{% url 'student_detail' student.id %}" class="btn-view">Ver</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Actividades Recientes -->
+    <div class="dashboard-section">
+        <h2>📚 Actividades Recientes</h2>
+        <div class="activity-list">
+            {% for activity in recent_activities %}
+            <div class="activity-item">
+                <div class="activity-date">{{ activity.date|date:"d M" }}</div>
+                <div class="activity-info">
+                    <h4>{{ activity.student.name }}</h4>
+                    <p>{{ activity.subject }} - Clase #{{ activity.class_number }}</p>
+                </div>
+                <span class="badge badge-{{ activity.performance|lower|slugify }}">{{ activity.performance }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Musical{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'classes/css/style.css' %}">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🎼 Sistema Musical</h2>
+                <p>{{ request.user.teacher_profile.full_name }}</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="{% url '   registro' %}" class="nav-item {% if request.resolver_match.url_name == 'registro' %}active{% endif %}">
+                    <span class="icon">📝</span>
+                    <span>Registrar Clase</span>
+                </a>
+                
+                <a href="{% url 'estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
+                    <span class="icon">👥</span>
+                    <span>Estudiantes</span>
+                </a>
+                
+                <a href="{% url 'informes' %}" class="nav-item {% if request.resolver_match.url_name == 'informes' %}active{% endif %}">
+                    <span class="icon">📄</span>
+                    <span>Informes</span>
+                </a>
+                
+                <a href="{% url 'carpetas' %}" class="nav-item {% if request.resolver_match.url_name == 'carpetas' %}active{% endif %}">
+                    <span class="icon">📁</span>
+                    <span>Carpetas</span>
+                </a>
+                
+                <a href="{% url 'grades' %}" class="nav-item {% if request.resolver_match.url_name == 'grades' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Calificaciones</span>
+                </a>
+                
+                <a href="{% url 'attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
+                    <span class="icon">✅</span>
+                    <span>Asistencia</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="{% url 'profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                    <span class="icon">⚙️</span>
+                    <span>Mi Perfil</span>
+                </a>
+                
+                <a href="{% url 'logout' %}" class="nav-item">
+                    <span class="icon">🚪</span>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="topbar">
+                <h1>{% block page_title %}{% endblock %}</h1>
+                <div class="topbar-user">
+                    <span>{{ request.user.username }}</span>
+                </div>
+            </div>
+            
+            <div class="content-wrapper">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    <script src="{% static 'classes/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
