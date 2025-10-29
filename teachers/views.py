@@ -8,166 +8,105 @@ from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime, date, timedelta
 from urllib.parse import quote
-from functools import wraps
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
-from classes.models import Teacher, Student, Activity, Grade, Attendance, Clase
-from classes.forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm
+# Importar decorador de users
+from users.views.decorators import teacher_required
 
+# Importar modelos
+from teachers.models import Teacher
+from students.models import Student
+from classes.models import Activity, Grade, Attendance, Clase, Enrollment
 
-# ============================================
-# DECORADOR TEACHER
-# ============================================
-
-def teacher_required(view_func):
-    """Decorador para vistas que requieren ser docente"""
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.warning(request, 'Debes iniciar sesión como docente')
-            return redirect('teacher_login')
-        
-        if not hasattr(request.user, 'teacher_profile'):
-            messages.error(request, '⚠️ No tienes permisos de docente')
-            logout(request)
-            return redirect('teacher_login')
-        
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
-
-
-# ============================================
-# LOGIN Y REGISTRO DOCENTE
-# ============================================
-
-def teacher_login_view(request):
-    """Vista de login para docentes"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'teacher_profile'):
-            return redirect('teacher_dashboard')
-        elif hasattr(request.user, 'student_profile'):
-            messages.info(request, 'Estás en el área de docentes. Usa el login de estudiantes.')
-            return redirect('student_dashboard')
-        logout(request)
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            if not hasattr(user, 'teacher_profile'):
-                messages.error(request, '⚠️ Esta cuenta no es de docente.')
-                return render(request, 'teachers/login.html')
-            
-            login(request, user)
-            messages.success(request, f'¡Bienvenido {user.first_name or user.username}!')
-            return redirect('teacher_dashboard')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-    
-    return render(request, 'teachers/login.html')
-
-
-def teacher_register_view(request):
-    """Vista para registrar nuevos docentes"""
-    if request.user.is_authenticated:
-        return redirect('teacher_dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        phone = request.POST.get('phone', '')
-        specialization = request.POST.get('specialization', '')
-        
-        if not all([username, email, password1, password2, first_name, last_name]):
-            messages.error(request, 'Por favor completa todos los campos obligatorios')
-        elif password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden')
-        elif len(password1) < 6:
-            messages.error(request, 'La contraseña debe tener al menos 6 caracteres')
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso')
-        elif User.objects.filter(email=email).exists():
-            messages.error(request, 'El correo electrónico ya está registrado')
-        else:
-            try:
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password1,
-                    first_name=first_name,
-                    last_name=last_name
-                )
-                teacher = user.teacher_profile
-                teacher.full_name = f"{first_name} {last_name}"
-                teacher.phone = phone
-                teacher.specialization = specialization
-                teacher.save()
-                
-                messages.success(request, f'¡Cuenta creada exitosamente! Ya puedes iniciar sesión como {username}')
-                return redirect('teacher_login')
-            except IntegrityError:
-                messages.error(request, 'Error al crear la cuenta. Intenta con otro nombre de usuario')
-
-    return render(request, 'teachers/register.html')
-
-
-def teacher_logout_view(request):
-    """Cerrar sesión"""
-    logout(request)
-    messages.success(request, 'Has cerrado sesión correctamente')
-    return redirect('teacher_login')
+# Importar formularios (si existen)
+try:
+    from classes.forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm, ClaseForm
+except ImportError:
+    pass
 
 
 # ============================================
 # DASHBOARD DOCENTE
 # ============================================
 
+@login_required
 @teacher_required
 def teacher_dashboard_view(request):
+    """Dashboard para docentes con formulario unificado"""
     teacher = request.user.teacher_profile
-    clases_teoricas = Clase.objects.filter(teacher=teacher).order_by('-fecha')
-    
-    clases_con_datos = []
-    clases_registradas_count = 0
 
-    for clase in clases_teoricas:
-        try:
-            registro = clase.registros.get()
-            asistencias_count = registro.asistencias.count()
-            total_estudiantes = clase.estudiantes.count()
-            clases_con_datos.append({
-                'clase': clase,
-                'tiene_registro': True,
-                'asistencias_registradas': asistencias_count,
-                'total_estudiantes': total_estudiantes,
-                'porcentaje': int((asistencias_count / total_estudiantes * 100)) if total_estudiantes > 0 else 0
-            })
-            clases_registradas_count += 1
-        except Activity.DoesNotExist:
-            clases_con_datos.append({
-                'clase': clase,
-                'tiene_registro': False,
-                'total_estudiantes': clase.estudiantes.count()
-            })
-    
-    total_clases = clases_teoricas.count()
-    
+    # Formulario unificado
+    if request.method == 'POST' and request.POST.get('action') == 'save_all_entry':
+        from classes.forms import UnifiedEntryForm
+        form = UnifiedEntryForm(request.POST, teacher=teacher)
+        if form.is_valid():
+            from django.db import transaction
+            from classes.models import Activity, Attendance, Grade, Clase
+            cd = form.cleaned_data
+            with transaction.atomic():
+                # Asegurar Clase por Materia
+                clase = Clase.objects.filter(teacher=teacher, subject=cd['common_subject'], active=True).order_by('name').first()
+                if not clase:
+                    clase = Clase.objects.create(teacher=teacher, subject=cd['common_subject'], name=cd['common_subject'], active=True)
+                # Activity
+                last = Activity.objects.filter(student=cd['common_student'], subject=cd['common_subject']).order_by('-class_number').first()
+                activity = Activity.objects.create(
+                    student=cd['common_student'],
+                    clase=clase,
+                    subject=cd['common_subject'],
+                    class_number=(last.class_number + 1) if last else 1,
+                    date=cd['common_date'],
+                    topics_worked=cd.get('topics_worked',''),
+                    techniques=cd.get('techniques',''),
+                    pieces=cd.get('pieces',''),
+                    performance=cd['performance'],
+                    strengths=cd.get('strengths',''),
+                    areas_to_improve=cd.get('areas_to_improve',''),
+                    homework=cd.get('homework',''),
+                    practice_time=cd.get('practice_time') or 30,
+                    observations=cd.get('observations',''),
+                )
+                # Attendance
+                Attendance.objects.update_or_create(
+                    student=cd['common_student'], date=cd['common_date'],
+                    defaults={'status': cd['attendance_status'], 'notes': cd.get('attendance_notes','')}
+                )
+                # Grade (opcional)
+                if cd.get('grade_score') is not None and cd.get('grade_period'):
+                    Grade.objects.update_or_create(
+                        student=cd['common_student'], subject=cd['common_subject'], period=cd['grade_period'],
+                        defaults={'score': cd['grade_score'], 'comments': cd.get('grade_comments',''), 'date': cd['common_date']}
+                    )
+            messages.success(request, 'Registro guardado correctamente.')
+            return redirect('teachers:teacher_dashboard')
+        else:
+            # Mostrar errores
+            for field, errors in form.errors.items():
+                messages.error(request, f"{field}: {','.join(errors)}")
+    else:
+        from classes.forms import UnifiedEntryForm
+        form = UnifiedEntryForm(teacher=teacher)
+
+    # Datos para tarjetas e información del dashboard
+    total_students = teacher.students.filter(active=True).count()
+    from classes.models import Activity
+    recent_activities = Activity.objects.filter(student__teacher=teacher).select_related('student').order_by('-date')[:10]
+    total_classes = Activity.objects.filter(student__teacher=teacher).count()
+    today = date.today()
+    today_classes = Activity.objects.filter(student__teacher=teacher, date=today).select_related('student')
+    recent_students = teacher.students.filter(active=True).order_by('name')[:8]
+
     context = {
         'teacher': teacher,
-        'clases_teoricas': clases_con_datos,
-        'total_clases': total_clases,
-        'clases_registradas': clases_registradas_count,
-        'clases_pendientes': total_clases - clases_registradas_count,
-        'total_estudiantes': teacher.students.count(),
+        'total_students': total_students,
+        'total_classes': total_classes,
+        'today_classes': today_classes,
+        'recent_students': recent_students,
+        'recent_activities': recent_activities,
+        'unified_form': form,
     }
-    
+
     return render(request, 'teachers/dashboard.html', context)
 
 
@@ -187,7 +126,7 @@ def estudiantes_view(request):
             student.teacher = teacher
             student.save()
             messages.success(request, f'Estudiante {student.name} agregado')
-            return redirect('estudiantes')
+            return redirect('teachers:estudiantes')
     else:
         form = StudentForm()
     
@@ -249,7 +188,7 @@ def student_edit_view(request, student_id):
         if form.is_valid():
             form.save()
             messages.success(request, f'Información de {student.name} actualizada')
-            return redirect('student_detail', student_id=student.id)
+            return redirect('teachers:student_detail', student_id=student.id)
     else:
         form = StudentForm(instance=student)
     
@@ -273,7 +212,7 @@ def student_delete_view(request, student_id):
         student.active = False
         student.save()
         messages.success(request, f'Estudiante {student.name} desactivado')
-        return redirect('estudiantes')
+        return redirect('teachers:estudiantes')
     
     return render(request, 'teachers/student_confirm_delete.html', {'student': student})
 
@@ -286,6 +225,64 @@ def student_code_view(request, student_id):
     
     return render(request, 'teachers/student_code.html', {'student': student})
 
+
+# ============================================
+# CLASES TEÓRICAS (Gestión)
+# ============================================
+
+@teacher_required
+def clases_teoricas_view(request):
+    teacher = request.user.teacher_profile
+    if request.method == 'POST':
+        form = ClaseForm(request.POST, teacher=teacher)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Clase creada correctamente')
+            return redirect('teachers:clases_teoricas')
+    else:
+        form = ClaseForm(teacher=teacher)
+    clases = Clase.objects.filter(teacher=teacher).order_by('subject', 'name')
+    return render(request, 'teachers/clases.html', {
+        'form': form,
+        'clases': clases,
+    })
+
+@teacher_required
+def clase_create_view(request):
+    teacher = request.user.teacher_profile
+    if request.method == 'POST':
+        form = ClaseForm(request.POST, teacher=teacher)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Clase creada correctamente')
+            return redirect('teachers:clases_teoricas')
+    else:
+        form = ClaseForm(teacher=teacher)
+    return render(request, 'teachers/clase_form.html', {'form': form})
+
+@teacher_required
+def clase_edit_view(request, clase_id):
+    teacher = request.user.teacher_profile
+    clase = get_object_or_404(Clase, id=clase_id, teacher=teacher)
+    if request.method == 'POST':
+        form = ClaseForm(request.POST, instance=clase, teacher=teacher)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Clase actualizada')
+            return redirect('teachers:clases_teoricas')
+    else:
+        form = ClaseForm(instance=clase, teacher=teacher)
+    return render(request, 'teachers/clase_form.html', {'form': form, 'clase': clase})
+
+@teacher_required
+def clase_delete_view(request, clase_id):
+    teacher = request.user.teacher_profile
+    clase = get_object_or_404(Clase, id=clase_id, teacher=teacher)
+    if request.method == 'POST':
+        clase.delete()
+        messages.success(request, 'Clase eliminada')
+        return redirect('teachers:clases_teoricas')
+    return render(request, 'teachers/clase_confirm_delete.html', {'clase': clase})
 
 # ============================================
 # ACTIVIDADES/CLASES
@@ -310,7 +307,7 @@ def registro_view(request):
             activity.save()
             
             messages.success(request, f'Clase #{activity.class_number} registrada')
-            return redirect('registro')
+            return redirect('teachers:registro')
     else:
         form = ActivityForm(teacher=teacher)
     
@@ -331,7 +328,7 @@ def activity_edit_view(request, activity_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Clase actualizada')
-            return redirect('informes')
+            return redirect('teachers:informes')
     else:
         form = ActivityForm(instance=activity, teacher=teacher)
     
@@ -352,7 +349,7 @@ def activity_delete_view(request, activity_id):
         class_number = activity.class_number
         activity.delete()
         messages.success(request, f'Clase #{class_number} de {student_name} eliminada')
-        return redirect('informes')
+        return redirect('teachers:informes')
     
     return render(request, 'teachers/activity_confirm_delete.html', {'activity': activity})
 
@@ -504,7 +501,7 @@ def grades_view(request):
         if form.is_valid():
             grade = form.save()
             messages.success(request, f'Calificación registrada: {grade.student.name} - {grade.score}')
-            return redirect('grades')
+            return redirect('teachers:grades')
     else:
         form = GradeForm(teacher=teacher)
     
@@ -540,7 +537,7 @@ def grade_edit_view(request, grade_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Calificación actualizada')
-            return redirect('grades')
+            return redirect('teachers:grades')
     else:
         form = GradeForm(instance=grade, teacher=teacher)
     
@@ -560,7 +557,7 @@ def grade_delete_view(request, grade_id):
         student_name = grade.student.name
         grade.delete()
         messages.success(request, f'Calificación de {student_name} eliminada')
-        return redirect('grades')
+        return redirect('teachers:grades')
     
     return render(request, 'teachers/grade_confirm_delete.html', {'grade': grade})
 
@@ -579,7 +576,7 @@ def attendance_view(request):
         if form.is_valid():
             attendance = form.save()
             messages.success(request, f'Asistencia registrada: {attendance.student.name} - {attendance.status}')
-            return redirect('attendance')
+            return redirect('teachers:attendance')
     else:
         form = AttendanceForm(teacher=teacher)
     
@@ -607,7 +604,7 @@ def attendance_edit_view(request, attendance_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Asistencia actualizada')
-            return redirect('attendance')
+            return redirect('teachers:attendance')
     else:
         form = AttendanceForm(instance=attendance, teacher=teacher)
     
@@ -626,7 +623,7 @@ def attendance_delete_view(request, attendance_id):
     if request.method == 'POST':
         attendance.delete()
         messages.success(request, 'Registro eliminado')
-        return redirect('attendance')
+        return redirect('teachers:attendance')
     
     return render(request, 'teachers/attendance_confirm_delete.html', {'attendance': attendance})
 
@@ -641,11 +638,11 @@ def profile_view(request):
     teacher = request.user.teacher_profile
     
     if request.method == 'POST':
-        form = TeacherProfileForm(request.POST, instance=teacher)
+        form = TeacherProfileForm(request.POST, request.FILES, instance=teacher)
         if form.is_valid():
             form.save()
             messages.success(request, 'Perfil actualizado')
-            return redirect('teacher_profile')
+            return redirect('teachers:profile')
     else:
         form = TeacherProfileForm(instance=teacher)
     
@@ -653,6 +650,103 @@ def profile_view(request):
         'form': form,
         'teacher': teacher,
     })
+
+
+# ============================================
+# DESCARGAS
+# ============================================
+
+@teacher_required
+def download_parent_report(request, activity_id):
+    """Descargar informe para padres"""
+    teacher = request.user.teacher_profile
+    activity = get_object_or_404(Activity, id=activity_id, student__teacher=teacher)
+    
+    content = f"""INFORME DE PROGRESO - MÚSICA
+Para Padres de Familia
+
+Fecha: {activity.date.strftime('%d/%m/%Y')}
+Clase #{activity.class_number}
+
+Estudiante: {activity.student.name}
+Año escolar: {activity.student.grade}
+Materia: {activity.subject}
+Docente: {teacher.full_name}
+
+TEMAS TRABAJADOS:
+{activity.topics_worked or 'No especificado'}
+
+TÉCNICAS:
+{activity.techniques or 'No especificado'}
+
+REPERTORIO:
+{activity.pieces or 'No especificado'}
+
+DESEMPEÑO: {activity.performance}
+
+FORTALEZAS:
+{activity.strengths or 'No especificado'}
+
+ÁREAS DE OPORTUNIDAD:
+{activity.areas_to_improve or 'No especificado'}
+
+TAREAS PARA CASA:
+{activity.homework or 'No especificado'}
+
+Tiempo de práctica: {activity.practice_time} minutos diarios
+
+OBSERVACIONES:
+{activity.observations or 'Ninguna'}
+
+{teacher.full_name}
+Docente de Música
+    """
+    
+    response = HttpResponse(content, content_type='text/plain; charset=utf-8')
+    filename = f"{activity.student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    return response
+
+
+@teacher_required
+def download_teacher_report(request, activity_id):
+    """Descargar informe para docente"""
+    teacher = request.user.teacher_profile
+    activity = get_object_or_404(Activity, id=activity_id, student__teacher=teacher)
+    
+    content = f"""REGISTRO ACADÉMICO - MÚSICA
+Informe para el Docente
+
+Fecha: {activity.date.strftime('%d/%m/%Y')}
+ID Registro: #{activity.id}
+Clase #{activity.class_number}
+
+ESTUDIANTE: {activity.student.name}
+Año escolar: {activity.student.grade}
+Materia: {activity.subject}
+Docente: {teacher.full_name}
+
+CONTENIDO DE LA CLASE:
+{activity.topics_worked or 'No especificado'}
+
+TÉCNICAS:
+{activity.techniques or 'No especificado'}
+
+REPERTORIO:
+{activity.pieces or 'No especificado'}
+
+EVALUACIÓN: {activity.performance}
+
+NOTAS:
+{activity.observations or 'Sin observaciones'}
+    """
+    
+    response = HttpResponse(content, content_type='text/plain; charset=utf-8')
+    filename = f"Docente_{activity.student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    return response
 
 
 # ============================================
@@ -711,3 +805,172 @@ def get_student_subjects(request):
         return JsonResponse({'subjects': subjects})
     except Student.DoesNotExist:
         return JsonResponse({'subjects': []})
+
+
+# ============================================
+# EMAIL
+# ============================================
+
+@teacher_required
+def send_report_email(request, activity_id):
+    """Enviar informe por email"""
+    teacher = request.user.teacher_profile
+    activity = get_object_or_404(Activity, id=activity_id, student__teacher=teacher)
+    
+    if not activity.student.parent_email:
+        messages.error(request, 'Este estudiante no tiene email registrado')
+        return redirect('teachers:informes')
+    
+    subject = f"Informe de Clase - {activity.student.name}"
+    message = f"""Estimado/a {activity.student.parent_name or 'Padre/Madre'},
+
+Informe de la clase #{activity.class_number}
+Estudiante: {activity.student.name}
+Materia: {activity.subject}
+Fecha: {activity.date.strftime('%d/%m/%Y')}
+
+Desempeño: {activity.performance}
+
+{teacher.full_name}
+Docente de Música
+    """
+    
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[activity.student.parent_email],
+            fail_silently=False,
+        )
+        messages.success(request, f'✅ Informe enviado a {activity.student.parent_email}')
+    except Exception as e:
+        messages.error(request, f'❌ Error al enviar email: {str(e)}')
+    
+    return redirect('teachers:informes')
+
+
+@teacher_required
+def send_grades_email(request, student_id):
+    """Enviar calificaciones por email"""
+    teacher = request.user.teacher_profile
+    student = get_object_or_404(Student, id=student_id, teacher=teacher)
+    
+    if not student.parent_email:
+        messages.error(request, 'Este estudiante no tiene email registrado')
+        return redirect('teachers:student_detail', student_id=student.id)
+    
+    grades = student.grades.all().order_by('subject', '-date')
+    subject = f"Calificaciones - {student.name}"
+    
+    message = f"""Estimado/a {student.parent_name or 'Padre/Madre'},
+
+Calificaciones de {student.name}:
+
+"""
+    for grade in grades:
+        message += f"{grade.subject}: {grade.score}/10\n"
+    
+    message += f"\n{teacher.full_name}\nDocente de Música"
+    
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[student.parent_email],
+            fail_silently=False,
+        )
+        messages.success(request, f'✅ Calificaciones enviadas')
+    except Exception as e:
+        messages.error(request, f'❌ Error: {str(e)}')
+    
+    return redirect('teachers:student_detail', student_id=student.id)
+
+
+# ============================================
+# WHATSAPP
+# ============================================
+
+def generate_whatsapp_url(phone_number, message):
+    """Genera URL de WhatsApp"""
+    clean_phone = ''.join(filter(str.isdigit, phone_number))
+    if not clean_phone.startswith('593') and len(clean_phone) == 10:
+        clean_phone = '593' + clean_phone
+    encoded_message = quote(message)
+    return f"https://wa.me/{clean_phone}?text={encoded_message}"
+
+
+@teacher_required
+def whatsapp_class_report(request, activity_id):
+    """Enviar informe por WhatsApp"""
+    teacher = request.user.teacher_profile
+    activity = get_object_or_404(Activity, id=activity_id, student__teacher=teacher)
+    
+    if not activity.student.parent_phone:
+        messages.error(request, '⚠️ Sin número de teléfono registrado')
+        return redirect('teachers:informes')
+    
+    message = f"""🎼 INFORME DE CLASE
+
+Estudiante: {activity.student.name}
+Clase #{activity.class_number}
+Fecha: {activity.date.strftime('%d/%m/%Y')}
+Materia: {activity.subject}
+
+Desempeño: {activity.performance}
+
+{teacher.full_name}
+Docente de Música
+    """
+    
+    whatsapp_url = generate_whatsapp_url(activity.student.parent_phone, message)
+    return redirect(whatsapp_url)
+
+
+@teacher_required
+def whatsapp_grades_report(request, student_id):
+    """Enviar calificaciones por WhatsApp"""
+    teacher = request.user.teacher_profile
+    student = get_object_or_404(Student, id=student_id, teacher=teacher)
+    
+    if not student.parent_phone:
+        messages.error(request, '⚠️ Sin número de teléfono')
+        return redirect('teachers:student_detail', student_id=student.id)
+    
+    grades = student.grades.all().order_by('subject')
+    message = f"📊 CALIFICACIONES\n\nEstudiante: {student.name}\n\n"
+    
+    for grade in grades:
+        message += f"{grade.subject}: {grade.score}/10\n"
+    
+    message += f"\n{teacher.full_name}"
+    
+    whatsapp_url = generate_whatsapp_url(student.parent_phone, message)
+    return redirect(whatsapp_url)
+
+
+@teacher_required
+def whatsapp_attendance_report(request, student_id):
+    """Enviar asistencia por WhatsApp"""
+    teacher = request.user.teacher_profile
+    student = get_object_or_404(Student, id=student_id, teacher=teacher)
+    
+    if not student.parent_phone:
+        messages.error(request, '⚠️ Sin número de teléfono')
+        return redirect('teachers:student_detail', student_id=student.id)
+    
+    attendances = student.attendances.all()[:10]
+    total = attendances.count()
+    presente = attendances.filter(status='Presente').count()
+    
+    message = f"✅ ASISTENCIA\n\nEstudiante: {student.name}\n"
+    message += f"Total: {total}\nPresente: {presente}\n\n"
+    
+    for att in attendances[:5]:
+        message += f"{att.date.strftime('%d/%m')}: {att.status}\n"
+    
+    message += f"\n{teacher.full_name}"
+    
+    whatsapp_url = generate_whatsapp_url(student.parent_phone, message)
+    return redirect(whatsapp_url)

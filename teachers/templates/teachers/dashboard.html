@@ -31,6 +31,63 @@
             </div>
         </div>
     </div>
+
+<form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save_all_entry">
+        <div class="dashboard-section">
+            <h2>⚡ Registro Unificado</h2>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+                <!-- Comunes -->
+                <div class="card">
+                    <h3>🎛️ Parámetros Comunes</h3>
+                    <div class="row g-3">
+                        <div class="col-md-4">{{ unified_form.common_student.label_tag }} {{ unified_form.common_student }}</div>
+                        <div class="col-md-4">{{ unified_form.common_subject.label_tag }} {{ unified_form.common_subject }}</div>
+                        <div class="col-md-4">{{ unified_form.common_date.label_tag }} {{ unified_form.common_date }}</div>
+                    </div>
+                </div>
+
+                <!-- Clase -->
+                <div class="card">
+                    <h3>📚 Clase</h3>
+                    <div class="row g-3">
+                        <div class="col-md-4">{{ unified_form.performance.label_tag }} {{ unified_form.performance }}</div>
+                        <div class="col-md-4">{{ unified_form.practice_time.label_tag }} {{ unified_form.practice_time }}</div>
+                        <div class="col-md-4">{{ unified_form.pieces.label_tag }} {{ unified_form.pieces }}</div>
+                        <div class="col-12">{{ unified_form.topics_worked.label_tag }} {{ unified_form.topics_worked }}</div>
+                        <div class="col-12">{{ unified_form.techniques.label_tag }} {{ unified_form.techniques }}</div>
+                        <div class="col-12">{{ unified_form.strengths.label_tag }} {{ unified_form.strengths }}</div>
+                        <div class="col-12">{{ unified_form.areas_to_improve.label_tag }} {{ unified_form.areas_to_improve }}</div>
+                        <div class="col-12">{{ unified_form.homework.label_tag }} {{ unified_form.homework }}</div>
+                        <div class="col-12">{{ unified_form.observations.label_tag }} {{ unified_form.observations }}</div>
+                    </div>
+                </div>
+
+                <!-- Asistencia -->
+                <div class="card">
+                    <h3>✅ Asistencia</h3>
+                    <div class="row g-3">
+                        <div class="col-md-4">{{ unified_form.attendance_status.label_tag }} {{ unified_form.attendance_status }}</div>
+                        <div class="col-12">{{ unified_form.attendance_notes.label_tag }} {{ unified_form.attendance_notes }}</div>
+                    </div>
+                </div>
+
+                <!-- Calificación (opcional) -->
+                <div class="card">
+                    <h3>📊 Calificación</h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">{{ unified_form.grade_period.label_tag }} {{ unified_form.grade_period }}</div>
+                        <div class="col-md-6">{{ unified_form.grade_score.label_tag }} {{ unified_form.grade_score }}</div>
+                        <div class="col-12">{{ unified_form.grade_comments.label_tag }} {{ unified_form.grade_comments }}</div>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Guardar todo</button>
+                </div>
+            </div>
+        </div>
+    </form>
     
     <!-- Clases de Hoy -->
     {% if today_classes %}
@@ -61,7 +118,7 @@
                     <h4>{{ student.name }}</h4>
                     <p>{{ student.grade }} • {{ student.get_class_count }} clases</p>
                 </div>
-                <a href="{% url 'students:student_detail' student.id %}" class="btn-view">Ver</a>
+                <a href="{% url 'teachers:student_detail' student.id %}" class="btn-view">Ver</a>
             </div>
             {% endfor %}
         </div>

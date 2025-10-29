@@ -3,57 +3,111 @@
 {% block title %}Mis Clases{% endblock %}
 
 {% block content %}
-<h1 class="page-title">📚 Mis Clases</h1>
-<p class="page-subtitle">Historial completo de clases de música</p>
+<div class="container-narrow">
+  <h1 class="mb-4">📚 Mis Clases</h1>
+  <p class="text-muted mb-4">Historial y matrícula en clases teóricas</p>
 
-<!-- FILTRO -->
-<div style="margin-bottom: 30px;">
-    <form method="get" style="display: flex; gap: 15px; flex-wrap: wrap;">
-        <select name="subject" class="form-control" style="max-width: 300px; padding: 12px; border: 2px solid #D1D5DB; border-radius: 10px;" onchange="this.form.submit()">
-            <option value="">Todas las materias</option>
-            {% for subject in student.get_subjects %}
-                <option value="{{ subject }}" {% if subject_filter == subject %}selected{% endif %}>{{ subject }}</option>
-            {% endfor %}
-        </select>
-    </form>
-</div>
-
-<!-- CLASES AGRUPADAS POR MATERIA -->
-{% for subject, subject_activities in activities_by_subject.items %}
-<div style="margin-bottom: 40px;">
-    <h2 style="color: #1F2937; font-size: 1.5em; margin-bottom: 20px;">
-        {% if 'Guitarra' in subject %}🎸{% elif 'Conjunto' in subject %}🎺{% else %}🎵{% endif %}
-        {{ subject }} ({{ subject_activities|length }} clases)
-    </h2>
-    
-    {% for activity in subject_activities %}
-    <div style="background: white; border: 2px solid #E5E7EB; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-            <div>
-                <h3 style="color: #1F2937; margin-bottom: 5px;">Clase #{{ activity.class_number }}</h3>
-                <p style="color: #6B7280; font-size: 0.9em;">{{ activity.date|date:"d F Y" }}</p>
-            </div>
-            <span style="padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9em;
-                {% if activity.performance == 'Excelente' %}background: #D1FAE5; color: #065F46;
-                {% elif activity.performance == 'Muy Bueno' or activity.performance == 'Bueno' %}background: #FEF3C7; color: #92400E;
-                {% else %}background: #FED7AA; color: #9A3412;{% endif %}">
-                {{ activity.performance }}
-            </span>
-        </div>
-        
-        <div style="background: #F9FAFB; padding: 15px; border-radius: 10px;">
-            <p style="margin-bottom: 10px;"><strong>📖 Temas trabajados:</strong> {{ activity.topics_worked|default:"-" }}</p>
-            <p style="margin-bottom: 10px;"><strong>🎼 Técnicas:</strong> {{ activity.techniques|default:"-" }}</p>
-            <p style="margin-bottom: 10px;"><strong>🎵 Repertorio:</strong> {{ activity.pieces|default:"-" }}</p>
-            <p style="margin-bottom: 10px;"><strong>✨ Fortalezas:</strong> {{ activity.strengths|default:"-" }}</p>
-            <p style="margin-bottom: 10px;"><strong>🎯 A mejorar:</strong> {{ activity.areas_to_improve|default:"-" }}</p>
-            <p style="margin-bottom: 10px;"><strong>🏠 Tarea:</strong> {{ activity.homework|default:"Sin tareas" }}</p>
-            <p><strong>⏱️ Tiempo de práctica:</strong> {{ activity.practice_time }} minutos/día</p>
-        </div>
+  <!-- Disponibles para matricularse -->
+  <div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="mb-0">Clases disponibles</h3>
     </div>
-    {% endfor %}
+    {% if clases_disponibles %}
+      <div class="row g-3">
+        {% for c in clases_disponibles %}
+          <div class="col-12 col-md-6">
+            <div class="card h-100">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h5 class="mb-1">{{ c.subject }} • {{ c.name }}</h5>
+                  <p class="mb-1 text-muted">Docente: {{ c.teacher.full_name }}</p>
+                  {% if c.schedule %}<p class="mb-1 text-muted">Horario: {{ c.schedule }}</p>{% endif %}
+                  {% if c.room %}<p class="mb-1 text-muted">Aula: {{ c.room }}</p>{% endif %}
+                  <small class="text-muted">Cupos: {{ c.get_enrolled_count }} / {{ c.max_students }}</small>
+                </div>
+                <div>
+                  <a class="btn btn-primary" href="{% url 'students:enroll' c.id %}">Matricularme</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">No hay clases disponibles para matricularse en este momento.</p>
+    {% endif %}
+  </div>
+
+  <!-- Clases ya matriculadas -->
+  <div class="card mb-4">
+    <h3 class="mb-3">Mis clases matriculadas</h3>
+    {% if mis_clases %}
+      <div class="row g-3">
+        {% for c in mis_clases %}
+          <div class="col-12 col-md-6">
+            <div class="card h-100">
+              <h5 class="mb-1">{{ c.subject }} • {{ c.name }}</h5>
+              <p class="mb-1 text-muted">Docente: {{ c.teacher.full_name }}</p>
+              <small class="text-muted">Cupos: {{ c.get_enrolled_count }} / {{ c.max_students }}</small>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">Aún no estás matriculado en ninguna clase.</p>
+    {% endif %}
+  </div>
+
+  <!-- Historial de actividades -->
+  <div class="mb-3">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-12 col-md-6">
+        <label class="form-label">Filtrar por materia</label>
+        <select name="subject" class="form-select" onchange="this.form.submit()">
+          <option value="">Todas las materias</option>
+          {% for subject in student.get_subjects %}
+            <option value="{{ subject }}" {% if subject_filter == subject %}selected{% endif %}>{{ subject }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <button type="submit" class="btn btn-outline-secondary">Aplicar</button>
+      </div>
+    </form>
+  </div>
+
+  {% for subject, subject_activities in activities_by_subject.items %}
+    <div class="mb-4">
+      <h4 class="mb-3">{% if 'Guitarra' in subject %}🎸{% elif 'Conjunto' in subject %}🎺{% else %}🎵{% endif %} {{ subject }} ({{ subject_activities|length }} clases)</h4>
+      <div class="d-grid gap-3">
+        {% for activity in subject_activities %}
+          <div class="card">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h6 class="mb-1">Clase #{{ activity.class_number }}</h6>
+                <small class="text-muted">{{ activity.date|date:"d M Y" }}</small>
+              </div>
+              <span class="badge rounded-pill text-bg-
+                {% if activity.performance == 'Excelente' %}success
+                {% elif activity.performance == 'Muy Bueno' or activity.performance == 'Bueno' %}warning
+                {% else %}danger{% endif %}">
+                {{ activity.performance }}
+              </span>
+            </div>
+            <div class="bg-light p-3 rounded">
+              <p class="mb-2"><strong>📖 Temas:</strong> {{ activity.topics_worked|default:"-" }}</p>
+              <p class="mb-2"><strong>🎼 Técnicas:</strong> {{ activity.techniques|default:"-" }}</p>
+              <p class="mb-2"><strong>🎵 Repertorio:</strong> {{ activity.pieces|default:"-" }}</p>
+              <p class="mb-2"><strong>✨ Fortalezas:</strong> {{ activity.strengths|default:"-" }}</p>
+              <p class="mb-2"><strong>🎯 A mejorar:</strong> {{ activity.areas_to_improve|default:"-" }}</p>
+              <p class="mb-0"><strong>🏠 Tarea:</strong> {{ activity.homework|default:"Sin tareas" }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-center text-muted py-5">No tienes clases registradas</p>
+  {% endfor %}
 </div>
-{% empty %}
-<p style="color: #6B7280; text-align: center; padding: 60px;">No tienes clases registradas</p>
-{% endfor %}
 {% endblock %}

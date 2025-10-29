@@ -3,8 +3,9 @@
 {% block title %}Mi Portal - {{ student.name }}{% endblock %}
 
 {% block content %}
-<h1 class="page-title">👋 ¡Hola, {{ student.name }}!</h1>
-<p class="page-subtitle">Bienvenido a tu portal de música</p>
+<div class="container-narrow">
+<h1 class="mb-2">👋 ¡Hola, {{ student.name }}!</h1>
+<p class="text-muted mb-4">Bienvenido a tu portal de música</p>
 
 <!-- ESTADÍSTICAS -->
 <div class="stats-grid">
@@ -85,4 +86,37 @@
     </div>
 </div>
 {% endif %}
+
+<!-- Matricularse desde el dashboard -->
+<div class="mt-4">
+  <div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Clases disponibles para matricularse</h2>
+      <a href="{% url 'students:classes' %}" class="btn btn-outline-secondary">Ver todas</a>
+    </div>
+    {% if clases_disponibles %}
+      <div class="row g-3">
+        {% for c in clases_disponibles %}
+          <div class="col-12 col-md-6">
+            <div class="card h-100">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h5 class="mb-1">{{ c.subject }} • {{ c.name }}</h5>
+                  <p class="mb-1 text-muted">Docente: {{ c.teacher.full_name }}</p>
+                  <small class="text-muted">Cupos: {{ c.get_enrolled_count }} / {{ c.max_students }}</small>
+                </div>
+                <div>
+                  <a class="btn btn-primary" href="{% url 'students:enroll' c.id %}">Matricularme</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">No hay clases disponibles por ahora.</p>
+    {% endif %}
+  </div>
+</div>
+</div>
 {% endblock %}

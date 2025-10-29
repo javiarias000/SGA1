@@ -1,131 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.db.models import Avg
-from functools import wraps
-from django.contrib.auth.models import User
 
-from classes.models import Teacher, Student, Activity, Grade, Attendance, Clase
-from classes.forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm
+# Importar decorador de users
+from users.views.decorators import student_required
 
-
-# ============================================
-# DECORADOR STUDENT
-# ============================================
-
-def student_required(view_func):
-    """Decorador para vistas que requieren ser estudiante"""
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.warning(request, 'Debes iniciar sesión como estudiante')
-            return redirect('student_login')
-        
-        if not hasattr(request.user, 'student_profile'):
-            messages.error(request, '⚠️ No tienes permisos de estudiante')
-            logout(request)
-            return redirect('student_login')
-        
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
-
-
-# ============================================
-# LOGIN ESTUDIANTE
-# ============================================
-
-def student_login_view(request):
-    """Vista de login para estudiantes"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'student_profile'):
-            return redirect('student_dashboard')
-        elif hasattr(request.user, 'teacher_profile'):
-            messages.info(request, 'Ya tienes sesión como docente.')
-            return redirect('teacher_dashboard')
-        else:
-            logout(request)
-            messages.warning(request, 'Tu cuenta no tiene perfil asociado.')
-            return redirect('student_login')
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            if not hasattr(user, 'student_profile'):
-                messages.error(request, '⚠️ Esta cuenta no es de estudiante. Usa el login de docentes.')
-            else:
-                login(request, user)
-                messages.success(request, f'¡Bienvenido {user.student_profile.name}!')
-                return redirect('student_dashboard')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-
-    return render(request, 'students/login.html')
-
-
-def student_register_view(request):
-    """Vista para que estudiantes creen su cuenta"""
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'student_profile'):
-            return redirect('student_dashboard')
-        return redirect('teacher_dashboard')
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        student_code = request.POST.get('student_code')
-        
-        if not all([username, email, password1, password2, student_code]):
-            messages.error(request, 'Por favor completa todos los campos')
-        elif password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden')
-        elif len(password1) < 6:
-            messages.error(request, 'La contraseña debe tener al menos 6 caracteres')
-        else:
-            try:
-                student = Student.objects.get(id=int(student_code), active=True)
-            except (Student.DoesNotExist, ValueError):
-                messages.error(request, 'Código de estudiante inválido.')
-                return render(request, 'students/register.html')
-            
-            if student.user:
-                messages.error(request, 'Este estudiante ya tiene una cuenta creada.')
-            elif User.objects.filter(username=username).exists():
-                messages.error(request, 'El nombre de usuario ya está en uso')
-            elif User.objects.filter(email=email).exists():
-                messages.error(request, 'El correo electrónico ya está registrado')
-            else:
-                user = User.objects.create_user(
-                    username=username,
-                    email=email,
-                    password=password1,
-                    first_name=student.name.split()[0],
-                    last_name=' '.join(student.name.split()[1:]) if len(student.name.split()) > 1 else ''
-                )
-                student.user = user
-                student.save()
-                messages.success(request, '¡Cuenta creada exitosamente! Ya puedes iniciar sesión')
-                return redirect('student_login')
-    
-    return render(request, 'students/register.html')
-
-
-def student_logout_view(request):
-    """Cerrar sesión"""
-    logout(request)
-    messages.success(request, 'Has cerrado sesión correctamente')
-    return redirect('student_login')
+# Importar modelos
+from students.models import Student
+from classes.models import Activity, Grade, Attendance, Clase, Enrollment
 
 
 # ============================================
 # DASHBOARD ESTUDIANTE
 # ============================================
-
+@login_required
 @student_required
 def student_dashboard_view(request):
     """Dashboard para estudiantes"""
@@ -133,66 +22,59 @@ def student_dashboard_view(request):
         estudiante = request.user.student_profile
     except AttributeError:
         messages.error(request, 'No se encontró tu perfil de estudiante')
-        logout(request)
-        return redirect('student_login')
+        return redirect('users:login')
     
-    # Obtener las últimas actividades/clases del estudiante
-    mis_actividades = Activity.objects.filter(
-        student=estudiante
-    ).order_by('-date')[:10]
+    # Últimas actividades y calificaciones
+    mis_actividades = Activity.objects.filter(student=estudiante).order_by('-date')[:10]
+    mis_calificaciones = Grade.objects.filter(student=estudiante).order_by('-date')[:5]
+    mis_asistencias_qs = Attendance.objects.filter(student=estudiante).order_by('-date')
+    mis_asistencias = list(mis_asistencias_qs[:10])
+
+    # Clases disponibles y ya matriculadas
+    # Clases activas globales (independiente del docente), excluyendo ya matriculadas
+    clases_candidatas = Clase.objects.filter(active=True).exclude(
+        enrollments__student=estudiante,
+        enrollments__active=True
+    )
+    # Aplicar reglas de aptitud y cupo
+    clases_disponibles = [c for c in clases_candidatas if estudiante.can_take_subject(c.subject) and c.has_space()]
+
+    mis_clases = Clase.objects.filter(
+        enrollments__student=estudiante,
+        enrollments__active=True
+    )
     
-    # Obtener calificaciones
-    mis_calificaciones = Grade.objects.filter(
-        student=estudiante
-    ).order_by('-date')[:5]
-    
-    # Obtener asistencias recientes
-    mis_asistencias = Attendance.objects.filter(
-        student=estudiante
-    ).order_by('-date')[:10]
-    
-    # Calcular estadísticas
+    # Estadísticas
     total_clases = Activity.objects.filter(student=estudiante).count()
-    total_asistencias = Attendance.objects.filter(student=estudiante).count()
-    presente_count = Attendance.objects.filter(
-        student=estudiante, 
-        status='Presente'
-    ).count()
-    
-    # Calcular promedio de calificaciones
-    promedio = Grade.objects.filter(student=estudiante).aggregate(
-        promedio=Avg('score')
-    )['promedio'] or 0
-    
-    # Calcular porcentaje de asistencia
-    porcentaje_asistencia = 0
-    if total_asistencias > 0:
-        porcentaje_asistencia = (presente_count / total_asistencias) * 100
-    
-    # Agrupar actividades por materia
+    total_asistencias = len(mis_asistencias)
+    presente_count = sum(1 for a in mis_asistencias if a.status == 'Presente')
+    promedio = Grade.objects.filter(student=estudiante).aggregate(promedio=Avg('score'))['promedio'] or 0
+    asistencia_porcentaje = (presente_count / total_asistencias * 100) if total_asistencias else 0
+    subjects = estudiante.get_subjects()
+
+    # Agrupar actividades por materia (si se usa en algún fragmento)
     actividades_por_materia = {}
     for actividad in mis_actividades:
-        if actividad.subject not in actividades_por_materia:
-            actividades_por_materia[actividad.subject] = []
-        actividades_por_materia[actividad.subject].append(actividad)
-    
-    stats = {
-        'total_clases': total_clases,
-        'total_asistencias': total_asistencias,
-        'promedio': round(promedio, 2),
-        'porcentaje_asistencia': round(porcentaje_asistencia, 1),
-        'presente_count': presente_count,
-    }
+        actividades_por_materia.setdefault(actividad.subject, []).append(actividad)
     
     context = {
-        'estudiante': estudiante,
-        'mis_actividades': mis_actividades,
-        'mis_calificaciones': mis_calificaciones,
+        'student': estudiante,
+        # Aliases esperados por templates existentes
+        'recent_activities': mis_actividades,
+        'recent_grades': mis_calificaciones,
+        'promedio': round(promedio, 2),
+        'asistencia_porcentaje': round(asistencia_porcentaje, 0),
+        'subjects': subjects,
+        'total_classes': total_clases,
+        
+        # Datos de matrícula para el dashboard
+        'clases_disponibles': clases_disponibles,
+        'mis_clases': mis_clases,
+
+        # Compatibilidad con otras secciones
         'mis_asistencias': mis_asistencias,
         'actividades_por_materia': actividades_por_materia,
-        'stats': stats,
     }
-    
     return render(request, 'students/dashboard.html', context)
 
 
@@ -211,18 +93,62 @@ def student_classes_view(request):
     if subject_filter:
         activities = activities.filter(subject=subject_filter)
     
+    # Agrupar por materia
     activities_by_subject = {}
     for activity in activities:
         if activity.subject not in activities_by_subject:
             activities_by_subject[activity.subject] = []
         activities_by_subject[activity.subject].append(activity)
     
+    # Obtener clases disponibles para matricularse
+    # Clases activas globales (independiente del docente), excluyendo ya matriculadas
+    clases_candidatas = Clase.objects.filter(active=True).exclude(
+        enrollments__student=student,
+        enrollments__active=True
+    )
+    # Aptitud por grado y cupo
+    clases_disponibles = [c for c in clases_candidatas if student.can_take_subject(c.subject) and c.has_space()]
+    
+    # Obtener clases matriculadas
+    mis_clases = Clase.objects.filter(
+        enrollments__student=student,
+        enrollments__active=True
+    )
+    
+    
     return render(request, 'students/classes.html', {
         'student': student,
         'activities': activities,
         'activities_by_subject': activities_by_subject,
         'subject_filter': subject_filter,
+        'clases_disponibles': clases_disponibles,
+        'mis_clases': mis_clases,
     })
+
+
+# ============================================
+# MATRÍCULA EN CLASES
+# ============================================
+
+@student_required
+def student_enroll_view(request, clase_id):
+    """Permite que el estudiante se matricule a una clase"""
+    student = request.user.student_profile
+    clase = get_object_or_404(Clase, id=clase_id, active=True)
+
+    # Elegibilidad por materia
+    if not student.can_take_subject(clase.subject):
+        messages.error(request, "No cumples los requisitos para esta materia según tu grado.")
+    # Verificar si ya está matriculado
+    elif Enrollment.objects.filter(student=student, clase=clase, active=True).exists():
+        messages.info(request, "Ya estás matriculado en esta clase.")
+    elif not clase.has_space():
+        messages.error(request, "Esta clase ya está llena.")
+    else:
+        Enrollment.objects.create(student=student, clase=clase, active=True)
+        messages.success(request, f"Te has matriculado correctamente en {clase.name}")
+
+    return redirect('students:classes')
 
 
 # ============================================
@@ -235,6 +161,7 @@ def student_grades_view(request):
     student = request.user.student_profile
     grades = Grade.objects.filter(student=student).order_by('subject', '-date')
     
+    # Agrupar por materia
     grades_by_subject = {}
     for grade in grades:
         if grade.subject not in grades_by_subject:
@@ -244,12 +171,14 @@ def student_grades_view(request):
             }
         grades_by_subject[grade.subject]['grades'].append(grade)
     
+    # Calcular promedios por materia
     for subject in grades_by_subject:
         subject_grades = grades_by_subject[subject]['grades']
         if subject_grades:
             avg = sum(float(g.score) for g in subject_grades) / len(subject_grades)
             grades_by_subject[subject]['average'] = round(avg, 2)
     
+    # Calcular promedio general
     promedio_general = 0
     if grades:
         promedio_general = sum(float(g.score) for g in grades) / len(grades)
@@ -272,6 +201,7 @@ def student_attendance_view(request):
     student = request.user.student_profile
     attendances = Attendance.objects.filter(student=student).order_by('-date')
     
+    # Calcular estadísticas
     total = attendances.count()
     presente = attendances.filter(status='Presente').count()
     ausente = attendances.filter(status='Ausente').count()
@@ -300,29 +230,34 @@ def student_attendance_view(request):
 def student_profile_view(request):
     """Perfil del estudiante"""
     student = request.user.student_profile
+
+    if request.method == 'POST' and request.FILES.get('photo'):
+        student.photo = request.FILES['photo']
+        student.save()
+        messages.success(request, 'Foto de perfil actualizada')
+        return redirect('students:profile')
+    
+    # Estadísticas generales
+    total_clases = Activity.objects.filter(student=student).count()
+    total_asistencias = Attendance.objects.filter(student=student).count()
+    promedio = Grade.objects.filter(student=student).aggregate(
+        promedio=Avg('score')
+    )['promedio'] or 0
+    
+    # Materias que está cursando
+    materias = Activity.objects.filter(student=student).values_list('subject', flat=True).distinct()
+    
+    # Clases matriculadas
+    clases_matriculadas = Clase.objects.filter(
+        enrollments__student=student,
+        enrollments__active=True
+    )
     
     return render(request, 'students/profile.html', {
         'student': student,
+        'total_clases': total_clases,
+        'total_asistencias': total_asistencias,
+        'promedio': round(promedio, 2),
+        'materias': materias,
+        'clases_matriculadas': clases_matriculadas,
     })
-
-
-# ============================================
-# MATRÍCULA EN CLASES
-# ============================================
-
-@student_required
-def student_enroll_view(request, clase_id):
-    """Permite que el estudiante se matricule a una clase"""
-    from classes.models import Enrollment
-    
-    student = request.user.student_profile
-    clase = get_object_or_404(Clase, id=clase_id)
-
-    # Verificar si ya está matriculado
-    if Enrollment.objects.filter(student=student, clase=clase).exists():
-        messages.info(request, "Ya estás matriculado en esta clase.")
-    else:
-        Enrollment.objects.create(student=student, clase=clase)
-        messages.success(request, f"Te has matriculado correctamente en {clase.name}")
-
-    return redirect('student_classes')

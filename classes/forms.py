@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Teacher, Student, Activity, Grade, Attendance
+from .models import Teacher, Student, Activity, Grade, Attendance, Clase
 
 class StudentForm(forms.ModelForm):
     """Formulario para agregar/editar estudiantes"""
@@ -40,12 +40,13 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = [
-            'student', 'subject', 'date', 'topics_worked', 'techniques',
+            'student', 'clase', 'subject', 'date', 'topics_worked', 'techniques',
             'pieces', 'performance', 'practice_time', 'strengths',
             'areas_to_improve', 'homework', 'observations'
         ]
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control', 'id': 'id_student'}),
+            'clase': forms.Select(attrs={'class': 'form-control', 'id': 'id_clase'}),
             'subject': forms.Select(attrs={'class': 'form-control', 'id': 'id_subject'}),
             'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'topics_worked': forms.Textarea(attrs={
@@ -100,6 +101,18 @@ class ActivityForm(forms.ModelForm):
                 teacher=self.teacher,
                 active=True
             )
+            # Filtrar clases del docente
+            self.fields['clase'].queryset = Clase.objects.filter(
+                teacher=self.teacher,
+                active=True
+            ).order_by('subject', 'name')
+        
+        # Valores iniciales útiles
+        from datetime import date as _date
+        if not self.initial.get('practice_time'):
+            self.fields['practice_time'].initial = 30
+        if not self.initial.get('date'):
+            self.fields['date'].initial = _date.today()
         
         # Ocultar el campo class_number ya que se auto-calcula
         if 'class_number' in self.fields:
@@ -137,6 +150,11 @@ class GradeForm(forms.ModelForm):
         self.teacher = kwargs.pop('teacher', None)
         super().__init__(*args, **kwargs)
         
+        # Valores iniciales útiles
+        from datetime import date as _date
+        if not self.initial.get('date'):
+            self.fields['date'].initial = _date.today()
+        
         # Filtrar solo estudiantes del docente actual
         if self.teacher:
             self.fields['student'].queryset = Student.objects.filter(
@@ -168,6 +186,13 @@ class AttendanceForm(forms.ModelForm):
         self.teacher = kwargs.pop('teacher', None)
         super().__init__(*args, **kwargs)
         
+        # Valores iniciales útiles
+        if not self.initial.get('status'):
+            self.fields['status'].initial = 'Presente'
+        from datetime import date as _date
+        if not self.initial.get('date'):
+            self.fields['date'].initial = _date.today()
+        
         # Filtrar solo estudiantes del docente actual
         if self.teacher:
             self.fields['student'].queryset = Student.objects.filter(
@@ -176,11 +201,38 @@ class AttendanceForm(forms.ModelForm):
             )
 
 
+class ClaseForm(forms.ModelForm):
+    class Meta:
+        model = Clase
+        fields = ['name', 'subject', 'description', 'schedule', 'room', 'max_students', 'active']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'subject': forms.Select(attrs={'class': 'form-select'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'schedule': forms.TextInput(attrs={'class': 'form-control'}),
+            'room': forms.TextInput(attrs={'class': 'form-control'}),
+            'max_students': forms.NumberInput(attrs={'class': 'form-control'}),
+            'active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.teacher = kwargs.pop('teacher', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        if self.teacher is not None:
+            obj.teacher = self.teacher
+        if commit:
+            obj.save()
+        return obj
+
+
 class TeacherProfileForm(forms.ModelForm):
     """Formulario para editar perfil del docente"""
     class Meta:
         model = Teacher
-        fields = ['full_name', 'specialization', 'phone']
+        fields = ['full_name', 'specialization', 'phone', 'photo']
         widgets = {
             'full_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -195,6 +247,124 @@ class TeacherProfileForm(forms.ModelForm):
                 'placeholder': '0999999999'
             }),
         }
+
+
+class UnifiedEntryForm(forms.Form):
+    """Formulario unificado para registrar Clase, Asistencia y Calificación en una sola vista."""
+    # Comunes
+    common_student = forms.ModelChoiceField(
+        queryset=Student.objects.none(),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label='Estudiante'
+    )
+    common_subject = forms.ChoiceField(
+        choices=Activity.SUBJECT_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label='Materia'
+    )
+    common_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        label='Fecha'
+    )
+
+    # Clase (Activity)
+    performance = forms.ChoiceField(
+        choices=Activity.PERFORMANCE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        initial='Bueno',
+        label='Desempeño'
+    )
+    practice_time = forms.IntegerField(
+        min_value=15, max_value=180,
+        initial=30,
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        label='Minutos de práctica'
+    )
+    topics_worked = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Temas trabajados'
+    )
+    techniques = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Técnicas'
+    )
+    pieces = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label='Repertorio'
+    )
+    strengths = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Fortalezas'
+    )
+    areas_to_improve = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Áreas a mejorar'
+    )
+    homework = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Tareas para casa'
+    )
+    observations = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Observaciones'
+    )
+
+    # Asistencia
+    attendance_status = forms.ChoiceField(
+        choices=Attendance.STATUS_CHOICES,
+        initial='Presente',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label='Asistencia'
+    )
+    attendance_notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Notas de asistencia'
+    )
+
+    # Calificación
+    grade_period = forms.ChoiceField(
+        choices=Grade.PERIOD_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label='Período'
+    )
+    grade_score = forms.DecimalField(
+        required=False,
+        min_value=0, max_value=10, decimal_places=2, max_digits=5,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
+        label='Nota'
+    )
+    grade_comments = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        label='Comentarios'
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.teacher = kwargs.pop('teacher', None)
+        super().__init__(*args, **kwargs)
+        from datetime import date as _date
+        if not self.initial.get('common_date'):
+            self.fields['common_date'].initial = _date.today()
+        if self.teacher:
+            self.fields['common_student'].queryset = Student.objects.filter(teacher=self.teacher, active=True)
+
+    def clean(self):
+        cleaned = super().clean()
+        # Validación condicional para calificación
+        score = cleaned.get('grade_score')
+        period = cleaned.get('grade_period')
+        if score is not None and period in (None, ''):
+            self.add_error('grade_period', 'Selecciona el período para la calificación')
+        return cleaned
 
 
 class QuickAttendanceForm(forms.Form):

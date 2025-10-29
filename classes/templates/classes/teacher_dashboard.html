@@ -61,7 +61,7 @@
                     <h4>{{ student.name }}</h4>
                     <p>{{ student.grade }} • {{ student.get_class_count }} clases</p>
                 </div>
-                <a href="{% url 'student_detail' student.id %}" class="btn-view">Ver</a>
+                <a href="{% url 'teachers:student_detail' student_id=student.id %}" class="btn-view">Ver</a>
             </div>
             {% endfor %}
         </div>

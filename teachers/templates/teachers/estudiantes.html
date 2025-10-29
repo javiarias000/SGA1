@@ -96,7 +96,7 @@
                 {% endif %}
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                <a href="{% url 'students:student_detail' student.id %}" class="btn btn-view">👁️ Ver Detalle</a>
+                <a href="{% url 'teachers:student_detail' student_id=student.id %}" class="btn btn-view">👁️ Ver Detalle</a>
             </div>
         </div>
     </div>

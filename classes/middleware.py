@@ -24,16 +24,21 @@ class RoleBasedAccessMiddleware:
         # Evitar ejecutar lógica para peticiones de archivos estáticos u cosas sin path
         path = request.path or "/"
 
-        # URLs públicas (si quieres usar nombres, resuélvelos de forma segura)
+        # Permitir admin, estáticos y media sin interferencia
+        if path.startswith('/admin/') or path.startswith('/static/') or path.startswith('/media/'):
+            return self.get_response(request)
+
+        # URLs públicas
         public_urls = [
-            safe_reverse('login', default='/login/'),
-            safe_reverse('logout', default='/logout/'),
-            safe_reverse('register', default='/register/'),  # si no existe, usamos '/register/' como fallback
+            safe_reverse('home', default='/'),
+            safe_reverse('users:login', default='/users/login/'),
+            safe_reverse('users:logout', default='/users/logout/'),
+            safe_reverse('users:register', default='/users/register/'),
         ]
         # Asegura que public_urls contenga strings válidos
         public_urls = [u for u in public_urls if u]
 
-        # Si la ruta es pública, dejamos pasar
+        # Si la ruta es pública o es admin/static/media, dejamos pasar
         if path in public_urls:
             return self.get_response(request)
 
@@ -42,7 +47,7 @@ class RoleBasedAccessMiddleware:
 
         # Si no está autenticado, lo puedes redirigir al login (opcional)
         if not is_authenticated:
-            login_url = safe_reverse('login', default='/login/')
+            login_url = safe_reverse('users:login', default='/users/login/')
             return redirect(login_url)
 
         # Determinar rol (ajusta según tu modelo de usuario)
@@ -50,20 +55,18 @@ class RoleBasedAccessMiddleware:
         is_student = hasattr(user, 'student_profile')
         is_teacher = hasattr(user, 'teacher_profile')
 
-        # Protección por zonas: si las listas student_paths/teacher_paths contienen prefijos (ej: '/teacher/')
-        # comparamos con request.path.startswith(...)
-        if is_student:
-            # Si estudiante intenta acceder a área de docente => llevar al dashboard del estudiante
+        # Solo aplicar redirecciones cruzadas cuando el usuario tiene un único rol
+        if is_student and not is_teacher:
+            # Estudiante no debe entrar a área de docentes
             if any(path.startswith(p) for p in teacher_paths):
-                student_dashboard = safe_reverse('student:dashboard', default='/student/dashboard/')
-                # Evitar bucle: si ya está en el dashboard no redirigir
+                student_dashboard = safe_reverse('students:student_dashboard', default='/students/dashboard/')
                 if path != student_dashboard:
                     return redirect(student_dashboard)
 
-        if is_teacher:
-            # Si docente intenta acceder a área de estudiante => llevar al dashboard del docente
+        if is_teacher and not is_student:
+            # Docente no debe entrar a área de estudiantes
             if any(path.startswith(p) for p in student_paths):
-                teacher_dashboard = safe_reverse('teacher:dashboard', default='/teacher/dashboard/')
+                teacher_dashboard = safe_reverse('teachers:teacher_dashboard', default='/teachers/dashboard/')
                 if path != teacher_dashboard:
                     return redirect(teacher_dashboard)
 

@@ -1,24 +1,252 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema Musical - Estudiantes{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>{% block title %}Portal Estudiante{% endblock %}</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    
+    <style>
+        /* Estilos inline como fallback */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .sidebar-header p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-left-color: #e74c3c;
+        }
+
+        .nav-item.active {
+            background-color: rgba(231,76,60,0.2);
+            border-left-color: #e74c3c;
+        }
+
+        .nav-item .icon {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2rem;
+            width: calc(100% - 260px);
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid #9b59b6;
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #8e44ad;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     {% if user.is_authenticated and user.student_profile %}
     <div class="dashboard-container">
-        <aside class="sidebar student-sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
-                <h2>🎵 Sistema Musical</h2>
+                <h2>🎓 Portal Estudiante</h2>
                 <p>{{ request.user.student_profile.name }}</p>
             </div>
             
             <nav class="sidebar-nav">
-                <a href="{% url 'students:dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <a href="{% url 'students:student_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
                     <span class="icon">📊</span>
                     <span>Mi Dashboard</span>
                 </a>
@@ -43,7 +271,7 @@
                     <span>Mi Perfil</span>
                 </a>
                 
-                <a href="{% url 'students:logout' %}" class="nav-item logout">
+                <a href="{% url 'users:logout' %}" class="nav-item">
                     <span class="icon">🚪</span>
                     <span>Cerrar Sesión</span>
                 </a>
@@ -51,38 +279,27 @@
         </aside>
         
         <main class="main-content">
-            <div class="content-header">
-                <h1>{% block page_title %}Mi Dashboard{% endblock %}</h1>
-            </div>
-            
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
-            <div class="content-body">
-                {% block content %}{% endblock %}
+            <div class="container-fluid py-4">
+                <!-- Mensajes -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mb-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Contenido -->
+                {% block content %}
+                {% endblock %}
             </div>
         </main>
     </div>
     {% else %}
-    <div class="auth-container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        {% block auth_content %}{% endblock %}
+    <div style="padding: 2rem; text-align: center;">
+        <h1>Acceso Denegado</h1>
+        <p>Debes iniciar sesión como estudiante para acceder a esta página.</p>
+        <a href="{% url 'users:login' %}" class="btn btn-primary">Iniciar Sesión</a>
     </div>
     {% endif %}
     

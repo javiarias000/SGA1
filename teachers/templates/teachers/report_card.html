@@ -1,0 +1,100 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Libreta - {{ student.name }}{% endblock %}
+{% block page_title %}📒 Libreta de {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="report-card">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="card-title">Resumen</h3>
+      <p><strong>Docente:</strong> {{ teacher.full_name }}</p>
+      <p><strong>Año:</strong> {{ student.grade }}</p>
+      <div class="row mt-3">
+        <div class="col-md-3"><strong>Total clases:</strong> {{ total_classes }}</div>
+        <div class="col-md-3"><strong>Promedio:</strong> {{ promedio_general|floatformat:2 }}</div>
+        <div class="col-md-3"><strong>Asistencias:</strong> {{ presente_count }}/{{ total_attendance }} ({{ attendance_percentage|floatformat:0 }}%)</div>
+        <div class="col-md-3"><strong>Ausencias:</strong> {{ ausente_count }} • <strong>Tardanzas:</strong> {{ tardanza_count }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h3 class="card-title">📚 Clases por Materia</h3>
+          {% if activities_by_subject %}
+            {% for subject, acts in activities_by_subject.items %}
+              <div class="mb-3">
+                <h5 class="mb-2">{{ subject }}</h5>
+                <ul class="list-group">
+                  {% for a in acts %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>#{{ a.class_number }}</strong> · {{ a.date|date:"d M Y" }}
+                        {% if a.pieces %}<div style="font-size:12px;color:#6B7280;">{{ a.pieces }}</div>{% endif %}
+                      </div>
+                      <span class="badge bg-secondary">{{ a.performance }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted">No hay clases registradas.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h3 class="card-title">📊 Calificaciones</h3>
+          {% if grades_by_subject %}
+            {% for subject, grades in grades_by_subject.items %}
+              <div class="mb-3">
+                <h5 class="mb-2">{{ subject }}</h5>
+                <ul class="list-group">
+                  {% for g in grades %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>{{ g.period }}</strong> · {{ g.date|date:"d M Y" }}
+                        {% if g.comments %}<div style="font-size:12px;color:#6B7280;">{{ g.comments }}</div>{% endif %}
+                      </div>
+                      <span class="badge bg-primary">{{ g.score }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted">No hay calificaciones registradas.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3 class="card-title">✅ Asistencias recientes</h3>
+      {% if attendances %}
+        <ul class="list-group">
+          {% for att in attendances %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ att.date|date:"d M Y" }}</span>
+              <span class="badge bg-light text-dark">{{ att.status }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted">No hay registros de asistencia.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <a href="{% url 'teachers:student_detail' student.id %}" class="btn btn-secondary">← Volver al estudiante</a>
+</div>
+{% endblock %}

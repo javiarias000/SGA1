@@ -1,17 +1,10 @@
 # classes/routes.py
 
-# Rutas para los estudiantes
+# Prefijos de rutas para detectar áreas
 student_paths = [
-    '/student/dashboard/',
-    '/student/profile/',
-    '/student/courses/',
-    '/student/grades/',
+    '/students/',
 ]
 
-# Rutas para los profesores
 teacher_paths = [
-    '/teacher/dashboard/',
-    '/teacher/classes/',
-    '/teacher/students/',
-    '/teacher/grades/',
+    '/teachers/',
 ]

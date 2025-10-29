@@ -61,6 +61,7 @@
 
         <form method="post">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
             <div class="form-group">
                 <label>Usuario</label>
                 <input type="text" name="username" class="form-control" placeholder="Tu nombre de usuario" required autofocus>
@@ -75,7 +76,7 @@
         </form>
 
         <div class="register-link">
-            <p>¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a></p>
+<p>¿No tienes cuenta? <a href="{% url 'users:register' %}">Regístrate aquí</a></p>
         </div>
     </div>
 </body>

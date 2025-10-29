@@ -9,14 +9,25 @@
 <!-- INFORMACIÓN DEL ESTUDIANTE -->
 <div style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 2px solid #3B82F6; padding: 40px; border-radius: 20px; margin-bottom: 30px;">
     <div style="display: flex; align-items: center; gap: 30px; margin-bottom: 30px;">
-        <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #10B981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4em; font-weight: bold;">
-            {{ student.name.0 }}
+        <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #10B981 0%, #059669 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 4em; font-weight: bold; overflow: hidden;">
+            {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+                {{ student.name.0 }}
+            {% endif %}
         </div>
         <div>
             <h2 style="font-size: 2em; color: #1F2937; margin-bottom: 5px;">{{ student.name }}</h2>
             <p style="color: #6B7280; font-size: 1.1em;">{{ student.grade }}</p>
         </div>
     </div>
+
+    <form method="post" enctype="multipart/form-data" style="margin-top: 10px;">
+        {% csrf_token %}
+        <label style="font-weight:600; margin-right:10px;">Actualizar foto:</label>
+        <input type="file" name="photo" accept="image/*" class="form-control" style="max-width:300px; display:inline-block;">
+        <button type="submit" class="btn btn-primary" style="margin-left:10px;">Subir</button>
+    </form>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
         <div>

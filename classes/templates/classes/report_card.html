@@ -171,7 +171,7 @@
     <div class="actions-bar">
         <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimir Libreta</button>
         <a href="{% url 'send_complete_report' student.id %}" class="btn btn-orange">📧 Enviar por Email</a>
-        <a href="{% url 'student_detail' student.id %}" class="btn btn-view">← Volver al Estudiante</a>
+        <a href="{% url 'teachers:student_detail' student_id=student.id %}" class="btn btn-view">← Volver al Estudiante</a>
     </div>
 </div>
 {% endblock %}

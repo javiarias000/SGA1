@@ -3,24 +3,35 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
-from .decorators import teacher_required, student_required
-from classes.models import Clase, Activity, Attendance
 
+# Importar decoradores
+from users.views.decorators import teacher_required, student_required
+
+# Importar modelos
+from classes.models import Clase, Activity, Attendance, Grade
 
 
 # ============================================
-# DASHBOARD PRINCIPAL
+# DASHBOARD PRINCIPAL (Redirección)
 # ============================================
 
 @login_required
 def dashboard(request):
     """Redirige según rol del usuario"""
     user = request.user
-    if hasattr(user, 'is_teacher') and user.is_teacher:
-        return redirect('teacher_dashboard')
-    elif hasattr(user, 'is_student') and user.is_student:
-        return redirect('student_dashboard')
-    return render(request, 'no_permission.html', {'mensaje': 'Rol no identificado'})
+    
+    # Verificar si es teacher
+    if hasattr(user, 'teacher_profile'):
+        return redirect('teachers:teacher_dashboard')
+    
+    # Verificar si es student
+    elif hasattr(user, 'student_profile'):
+        return redirect('students:student_dashboard')
+    
+    # Si no tiene ningún perfil
+    messages.error(request, 'Tu cuenta no tiene un perfil asignado')
+    logout(request)
+    return redirect('users:login')
 
 
 # ============================================
@@ -29,33 +40,31 @@ def dashboard(request):
 
 @teacher_required
 def teacher_dashboard_view(request):
+    """Dashboard para docentes"""
     teacher = request.user.teacher_profile
-    clases_teoricas = Clase.objects.filter(teacher=teacher).order_by('-fecha')
+    clases_teoricas = Clase.objects.filter(teacher=teacher, active=True).order_by('-fecha')
     
     clases_con_datos = []
     clases_registradas_count = 0
 
     for clase in clases_teoricas:
-        try:
-            registro = clase.registros.get()
-            asistencias_count = registro.asistencias.count()
-            total_estudiantes = clase.estudiantes.count()
-            clases_con_datos.append({
-                'clase': clase,
-                'tiene_registro': True,
-                'asistencias_registradas': asistencias_count,
-                'total_estudiantes': total_estudiantes,
-                'porcentaje': int((asistencias_count / total_estudiantes * 100)) if total_estudiantes > 0 else 0
-            })
-        except Activity.DoesNotExist:
-            clases_con_datos.append({
-                'clase': clase,
-                'tiene_registro': False,
-                'total_estudiantes': clase.estudiantes.count()
-            })
+        # Obtener enrollments activos
+        enrollments = clase.enrollments.filter(active=True)
+        total_estudiantes = enrollments.count()
+        
+        # Verificar si tiene actividades registradas
+        tiene_actividades = Activity.objects.filter(clase=clase).exists()
+        
+        clases_con_datos.append({
+            'clase': clase,
+            'tiene_registro': tiene_actividades,
+            'total_estudiantes': total_estudiantes,
+        })
+        
+        if tiene_actividades:
+            clases_registradas_count += 1
     
     total_clases = clases_teoricas.count()
-    clases_number = Activity.objects.filter(clase__teacher=teacher).count()
     
     context = {
         'teacher': teacher,
@@ -63,10 +72,12 @@ def teacher_dashboard_view(request):
         'total_clases': total_clases,
         'clases_registradas': clases_registradas_count,
         'clases_pendientes': total_clases - clases_registradas_count,
-        'total_estudiantes': teacher.students.count(),
+        'total_estudiantes': teacher.students.filter(active=True).count(),
     }
     
-    return render(request, 'dashboard.html', context)
+    return render(request, 'teachers/dashboard.html', context)
+
+
 # ============================================
 # DASHBOARD ESTUDIANTE
 # ============================================
@@ -79,7 +90,7 @@ def student_dashboard_view(request):
     except AttributeError:
         messages.error(request, 'No se encontró tu perfil de estudiante')
         logout(request)
-        return redirect('student_login')
+        return redirect('users:login')
     
     # Obtener las últimas actividades/clases del estudiante
     mis_actividades = Activity.objects.filter(
@@ -105,7 +116,6 @@ def student_dashboard_view(request):
     ).count()
     
     # Calcular promedio de calificaciones
-    from django.db.models import Avg
     promedio = Grade.objects.filter(student=estudiante).aggregate(
         promedio=Avg('score')
     )['promedio'] or 0
@@ -139,4 +149,4 @@ def student_dashboard_view(request):
         'stats': stats,
     }
     
-    return render(request, 'classes/student/dashboard.html', context)
+    return render(request, 'students/dashboard.html', context)

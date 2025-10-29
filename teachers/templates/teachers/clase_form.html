@@ -1,0 +1,50 @@
+{% extends 'teachers/base.html' %}
+{% block title %}Clase{% endblock %}
+{% block content %}
+<div class="container-narrow">
+  <h1 class="mb-4">Clase</h1>
+  <div class="card">
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        {{ form.name }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Materia</label>
+        {{ form.subject }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        {{ form.description }}
+      </div>
+      <div class="row g-3">
+        <div class="col">
+          <label class="form-label">Horario</label>
+          {{ form.schedule }}
+        </div>
+        <div class="col">
+          <label class="form-label">Aula</label>
+          {{ form.room }}
+        </div>
+      </div>
+      <div class="row g-3 mt-3">
+        <div class="col">
+          <label class="form-label">Cupo</label>
+          {{ form.max_students }}
+        </div>
+        <div class="col d-flex align-items-end">
+          <div class="form-check">
+            {{ form.active }}
+            <label class="form-check-label">Activa</label>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'teachers:clases_teoricas' %}" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

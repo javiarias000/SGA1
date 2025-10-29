@@ -10,6 +10,7 @@ class Teacher(models.Model):
     full_name = models.CharField(max_length=200, verbose_name="Nombre completo")
     specialization = models.CharField(max_length=100, blank=True, verbose_name="Especialización")
     phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono")
+    photo = models.ImageField(upload_to='profiles/teachers/', blank=True, null=True, verbose_name="Foto de perfil")
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:

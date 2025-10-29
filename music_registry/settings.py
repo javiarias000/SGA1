@@ -141,9 +141,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Login
-LOGIN_URL = '/login/'
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/users/login/'
 
 
 
@@ -157,9 +157,3 @@ EMAIL_HOST_USER = 'javiarias000@gmail.com'
 EMAIL_HOST_PASSWORD = 'mtqhlljcsuonbqkw'  
 DEFAULT_FROM_EMAIL = 'Sistema Musical <javiarias000@gmail.com>'
 
-# NOTA: Para Gmail, necesitas crear una "Contraseña de aplicación"
-# 1. Ve a https://myaccount.google.com/security
-# 2. Activa "Verificación en 2 pasos"
-# 3. Busca "Contraseñas de aplicaciones"
-# 4. Genera una nueva contraseña para "Correo"
-# 5. Usa esa contraseña aquí

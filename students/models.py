@@ -26,6 +26,7 @@ class Student(models.Model):
     parent_email = models.EmailField(blank=True, verbose_name="Email del padre/madre")
     parent_phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono del padre/madre")
     notes = models.TextField(blank=True, verbose_name="Notas adicionales")
+    photo = models.ImageField(upload_to='profiles/students/', blank=True, null=True, verbose_name="Foto de perfil")
     active = models.BooleanField(default=True, verbose_name="Activo")
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -38,17 +39,21 @@ class Student(models.Model):
         return f"{self.name} - {self.grade}"
     
     def can_take_subject(self, subject):
-        """Verifica si el estudiante puede tomar una materia según su grado"""
-        grade_number = int(''.join(filter(str.isdigit, self.grade)))
-        is_bachillerato = 'Bachillerato' in self.grade
+        """Verifica si el estudiante puede tomar una materia según su grado.
+        Se usan coincidencias flexibles por nombre para tolerar variaciones (acentos, alias).
+        """
+        subject_l = (subject or '').lower()
+        grade_digits = ''.join(filter(str.isdigit, self.grade or ''))
+        grade_number = int(grade_digits) if grade_digits else 0
+        is_bachillerato = 'bachillerato' in (self.grade or '').lower()
         
-        if subject == 'Guitarra Clásica':
+        if 'guitarra' in subject_l:
             return True
-        elif subject == 'Conjunto Instrumental':
+        if 'conjunto' in subject_l:
             return grade_number >= 6
-        elif subject == 'Creación y Arreglos Musicales':
+        if 'creación' in subject_l or 'arreglo' in subject_l:
             return is_bachillerato and grade_number == 2
-        return False
+        return True  # por defecto permitir si no se reconoce la materia, para no bloquear UX
     
     def get_class_count(self, subject=None):
         """Número de clases del estudiante"""
@@ -64,4 +69,4 @@ class Student(models.Model):
     def has_user_account(self):
         """Verifica si el estudiante tiene cuenta de usuario"""
         return self.user is not None
-        
+

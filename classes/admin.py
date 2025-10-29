@@ -1,5 +1,17 @@
 from django.contrib import admin
-from .models import Teacher, Student, Activity, Grade, Attendance
+from .models import Activity, Grade, Attendance, Clase, Enrollment
+
+@admin.register(Clase)
+class ClaseAdmin(admin.ModelAdmin):
+    list_display = ['name', 'subject', 'teacher', 'max_students', 'get_enrolled_count', 'active']
+    list_filter = ['subject', 'active', 'teacher']
+    search_fields = ['name', 'teacher__full_name']
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ['student', 'clase', 'date_enrolled', 'active']
+    list_filter = ['active', 'clase__subject', 'clase__teacher']
+    search_fields = ['student__name', 'clase__name', 'clase__teacher__full_name']
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):

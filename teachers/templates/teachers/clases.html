@@ -1,0 +1,96 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Clases Teóricas{% endblock %}
+
+{% block content %}
+<div class="container-narrow">
+  <h1 class="mb-4">🗂️ Clases Teóricas</h1>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-5">
+      <div class="card">
+        <h4 class="mb-3">Crear nueva clase</h4>
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            {{ form.name }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Materia</label>
+            {{ form.subject }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            {{ form.description }}
+          </div>
+          <div class="row g-3">
+            <div class="col">
+              <label class="form-label">Horario</label>
+              {{ form.schedule }}
+            </div>
+            <div class="col">
+              <label class="form-label">Aula</label>
+              {{ form.room }}
+            </div>
+          </div>
+          <div class="row g-3 mt-3">
+            <div class="col">
+              <label class="form-label">Cupo</label>
+              {{ form.max_students }}
+            </div>
+            <div class="col d-flex align-items-end">
+              <div class="form-check">
+                {{ form.active }}
+                <label class="form-check-label">Activa</label>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="card">
+        <h4 class="mb-3">Mis clases</h4>
+        {% if clases %}
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Materia</th>
+                  <th>Nombre</th>
+                  <th>Cupos</th>
+                  <th>Activa</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in clases %}
+                <tr>
+                  <td>{{ c.subject }}</td>
+                  <td>{{ c.name }}</td>
+                  <td>{{ c.get_enrolled_count }} / {{ c.max_students }}</td>
+                  <td>
+                    {% if c.active %}<span class="badge bg-success">Sí</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}
+                  </td>
+                  <td class="text-end">
+                    <a href="{% url 'teachers:clase_edit' c.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+                    <a href="{% url 'teachers:clase_delete' c.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">Aún no has creado clases.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

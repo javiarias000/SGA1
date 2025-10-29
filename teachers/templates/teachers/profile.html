@@ -6,8 +6,12 @@
 {% block content %}
 <div class="profile-container">
     <div class="profile-card">
-        <div class="profile-avatar-large">
-            {{ request.user.first_name.0|default:request.user.username.0 }}
+        <div class="profile-avatar-large" style="overflow: hidden;">
+            {% if teacher.photo %}
+                <img src="{{ teacher.photo.url }}" alt="Foto" style="width:100%; height:100%; object-fit: cover;">
+            {% else %}
+                <span>{{ request.user.first_name.0|default:request.user.username.0 }}</span>
+            {% endif %}
         </div>
         <div class="profile-info">
             <h2>{{ teacher.full_name }}</h2>
@@ -40,7 +44,7 @@
 
 <div class="edit-profile-section mt-20">
     <h3>✏️ Editar Información</h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group">
@@ -56,6 +60,11 @@
         <div class="form-group">
             {{ form.phone.label_tag }}
             {{ form.phone }}
+        </div>
+        
+        <div class="form-group">
+            <label>Foto de perfil</label>
+            {{ form.photo }}
         </div>
         
         <button type="submit" class="btn btn-primary">💾 Actualizar Perfil</button>

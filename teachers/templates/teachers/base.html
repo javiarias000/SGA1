@@ -1,11 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema Musical - Docentes{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <!-- App/Teachers CSS (optional overrides) -->
+    <link rel="stylesheet" href="{% static 'teachers/css/style.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -18,14 +25,9 @@
             </div>
             
             <nav class="sidebar-nav">
-                <a href="{% url 'teachers:dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+<a href="{% url 'teachers:teacher_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">
                     <span class="icon">📊</span>
                     <span>Dashboard</span>
-                </a>
-                
-                <a href="{% url 'teachers:registro' %}" class="nav-item {% if request.resolver_match.url_name == 'registro' %}active{% endif %}">
-                    <span class="icon">📝</span>
-                    <span>Registrar Clase</span>
                 </a>
                 
                 <a href="{% url 'teachers:estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
@@ -37,20 +39,15 @@
                     <span class="icon">📋</span>
                     <span>Informes</span>
                 </a>
+
+                <a href="{% url 'teachers:clases_teoricas' %}" class="nav-item {% if request.resolver_match.url_name == 'clases_teoricas' %}active{% endif %}">
+                    <span class="icon">🏫</span>
+                    <span>Clases Teóricas</span>
+                </a>
                 
                 <a href="{% url 'teachers:carpetas' %}" class="nav-item {% if request.resolver_match.url_name == 'carpetas' %}active{% endif %}">
                     <span class="icon">📁</span>
                     <span>Carpetas</span>
-                </a>
-                
-                <a href="{% url 'teachers:grades' %}" class="nav-item {% if request.resolver_match.url_name == 'grades' %}active{% endif %}">
-                    <span class="icon">📊</span>
-                    <span>Calificaciones</span>
-                </a>
-                
-                <a href="{% url 'teachers:attendance' %}" class="nav-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
-                    <span class="icon">✅</span>
-                    <span>Asistencia</span>
                 </a>
                 
                 <a href="{% url 'teachers:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
@@ -58,7 +55,7 @@
                     <span>Mi Perfil</span>
                 </a>
                 
-                <a href="{% url 'teachers:logout' %}" class="nav-item logout">
+<a href="{% url 'users:logout' %}" class="nav-item">
                     <span class="icon">🚪</span>
                     <span>Cerrar Sesión</span>
                 </a>
@@ -66,38 +63,27 @@
         </aside>
         
         <main class="main-content">
-            <div class="content-header">
-                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
-            </div>
-            
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            
-            <div class="content-body">
-                {% block content %}{% endblock %}
+            <div class="container-fluid py-4">
+                <!-- Mensajes -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mb-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Contenido -->
+                {% block content %}
+                {% endblock %}
             </div>
         </main>
     </div>
     {% else %}
-    <div class="auth-container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        {% block auth_content %}{% endblock %}
+    <div style="padding: 2rem; text-align: center;">
+        <h1>Acceso Denegado</h1>
+        <p>Debes iniciar sesión como docente para acceder a esta página.</p>
+        <a href="{% url 'users:login' %}" class="btn btn-primary">Iniciar Sesión</a>
     </div>
     {% endif %}
     
