@@ -21,7 +21,7 @@ class Student(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='students', verbose_name="Docente")
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='student_profile', verbose_name="Usuario del estudiante")
     name = models.CharField(max_length=200, verbose_name="Nombre completo")
-    grade = models.CharField(max_length=50, choices=GRADE_CHOICES, verbose_name="Año escolar")
+    grade = models.CharField(max_length=50, verbose_name="Año escolar")
     parent_name = models.CharField(max_length=200, blank=True, verbose_name="Nombre del padre/madre")
     parent_email = models.EmailField(blank=True, verbose_name="Email del padre/madre")
     parent_phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono del padre/madre")

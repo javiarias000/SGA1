@@ -1,0 +1,173 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Calificaciones Detalladas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">📊 Calificaciones por Parciales</h1>
+    
+    <!-- Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Parcial</label>
+                    <select name="parcial" class="form-select" onchange="this.form.submit()">
+                        <option value="1P" {% if parcial_actual == '1P' %}selected{% endif %}>Primer Parcial</option>
+                        <option value="2P" {% if parcial_actual == '2P' %}selected{% endif %}>Segundo Parcial</option>
+                        <option value="3P" {% if parcial_actual == '3P' %}selected{% endif %}>Tercer Parcial</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">Materia</label>
+                    <select name="subject" class="form-select" onchange="this.form.submit()">
+                        {% for code, name in materias %}
+                        <option value="{{ code }}" {% if subject_actual == code %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">Estudiante</label>
+                    <select name="student" class="form-select" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        {% for est in estudiantes_lista %}
+                        <option value="{{ est.id }}">{{ est.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ estadisticas.total }}</h3>
+                    <p class="mb-0">Total Estudiantes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-success">{{ estadisticas.aprobados }}</h3>
+                    <p class="mb-0">Aprobados (≥7)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-warning">{{ estadisticas.en_riesgo }}</h3>
+                    <p class="mb-0">En Riesgo (4-7)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-danger">{{ estadisticas.reprobados }}</h3>
+                    <p class="mb-0">Reprobados (<4)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabla de Calificaciones -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>N°</th>
+                            <th>Estudiante</th>
+                            {% for tipo in tipos_aportes %}
+                            <th class="text-center">{{ tipo.nombre }}</th>
+                            {% endfor %}
+                            <th class="text-center bg-primary text-white">Promedio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in datos_tabla %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ fila.estudiante.name }}</td>
+                            {% for tipo in tipos_aportes %}
+                            <td class="text-center">
+                                <input type="number" 
+                                       class="form-control form-control-sm text-center calificacion-input"
+                                       min="0" max="10" step="0.01"
+                                       value="{{ fila.aportes|get_item:tipo.codigo|floatformat:2 }}"
+                                       data-student="{{ fila.estudiante.id }}"
+                                       data-tipo="{{ tipo.id }}"
+                                       data-parcial="{{ parcial_actual }}"
+                                       data-subject="{{ subject_actual }}"
+                                       style="width: 80px;">
+                            </td>
+                            {% endfor %}
+                            <td class="text-center bg-light">
+                                <strong class="promedio-{{ fila.estudiante.id }}">
+                                    {{ fila.promedio|floatformat:2 }}
+                                </strong>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="100" class="text-center text-muted">
+                                No hay estudiantes
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Guardar calificación al cambiar
+document.querySelectorAll('.calificacion-input').forEach(input => {
+    input.addEventListener('change', function() {
+        const data = {
+            student_id: this.dataset.student,
+            tipo_aporte_id: this.dataset.tipo,
+            parcial: this.dataset.parcial,
+            subject: this.dataset.subject,
+            calificacion: parseFloat(this.value) || 0
+        };
+        
+        fetch('{% url "teachers:guardar_calificacion_parcial" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                // Actualizar promedio
+                document.querySelector('.promedio-' + data.student_id).textContent = 
+                    result.promedio.toFixed(2);
+                
+                // Feedback visual
+                this.classList.add('border-success');
+                setTimeout(() => this.classList.remove('border-success'), 1000);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            this.classList.add('border-danger');
+        });
+    });
+});
+</script>
+
+{% endblock %}

@@ -12,8 +12,9 @@ class StudentForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Nombre completo del estudiante'
             }),
-            'grade': forms.Select(attrs={
-                'class': 'form-control'
+'grade': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ej: 1ro Bachillerato A'
             }),
             'parent_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -107,6 +108,10 @@ class ActivityForm(forms.ModelForm):
                 active=True
             ).order_by('subject', 'name')
         
+        # Materias dinámicas
+        from .models import get_subject_choices
+        self.fields['subject'].choices = get_subject_choices()
+        
         # Valores iniciales útiles
         from datetime import date as _date
         if not self.initial.get('practice_time'):
@@ -154,6 +159,10 @@ class GradeForm(forms.ModelForm):
         from datetime import date as _date
         if not self.initial.get('date'):
             self.fields['date'].initial = _date.today()
+        
+        # Materias dinámicas
+        from .models import get_subject_choices
+        self.fields['subject'].choices = get_subject_choices()
         
         # Filtrar solo estudiantes del docente actual
         if self.teacher:
@@ -258,7 +267,7 @@ class UnifiedEntryForm(forms.Form):
         label='Estudiante'
     )
     common_subject = forms.ChoiceField(
-        choices=Activity.SUBJECT_CHOICES,
+        choices=[],
         widget=forms.Select(attrs={'class': 'form-select'}),
         label='Materia'
     )
@@ -356,6 +365,9 @@ class UnifiedEntryForm(forms.Form):
             self.fields['common_date'].initial = _date.today()
         if self.teacher:
             self.fields['common_student'].queryset = Student.objects.filter(teacher=self.teacher, active=True)
+        # Materias dinámicas
+        from .models import get_subject_choices
+        self.fields['common_subject'].choices = get_subject_choices()
 
     def clean(self):
         cleaned = super().clean()

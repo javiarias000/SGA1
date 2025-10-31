@@ -48,7 +48,7 @@
         
         <div style="display: flex; gap: 15px;">
             <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
-            <a href="{% url 'teachers:grades' %}" class="btn btn-view">← Cancelar</a>
+            <a href="{% url 'teachers:student_detail' grade.student.id %}" class="btn btn-view">← Cancelar</a>
         </div>
     </form>
 </div>

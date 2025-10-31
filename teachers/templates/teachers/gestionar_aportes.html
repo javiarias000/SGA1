@@ -1,0 +1,274 @@
+{% extends 'teachers/base.html' %}
+{% load static %}
+
+{% block title %}Gestionar Tipos de Aportes{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">📚 Gestionar Tipos de Aportes</h1>
+            <p class="text-muted mb-0">Administra los tipos de evaluaciones disponibles</p>
+        </div>
+        <div>
+            <a href="{% url 'teachers:teacher_dashboard' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Mensajes -->
+    {% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message|safe }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h3 class="text-primary">{{ total_aportes }}</h3>
+                    <p class="mb-0">Total de Aportes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <h3 class="text-success">{{ aportes_activos }}</h3>
+                    <p class="mb-0">Aportes Activos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <h3 class="text-info">{{ total_aportes|add:"-"|add:aportes_activos }}</h3>
+                    <p class="mb-0">Aportes Inactivos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario para Crear Nuevo Aporte -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-plus"></i> Crear Nuevo Tipo de Aporte</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="crear_aporte">
+                
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label">Nombre del Aporte *</label>
+                        <input type="text" 
+                               name="nombre" 
+                               class="form-control" 
+                               placeholder="Ej: Tarea 1, Examen Final, Proyecto, etc."
+                               required>
+                        <small class="text-muted">El nombre debe ser descriptivo y único</small>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Peso</label>
+                        <input type="number" 
+                               name="peso" 
+                               class="form-control" 
+                               value="1.0"
+                               min="0.1"
+                               max="5"
+                               step="0.1">
+                        <small class="text-muted">Por defecto: 1.0</small>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save"></i> Crear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de Aportes Existentes -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fas fa-list"></i> Tipos de Aportes Registrados</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Código</th>
+                            <th class="text-center">Peso</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Veces Usado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in aportes_con_stats %}
+                        <tr>
+                            <td>
+                                <strong>{{ item.tipo.nombre }}</strong>
+                            </td>
+                            <td>
+                                <code class="small">{{ item.tipo.codigo }}</code>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary">{{ item.tipo.peso }}</span>
+                            </td>
+                            <td class="text-center">
+                                {% if item.tipo.activo %}
+                                <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-info">{{ item.uso_count }}</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <!-- Botón Editar -->
+                                    <button type="button" 
+                                            class="btn btn-outline-primary" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editModal{{ item.tipo.id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    
+                                    <!-- Botón Eliminar -->
+                                    <button type="button" 
+                                            class="btn btn-outline-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteModal{{ item.tipo.id }}"
+                                            {% if item.usado %}disabled{% endif %}>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Editar -->
+                        <div class="modal fade" id="editModal{{ item.tipo.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="editar_aporte">
+                                        <input type="hidden" name="aporte_id" value="{{ item.tipo.id }}">
+                                        
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Aporte</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre</label>
+                                                <input type="text" 
+                                                       name="nombre" 
+                                                       class="form-control" 
+                                                       value="{{ item.tipo.nombre }}"
+                                                       required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Peso</label>
+                                                <input type="number" 
+                                                       name="peso" 
+                                                       class="form-control" 
+                                                       value="{{ item.tipo.peso }}"
+                                                       min="0.1"
+                                                       max="5"
+                                                       step="0.1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" 
+                                                           type="checkbox" 
+                                                           name="activo"
+                                                           id="activo{{ item.tipo.id }}"
+                                                           {% if item.tipo.activo %}checked{% endif %}>
+                                                    <label class="form-check-label" for="activo{{ item.tipo.id }}">
+                                                        Activo
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                Guardar Cambios
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Eliminar -->
+                        <div class="modal fade" id="deleteModal{{ item.tipo.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="eliminar_aporte">
+                                        <input type="hidden" name="aporte_id" value="{{ item.tipo.id }}">
+                                        
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar el aporte <strong>"{{ item.tipo.nombre }}"</strong>?</p>
+                                            {% if item.usado %}
+                                            <div class="alert alert-warning">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Este aporte ha sido usado {{ item.uso_count }} vez(es) y no puede ser eliminado.
+                                            </div>
+                                            {% else %}
+                                            <div class="alert alert-info">
+                                                Esta acción no se puede deshacer.
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cancelar
+                                            </button>
+                                            <button type="submit" class="btn btn-danger" {% if item.usado %}disabled{% endif %}>
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2"></i>
+                                <p>No hay tipos de aportes registrados</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -9,18 +9,18 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from teachers.models import Teacher
 from students.models import Student
+from django.db.models.signals import post_save, post_delete
+from django.db import models
+from decimal import Decimal
+
+
 
 class Clase(models.Model):
     """Modelo para Clases/Cursos teóricos donde los estudiantes se matriculan"""
-    SUBJECT_CHOICES = [
-        ('Guitarra Clásica', '🎸 Guitarra Clásica'),
-        ('Conjunto Instrumental', '🎺 Conjunto Instrumental'),
-        ('Creación y Arreglos Musicales', '🎵 Creación y Arreglos Musicales'),
-    ]
     
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='clases_teoricas', verbose_name="Docente")
     name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
-    subject = models.CharField(max_length=100, choices=SUBJECT_CHOICES, verbose_name="Materia")
+    subject = models.CharField(max_length=120, verbose_name="Materia")
     description = models.TextField(blank=True, verbose_name="Descripción")
     schedule = models.CharField(max_length=200, blank=True, verbose_name="Horario")
     room = models.CharField(max_length=100, blank=True, verbose_name="Aula/Salón")
@@ -66,11 +66,6 @@ class Enrollment(models.Model):
 
 class Activity(models.Model):
     """Modelo de Actividad/Clase"""
-    SUBJECT_CHOICES = [
-        ('Guitarra Clásica', '🎸 Guitarra Clásica'),
-        ('Conjunto Instrumental', '🎺 Conjunto Instrumental'),
-        ('Creación y Arreglos Musicales', '🎵 Creación y Arreglos Musicales'),
-    ]
     
     PERFORMANCE_CHOICES = [
         ('Excelente', 'Excelente'),
@@ -82,7 +77,7 @@ class Activity(models.Model):
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='activities', verbose_name="Estudiante")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='activities')
-    subject = models.CharField(max_length=100, choices=SUBJECT_CHOICES, verbose_name="Materia")
+    subject = models.CharField(max_length=120, verbose_name="Materia")
     class_number = models.PositiveIntegerField(verbose_name="Número de clase")
     date = models.DateField(verbose_name="Fecha de clase")
     
@@ -141,7 +136,7 @@ class Grade(models.Model):
     ]
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades', verbose_name="Estudiante")
-    subject = models.CharField(max_length=100, choices=Activity.SUBJECT_CHOICES, verbose_name="Materia")
+    subject = models.CharField(max_length=120, verbose_name="Materia")
     period = models.CharField(max_length=50, choices=PERIOD_CHOICES, verbose_name="Período")
     score = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(10)], verbose_name="Calificación")
     comments = models.TextField(blank=True, verbose_name="Comentarios")
@@ -183,6 +178,501 @@ class Attendance(models.Model):
         return f"{self.student.name} - {self.date} - {self.status}"
 
 
+
+# ============================================
+# SISTEMA UNIFICADO DE CALIFICACIONES
+# ============================================
+
+class TipoAporte(models.Model):
+    """
+    Tipos de aportes para calificaciones
+    Ejemplos: Trabajo en clase, Exposición, Transcripción, Deberes, etc.
+    """
+    nombre = models.CharField(max_length=100, verbose_name="Nombre del aporte")
+    codigo = models.CharField(max_length=50, unique=True, verbose_name="Código")
+    descripcion = models.TextField(blank=True, verbose_name="Descripción")
+    peso = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        default=1.0, 
+        verbose_name="Peso en el promedio",
+        help_text="Peso relativo de este aporte en el cálculo del promedio"
+    )
+    orden = models.IntegerField(default=0, verbose_name="Orden de visualización")
+    activo = models.BooleanField(default=True, verbose_name="Activo")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Tipo de Aporte"
+        verbose_name_plural = "Tipos de Aportes"
+        ordering = ['orden', 'nombre']
+    
+    def __str__(self):
+        return f"{self.nombre} (Peso: {self.peso})"
+
+
+class CalificacionParcial(models.Model):
+    """
+    MODELO CENTRAL UNIFICADO DE CALIFICACIONES
+    Maneja todas las calificaciones por parcial, tipo de aporte y quimestre
+    """
+    PARCIAL_CHOICES = [
+        ('1P', 'Primer Parcial'),
+        ('2P', 'Segundo Parcial'),
+        ('3P', 'Tercer Parcial'),
+        ('4P', 'Cuarto Parcial'),  # Ahora con 4 parciales
+    ]
+    
+    QUIMESTRE_CHOICES = [
+        ('Q1', 'Primer Quimestre'),
+        ('Q2', 'Segundo Quimestre'),
+    ]
+    
+    # Relaciones principales
+    student = models.ForeignKey(
+        'students.Student', 
+        on_delete=models.CASCADE, 
+        related_name='calificaciones_parciales',
+        verbose_name="Estudiante"
+    )
+    
+    subject = models.CharField(
+        max_length=120,
+        verbose_name="Materia"
+    )
+    
+    parcial = models.CharField(
+        max_length=2, 
+        choices=PARCIAL_CHOICES,
+        verbose_name="Parcial"
+    )
+    
+    quimestre = models.CharField(
+        max_length=2,
+        choices=QUIMESTRE_CHOICES,
+        default='Q1',
+        verbose_name="Quimestre"
+    )
+    
+    tipo_aporte = models.ForeignKey(
+        TipoAporte, 
+        on_delete=models.PROTECT,
+        verbose_name="Tipo de Aporte",
+        related_name="calificaciones"
+    )
+    
+    # Calificación (0-10)
+    calificacion = models.DecimalField(
+        max_digits=4, 
+        decimal_places=2,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        default=0,
+        verbose_name="Calificación",
+        help_text="Nota sobre 10"
+    )
+    
+    # Metadata
+    fecha_registro = models.DateField(
+        auto_now_add=True, 
+        verbose_name="Fecha de Registro"
+    )
+    fecha_actualizacion = models.DateField(
+        auto_now=True, 
+        verbose_name="Última Actualización"
+    )
+    observaciones = models.TextField(
+        blank=True, 
+        verbose_name="Observaciones"
+    )
+    registrado_por = models.ForeignKey(
+        'teachers.Teacher',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Registrado por"
+    )
+    
+    class Meta:
+        verbose_name = "Calificación Parcial"
+        verbose_name_plural = "Calificaciones Parciales"
+        unique_together = ['student', 'subject', 'parcial', 'quimestre', 'tipo_aporte']
+        ordering = ['-fecha_actualizacion', 'student__name']
+        indexes = [
+            models.Index(fields=['student', 'subject', 'parcial']),
+            models.Index(fields=['student', 'quimestre']),
+            models.Index(fields=['parcial', 'quimestre']),
+        ]
+    
+    def __str__(self):
+        return f"{self.student.name} - {self.subject} - {self.get_parcial_display()} - {self.tipo_aporte.nombre}: {self.calificacion}"
+    
+    def get_escala_cualitativa(self):
+        """
+        Obtiene la escala cualitativa según el Ministerio de Educación Ecuador
+        DAR: Domina los Aprendizajes Requeridos (9-10)
+        AAR: Alcanza los Aprendizajes Requeridos (7-8.99)
+        PAAR: Próximo a Alcanzar los Aprendizajes (4.01-6.99)
+        NAAR: No Alcanza los Aprendizajes Requeridos (≤4)
+        """
+        nota = float(self.calificacion)
+        if nota >= 9:
+            return {
+                'codigo': 'DAR', 
+                'nombre': 'Domina los Aprendizajes Requeridos', 
+                'color': '#10B981',
+                'text_color': '#FFFFFF'
+            }
+        elif nota >= 7:
+            return {
+                'codigo': 'AAR', 
+                'nombre': 'Alcanza los Aprendizajes Requeridos', 
+                'color': '#3B82F6',
+                'text_color': '#FFFFFF'
+            }
+        elif nota >= 4.01:
+            return {
+                'codigo': 'PAAR', 
+                'nombre': 'Próximo a Alcanzar los Aprendizajes', 
+                'color': '#F59E0B',
+                'text_color': '#000000'
+            }
+        else:
+            return {
+                'codigo': 'NAAR', 
+                'nombre': 'No Alcanza los Aprendizajes Requeridos', 
+                'color': '#EF4444',
+                'text_color': '#FFFFFF'
+            }
+    
+    @staticmethod
+    def calcular_promedio_parcial(student, subject, parcial, quimestre='Q1'):
+        """
+        Calcula el promedio ponderado de un parcial específico
+        """
+        calificaciones = CalificacionParcial.objects.filter(
+            student=student,
+            subject=subject,
+            parcial=parcial,
+            quimestre=quimestre,
+            calificacion__gt=0
+        ).select_related('tipo_aporte')
+        
+        if not calificaciones.exists():
+            return Decimal('0.00')
+        
+        # Promedio ponderado según peso de cada aporte
+        suma_ponderada = sum(
+            c.calificacion * c.tipo_aporte.peso 
+            for c in calificaciones
+        )
+        suma_pesos = sum(c.tipo_aporte.peso for c in calificaciones)
+        
+        if suma_pesos == 0:
+            return Decimal('0.00')
+        
+        promedio = suma_ponderada / suma_pesos
+        return round(promedio, 2)
+    
+    @staticmethod
+    def calcular_promedio_quimestre(student, subject, quimestre='Q1'):
+        """
+        Calcula el promedio de quimestre (promedio de todos los parciales)
+        Con 4 parciales ahora
+        """
+        promedios = []
+        
+        for parcial, _ in CalificacionParcial.PARCIAL_CHOICES:
+            prom = CalificacionParcial.calcular_promedio_parcial(
+                student, subject, parcial, quimestre
+            )
+            if prom > 0:
+                promedios.append(float(prom))
+        
+        if not promedios:
+            return Decimal('0.00')
+        
+        promedio_quimestre = sum(promedios) / len(promedios)
+        return Decimal(str(round(promedio_quimestre, 2)))
+    
+    @staticmethod
+    def calcular_nota_final_materia(student, subject):
+        """
+        Calcula la nota final de una materia
+        Fórmula: (Q1_80% + Q2_80%) + Examen_Final_20%
+        Por ahora solo calcula el promedio de quimestres (80%)
+        """
+        prom_q1 = CalificacionParcial.calcular_promedio_quimestre(student, subject, 'Q1')
+        prom_q2 = CalificacionParcial.calcular_promedio_quimestre(student, subject, 'Q2')
+        
+        # Equivalencia 80% (0.8 de cada quimestre)
+        equivalencia_q1 = float(prom_q1) * 0.4  # 40% del total
+        equivalencia_q2 = float(prom_q2) * 0.4  # 40% del total
+        
+        # Total 80% (falta el 20% del examen final)
+        total_80_porciento = equivalencia_q1 + equivalencia_q2
+        
+        return Decimal(str(round(total_80_porciento, 2)))
+    
+    @staticmethod
+    def calcular_promedio_general(student):
+        """
+        Calcula el promedio general del estudiante (todas las materias)
+        """
+        materias = CalificacionParcial.objects.filter(
+            student=student
+        ).values_list('subject', flat=True).distinct()
+        
+        if not materias:
+            return Decimal('0.00')
+        
+        promedios = []
+        for materia in materias:
+            prom_q1 = CalificacionParcial.calcular_promedio_quimestre(student, materia, 'Q1')
+            prom_q2 = CalificacionParcial.calcular_promedio_quimestre(student, materia, 'Q2')
+            
+            # Promedio de ambos quimestres
+            if prom_q1 > 0 and prom_q2 > 0:
+                promedio_materia = (float(prom_q1) + float(prom_q2)) / 2
+                promedios.append(promedio_materia)
+            elif prom_q1 > 0:
+                promedios.append(float(prom_q1))
+            elif prom_q2 > 0:
+                promedios.append(float(prom_q2))
+        
+        if not promedios:
+            return Decimal('0.00')
+        
+        promedio_general = sum(promedios) / len(promedios)
+        return Decimal(str(round(promedio_general, 2)))
+    
+    @staticmethod
+    def obtener_libreta_completa(student):
+        """
+        Genera la libreta completa del estudiante con todas las calificaciones
+        Similar al formato del Excel que proporcionaste
+        """
+        materias = CalificacionParcial.objects.filter(
+            student=student
+        ).values_list('subject', flat=True).distinct()
+        
+        libreta = {
+            'estudiante': {
+                'nombre': student.name,
+                'id': student.id,
+            },
+            'materias': [],
+            'promedio_general': float(CalificacionParcial.calcular_promedio_general(student))
+        }
+        
+        for materia in materias:
+            materia_data = {
+                'nombre': materia,
+                'quimestre1': {
+                    'parciales': {},
+                    'promedio': float(CalificacionParcial.calcular_promedio_quimestre(student, materia, 'Q1'))
+                },
+                'quimestre2': {
+                    'parciales': {},
+                    'promedio': float(CalificacionParcial.calcular_promedio_quimestre(student, materia, 'Q2'))
+                },
+                'nota_final': float(CalificacionParcial.calcular_nota_final_materia(student, materia))
+            }
+            
+            # Obtener calificaciones de cada parcial
+            for parcial, parcial_nombre in CalificacionParcial.PARCIAL_CHOICES:
+                # Q1
+                califs_q1 = CalificacionParcial.objects.filter(
+                    student=student,
+                    subject=materia,
+                    parcial=parcial,
+                    quimestre='Q1'
+                ).select_related('tipo_aporte')
+                
+                materia_data['quimestre1']['parciales'][parcial] = {
+                    'nombre': parcial_nombre,
+                    'aportes': [
+                        {
+                            'tipo': c.tipo_aporte.nombre,
+                            'nota': float(c.calificacion)
+                        } for c in califs_q1
+                    ],
+                    'promedio': float(CalificacionParcial.calcular_promedio_parcial(student, materia, parcial, 'Q1'))
+                }
+                
+                # Q2
+                califs_q2 = CalificacionParcial.objects.filter(
+                    student=student,
+                    subject=materia,
+                    parcial=parcial,
+                    quimestre='Q2'
+                ).select_related('tipo_aporte')
+                
+                materia_data['quimestre2']['parciales'][parcial] = {
+                    'nombre': parcial_nombre,
+                    'aportes': [
+                        {
+                            'tipo': c.tipo_aporte.nombre,
+                            'nota': float(c.calificacion)
+                        } for c in califs_q2
+                    ],
+                    'promedio': float(CalificacionParcial.calcular_promedio_parcial(student, materia, parcial, 'Q2'))
+                }
+            
+            libreta['materias'].append(materia_data)
+        
+        return libreta
+
+    @staticmethod
+    def obtener_resumen_estudiante(student):
+        """
+        Devuelve un resumen compacto para emails:
+        {
+          'promedio_general': float,
+          'materias': [
+             {
+               'nombre': subject,
+               'parciales': {'1P': float, '2P': float, '3P': float, '4P': float},
+               'promedio_final': float
+             }
+          ]
+        }
+        """
+        materias = CalificacionParcial.objects.filter(
+            student=student
+        ).values_list('subject', flat=True).distinct()
+
+        resumen = {
+            'promedio_general': float(CalificacionParcial.calcular_promedio_general(student)),
+            'materias': []
+        }
+        for materia in materias:
+            parciales = {}
+            for parcial, _ in CalificacionParcial.PARCIAL_CHOICES:
+                parciales[parcial] = float(
+                    CalificacionParcial.calcular_promedio_parcial(student, materia, parcial)
+                )
+            promedio_final = float(
+                CalificacionParcial.calcular_nota_final_materia(student, materia)
+            )
+            resumen['materias'].append({
+                'nombre': materia,
+                'parciales': parciales,
+                'promedio_final': promedio_final
+            })
+        return resumen
+
+
+class PromedioCache(models.Model):
+    """
+    Cache para optimizar cálculos de promedios frecuentes
+    Se actualiza automáticamente mediante signals
+    """
+    TIPO_CHOICES = [
+        ('parcial', 'Parcial'),
+        ('quimestre', 'Quimestre'),
+        ('general', 'General'),
+    ]
+    
+    student = models.ForeignKey(
+        'students.Student', 
+        on_delete=models.CASCADE,
+        related_name='cache_promedios'
+    )
+    subject = models.CharField(max_length=100, blank=True)
+    parcial = models.CharField(max_length=2, blank=True)
+    quimestre = models.CharField(max_length=2, blank=True)
+    tipo_promedio = models.CharField(max_length=20, choices=TIPO_CHOICES)
+    promedio = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    fecha_calculo = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Promedio (Cache)"
+        verbose_name_plural = "Promedios (Cache)"
+        unique_together = ['student', 'subject', 'parcial', 'quimestre', 'tipo_promedio']
+        indexes = [
+            models.Index(fields=['student', 'tipo_promedio']),
+        ]
+    
+    def __str__(self):
+        return f"{self.student.name} - {self.tipo_promedio}: {self.promedio}"
+
+
+def get_all_subjects():
+    """Obtiene el listado dinámico de materias existentes en el sistema."""
+    try:
+        clase_subjects = set(Clase.objects.values_list('subject', flat=True).distinct())
+    except Exception:
+        clase_subjects = set()
+    try:
+        activity_subjects = set(Activity.objects.values_list('subject', flat=True).distinct())
+    except Exception:
+        activity_subjects = set()
+    subjects = sorted(s for s in (clase_subjects | activity_subjects) if s)
+    if not subjects:
+        subjects = ['Guitarra Clásica', 'Conjunto Instrumental', 'Creación y Arreglos Musicales']
+    return subjects
+
+
+def get_subject_choices():
+    return [(s, s) for s in get_all_subjects()]
+
+# ============================================
+# SIGNALS PARA ACTUALIZACIÓN AUTOMÁTICA
+# ============================================
+
+@receiver([post_save, post_delete], sender=CalificacionParcial)
+def actualizar_cache_promedios(sender, instance, **kwargs):
+    """
+    Actualiza automáticamente el cache de promedios cuando se guardan
+    o eliminan calificaciones
+    """
+    try:
+        # 1. Actualizar promedio del parcial específico
+        promedio_parcial = CalificacionParcial.calcular_promedio_parcial(
+            instance.student, 
+            instance.subject, 
+            instance.parcial,
+            instance.quimestre
+        )
+        PromedioCache.objects.update_or_create(
+            student=instance.student,
+            subject=instance.subject,
+            parcial=instance.parcial,
+            quimestre=instance.quimestre,
+            tipo_promedio='parcial',
+            defaults={'promedio': promedio_parcial}
+        )
+        
+        # 2. Actualizar promedio del quimestre
+        promedio_quimestre = CalificacionParcial.calcular_promedio_quimestre(
+            instance.student, 
+            instance.subject, 
+            instance.quimestre
+        )
+        PromedioCache.objects.update_or_create(
+            student=instance.student,
+            subject=instance.subject,
+            quimestre=instance.quimestre,
+            tipo_promedio='quimestre',
+            defaults={'promedio': promedio_quimestre}
+        )
+        
+        # 3. Actualizar promedio general del estudiante
+        promedio_general = CalificacionParcial.calcular_promedio_general(instance.student)
+        PromedioCache.objects.update_or_create(
+            student=instance.student,
+            subject='GENERAL',
+            tipo_promedio='general',
+            defaults={'promedio': promedio_general}
+        )
+        
+    except Exception as e:
+        # Log del error pero no interrumpir el guardado
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error actualizando cache de promedios: {e}")
+        
+
 # ============================================
 # SIGNALS - Mantener los mismos
 # ============================================
@@ -206,7 +696,6 @@ def save_teacher_profile(sender, instance, **kwargs):
     """Guardar perfil de docente"""
     if not instance.is_superuser and hasattr(instance, 'teacher_profile'):
         instance.teacher_profile.save()
-
 
 
 

@@ -37,13 +37,8 @@
             <p class="text-muted mb-0">Sistema Unificado e Integral</p>
         </div>
         <div class="text-end">
-            <a href="{% url 'teachers:gestionar_aportes' %}" class="btn btn-outline-primary me-2">
-                <i class="fas fa-cog"></i> Gestionar Aportes
-            </a>
-            <div>
-                <p class="mb-0"><strong>{{ teacher.user.get_full_name }}</strong></p>
-                <small class="text-muted">{{ teacher.user.email }}</small>
-            </div>
+            <p class="mb-0"><strong>{{ teacher.user.get_full_name }}</strong></p>
+            <small class="text-muted">{{ teacher.user.email }}</small>
         </div>
     </div>
 
@@ -282,7 +277,7 @@
                                 {% for calif in calificaciones_recientes %}
                                 <tr>
                                     <td><strong>{{ calif.student.name }}</strong></td>
-                                    <td><small>{{ calif.get_subject_display }}</small></td>
+                                    <td><small>{{ calif.subject }}</small></td>
                                     <td>
                                         <span class="badge bg-secondary">
                                             {{ calif.get_parcial_display }}
@@ -486,4 +481,38 @@ document.getElementById('studentSelect').addEventListener('change', function() {
     }
 });
 </script>
+
+{% block extra_js %}
+<script>
+// Render gráfico de promedios
+(function(){
+  const canvasId = 'graficoPromedios';
+  if (!document.getElementById(canvasId)) {
+    const card = document.createElement('div');
+    card.className = 'card mb-4 shadow-sm';
+    card.innerHTML = `
+      <div class="card-header bg-white">
+        <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Promedios por Estudiante</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="${canvasId}" height="120"></canvas>
+      </div>`;
+    document.querySelector('.container-fluid').prepend(card);
+  }
+  const datos = {
+    nombres: {{ estudiantes_nombres|safe }},
+    promedios: {{ estudiantes_promedios|safe }},
+    colores: {{ colores_escalas|safe }}
+  };
+  if (window.Chart && datos.nombres && datos.nombres.length) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels: datos.nombres, datasets: [{ label: 'Promedio', data: datos.promedios, backgroundColor: datos.colores, borderRadius: 8 }] },
+      options: { responsive: true, scales: { y: { beginAtZero: true, max: 10 } } }
+    });
+  }
+})();
+</script>
+{% endblock %}
 {% endblock %}

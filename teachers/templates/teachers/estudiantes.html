@@ -58,8 +58,8 @@
             <label>Filtrar por año</label>
             <select name="grade" class="form-control" onchange="this.form.submit()">
                 <option value="">Todos los años</option>
-                {% for grade_code, grade_name in form.fields.grade.choices %}
-                    <option value="{{ grade_code }}" {% if grade_filter == grade_code %}selected{% endif %}>{{ grade_name }}</option>
+                {% for grade_name in grade_choices %}
+                    <option value="{{ grade_name }}" {% if grade_filter == grade_name %}selected{% endif %}>{{ grade_name }}</option>
                 {% endfor %}
             </select>
         </div>

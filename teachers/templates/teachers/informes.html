@@ -84,7 +84,10 @@
                 
                 {% if activity.student.parent_email %}
                     <a href="{% url 'teachers:send_report_email' activity.id %}" class="btn btn-orange" style="padding: 10px 20px; font-size: 14px;">
-                        📧 Email
+                        📧 Email Clase
+                    </a>
+                    <a href="{% url 'teachers:send_student_report_email' activity.student.id %}" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">
+                        📧 Email Calificaciones
                     </a>
                 {% endif %}
                 

@@ -1,3 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Node
+node_modules/
+**/node_modules/
+
+# Django
+staticfiles/
+media/
+
+# Env
+.env
+.env.*
+
+# Celery/Redis
+celerybeat-schedule
+celerybeat.pid
+
+# macOS
+.DS_Store
+
 
 # Python
 __pycache__/

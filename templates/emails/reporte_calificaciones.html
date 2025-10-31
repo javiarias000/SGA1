@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Calificaciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .student-info {
+            background: #f9fafb;
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        
+        .student-info h2 {
+            color: #1f2937;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .student-info p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .promedio-general {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .promedio-general .numero {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .promedio-general .texto {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        .promedio-general .escala {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .materias-section {
+            margin-bottom: 30px;
+        }
+        
+        .materias-section h3 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .materia-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .materia-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+        
+        .materia-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .materia-nombre {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .materia-promedio {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .parciales {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .parcial {
+            text-align: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        
+        .parcial-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .parcial-nota {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .escala-info {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .escala-info h4 {
+            color: #92400e;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .escala-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .escala-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        
+        .footer {
+            background: #f9fafb;
+            padding: 25px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+        }
+        
+        .footer strong {
+            color: #1f2937;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .alert-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .alert-box h4 {
+            color: #991b1b;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-box p {
+            color: #7f1d1d;
+            font-size: 14px;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .parciales {
+                grid-template-columns: 1fr;
+            }
+            
+            .materia-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Reporte de Calificaciones</h1>
+            <p>{{ conservatorio }}</p>
+            <p>Año Académico {{ anio_academico }}</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Información del Estudiante -->
+            <div class="student-info">
+                <h2>{{ estudiante.name }}</h2>
+                <p><strong>Curso:</strong> {{ estudiante.grade }}</p>
+                <p><strong>Docente:</strong> {{ estudiante.teacher.user.get_full_name }}</p>
+                <p><strong>Fecha:</strong> {{ "now"|date:"d/m/Y" }}</p>
+            </div>
+            
+            <!-- Promedio General -->
+            <div class="promedio-general" style="background: {{ escala.color }};">
+                <div class="numero">{{ promedio_general }}</div>
+                <div class="texto">Promedio General</div>
+                <div class="escala">{{ escala.nombre }} - {{ escala.desc }}</div>
+            </div>
+            
+            <!-- Alertas (si aplica) -->
+            {% if promedio_general > 0 and promedio_general < 7 %}
+            <div class="alert-box">
+                <h4>⚠️ Alerta de Rendimiento</h4>
+                <p>El promedio del estudiante está por debajo del nivel esperado. Recomendamos coordinar una reunión con el docente para establecer estrategias de mejora.</p>
+            </div>
+            {% endif %}
+            
+            <!-- Materias -->
+            <div class="materias-section">
+                <h3>📚 Calificaciones por Materia</h3>
+                
+                {% for materia in materias %}
+                {% if materia.promedio_final > 0 %}
+                <div class="materia-card">
+                    <div class="materia-header">
+                        <div class="materia-nombre">{{ materia.nombre }}</div>
+                        <div class="materia-promedio" style="background-color: {% if materia.promedio_final >= 9 %}#10b981{% elif materia.promedio_final >= 7 %}#3b82f6{% elif materia.promedio_final >= 4.01 %}#f59e0b{% else %}#ef4444{% endif %};">
+                            {{ materia.promedio_final }}
+                        </div>
+                    </div>
+                    
+                    <div class="parciales">
+                        <div class="parcial">
+                            <div class="parcial-label">Parcial 1</div>
+                            <div class="parcial-nota">{{ materia.parciales.1P|default:"--" }}</div>
+                        </div>
+                        <div class="parcial">
+                            <div class="parcial-label">Parcial 2</div>
+                            <div class="parcial-nota">{{ materia.parciales.2P|default:"--" }}</div>
+                        </div>
+                        <div class="parcial">
+                            <div class="parcial-label">Parcial 3</div>
+                            <div class="parcial-nota">{{ materia.parciales.3P|default:"--" }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <!-- Información de Escala -->
+            <div class="escala-info">
+                <h4>📌 Escala de Calificación Cualitativa</h4>
+                <div class="escala-item">
+                    <span class="escala-badge" style="background: #10b981;"></span>
+                    <strong>DAR (9-10):</strong>&nbsp;Domina los Aprendizajes Requeridos
+                </div>
+                <div class="escala-item">
+                    <span class="escala-badge" style="background: #3b82f6;"></span>
+                    <strong>AAR (7-8.99):</strong>&nbsp;Alcanza los Aprendizajes Requeridos
+                </div>
+                <div class="escala-item">
+                    <span class="escala-badge" style="background: #f59e0b;"></span>
+                    <strong>PAAR (4.01-6.99):</strong>&nbsp;Próximo a Alcanzar los Aprendizajes
+                </div>
+                <div class="escala-item">
+                    <span class="escala-badge" style="background: #ef4444;"></span>
+                    <strong>NAAR (0-4):</strong>&nbsp;No Alcanza los Aprendizajes Requeridos
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>{{ conservatorio }}</strong>
+            <p>Este es un correo automático generado por el sistema de calificaciones.</p>
+            <p>Para consultas, por favor contacte al docente: {{ estudiante.teacher.user.email }}</p>
+            <p style="margin-top: 15px; font-size: 11px; color: #9ca3af;">
+                © {{ "now"|date:"Y" }} Todos los derechos reservados
+            </p>
+        </div>
+    </div>
+</body>
+</html>

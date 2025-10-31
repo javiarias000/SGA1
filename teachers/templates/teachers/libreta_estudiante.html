@@ -1,0 +1,229 @@
+{% extends 'teachers/base.html' %}
+{% load static %}
+
+{% block title %}Libreta de {{ student.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        .no-print { display: none !important; }
+        .card { border: 1px solid #000 !important; }
+    }
+    .tabla-libreta th {
+        background-color: #f8f9fa;
+        font-size: 0.85rem;
+    }
+    .tabla-libreta td {
+        font-size: 0.9rem;
+    }
+    .promedio-cell {
+        font-weight: bold;
+        font-size: 1rem;
+        background-color: #e3f2fd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <div>
+            <h1 class="h3 mb-1">📄 Libreta de Calificaciones</h1>
+            <p class="text-muted mb-0">{{ student.name }}</p>
+        </div>
+        <div>
+            <a href="{% url 'teachers:dashboard_unified' %}" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+            <button onclick="window.print()" class="btn btn-primary">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+    </div>
+
+    <!-- Información del Estudiante -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5><strong>Estudiante:</strong> {{ student.name }}</h5>
+                    <p class="mb-1"><strong>Profesor:</strong> {{ teacher.user.get_full_name }}</p>
+                    <p class="mb-0"><strong>Año Académico:</strong> 2025-2026</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <h2 class="mb-0">
+                        <span class="badge" 
+                              style="background-color: {% if libreta.promedio_general >= 9 %}#10B981{% elif libreta.promedio_general >= 7 %}#3B82F6{% elif libreta.promedio_general >= 4.01 %}#F59E0B{% else %}#EF4444{% endif %}; color: white; font-size: 2rem;">
+                            {{ libreta.promedio_general }}
+                        </span>
+                    </h2>
+                    <p class="text-muted small mb-0">Promedio General</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calificaciones por Materia -->
+    {% for materia in libreta.materias %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{{ materia.nombre }}</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered tabla-libreta mb-0">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="align-middle text-center">Tipo de Aporte</th>
+                            <th colspan="4" class="text-center bg-info text-white">PRIMER QUIMESTRE</th>
+                            <th colspan="4" class="text-center bg-warning">SEGUNDO QUIMESTRE</th>
+                            <th rowspan="2" class="text-center align-middle bg-success text-white">NOTA FINAL</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">1P</th>
+                            <th class="text-center">2P</th>
+                            <th class="text-center">3P</th>
+                            <th class="text-center">4P</th>
+                            <th class="text-center">1P</th>
+                            <th class="text-center">2P</th>
+                            <th class="text-center">3P</th>
+                            <th class="text-center">4P</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Obtener todos los tipos de aportes únicos -->
+                        {% for parcial_key, parcial_data in materia.quimestre1.parciales.items %}
+                            {% for aporte in parcial_data.aportes %}
+                                {% if forloop.first and forloop.parentloop.first %}
+                                <tr>
+                                    <td><strong>{{ aporte.tipo }}</strong></td>
+                                    
+                                    <!-- Q1 Parciales -->
+                                    {% for p_key in "1P,2P,3P,4P"|split:"," %}
+                                        {% with p_data=materia.quimestre1.parciales|get_item:p_key %}
+                                        <td class="text-center">
+                                            {% for a in p_data.aportes %}
+                                                {% if a.tipo == aporte.tipo %}
+                                                    {{ a.nota }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    
+                                    <!-- Q2 Parciales -->
+                                    {% for p_key in "1P,2P,3P,4P"|split:"," %}
+                                        {% with p_data=materia.quimestre2.parciales|get_item:p_key %}
+                                        <td class="text-center">
+                                            {% for a in p_data.aportes %}
+                                                {% if a.tipo == aporte.tipo %}
+                                                    {{ a.nota }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    
+                                    <td class="text-center" rowspan="100"></td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        
+                        <!-- Fila de Promedios Parciales -->
+                        <tr class="promedio-cell">
+                            <td><strong>PROMEDIO PARCIAL</strong></td>
+                            {% for parcial_key in "1P,2P,3P,4P"|split:"," %}
+                                {% with p_data=materia.quimestre1.parciales|get_item:parcial_key %}
+                                <td class="text-center">{{ p_data.promedio|default:"0.00" }}</td>
+                                {% endwith %}
+                            {% endfor %}
+                            {% for parcial_key in "1P,2P,3P,4P"|split:"," %}
+                                {% with p_data=materia.quimestre2.parciales|get_item:parcial_key %}
+                                <td class="text-center">{{ p_data.promedio|default:"0.00" }}</td>
+                                {% endwith %}
+                            {% endfor %}
+                            <td class="text-center bg-success text-white" rowspan="2">
+                                <strong style="font-size: 1.5rem;">{{ materia.nota_final }}</strong>
+                            </td>
+                        </tr>
+                        
+                        <!-- Fila de Promedios Quimestrales -->
+                        <tr class="table-info">
+                            <td colspan="4" class="text-center"><strong>PROMEDIO Q1:</strong></td>
+                            <td class="text-center"><strong>{{ materia.quimestre1.promedio }}</strong></td>
+                            <td colspan="3" class="text-center"><strong>PROMEDIO Q2:</strong></td>
+                            <td class="text-center"><strong>{{ materia.quimestre2.promedio }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No hay calificaciones registradas para este estudiante.
+    </div>
+    {% endfor %}
+
+    <!-- Resumen Final -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">RESUMEN GENERAL</h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h3>{{ libreta.materias|length }}</h3>
+                    <p class="text-muted">Materias</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>{{ libreta.promedio_general }}</h3>
+                    <p class="text-muted">Promedio General</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>
+                        {% if libreta.promedio_general >= 9 %}
+                            <span class="badge bg-success">DAR</span>
+                        {% elif libreta.promedio_general >= 7 %}
+                            <span class="badge bg-primary">AAR</span>
+                        {% elif libreta.promedio_general >= 4.01 %}
+                            <span class="badge bg-warning">PAAR</span>
+                        {% else %}
+                            <span class="badge bg-danger">NAAR</span>
+                        {% endif %}
+                    </h3>
+                    <p class="text-muted">Escala Cualitativa</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firmas (para impresión) -->
+    <div class="row mt-5 pt-5 d-print-block" style="page-break-inside: avoid;">
+        <div class="col-md-4 text-center">
+            <div class="pt-5 border-top border-dark">
+                <strong>Firma del Docente</strong>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="pt-5 border-top border-dark">
+                <strong>Firma del Director</strong>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="pt-5 border-top border-dark">
+                <strong>Firma del Representante</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Template filter personalizado para acceder a diccionarios
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Libreta cargada correctamente');
+});
+</script>
+{% endblock %}
