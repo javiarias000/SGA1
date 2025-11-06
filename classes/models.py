@@ -607,7 +607,21 @@ def get_all_subjects():
         activity_subjects = set(Activity.objects.values_list('subject', flat=True).distinct())
     except Exception:
         activity_subjects = set()
-    subjects = sorted(s for s in (clase_subjects | activity_subjects) if s)
+    subjects_raw = set(s.strip() for s in (clase_subjects | activity_subjects) if s)
+
+    # Excluir nombres de docentes del listado (coincidencia exacta, case-insensitive)
+    try:
+        teacher_names = set(t.full_name.strip().lower() for t in Teacher.objects.all() if t.full_name)
+        # También considerar nombre completo del usuario por si difiere
+        from django.contrib.auth.models import User as _U
+        teacher_names |= set((_u.get_full_name() or _u.username or '').strip().lower() for _u in _U.objects.filter(teacher_profile__isnull=False))
+    except Exception:
+        teacher_names = set()
+
+    subjects = sorted(
+        s for s in subjects_raw
+        if s and s.lower() not in teacher_names
+    )
     if not subjects:
         subjects = ['Guitarra Clásica', 'Conjunto Instrumental', 'Creación y Arreglos Musicales']
     return subjects
