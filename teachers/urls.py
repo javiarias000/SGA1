@@ -44,6 +44,8 @@ urlpatterns = [
     path('informes/<int:activity_id>/whatsapp/', views.whatsapp_class_report, name='whatsapp_class'),
     path('informes/<int:activity_id>/email/', views.send_report_email, name='send_report_email'),
     path('informes/student/<int:student_id>/email/', views.send_student_report_email, name='send_student_report_email'),
+    path('informes/student/<int:student_id>/whatsapp/grades/', views.whatsapp_grades_report, name='whatsapp_grades'),
+    path('informes/student/<int:student_id>/whatsapp/attendance/', views.whatsapp_attendance_report, name='whatsapp_attendance'),
     
     # Calificaciones detalladas
     path('calificaciones/detalladas/', views.calificaciones_detalladas_view, name='calificaciones_detalladas'),

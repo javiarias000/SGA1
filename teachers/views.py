@@ -65,6 +65,74 @@ def teacher_dashboard(request):
         
         elif action == 'delete_calificacion':
             return _eliminar_calificacion(request, teacher)
+
+        elif action == 'create_informe':
+            # Crear actividad/informe de clase y guardar archivo en static/teachers/reports/
+            try:
+                student_id = request.POST.get('report_student_id')
+                subject = request.POST.get('report_subject')
+                date_str = request.POST.get('report_date')
+                performance = request.POST.get('report_performance', 'Bueno')
+                topics = request.POST.get('report_topics', '')
+                techniques = request.POST.get('report_techniques', '')
+                pieces = request.POST.get('report_pieces', '')
+                observations = request.POST.get('report_observations', '')
+
+                # Validaciones básicas
+                if not (student_id and subject and date_str):
+                    messages.error(request, 'Datos incompletos para crear el informe')
+                    return redirect('teachers:teacher_dashboard')
+
+                student = get_object_or_404(Student, id=student_id, teacher=teacher)
+                fecha = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+                # Obtener o crear Clase asociada del docente por materia
+                clase = Clase.objects.filter(teacher=teacher, subject=subject).first()
+                if not clase:
+                    clase = Clase.objects.create(
+                        teacher=teacher,
+                        name=f"{subject} - {teacher.full_name}",
+                        subject=subject,
+                        description='Clase auto-creada para informes desde dashboard',
+                        active=True
+                    )
+
+                # Número de clase se autogenera en save() si se deja en blanco
+                activity = Activity(
+                    student=student,
+                    clase=clase,
+                    subject=subject,
+                    class_number=0,
+                    date=fecha,
+                    topics_worked=topics,
+                    techniques=techniques,
+                    pieces=pieces,
+                    performance=performance,
+                    observations=observations
+                )
+                activity.save()
+
+                # Guardar archivo de informe en static/teachers/reports/<student_id>/
+                try:
+                    import os
+                    from django.conf import settings
+                    reports_root = os.path.join(settings.BASE_DIR, 'static', 'teachers', 'reports', str(student.id))
+                    os.makedirs(reports_root, exist_ok=True)
+                    filename = f"Docente_{student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
+                    content = f"""REGISTRO ACADÉMICO - MÚSICA\nInforme para el Docente\n\nFecha: {activity.date.strftime('%d/%m/%Y')}\nID Registro: #{activity.id}\nClase #{activity.class_number}\n\nESTUDIANTE: {student.name}\nAño escolar: {student.grade}\nMateria: {activity.subject}\nDocente: {teacher.full_name}\n\nCONTENIDO DE LA CLASE:\n{activity.topics_worked or 'No especificado'}\n\nTÉCNICAS:\n{activity.techniques or 'No especificado'}\n\nREPERTORIO:\n{activity.pieces or 'No especificado'}\n\nEVALUACIÓN: {activity.performance}\n\nNOTAS:\n{activity.observations or 'Sin observaciones'}\n"""
+                    with open(os.path.join(reports_root, filename), 'w', encoding='utf-8') as f:
+                        f.write(content)
+                except Exception:
+                    # No bloquear si falla el guardado físico
+                    pass
+
+                messages.success(request, f'Informe creado para {student.name} (Clase #{activity.class_number})')
+            except Exception as e:
+                messages.error(request, f'No se pudo crear el informe: {e}')
+            return redirect('teachers:teacher_dashboard')
+
+        elif action == 'unified_save':
+            return _guardar_unificado(request, teacher)
     
     # ==========================================
     # CONTEXTO DEL DASHBOARD
@@ -81,6 +149,17 @@ def teacher_dashboard(request):
         student__teacher=teacher, 
         date=today
     ).select_related('student')
+    
+    # Asistencias de hoy y formulario de asistencia en dashboard
+    attendances_today = Attendance.objects.filter(
+        student__teacher=teacher,
+        date=today
+    ).select_related('student').order_by('student__name')
+    attendance_form = None
+    try:
+        attendance_form = AttendanceForm(teacher=teacher)
+    except Exception:
+        attendance_form = None
     
     # Última semana
     last_week = today - timedelta(days=7)
@@ -171,6 +250,8 @@ def teacher_dashboard(request):
         'tipos_aportes': tipos_aportes,
         'materias': materias,
         'calificaciones_recientes': calificaciones_recientes,
+        'attendances_today': attendances_today,
+        'attendance_form': attendance_form,
         'top_estudiantes': top_estudiantes,
         'estudiantes_en_riesgo': estudiantes_en_riesgo,
         'stats_por_escala': stats_por_escala,
@@ -309,6 +390,123 @@ def _eliminar_calificacion(request, teacher):
     return redirect('teachers:teacher_dashboard')
 
 
+def _guardar_unificado(request, teacher):
+    """Guarda calificaciones, asistencia e informe en un solo envío."""
+    try:
+        student_id = request.POST.get('student_id')
+        subject = request.POST.get('subject')
+        parcial = request.POST.get('parcial', '1P')
+        quimestre = request.POST.get('quimestre', 'Q1')
+        fecha_str = request.POST.get('date')
+        observaciones_generales = request.POST.get('observaciones', '')
+
+        if not (student_id and subject and fecha_str):
+            messages.error(request, 'Faltan datos: estudiante, materia o fecha')
+            return redirect('teachers:teacher_dashboard')
+
+        student = get_object_or_404(Student, id=student_id, teacher=teacher, active=True)
+        fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+
+        # 1) Calificaciones
+        calificaciones_guardadas = 0
+        for key in request.POST.keys():
+            if key.startswith('aporte_nombre_'):
+                index = key.replace('aporte_nombre_', '')
+                nombre_aporte = request.POST.get(f'aporte_nombre_{index}', '').strip()
+                calificacion_value = request.POST.get(f'aporte_nota_{index}', '').strip()
+                obs_aporte = request.POST.get(f'obs_{index}', '')
+                if not (nombre_aporte and calificacion_value):
+                    continue
+                try:
+                    nota = Decimal(calificacion_value)
+                    if nota < 0 or nota > 10:
+                        messages.warning(request, f'⚠️ La nota para {nombre_aporte} debe estar entre 0 y 10')
+                        continue
+                    codigo = nombre_aporte.upper().replace(' ', '_')[:50]
+                    tipo_aporte, created = TipoAporte.objects.get_or_create(
+                        codigo=codigo,
+                        defaults={'nombre': nombre_aporte, 'peso': 1.0, 'orden': 0, 'activo': True}
+                    )
+                    if not created and tipo_aporte.nombre != nombre_aporte:
+                        tipo_aporte.nombre = nombre_aporte
+                        tipo_aporte.save()
+                    observaciones_completas = f"{observaciones_generales}\n{obs_aporte}".strip()
+                    CalificacionParcial.objects.update_or_create(
+                        student=student,
+                        subject=subject,
+                        parcial=parcial,
+                        quimestre=quimestre,
+                        tipo_aporte=tipo_aporte,
+                        defaults={'calificacion': nota, 'observaciones': observaciones_completas, 'registrado_por': teacher}
+                    )
+                    calificaciones_guardadas += 1
+                except Exception:
+                    messages.warning(request, f'⚠️ Valor inválido para {nombre_aporte}: {calificacion_value}')
+
+        # 2) Asistencia
+        att_status = request.POST.get('att_status')
+        att_notes = request.POST.get('att_notes', '')
+        if att_status:
+            Attendance.objects.update_or_create(
+                student=student,
+                date=fecha,
+                defaults={'status': att_status, 'notes': att_notes}
+            )
+
+        # 3) Informe (Activity)
+        rep_performance = request.POST.get('rep_performance', 'Bueno')
+        rep_topics = request.POST.get('rep_topics', '')
+        rep_techniques = request.POST.get('rep_techniques', '')
+        rep_pieces = request.POST.get('rep_pieces', '')
+        rep_observations = request.POST.get('rep_observations', '')
+        rep_practice_time = request.POST.get('rep_practice_time')
+        rep_strengths = request.POST.get('rep_strengths', '')
+        rep_areas_to_improve = request.POST.get('rep_areas_to_improve', '')
+        rep_homework = request.POST.get('rep_homework', '')
+        if any([rep_topics, rep_techniques, rep_pieces, rep_observations, rep_strengths, rep_areas_to_improve, rep_homework, rep_practice_time]):
+            clase = Clase.objects.filter(teacher=teacher, subject=subject).first()
+            if not clase:
+                clase = Clase.objects.create(
+                    teacher=teacher,
+                    name=f"{subject} - {teacher.full_name}",
+                    subject=subject,
+                    description='Clase auto-creada para informes desde dashboard',
+                    active=True
+                )
+            activity = Activity(
+                student=student,
+                clase=clase,
+                subject=subject,
+                class_number=0,
+                date=fecha,
+                topics_worked=rep_topics,
+                techniques=rep_techniques,
+                pieces=rep_pieces,
+                performance=rep_performance,
+                observations=rep_observations,
+                strengths=rep_strengths,
+                areas_to_improve=rep_areas_to_improve,
+                homework=rep_homework
+            )
+            # práctica: validar rango si viene
+            try:
+                if rep_practice_time is not None and str(rep_practice_time).strip() != '':
+                    pt_int = int(rep_practice_time)
+                    if 15 <= pt_int <= 180:
+                        activity.practice_time = pt_int
+            except Exception:
+                pass
+            activity.save()
+
+        if calificaciones_guardadas > 0:
+            promedio_parcial = CalificacionParcial.calcular_promedio_parcial(student, subject, parcial, quimestre)
+            messages.success(request, f'✅ Guardado unificado para {student.name}. Calificaciones: {calificaciones_guardadas}. Promedio parcial: <strong>{promedio_parcial}</strong>')
+        else:
+            messages.success(request, f'✅ Asistencia e informe guardados para {student.name}')
+
+    except Exception as e:
+        messages.error(request, f'❌ Error en guardado unificado: {e}')
+    return redirect('teachers:teacher_dashboard')
 @login_required
 @teacher_required
 def obtener_calificaciones_estudiante(request, student_id):

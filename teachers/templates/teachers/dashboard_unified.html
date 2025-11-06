@@ -25,11 +25,32 @@
         display: inline-block;
         text-align: center;
     }
+
+    /* Compact UI for dashboard */
+    .dashboard-compact { font-size: 0.95rem; }
+    .dashboard-compact h1.h3 { font-size: 1.15rem; margin-bottom: .25rem; }
+    .dashboard-compact .card-header { padding: .5rem .75rem; }
+    .dashboard-compact .card-body { padding: .75rem; }
+    .dashboard-compact .form-control,
+    .dashboard-compact .form-select,
+    .dashboard-compact .btn { font-size: .9rem; }
+    .dashboard-compact .form-control,
+    .dashboard-compact .form-select { padding: .25rem .5rem; }
+    .dashboard-compact .btn { padding: .35rem .6rem; }
+    .dashboard-compact .btn-lg { padding: .45rem .9rem; font-size: .95rem; }
+    .dashboard-compact .table th,
+    .dashboard-compact .table td { padding: .4rem .5rem; }
+    .dashboard-compact .nota-badge { font-size: .95rem; padding: .2rem .4rem; }
+    .dashboard-compact .escala-badge { min-width: 48px; font-size: .8rem; }
+    .dashboard-compact .row.g-3 { --bs-gutter-x: .75rem; --bs-gutter-y: .75rem; }
+    .dashboard-compact .row.g-2 { --bs-gutter-x: .5rem; --bs-gutter-y: .5rem; }
+    .dashboard-compact .mb-4 { margin-bottom: 1rem !important; }
+    .dashboard-compact .py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 dashboard-compact">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -144,7 +165,7 @@
 
             <form method="POST" id="formCalificaciones" action="{% url 'teachers:teacher_dashboard' %}">
                 {% csrf_token %}
-                <input type="hidden" name="action" value="save_calificaciones">
+                <input type="hidden" name="action" value="unified_save">
 
                 <!-- Selectores Principales -->
                 <div class="row g-3 mb-4">
@@ -177,13 +198,17 @@
                         </select>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label fw-bold">Quimestre *</label>
                         <select name="quimestre" id="quimestreSelect" class="form-select" required>
                             {% for code, name in quimestres %}
                             <option value="{{ code }}">{{ name }}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Fecha *</label>
+                        <input type="date" name="date" id="dateUnified" class="form-control" required>
                     </div>
                 </div>
 
@@ -238,16 +263,150 @@
                     <strong>Promedio calculado:</strong> <span id="promedioValor">0.00</span>
                 </div>
 
-                <!-- Botones -->
-                <div class="d-flex justify-content-between">
+                <!-- Asistencia (unificada) -->
+                <hr class="my-4">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0"><i class="fas fa-user-check"></i> Asistencia</h5>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <label class="form-label">Estado</label>
+                            <select name="att_status" class="form-select">
+                                <option value="">-- Seleccione --</option>
+                                <option value="Presente">Presente</option>
+                                <option value="Ausente">Ausente</option>
+                                <option value="Tardanza">Tardanza</option>
+                                <option value="Justificado">Justificado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label">Observaciones</label>
+                            <input type="text" name="att_notes" class="form-control" placeholder="Observaciones de asistencia (opcional)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Estado</th>
+                                <th>Obs.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for at in attendances_today %}
+                            <tr>
+                                <td>{{ at.student.name }}</td>
+                                <td>{{ at.get_status_display }}</td>
+                                <td><small class="text-muted">{{ at.notes|default:'-' }}</small></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Sin registros hoy</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Informes del estudiante seleccionado -->
+                <hr class="my-4">
+                <div>
+                    <h5 class="mb-2"><i class="fas fa-file-alt"></i> Informes del estudiante</h5>
+                    <p class="text-muted small mb-2">Selecciona un estudiante arriba para habilitar estas acciones.</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a id="btnReporteLibreta" class="btn btn-outline-secondary btn-sm disabled" href="#" role="button" aria-disabled="true">
+                            <i class="fas fa-book"></i> Ver libreta
+                        </a>
+                        <a id="btnReporteEmail" class="btn btn-outline-primary btn-sm disabled" href="#" role="button" aria-disabled="true">
+                            <i class="fas fa-envelope"></i> Enviar por email
+                        </a>
+                        <a id="btnWhatsappGrades" class="btn btn-outline-success btn-sm disabled" href="#" role="button" aria-disabled="true">
+                            <i class="fab fa-whatsapp"></i> WhatsApp calificaciones
+                        </a>
+                        <a class="btn btn-outline-dark btn-sm" href="{% url 'teachers:informes' %}">
+                            <i class="fas fa-clipboard-list"></i> Ir a /informes
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Crear Informe (unificado) -->
+                <hr class="my-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="fas fa-file-signature"></i> Crear Informe de Clase</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Desempeño</label>
+                                <select name="rep_performance" class="form-select">
+                                    <option value="Excelente">Excelente</option>
+                                    <option value="Muy Bueno">Muy Bueno</option>
+                                    <option value="Bueno" selected>Bueno</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="Necesita mejorar">Necesita mejorar</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Práctica (min)</label>
+                                <input type="number" name="rep_practice_time" class="form-control" min="15" max="180" placeholder="30">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label class="form-label">Temas trabajados</label>
+                                <textarea name="rep_topics" rows="2" class="form-control" placeholder="Escalas, lectura, teoría..."></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Técnicas</label>
+                                <textarea name="rep_techniques" rows="2" class="form-control" placeholder="Posición, articulación..."></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Repertorio</label>
+                                <input type="text" name="rep_pieces" class="form-control" placeholder="Piezas trabajadas">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-4">
+                                <label class="form-label">Fortalezas</label>
+                                <textarea name="rep_strengths" rows="2" class="form-control" placeholder="¿Qué hizo bien?"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Áreas a mejorar</label>
+                                <textarea name="rep_areas_to_improve" rows="2" class="form-control" placeholder="Aspectos a trabajar"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tareas para casa</label>
+                                <textarea name="rep_homework" rows="2" class="form-control" placeholder="Estudiar escala de Do, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <label class="form-label">Observaciones</label>
+                            <textarea name="rep_observations" rows="2" class="form-control" placeholder="Notas generales"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones unificados -->
+                <div class="d-flex justify-content-between mt-3">
                     <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
                         <i class="fas fa-eraser"></i> Limpiar
                     </button>
                     <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-save"></i> Guardar Calificaciones
+                        <i class="fas fa-save"></i> Guardar todo
                     </button>
                 </div>
             </form>
+            </div>
+            
+            
         </div>
     </div>
 
@@ -273,9 +432,9 @@
                                     <th>Fecha</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tablaCalificacionesRecientes">
                                 {% for calif in calificaciones_recientes %}
-                                <tr>
+                                <tr class="calif-row{% if forloop.counter > 5 %} d-none{% endif %}">
                                     <td><strong>{{ calif.student.name }}</strong></td>
                                     <td><small>{{ calif.subject }}</small></td>
                                     <td>
@@ -306,6 +465,17 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                            {% if calificaciones_recientes|length > 5 %}
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <button type="button" id="toggleMasCalificaciones" class="btn btn-outline-secondary btn-sm">
+                                            Ver más
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            {% endif %}
                         </table>
                     </div>
                 </div>
@@ -356,9 +526,65 @@
                 </div>
             </div>
             {% endif %}
+
+            
+        </div>
+    </div>
+
+    <!-- Actividades Recientes y Acciones de Informe -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fas fa-clipboard-list"></i> Actividades/Clases Recientes</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Estudiante</th>
+                            <th>Materia</th>
+                            <th># Clase</th>
+                            <th>Desempeño</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for act in recent_activities %}
+                        <tr>
+                            <td><small>{{ act.date|date:"d/m/Y" }}</small></td>
+                            <td>{{ act.student.name }}</td>
+                            <td><small>{{ act.subject }}</small></td>
+                            <td class="text-center">{{ act.class_number }}</td>
+                            <td>{{ act.performance|default:'-' }}</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a class="btn btn-outline-secondary" href="{% url 'teachers:download_teacher' act.id %}" title="Descargar informe docente">
+                                        <i class="fas fa-file-download"></i>
+                                    </a>
+                                    <a class="btn btn-outline-secondary" href="{% url 'teachers:download_parent' act.id %}" title="Descargar informe representante">
+                                        <i class="fas fa-file-alt"></i>
+                                    </a>
+                                    <a class="btn btn-outline-success" href="{% url 'teachers:whatsapp_class' act.id %}" title="Enviar por WhatsApp">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Sin actividades recientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Crear Informe de Clase (rápido) -->
+
 
 <script>
 let aporteCounter = 1;
@@ -450,6 +676,22 @@ function calcularPromedioTiempoReal() {
     }
 }
 
+// Mostrar/ocultar calificaciones adicionales
+const toggleBtn = document.getElementById('toggleMasCalificaciones');
+if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+        const rows = document.querySelectorAll('#tablaCalificacionesRecientes .calif-row');
+        let mostrando = false;
+        rows.forEach((row, idx) => {
+            if (idx >= 5) {
+                row.classList.toggle('d-none');
+                mostrando = !row.classList.contains('d-none');
+            }
+        });
+        this.textContent = mostrando ? 'Ver menos' : 'Ver más';
+    });
+}
+
 // Event listener para el primer input
 document.querySelector('.calificacion-input').addEventListener('input', calcularPromedioTiempoReal);
 
@@ -479,6 +721,56 @@ document.getElementById('studentSelect').addEventListener('change', function() {
         // Aquí podrías hacer una llamada AJAX para pre-cargar datos
         console.log('Cargando datos de estudiante:', studentId);
     }
+
+    // Sincronizar selección con el formulario de asistencia
+    const attendanceForm = document.querySelector('form[action$="/teachers/asistencia/"]');
+    const attendanceSelect = attendanceForm ? attendanceForm.querySelector('select[name="student"]') : null;
+    if (attendanceSelect) {
+        attendanceSelect.value = studentId || '';
+    }
+    // Sincronizar inputs del formulario de informe rápido
+    const reportStudent = document.getElementById('reportStudentId');
+    const reportSubject = document.getElementById('reportSubject');
+    if (reportStudent) reportStudent.value = studentId || '';
+    if (reportSubject) reportSubject.value = subject || '';
+
+    // Activar/desactivar botones de informes
+    const btnLibreta = document.getElementById('btnReporteLibreta');
+    const btnEmail = document.getElementById('btnReporteEmail');
+    const btnWhatsappGrades = document.getElementById('btnWhatsappGrades');
+    if (studentId) {
+        if (btnLibreta) {
+            btnLibreta.classList.remove('disabled');
+            btnLibreta.removeAttribute('aria-disabled');
+            btnLibreta.href = '{% url "teachers:report_card" 0 %}'.replace('/0/', '/' + studentId + '/');
+        }
+        if (btnEmail) {
+            btnEmail.classList.remove('disabled');
+            btnEmail.removeAttribute('aria-disabled');
+            btnEmail.href = '{% url "teachers:send_student_report_email" 0 %}'.replace('/0/', '/' + studentId + '/');
+        }
+        if (btnWhatsappGrades) {
+            btnWhatsappGrades.classList.remove('disabled');
+            btnWhatsappGrades.removeAttribute('aria-disabled');
+            btnWhatsappGrades.href = '{% url "teachers:whatsapp_grades" 0 %}'.replace('/0/', '/' + studentId + '/');
+        }
+    } else {
+        if (btnLibreta) {
+            btnLibreta.classList.add('disabled');
+            btnLibreta.setAttribute('aria-disabled', 'true');
+            btnLibreta.href = '#';
+        }
+        if (btnEmail) {
+            btnEmail.classList.add('disabled');
+            btnEmail.setAttribute('aria-disabled', 'true');
+            btnEmail.href = '#';
+        }
+        if (btnWhatsappGrades) {
+            btnWhatsappGrades.classList.add('disabled');
+            btnWhatsappGrades.setAttribute('aria-disabled', 'true');
+            btnWhatsappGrades.href = '#';
+        }
+    }
 });
 </script>
 
@@ -490,14 +782,16 @@ document.getElementById('studentSelect').addEventListener('change', function() {
   if (!document.getElementById(canvasId)) {
     const card = document.createElement('div');
     card.className = 'card mb-4 shadow-sm';
-    card.innerHTML = `
-      <div class="card-header bg-white">
-        <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Promedios por Estudiante</h5>
-      </div>
-      <div class="card-body">
-        <canvas id="${canvasId}" height="120"></canvas>
-      </div>`;
-    document.querySelector('.container-fluid').prepend(card);
+    card.innerHTML = '<div class="card-header bg-white">'
+      + '<h5 class="mb-0"><i class="fas fa-chart-bar"></i> Promedios por Estudiante</h5>'
+      + '</div>'
+      + '<div class="card-body">'
+      + '<canvas id="' + canvasId + '" height="120"></canvas>'
+      + '</div>';
+    const container = document.querySelector('.container-fluid');
+    if (container) {
+      container.appendChild(card);
+    }
   }
   const datos = {
     nombres: {{ estudiantes_nombres|safe }},
