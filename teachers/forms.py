@@ -4,7 +4,16 @@ from django.contrib.auth.models import User
 
 from teachers.models import Teacher 
 
+from subjects.models import Subject
+
 class DeberForm(forms.ModelForm):
+    subject = forms.ModelChoiceField(
+        queryset=Subject.objects.none(),  # se filtrará en __init__
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label="Materia"
+    )
+
     cursos = forms.ModelMultipleChoiceField(
         queryset=Curso.objects.none(),  # se filtrará en __init__
         widget=forms.CheckboxSelectMultiple,
@@ -22,7 +31,7 @@ class DeberForm(forms.ModelForm):
 
     class Meta:
         model = Deber
-        fields = ['titulo', 'descripcion', 'clase', 'fecha_entrega',
+        fields = ['titulo', 'descripcion', 'subject', 'clase', 'fecha_entrega',
                   'puntos_totales', 'archivo_adjunto', 'estado', 'cursos', 'estudiantes_especificos']
         widgets = {
             'titulo': forms.TextInput(attrs={
@@ -53,7 +62,7 @@ class DeberForm(forms.ModelForm):
         }
 
         labels = {
-            'clase': 'Materia'
+            'clase': 'Clase'
         }
 
     def __init__(self, *args, **kwargs):
@@ -61,6 +70,7 @@ class DeberForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if teacher:
+            self.fields['subject'].queryset = teacher.subjects.all()
             # Filtrar solo las clases del profesor
             self.fields['clase'].queryset = Clase.objects.filter(teacher=teacher)
 

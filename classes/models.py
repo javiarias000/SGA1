@@ -9,13 +9,14 @@ from django.db.models.signals import post_save, post_delete
 from django.db import models
 from decimal import Decimal
 from datetime import timezone
+from subjects.models import Subject
 
 class Clase(models.Model):
     """Modelo para Clases/Cursos teóricos donde los estudiantes se matriculan"""
     
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='clases_teoricas', verbose_name="Docente")
     name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
-    subject = models.CharField(max_length=120, verbose_name="Materia")
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='clases', verbose_name="Materia", null=True)
     description = models.TextField(blank=True, verbose_name="Descripción")
     schedule = models.CharField(max_length=200, blank=True, verbose_name="Horario")
     room = models.CharField(max_length=100, blank=True, verbose_name="Aula/Salón")
@@ -72,7 +73,7 @@ class Activity(models.Model):
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='activities', verbose_name="Estudiante")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='activities')
-    subject = models.CharField(max_length=120, verbose_name="Materia")
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='activities', verbose_name="Materia", null=True)
     class_number = models.PositiveIntegerField(verbose_name="Número de clase")
     date = models.DateField(verbose_name="Fecha de clase")
     
@@ -131,7 +132,7 @@ class Grade(models.Model):
     ]
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades', verbose_name="Estudiante")
-    subject = models.CharField(max_length=120, verbose_name="Materia")
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades', verbose_name="Materia", null=True)
     period = models.CharField(max_length=50, choices=PERIOD_CHOICES, verbose_name="Período")
     score = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(10)], verbose_name="Calificación")
     comments = models.TextField(blank=True, verbose_name="Comentarios")
@@ -231,10 +232,7 @@ class CalificacionParcial(models.Model):
         verbose_name="Estudiante"
     )
     
-    subject = models.CharField(
-        max_length=120,
-        verbose_name="Materia"
-    )
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='calificaciones_parciales', verbose_name="Materia", null=True)
     
     parcial = models.CharField(
         max_length=2, 
@@ -573,7 +571,7 @@ class PromedioCache(models.Model):
         on_delete=models.CASCADE,
         related_name='cache_promedios'
     )
-    subject = models.CharField(max_length=100, blank=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='cache_promedios', verbose_name="Materia", blank=True, null=True)
     parcial = models.CharField(max_length=2, blank=True)
     quimestre = models.CharField(max_length=2, blank=True)
     tipo_promedio = models.CharField(max_length=20, choices=TIPO_CHOICES)
@@ -590,40 +588,6 @@ class PromedioCache(models.Model):
     
     def __str__(self):
         return f"{self.student.name} - {self.tipo_promedio}: {self.promedio}"
-
-
-def get_all_subjects():
-    """Obtiene el listado dinámico de materias existentes en el sistema."""
-    try:
-        clase_subjects = set(Clase.objects.values_list('subject', flat=True).distinct())
-    except Exception:
-        clase_subjects = set()
-    try:
-        activity_subjects = set(Activity.objects.values_list('subject', flat=True).distinct())
-    except Exception:
-        activity_subjects = set()
-    subjects_raw = set(s.strip() for s in (clase_subjects | activity_subjects) if s)
-
-    # Excluir nombres de docentes del listado (coincidencia exacta, case-insensitive)
-    try:
-        teacher_names = set(t.full_name.strip().lower() for t in Teacher.objects.all() if t.full_name)
-        # También considerar nombre completo del usuario por si difiere
-        from django.contrib.auth.models import User as _U
-        teacher_names |= set((_u.get_full_name() or _u.username or '').strip().lower() for _u in _U.objects.filter(teacher_profile__isnull=False))
-    except Exception:
-        teacher_names = set()
-
-    subjects = sorted(
-        s for s in subjects_raw
-        if s and s.lower() not in teacher_names
-    )
-    if not subjects:
-        subjects = ['Guitarra Clásica', 'Conjunto Instrumental', 'Creación y Arreglos Musicales']
-    return subjects
-
-
-def get_subject_choices():
-    return [(s, s) for s in get_all_subjects()]
 
 # ============================================
 # SIGNALS PARA ACTUALIZACIÓN AUTOMÁTICA
@@ -736,6 +700,7 @@ class Deber(models.Model):
     fecha_asignacion = models.DateTimeField(auto_now_add=True)
     fecha_entrega = models.DateTimeField()
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deberes_profesor')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True, verbose_name="Materia")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True)
     puntos_totales = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     archivo_adjunto = models.FileField(upload_to='deberes/adjuntos/', blank=True, null=True)
@@ -748,7 +713,7 @@ class Deber(models.Model):
         ordering = ['-fecha_entrega']
     
     def __str__(self):
-        return f"{self.titulo} - {self.materia.nombre}"
+        return f"{self.titulo} - {self.subject}"
     
     def total_estudiantes(self):
         estudiantes_por_curso = User.objects.filter(cursos_estudiante__in=self.cursos.all())

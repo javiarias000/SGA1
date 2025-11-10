@@ -175,8 +175,7 @@ def teacher_dashboard(request):
     tipos_aportes = TipoAporte.objects.filter(activo=True).order_by('orden')
     
     # Materias disponibles (dinámicas)
-    from classes.models import get_all_subjects
-    materias = [(s, s) for s in get_all_subjects()]
+    materias = teacher.subjects.all()
     
     # Calificaciones recientes
     calificaciones_recientes = CalificacionParcial.objects.filter(
@@ -754,10 +753,10 @@ def student_detail_view(request, student_id):
     grades = student.grades.all().order_by('-date')
     
     subjects_stats = {}
-    for subject_code, subject_name in Activity.SUBJECT_CHOICES:
-        count = activities.filter(subject=subject_code).count()
+    for subject in teacher.subjects.all():
+        count = activities.filter(subject=subject).count()
         if count > 0:
-            subjects_stats[subject_name] = count
+            subjects_stats[subject.name] = count
     
     return render(request, 'teachers/student_detail.html', {
         'student': student,
@@ -823,56 +822,10 @@ def student_code_view(request, student_id):
 @teacher_required
 def clases_teoricas_view(request):
     teacher = request.user.teacher_profile
-    if request.method == 'POST':
-        form = ClaseForm(request.POST, teacher=teacher)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Clase creada correctamente')
-            return redirect('teachers:clases_teoricas')
-    else:
-        form = ClaseForm(teacher=teacher)
     clases = Clase.objects.filter(teacher=teacher).order_by('subject', 'name')
     return render(request, 'teachers/clases.html', {
-        'form': form,
         'clases': clases,
     })
-
-@teacher_required
-def clase_create_view(request):
-    teacher = request.user.teacher_profile
-    if request.method == 'POST':
-        form = ClaseForm(request.POST, teacher=teacher)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Clase creada correctamente')
-            return redirect('teachers:clases_teoricas')
-    else:
-        form = ClaseForm(teacher=teacher)
-    return render(request, 'teachers/clase_form.html', {'form': form})
-
-@teacher_required
-def clase_edit_view(request, clase_id):
-    teacher = request.user.teacher_profile
-    clase = get_object_or_404(Clase, id=clase_id, teacher=teacher)
-    if request.method == 'POST':
-        form = ClaseForm(request.POST, instance=clase, teacher=teacher)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Clase actualizada')
-            return redirect('teachers:clases_teoricas')
-    else:
-        form = ClaseForm(instance=clase, teacher=teacher)
-    return render(request, 'teachers/clase_form.html', {'form': form, 'clase': clase})
-
-@teacher_required
-def clase_delete_view(request, clase_id):
-    teacher = request.user.teacher_profile
-    clase = get_object_or_404(Clase, id=clase_id, teacher=teacher)
-    if request.method == 'POST':
-        clase.delete()
-        messages.success(request, 'Clase eliminada')
-        return redirect('teachers:clases_teoricas')
-    return render(request, 'teachers/clase_confirm_delete.html', {'clase': clase})
 
 # ============================================
 # ACTIVIDADES/CLASES
@@ -1107,9 +1060,8 @@ def calificaciones_detalladas_view(request):
         
         # Obtener calificaciones de cada aporte
         for tipo in tipos_aportes:
-            from classes.models import get_all_subjects
-            subjects_list = get_all_subjects()
-            default_subject = subjects_list[0] if subjects_list else subject
+            subjects_list = teacher.subjects.all()
+            default_subject = subjects_list.first() if subjects_list else subject
             calif = CalificacionParcial.objects.filter(
                 student=estudiante,
                 subject=subject or default_subject,
@@ -1120,9 +1072,8 @@ def calificaciones_detalladas_view(request):
             fila['aportes'][tipo.codigo] = calif.calificacion if calif else 0
         
         # Calcular promedio
-        from classes.models import get_all_subjects
-        subjects_list = get_all_subjects()
-        default_subject = subjects_list[0] if subjects_list else subject
+        subjects_list = teacher.subjects.all()
+        default_subject = subjects_list.first() if subjects_list else subject
         fila['promedio'] = CalificacionParcial.calcular_promedio_parcial(
             estudiante, 
             subject or default_subject, 
@@ -1144,7 +1095,7 @@ def calificaciones_detalladas_view(request):
         'parcial_actual': parcial,
         'subject_actual': subject,
         'estudiantes_lista': estudiantes,
-        'materias': [(s, s) for s in get_all_subjects()],
+        'materias': teacher.subjects.all(),
         'estadisticas': {
             'total': total_estudiantes,
             'aprobados': aprobados,
@@ -1466,12 +1417,12 @@ def get_student_subjects(request):
         student = Student.objects.get(id=student_id, teacher=teacher)
         subjects = []
         
-        for subject_code, subject_name in Activity.SUBJECT_CHOICES:
-            if student.can_take_subject(subject_code):
-                class_count = student.get_class_count(subject_code)
+        for subject in teacher.subjects.all():
+            if student.can_take_subject(subject):
+                class_count = student.get_class_count(subject)
                 subjects.append({
-                    'code': subject_code,
-                    'name': subject_name,
+                    'code': subject.id,
+                    'name': subject.name,
                     'class_count': class_count
                 })
         
@@ -1701,8 +1652,8 @@ def dashboard_profesor(request):
 
     # Deberes recientes (últimos 5)
     deberes_recientes = Deber.objects.filter(
-        profesor=request.user
-    ).select_related('materia').order_by('fecha_asignacion')[:5]
+        teacher=request.user
+    ).select_related('clase__subject').order_by('fecha_asignacion')[:5]
     
     # Entregas recientes (últimas 10)
     entregas_recientes = DeberEntrega.objects.filter(
@@ -1731,7 +1682,7 @@ def dashboard_profesor(request):
     promedios_materias = []
     for materia in estadisticas_materias:
         promedio = DeberEntrega.objects.filter(
-            deber__materia=materia,
+            deber__clase__subject=materia,
             calificacion__isnull=False
         ).aggregate(Avg('calificacion'))['calificacion__avg']
         
@@ -1819,7 +1770,7 @@ def dashboard_estudiante(request):
     mis_entregas = DeberEntrega.objects.filter(
         estudiante=request.user,
         estado__in=['entregado', 'revisado', 'tarde']
-    ).select_related('deber', 'deber__materia').order_by('-fecha_entrega')[:10]
+    ).select_related('deber', 'deber__clase__subject').order_by('-fecha_entrega')[:10]
     
     total_entregados = mis_entregas.count()
     
@@ -1828,7 +1779,7 @@ def dashboard_estudiante(request):
         estudiante=request.user,
         estado='revisado',
         calificacion__isnull=False
-    ).select_related('deber', 'deber__materia').order_by('-fecha_actualizacion')[:5]
+    ).select_related('deber', 'deber__clase__subject').order_by('-fecha_actualizacion')[:5]
     
     # Promedio general
     promedio_general = DeberEntrega.objects.filter(
@@ -1841,8 +1792,8 @@ def dashboard_estudiante(request):
     for entrega in DeberEntrega.objects.filter(
         estudiante=request.user,
         calificacion__isnull=False
-    ).select_related('deber__materia'):
-        materia_nombre = entrega.deber.materia.nombre
+    ).select_related('deber__clase__subject'):
+        materia_nombre = entrega.deber.clase.subject.name
         if materia_nombre not in materias_stats:
             materias_stats[materia_nombre] = {
                 'calificaciones': [],
@@ -1975,7 +1926,7 @@ def lista_deberes_profesor(request):
         deberes = deberes.filter(estado=estado_filtro)
     
     if materia_filtro != 'todas':
-        deberes = deberes.filter(materia_id=materia_filtro)
+        deberes = deberes.filter(clase__subject_id=materia_filtro)
     
     # Agregar estadísticas
     deberes = deberes.annotate(
@@ -1992,14 +1943,14 @@ def lista_deberes_profesor(request):
     ).count()
     
     # Obtener materias para el filtro
-    clase = Clase.objects.filter(teacher=request.user.teacher_profile)
+    materias = teacher_instance.subjects.all()
 
     context = {
         'deberes': deberes,
         'total_deberes': total_deberes,
         'deberes_activos': deberes_activos,
+        'materias': materias,
         'total_entregas_pendientes': total_entregas_pendientes,
-        'clase': clase,
         'estado_filtro': estado_filtro,
         'materia_filtro': materia_filtro,
     }
@@ -2045,6 +1996,20 @@ def ver_entregas(request, deber_id):
         'estado_filtro': estado_filtro,
     }
     return render(request, 'teachers/deberes/ver_entregas.html', context)
+
+@teacher_required
+def get_classes_by_subject(request):
+    """API para obtener clases filtradas por materia y docente"""
+    teacher = request.user.teacher_profile
+    subject_id = request.GET.get('subject_id')
+
+    clases_data = []
+    if subject_id:
+        clases = Clase.objects.filter(teacher=teacher, subject_id=subject_id, active=True).order_by('name')
+        for clase in clases:
+            clases_data.append({'id': clase.id, 'name': str(clase)})
+    
+    return JsonResponse({'clases': clases_data})
 
 @login_required
 def calificar_entrega(request, entrega_id):

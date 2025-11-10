@@ -20,9 +20,6 @@ urlpatterns = [
     
     # Clases teóricas (gestión)
     path('clases/', views.clases_teoricas_view, name='clases_teoricas'),
-    path('clases/nueva/', views.clase_create_view, name='clase_create'),
-    path('clases/<int:clase_id>/editar/', views.clase_edit_view, name='clase_edit'),
-    path('clases/<int:clase_id>/eliminar/', views.clase_delete_view, name='clase_delete'),
 
     # Actividades/Clases
     path('registro/', views.registro_view, name='registro'),
@@ -80,4 +77,5 @@ urlpatterns = [
     path('deberes/eliminar/<int:deber_id>/', views.eliminar_deber, name='eliminar_deber'),
     path('deberes/entregas/<int:deber_id>/', views.ver_entregas, name='ver_entregas'),
     path('deberes/calificar/<int:entrega_id>/', views.calificar_entrega, name='calificar_entrega'),
+    path('api/get-classes-by-subject/', views.get_classes_by_subject, name='get_classes_by_subject'),
 ]
