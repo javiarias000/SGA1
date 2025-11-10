@@ -346,6 +346,9 @@
 <a href="{% url 'students:attendance' %}" class="menu-item {% if request.resolver_match.url_name == 'attendance' %}active{% endif %}">
                 ✅ Asistencia
             </a>
+<a href="{% url 'students:homework' %}" class="menu-item {% if request.resolver_match.url_name == 'homework' %}active{% endif %}">
+                📝 Mis Deberes
+            </a>
 <a href="{% url 'students:profile' %}" class="menu-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                 ⚙️ Mi Perfil
             </a>

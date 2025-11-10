@@ -17,4 +17,7 @@ urlpatterns = [
     
     # Asistencia
     path('asistencia/', views.student_attendance_view, name='attendance'),
+
+    # Deberes
+    path('deberes/', views.student_homework_view, name='homework'),
 ]

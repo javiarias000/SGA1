@@ -8,7 +8,7 @@ from users.views.decorators import student_required
 
 # Importar modelos
 from students.models import Student
-from classes.models import Activity, Grade, Attendance, Clase, Enrollment, Subject
+from classes.models import Activity, Grade, Attendance, Clase, Enrollment, Subject, Deber, DeberEntrega
 
 
 # ============================================
@@ -220,6 +220,57 @@ def student_attendance_view(request):
         'justificado': justificado,
         'presente_pct': round(presente_pct, 1),
     })
+
+
+# ============================================
+# DEBERES DEL ESTUDIANTE
+# ============================================
+
+@login_required
+@student_required
+def student_homework_view(request):
+    """Vista para que los estudiantes vean sus deberes"""
+    try:
+        student = request.user.student_profile
+    except AttributeError:
+        messages.error(request, 'No se encontró tu perfil de estudiante')
+        return redirect('users:login')
+
+    # Obtener los IDs de las clases en las que el estudiante está matriculado
+    enrolled_class_ids = student.enrollments.filter(active=True).values_list('clase__id', flat=True)
+
+    # Obtener deberes asignados a las clases del estudiante o directamente al estudiante
+    # Asumiendo que 'estudiantes_especificos' en Deber es un ManyToMany a User,
+    # y que student.user es el User asociado al Student.
+    homework_assigned_to_classes = Deber.objects.filter(
+        clase__id__in=enrolled_class_ids
+    ).distinct()
+    
+    homework_directly_assigned = Deber.objects.filter(
+        estudiantes_especificos=student.user
+    ).distinct()
+
+    # Combinar y eliminar duplicados
+    all_homework = (homework_assigned_to_classes | homework_directly_assigned).order_by('-fecha_entrega')
+
+    # Para cada deber, obtener el estado de entrega del estudiante
+    homework_with_submission_status = []
+    for hw in all_homework:
+        submission = DeberEntrega.objects.filter(deber=hw, estudiante=student.user).first()
+        homework_with_submission_status.append({
+            'homework': hw,
+            'submission': submission,
+            'is_submitted': submission is not None,
+            'is_graded': submission and submission.calificacion is not None,
+            'status': submission.get_estado_display() if submission else 'No entregado',
+            'calificacion': submission.calificacion if submission else None,
+        })
+
+    context = {
+        'student': student,
+        'homework_list': homework_with_submission_status,
+    }
+    return render(request, 'students/homework.html', context)
 
 
 # ============================================

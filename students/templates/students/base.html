@@ -266,6 +266,11 @@
                     <span>Asistencia</span>
                 </a>
                 
+                <a href="{% url 'students:homework' %}" class="nav-item {% if request.resolver_match.url_name == 'homework' %}active{% endif %}">
+                    <span class="icon">📝</span>
+                    <span>Mis Deberes</span>
+                </a>
+                
                 <a href="{% url 'students:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                     <span class="icon">👤</span>
                     <span>Mi Perfil</span>

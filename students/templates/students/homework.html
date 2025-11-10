@@ -1,0 +1,46 @@
+{% extends 'classes/base_student.html' %}
+
+{% block title %}Mis Deberes - Portal de Estudiantes{% endblock %}
+
+{% block content %}
+<h2 class="page-title">Mis Deberes</h2>
+<p class="page-subtitle">Aquí puedes ver los deberes asignados y su estado de entrega.</p>
+
+{% if homework_list %}
+    <div class="homework-list">
+        {% for item in homework_list %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.homework.titulo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Materia: {{ item.homework.clase.subject.name }}</h6>
+                    <p class="card-text">{{ item.homework.descripcion }}</p>
+                    <p class="card-text"><strong>Fecha de Entrega:</strong> {{ item.homework.fecha_entrega|date:"d M Y H:i" }}</p>
+                    <p class="card-text"><strong>Estado:</strong> 
+                        {% if item.is_submitted %}
+                            <span class="badge bg-success">{{ item.status }}</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">{{ item.status }}</span>
+                        {% endif %}
+                    </p>
+                    {% if item.is_graded %}
+                        <p class="card-text"><strong>Calificación:</strong> {{ item.calificacion }} / {{ item.homework.puntos_totales }}</p>
+                    {% endif %}
+                    {% if item.homework.archivo_adjunto %}
+                        <a href="{{ item.homework.archivo_adjunto.url }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver Archivo Adjunto</a>
+                    {% endif %}
+                    {% if not item.is_submitted %}
+                        <a href="#" class="btn btn-sm btn-primary disabled">Entregar Deber (Funcionalidad Pendiente)</a>
+                    {% else %}
+                        <a href="#" class="btn btn-sm btn-info disabled">Ver Entrega (Funcionalidad Pendiente)</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        No tienes deberes asignados en este momento.
+    </div>
+{% endif %}
+
+{% endblock %}

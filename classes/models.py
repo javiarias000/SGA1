@@ -634,7 +634,7 @@ def actualizar_cache_promedios(sender, instance, **kwargs):
         promedio_general = CalificacionParcial.calcular_promedio_general(instance.student)
         PromedioCache.objects.update_or_create(
             student=instance.student,
-            subject='GENERAL',
+            subject=None, # Set subject to None for general average
             tipo_promedio='general',
             defaults={'promedio': promedio_general}
         )
