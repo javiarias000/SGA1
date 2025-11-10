@@ -5,7 +5,8 @@ from django.db import transaction
 from openpyxl import load_workbook
 from students.models import Student
 from teachers.models import Teacher
-from classes.models import Clase, Enrollment, get_all_subjects
+from classes.models import Clase, Enrollment
+from subjects.models import Subject
 
 
 def norm(s):
@@ -57,7 +58,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **opts):
         dry = opts['dry_run']
-        created = {"students": 0, "clases": 0, "enrollments": 0, "teachers": 0}
+        created = {"students": 0, "clases": 0, "enrollments": 0, "teachers": 0, "subjects": 0}
 
         # 1) Importar MATRICULADOS (base principal de estudiantes)
         wb = load_workbook(opts['matriculados'], read_only=True, data_only=True)
@@ -112,17 +113,20 @@ class Command(BaseCommand):
                 ap = cells[headers.get('apellidos del estudiante', -1)] if headers.get('apellidos del estudiante', -1) >= 0 else ''
                 no = cells[headers.get('nombres del estudiante', -1)] if headers.get('nombres del estudiante', -1) >= 0 else ''
                 name = norm(f"{ap} {no}")
-                subject = cells[headers.get('instrumento que estudia en el conservatorio bolívar', -1)] or cells[headers.get('agrupación', -1)] or ws.title
+                subject_name = cells[headers.get('instrumento que estudia en el conservatorio bolívar', -1)] or cells[headers.get('agrupación', -1)] or ws.title
                 teacher_name = cells[headers.get('maestro de instrumento', -1)] or cells[headers.get('docente piano acompañamiento', -1)] or cells[headers.get('docente piano complementario', -1)]
-                if not name or not subject:
+                if not name or not subject_name:
                     continue
                 teacher = get_or_create_teacher(teacher_name)
                 # Crear/obtener clase por subject+teacher
                 if not dry:
+                    subject, created_subject = Subject.objects.get_or_create(name=subject_name)
+                    if created_subject:
+                        created['subjects'] += 1
                     clase, _ = Clase.objects.get_or_create(
                         teacher=teacher,
                         subject=subject,
-                        name=f"{subject} - {teacher.full_name}",
+                        name=f"{subject.name} - {teacher.full_name}",
                         defaults={'active': True}
                     )
                     created['clases'] += 1
@@ -135,7 +139,7 @@ class Command(BaseCommand):
         # 3) (Opcional) Horarios: solo detectar materias adicionales y crear clases vacías por docente genérico
         try:
             wb3 = load_workbook(opts['horarios'], read_only=True, data_only=True)
-            subject_hint = set(get_all_subjects())
+            subject_hint = set(Subject.objects.values_list('name', flat=True))
             for ws in wb3.worksheets:
                 for row in ws.iter_rows(values_only=True):
                     for cell in row:
@@ -145,18 +149,21 @@ class Command(BaseCommand):
                         # Heurística: si contiene palabras clave de materias
                         if any(k in txt.lower() for k in ['coro', 'orquesta', 'conjunto', 'guitarra', 'piano', 'armonia', 'teoria']):
                             # extraer palabra capitalizada inicial
-                            subj = None
+                            subj_name = None
                             for key in ['Coro', 'Orquesta', 'Conjunto Instrumental', 'Guitarra Clásica', 'Piano Complementario', 'Piano Acompañamiento']:
                                 if key.lower() in txt.lower():
-                                    subj = key
+                                    subj_name = key
                                     break
-                            if subj and subj not in subject_hint and not dry:
+                            if subj_name and subj_name not in subject_hint and not dry:
                                 # Crear clase genérica sin docente concreto
                                 generic_teacher = get_or_create_teacher('Docente Sistema')
+                                subject, created_subject = Subject.objects.get_or_create(name=subj_name)
+                                if created_subject:
+                                    created['subjects'] += 1
                                 Clase.objects.get_or_create(
-                                    teacher=generic_teacher, subject=subj, name=subj
+                                    teacher=generic_teacher, subject=subject, name=subj_name
                                 )
-                                subject_hint.add(subj)
+                                subject_hint.add(subj_name)
         except Exception:
             pass
 

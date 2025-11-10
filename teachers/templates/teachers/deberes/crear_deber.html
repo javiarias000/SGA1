@@ -39,27 +39,26 @@
                         <small class="text-muted">Instrucciones detalladas para los estudiantes</small>
                     </div>
                     
-                    <!-- Materia y Puntos -->
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <label for="{{ form.materia.id_for_label }}" class="form-label">
-                                {{ form.materia.label }} <span class="text-danger">*</span>
-                            </label>
-                            {{ form.materia }}
-                            {% if form.materia.errors %}
-                                <div class="text-danger small mt-1">{{ form.materia.errors.0 }}</div>
-                            {% endif %}
-                            {% if form.materia.help_text %}
-                                <small class="text-muted">{{ form.materia.help_text }}</small>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="col-md-4 mb-3">
-                            <label for="{{ form.puntos_totales.id_for_label }}" class="form-label">
-                                {{ form.puntos_totales.label }}
-                            </label>
-                            {{ form.puntos_totales }}
-                        </div>
+                    <!-- Clase -->
+                    <div class="mb-3">
+                        <label for="{{ form.clase.id_for_label }}" class="form-label">
+                            {{ form.clase.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.clase }}
+                        {% if form.clase.errors %}
+                            <div class="text-danger small mt-1">{{ form.clase.errors.0 }}</div>
+                        {% endif %}
+                        {% if form.clase.help_text %}
+                            <small class="text-muted">{{ form.clase.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Puntos Totales -->
+                    <div class="mb-3">
+                        <label for="{{ form.puntos_totales.id_for_label }}" class="form-label">
+                            {{ form.puntos_totales.label }}
+                        </label>
+                        {{ form.puntos_totales }}
                     </div>
                     
                     <!-- Fecha de Entrega -->
@@ -174,12 +173,13 @@
 <script>
     // Establecer fecha mínima a hoy
     document.addEventListener('DOMContentLoaded', function() {
-        const fechaInput = document.getElementById('{{ form.fecha_entrega.id_for_label }}');
+        const fechaInput = document.getElementById('id_fecha_entrega');
         if (fechaInput) {
             const ahora = new Date();
             ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
             fechaInput.min = ahora.toISOString().slice(0, 16);
         }
+        // Removed dynamic filtering JavaScript
     });
 </script>
 {% endblock %}

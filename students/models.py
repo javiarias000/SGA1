@@ -42,7 +42,7 @@ class Student(models.Model):
         """Verifica si el estudiante puede tomar una materia según su grado.
         Se usan coincidencias flexibles por nombre para tolerar variaciones (acentos, alias).
         """
-        subject_l = (subject or '').lower()
+        subject_l = (subject.name or '').lower()
         grade_digits = ''.join(filter(str.isdigit, self.grade or ''))
         grade_number = int(grade_digits) if grade_digits else 0
         is_bachillerato = 'bachillerato' in (self.grade or '').lower()
@@ -64,7 +64,8 @@ class Student(models.Model):
     
     def get_subjects(self):
         """Materias que el estudiante está tomando"""
-        return self.activities.values_list('subject', flat=True).distinct()
+        from subjects.models import Subject
+        return Subject.objects.filter(activities__student=self).distinct()
     
     def has_user_account(self):
         """Verifica si el estudiante tiene cuenta de usuario"""

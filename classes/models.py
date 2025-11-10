@@ -700,7 +700,6 @@ class Deber(models.Model):
     fecha_asignacion = models.DateTimeField(auto_now_add=True)
     fecha_entrega = models.DateTimeField()
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deberes_profesor')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True, verbose_name="Materia")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True)
     puntos_totales = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     archivo_adjunto = models.FileField(upload_to='deberes/adjuntos/', blank=True, null=True)
@@ -713,7 +712,7 @@ class Deber(models.Model):
         ordering = ['-fecha_entrega']
     
     def __str__(self):
-        return f"{self.titulo} - {self.subject}"
+        return f"{self.titulo} - {self.clase.subject}"
     
     def total_estudiantes(self):
         estudiantes_por_curso = User.objects.filter(cursos_estudiante__in=self.cursos.all())

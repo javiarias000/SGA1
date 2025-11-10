@@ -8,7 +8,7 @@ from users.views.decorators import student_required
 
 # Importar modelos
 from students.models import Student
-from classes.models import Activity, Grade, Attendance, Clase, Enrollment
+from classes.models import Activity, Grade, Attendance, Clase, Enrollment, Subject
 
 
 # ============================================
@@ -245,7 +245,7 @@ def student_profile_view(request):
     )['promedio'] or 0
     
     # Materias que está cursando
-    materias = Activity.objects.filter(student=student).values_list('subject', flat=True).distinct()
+    materias = Subject.objects.filter(activities__student=student).distinct()
     
     # Clases matriculadas
     clases_matriculadas = Clase.objects.filter(

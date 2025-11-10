@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Teacher, Student, Activity, Grade, Attendance, Clase
+from subjects.models import Subject
 
 class StudentForm(forms.ModelForm):
     """Formulario para agregar/editar estudiantes"""
@@ -38,6 +39,7 @@ class StudentForm(forms.ModelForm):
 
 class ActivityForm(forms.ModelForm):
     """Formulario para registrar clases"""
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={'class': 'form-control', 'id': 'id_subject'}))
     class Meta:
         model = Activity
         fields = [
@@ -48,7 +50,6 @@ class ActivityForm(forms.ModelForm):
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control', 'id': 'id_student'}),
             'clase': forms.Select(attrs={'class': 'form-control', 'id': 'id_clase'}),
-            'subject': forms.Select(attrs={'class': 'form-control', 'id': 'id_subject'}),
             'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'topics_worked': forms.Textarea(attrs={
                 'class': 'form-control', 
@@ -107,10 +108,7 @@ class ActivityForm(forms.ModelForm):
                 teacher=self.teacher,
                 active=True
             ).order_by('subject', 'name')
-        
-        # Materias dinámicas
-        from .models import get_subject_choices
-        self.fields['subject'].choices = get_subject_choices()
+            self.fields['subject'].queryset = self.teacher.subjects.all()
         
         # Valores iniciales útiles
         from datetime import date as _date
@@ -126,12 +124,12 @@ class ActivityForm(forms.ModelForm):
 
 class GradeForm(forms.ModelForm):
     """Formulario para registrar calificaciones"""
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Grade
         fields = ['student', 'subject', 'period', 'score', 'comments', 'date']
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control'}),
-            'subject': forms.Select(attrs={'class': 'form-control'}),
             'period': forms.Select(attrs={'class': 'form-control'}),
             'score': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -160,16 +158,13 @@ class GradeForm(forms.ModelForm):
         if not self.initial.get('date'):
             self.fields['date'].initial = _date.today()
         
-        # Materias dinámicas
-        from .models import get_subject_choices
-        self.fields['subject'].choices = get_subject_choices()
-        
         # Filtrar solo estudiantes del docente actual
         if self.teacher:
             self.fields['student'].queryset = Student.objects.filter(
                 teacher=self.teacher,
                 active=True
             )
+            self.fields['subject'].queryset = self.teacher.subjects.all()
 
 
 class AttendanceForm(forms.ModelForm):
@@ -211,12 +206,12 @@ class AttendanceForm(forms.ModelForm):
 
 
 class ClaseForm(forms.ModelForm):
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}))
     class Meta:
         model = Clase
         fields = ['name', 'subject', 'description', 'schedule', 'room', 'max_students', 'active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'subject': forms.Select(attrs={'class': 'form-select'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'schedule': forms.TextInput(attrs={'class': 'form-control'}),
             'room': forms.TextInput(attrs={'class': 'form-control'}),
@@ -227,6 +222,8 @@ class ClaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.teacher = kwargs.pop('teacher', None)
         super().__init__(*args, **kwargs)
+        if self.teacher:
+            self.fields['subject'].queryset = self.teacher.subjects.all()
 
     def save(self, commit=True):
         obj = super().save(commit=False)
@@ -266,8 +263,8 @@ class UnifiedEntryForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'}),
         label='Estudiante'
     )
-    common_subject = forms.ChoiceField(
-        choices=[],
+    common_subject = forms.ModelChoiceField(
+        queryset=Subject.objects.all(),
         widget=forms.Select(attrs={'class': 'form-select'}),
         label='Materia'
     )
@@ -365,9 +362,7 @@ class UnifiedEntryForm(forms.Form):
             self.fields['common_date'].initial = _date.today()
         if self.teacher:
             self.fields['common_student'].queryset = Student.objects.filter(teacher=self.teacher, active=True)
-        # Materias dinámicas
-        from .models import get_subject_choices
-        self.fields['common_subject'].choices = get_subject_choices()
+            self.fields['common_subject'].queryset = self.teacher.subjects.all()
 
     def clean(self):
         cleaned = super().clean()

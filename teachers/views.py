@@ -1997,20 +1997,6 @@ def ver_entregas(request, deber_id):
     }
     return render(request, 'teachers/deberes/ver_entregas.html', context)
 
-@teacher_required
-def get_classes_by_subject(request):
-    """API para obtener clases filtradas por materia y docente"""
-    teacher = request.user.teacher_profile
-    subject_id = request.GET.get('subject_id')
-
-    clases_data = []
-    if subject_id:
-        clases = Clase.objects.filter(teacher=teacher, subject_id=subject_id, active=True).order_by('name')
-        for clase in clases:
-            clases_data.append({'id': clase.id, 'name': str(clase)})
-    
-    return JsonResponse({'clases': clases_data})
-
 @login_required
 def calificar_entrega(request, entrega_id):
     """Vista para calificar una entrega"""

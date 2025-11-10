@@ -3,12 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from subjects.models import Subject
 
 class Teacher(models.Model):
     """Perfil extendido del docente"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher_profile')
     full_name = models.CharField(max_length=200, verbose_name="Nombre completo")
     specialization = models.CharField(max_length=100, blank=True, verbose_name="Especialización")
+    subjects = models.ManyToManyField(Subject, related_name='teachers', verbose_name="Materias", blank=True)
     phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono")
     photo = models.ImageField(upload_to='profiles/teachers/', blank=True, null=True, verbose_name="Foto de perfil")
     created_at = models.DateTimeField(auto_now_add=True)

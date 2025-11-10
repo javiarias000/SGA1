@@ -3,16 +3,10 @@ from classes.models import Deber, DeberEntrega, Curso, Clase
 from django.contrib.auth.models import User
 
 from teachers.models import Teacher 
-
-from subjects.models import Subject
+# Removed: from subjects.models import Subject
 
 class DeberForm(forms.ModelForm):
-    subject = forms.ModelChoiceField(
-        queryset=Subject.objects.none(),  # se filtrará en __init__
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        required=True,
-        label="Materia"
-    )
+    # Removed: subject field
 
     cursos = forms.ModelMultipleChoiceField(
         queryset=Curso.objects.none(),  # se filtrará en __init__
@@ -31,7 +25,7 @@ class DeberForm(forms.ModelForm):
 
     class Meta:
         model = Deber
-        fields = ['titulo', 'descripcion', 'subject', 'clase', 'fecha_entrega',
+        fields = ['titulo', 'descripcion', 'clase', 'fecha_entrega', # Removed 'subject'
                   'puntos_totales', 'archivo_adjunto', 'estado', 'cursos', 'estudiantes_especificos']
         widgets = {
             'titulo': forms.TextInput(attrs={
@@ -62,7 +56,7 @@ class DeberForm(forms.ModelForm):
         }
 
         labels = {
-            'clase': 'Clase'
+            'clase': 'Materia' # Reverted label to 'Materia'
         }
 
     def __init__(self, *args, **kwargs):
@@ -70,7 +64,9 @@ class DeberForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if teacher:
-            self.fields['subject'].queryset = teacher.subjects.all()
+            # Removed: subject_queryset = teacher.subjects.all()
+            # Removed: print(f"DEBUG: Subjects for teacher {teacher.full_name}: {subject_queryset}")
+            # Removed: self.fields['subject'].queryset = subject_queryset
             # Filtrar solo las clases del profesor
             self.fields['clase'].queryset = Clase.objects.filter(teacher=teacher)
 

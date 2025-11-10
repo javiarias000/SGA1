@@ -8,13 +8,14 @@ class TeacherAdmin(admin.ModelAdmin):
     search_fields = ['full_name', 'user__username', 'user__email']
     list_filter = ['specialization', 'created_at']
     readonly_fields = ['created_at']
+    filter_horizontal = ['subjects']
     
     fieldsets = (
         ('Información de Usuario', {
             'fields': ('user',)
         }),
         ('Datos Personales', {
-            'fields': ('full_name', 'specialization', 'phone')
+            'fields': ('full_name', 'specialization', 'phone', 'subjects')
         }),
         ('Registro', {
             'fields': ('created_at',)
