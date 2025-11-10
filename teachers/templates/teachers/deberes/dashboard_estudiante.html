@@ -1,0 +1,34 @@
+<!-- En base.html, actualizar la sección del navbar -->
+<ul class="navbar-nav ms-auto">
+    {% if user.is_authenticated %}
+        {% if user.groups.all.0.name == 'Profesores' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard_profesor' %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'lista_deberes_profesor' %}">
+                    <i class="bi bi-list-task"></i> Mis Deberes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'crear_deber' %}">
+                    <i class="bi bi-plus-circle"></i> Crear Deber
+                </a>
+            </li>
+        {% elif user.groups.all.0.name == 'Estudiantes' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard_estudiante' %}">
+                    <i class="bi bi-house-door"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mis_deberes' %}">
+                    <i class="bi bi-clipboard-check"></i> Mis Deberes
+                </a>
+            </li>
+        {% endif %}
+        <!-- resto del navbar... -->
+    {% endif %}
+</ul>

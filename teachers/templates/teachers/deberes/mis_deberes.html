@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Deberes{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4 text-primary"><i class="bi bi-clipboard-check"></i> Mis Deberes</h1>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary mb-3"><i class="bi bi-hourglass-split"></i> Pendientes</h5>
+                    <h2 class="card-text display-5 fw-bold text-primary">{{ total_pendientes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary mb-3"><i class="bi bi-check-circle-fill"></i> Entregados</h5>
+                    <h2 class="card-text display-5 fw-bold text-success">{{ total_entregados }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary mb-3"><i class="bi bi-exclamation-triangle"></i> Vencidos</h5>
+                    <h2 class="card-text display-5 fw-bold text-danger">{{ vencidos|length }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === Pendientes === -->
+    <div class="mb-5">
+        <h3 class="mb-3"><i class="bi bi-hourglass-split"></i> Deberes Pendientes</h3>
+        {% if pendientes %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for item in pendientes %}
+                <div class="col">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.deber.titulo }}</h5>
+                            <span class="badge bg-primary mb-2">{{ item.deber.materia.nombre }}</span>
+                            <p class="card-text">{{ item.deber.descripcion|truncatechars:100 }}</p>
+                            <ul class="list-unstyled mb-2">
+                                <li>
+                                    <i class="bi bi-clock"></i>
+                                    Fecha límite: <span class="fw-semibold">{{ item.deber.fecha_entrega|date:"d/m/Y H:i" }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-person-badge"></i>
+                                    Profesor: <span class="fw-semibold">{{ item.deber.profesor.get_full_name }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-award"></i>
+                                    Puntos: <span class="fw-semibold">{{ item.deber.puntos_totales }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-calendar2-week"></i>
+                                    {% if item.dias_restantes > 1 %}
+                                        {{ item.dias_restantes }} días restantes
+                                    {% elif item.dias_restantes == 1 %}
+                                        Queda 1 día
+                                    {% elif item.dias_restantes == 0 %}
+                                        Último día para entregar
+                                    {% else %}
+                                        <span class="text-danger">¡Vencido!</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            <a href="{% url 'detalle_deber' item.deber.id %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-info-circle"></i> Detalle
+                            </a>
+                            {% if not item.esta_vencido %}
+                            <a href="{% url 'entregar_deber' item.deber.id %}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-upload"></i> Entregar
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-danger btn-sm" disabled>
+                                <i class="bi bi-lock"></i> Fuera de plazo
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-success shadow-sm"><i class="bi bi-emoji-smile"></i> ¡No tienes deberes pendientes!</div>
+        {% endif %}
+    </div>
+
+    <!-- === Entregados === -->
+    <div class="mb-5">
+        <h3 class="mb-3"><i class="bi bi-check-circle-fill"></i> Deberes Entregados</h3>
+        {% if entregados %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for item in entregados %}
+                <div class="col">
+                    <div class="card h-100 border-success">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.deber.titulo }}</h5>
+                            <span class="badge bg-success mb-2">{{ item.deber.materia.nombre }}</span>
+                            <p class="card-text">{{ item.deber.descripcion|truncatechars:100 }}</p>
+                            <ul class="list-unstyled mb-2">
+                                <li>
+                                    <i class="bi bi-clock"></i>
+                                    Fecha límite: <span class="fw-semibold">{{ item.deber.fecha_entrega|date:"d/m/Y H:i" }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-person-badge"></i>
+                                    Profesor: <span class="fw-semibold">{{ item.deber.profesor.get_full_name }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-award"></i>
+                                    Puntos: <span class="fw-semibold">{{ item.deber.puntos_totales }}</span>
+                                </li>
+                                {% if item.entrega %}
+                                <li>
+                                    <i class="bi bi-calendar-check"></i>
+                                    Entregado el {{ item.entrega.fecha_entrega|date:"d/m/Y H:i" }}
+                                    {% if item.entrega.esta_tarde %}
+                                        <span class="badge bg-danger">Entregado tarde</span>
+                                    {% endif %}
+                                </li>
+                                {% endif %}
+                                <li>
+                                    {% if item.entrega and item.entrega.estado == "revisado" %}
+                                        <i class="bi bi-clipboard2-check"></i> 
+                                        <span class="fw-semibold text-success">Calificado
+                                            {% if item.entrega.calificacion != None %}
+                                                ({{ item.entrega.calificacion|floatformat:1 }}/{{ item.deber.puntos_totales }})
+                                            {% endif %}
+                                        </span>
+                                    {% elif item.entrega and item.entrega.estado == "entregado" %}
+                                        <i class="bi bi-hourglass-split"></i> 
+                                        <span class="text-warning">En revisión</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% if item.entrega and item.entrega.retroalimentacion %}
+                            <div class="alert alert-info mb-1 py-2 px-2">
+                                <i class="bi bi-chat-left-quote text-primary"></i>
+                                <span class="fw-medium">{{ item.entrega.retroalimentacion|safe }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            <a href="{% url 'detalle_deber' item.deber.id %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-info-circle"></i> Detalle
+                            </a>
+                            {% if item.entrega %}
+                                {% if item.entrega.archivo_entrega %}
+                                    <a href="{{ item.entrega.archivo_entrega.url }}" class="btn btn-success btn-sm" target="_blank">
+                                        <i class="bi bi-download"></i> Ver entrega
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info shadow-sm"><i class="bi bi-check2-all"></i> No has entregado ningún deber aún.</div>
+        {% endif %}
+    </div>
+
+    <!-- === Vencidos === -->
+    <div class="mb-3">
+        <h3 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle"></i> Deberes Vencidos (No entregados)</h3>
+        {% if vencidos %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for item in vencidos %}
+                <div class="col">
+                    <div class="card h-100 border-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.deber.titulo }}</h5>
+                            <span class="badge bg-danger mb-2">{{ item.deber.materia.nombre }}</span>
+                            <p class="card-text">{{ item.deber.descripcion|truncatechars:100 }}</p>
+                            <ul class="list-unstyled mb-2">
+                                <li>
+                                    <i class="bi bi-clock"></i>
+                                    Fecha límite: <span class="fw-semibold">{{ item.deber.fecha_entrega|date:"d/m/Y H:i" }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-person-badge"></i>
+                                    Profesor: <span class="fw-semibold">{{ item.deber.profesor.get_full_name }}</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-award"></i>
+                                    Puntos: <span class="fw-semibold">{{ item.deber.puntos_totales }}</span>
+                                </li>
+                                <li>
+                                    <span class="text-danger"><i class="bi bi-x-octagon"></i> No entregado</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="{% url 'detalle_deber' item.deber.id %}" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-info-circle"></i> Detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info shadow-sm">¡No tienes deberes vencidos sin entregar!</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'teachers/base.html' %}
+{% load static %}
+{% block title %}{{ titulo }} - Sistema Educativo{% endblock %}
+
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-{% if deber %}pencil{% else %}plus-circle{% endif %}"></i>
+                    {{ titulo }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="deberForm">
+                    {% csrf_token %}
+                    
+                    <!-- Título -->
+                    <div class="mb-3">
+                        <label for="{{ form.titulo.id_for_label }}" class="form-label">
+                            {{ form.titulo.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.titulo }}
+                        {% if form.titulo.errors %}
+                            <div class="text-danger small mt-1">{{ form.titulo.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="mb-3">
+                        <label for="{{ form.descripcion.id_for_label }}" class="form-label">
+                            {{ form.descripcion.label }}
+                        </label>
+                        {{ form.descripcion }}
+                        <small class="text-muted">Instrucciones detalladas para los estudiantes</small>
+                    </div>
+                    
+                    <!-- Materia y Puntos -->
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="{{ form.materia.id_for_label }}" class="form-label">
+                                {{ form.materia.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.materia }}
+                            {% if form.materia.errors %}
+                                <div class="text-danger small mt-1">{{ form.materia.errors.0 }}</div>
+                            {% endif %}
+                            {% if form.materia.help_text %}
+                                <small class="text-muted">{{ form.materia.help_text }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="{{ form.puntos_totales.id_for_label }}" class="form-label">
+                                {{ form.puntos_totales.label }}
+                            </label>
+                            {{ form.puntos_totales }}
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha de Entrega -->
+                    <div class="mb-3">
+                        <label for="{{ form.fecha_entrega.id_for_label }}" class="form-label">
+                            {{ form.fecha_entrega.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.fecha_entrega }}
+                        {% if form.fecha_entrega.errors %}
+                            <div class="text-danger small mt-1">{{ form.fecha_entrega.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Archivo Adjunto -->
+                    <div class="mb-3">
+                        <label for="{{ form.archivo_adjunto.id_for_label }}" class="form-label">
+                            {{ form.archivo_adjunto.label }}
+                        </label>
+                        {{ form.archivo_adjunto }}
+                        <small class="text-muted d-block">
+                            Formatos permitidos: PDF, Word, Excel, PowerPoint, ZIP
+                        </small>
+                        {% if deber and deber.archivo_adjunto %}
+                            <div class="mt-2">
+                                <i class="bi bi-file-earmark-pdf text-danger"></i>
+                                <a href="{{ deber.archivo_adjunto.url }}" target="_blank">
+                                    Ver archivo actual
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Asignar a Cursos -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            {{ form.cursos.label }}
+                        </label>
+                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                            {% for checkbox in form.cursos %}
+                                <div class="form-check">
+                                    {{ checkbox.tag }}
+                                    <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                        {{ checkbox.choice_label }}
+                                    </label>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted mb-0">No tienes cursos asignados</p>
+                            {% endfor %}
+                        </div>
+                        <small class="text-muted">Selecciona los cursos que realizarán este deber</small>
+                    </div>
+                    
+                    <!-- Estudiantes Específicos (opcional) -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            {{ form.estudiantes_especificos.label }}
+                        </label>
+                        <div class="border rounded p-3" style="max-height: 150px; overflow-y: auto;">
+                            {% for checkbox in form.estudiantes_especificos %}
+                                <div class="form-check">
+                                    {{ checkbox.tag }}
+                                    <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                        {{ checkbox.choice_label }}
+                                    </label>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted mb-0">No hay estudiantes disponibles</p>
+                            {% endfor %}
+                        </div>
+                        <small class="text-muted">{{ form.estudiantes_especificos.help_text }}</small>
+                    </div>
+                    
+                    <!-- Estado -->
+                    <div class="mb-3">
+                        <label for="{{ form.estado.id_for_label }}" class="form-label">
+                            {{ form.estado.label }}
+                        </label>
+                        {{ form.estado }}
+                        <small class="text-muted d-block">
+                            <strong>Borrador:</strong> No visible para estudiantes |
+                            <strong>Activo:</strong> Visible y pueden entregar |
+                            <strong>Cerrado:</strong> No aceptar más entregas
+                        </small>
+                    </div>
+                    
+                    <hr>
+
+                   <!-- Botones -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-{% if deber %}save{% else %}send{% endif %}"></i>
+                            {% if deber %}
+                                Guardar Cambios
+                            {% else %}
+                                Crear y Asignar
+                            {% endif %}
+                        </button>
+                        <a href="{% url 'teachers:lista_deberes_profesor' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Establecer fecha mínima a hoy
+    document.addEventListener('DOMContentLoaded', function() {
+        const fechaInput = document.getElementById('{{ form.fecha_entrega.id_for_label }}');
+        if (fechaInput) {
+            const ahora = new Date();
+            ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+            fechaInput.min = ahora.toISOString().slice(0, 16);
+        }
+    });
+</script>
+{% endblock %}

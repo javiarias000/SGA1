@@ -16,4 +16,5 @@ urlpatterns = [
     # Apps principales (namespaced)
     path('students/', include(("students.urls", "students"), namespace='students')),
     path('teachers/', include(("teachers.urls", "teachers"), namespace='teachers')),
+    
 ] + (static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG else [])

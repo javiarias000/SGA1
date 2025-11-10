@@ -1,0 +1,209 @@
+{% extends 'teachers/base.html' %}
+{% load static %}
+{% block title %}Mis Deberes - Profesor{% endblock %}
+
+ <!-- Bootstrap 5 -->
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+ <!-- App CSS -->
+ <link rel="stylesheet" href="{% static 'css/app.css' %}">
+ <!-- App/Teachers CSS (optional overrides) -->
+ <link rel="stylesheet" href="{% static 'teachers/css/style.css' %}">
+  <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+{% block extra_css %}{% endblock %}
+ <!-- Chart.js CDN for charts -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-list-task"></i> Mis Deberes Asignados</h2>
+    <a href="{% url 'teachers:crear_deber' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Crear Nuevo Deber
+    </a>
+</div>
+
+<!-- Estadísticas -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card" style="border-left-color: #0d6efd;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Total Deberes</h6>
+                        <h3 class="mb-0">{{ total_deberes }}</h3>
+                    </div>
+                    <div class="text-primary" style="font-size: 2.5rem;">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card" style="border-left-color: #198754;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Deberes Activos</h6>
+                        <h3 class="mb-0">{{ deberes_activos }}</h3>
+                    </div>
+                    <div class="text-success" style="font-size: 2.5rem;">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card" style="border-left-color: #ffc107;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Entregas Pendientes</h6>
+                        <h3 class="mb-0">{{ total_entregas_pendientes }}</h3>
+                    </div>
+                    <div class="text-warning" style="font-size: 2.5rem;">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="filtros-section">
+    <form method="GET" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label small text-muted">Filtrar por Estado</label>
+            <select name="estado" class="form-select" onchange="this.form.submit()">
+                <option value="todos" {% if estado_filtro == 'todos' %}selected{% endif %}>Todos los estados</option>
+                <option value="activo" {% if estado_filtro == 'activo' %}selected{% endif %}>Activos</option>
+                <option value="borrador" {% if estado_filtro == 'borrador' %}selected{% endif %}>Borradores</option>
+                <option value="cerrado" {% if estado_filtro == 'cerrado' %}selected{% endif %}>Cerrados</option>
+            </select>
+        </div>
+        
+        <div class="col-md-4">
+            <label class="form-label small text-muted">Filtrar por Materia</label>
+            <select name="materia" class="form-select" onchange="this.form.submit()">
+                <option value="todas" {% if materia_filtro == 'todas' %}selected{% endif %}>Todas las materias</option>
+                {% for clase in clases %}
+                    <option value="{{ materia.id }}" {% if materia_filtro == materia.id|stringformat:"s" %}selected{% endif %}>
+                        {{ materia.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="col-md-4">
+            {% if estado_filtro != 'todos' or materia_filtro != 'todas' %}
+                <a href="{% url 'lista_deberes_profesor' %}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-x-circle"></i> Limpiar Filtros
+                </a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Lista de Deberes -->
+{% if deberes %}
+    <div class="row">
+        {% for deber in deberes %}
+            <div class="col-lg-6 mb-3">
+                <div class="card deber-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">{{ deber.titulo }}</h5>
+                            <span class="badge bg-{% if deber.estado == 'activo' %}success{% elif deber.estado == 'borrador' %}secondary{% else %}danger{% endif %}">
+                                {{ deber.get_estado_display }}
+                            </span>
+                        </div>
+                        
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-book"></i> {{ deber.materia.nombre }}
+                        </p>
+                        
+                        {% if deber.descripcion %}
+                            <p class="card-text small text-muted">
+                                {{ deber.descripcion|truncatewords:20 }}
+                            </p>
+                        {% endif %}
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar-event"></i>
+                                    {{ deber.fecha_entrega|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <small class="text-muted">
+                                    <i class="bi bi-trophy"></i>
+                                    {{ deber.puntos_totales }} pts
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Progreso de Entregas -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="text-muted">
+                                    Entregas: {{ deber.entregas_completadas }} / {{ deber.total_estudiantes }}
+                                </small>
+                                <small class="text-muted">{{ deber.porcentaje_entrega }}%</small>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" 
+                                     style="width: {{ deber.porcentaje_entrega }}%">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botones de Acción -->
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{% url 'ver_entregas' deber.id %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i> Ver Entregas
+                            </a>
+                            <a href="{% url 'editar_deber' deber.id %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <a href="{% url 'detalle_deber' deber.id %}" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-info-circle"></i> Detalle
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-light">
+                        <small class="text-muted">
+                            <i class="bi bi-clock-history"></i>
+                            Creado: {{ deber.fecha_asignacion|date:"d/m/Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #dee2e6;"></i>
+            <h5 class="mt-3 text-muted">No hay deberes disponibles</h5>
+            <p class="text-muted">
+                {% if estado_filtro != 'todos' or materia_filtro != 'todas' %}
+                    No se encontraron deberes con los filtros seleccionados.
+                {% else %}
+                    Comienza creando tu primer deber para asignar a tus estudiantes.
+                {% endif %}
+            </p>
+            <a href="{% url 'teachers:crear_deber' %}" class="btn btn-primary mt-2">
+                <i class="bi bi-plus-circle"></i> Crear Primer Deber
+            </a>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

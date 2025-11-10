@@ -2,30 +2,33 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
-from django.db.models import Q, Count, Avg
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.db.models import Q, Count, Avg, Prefetch
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime, date, timedelta
 from urllib.parse import quote
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone
 from decimal import Decimal
 
 # Importar decorador de users
-from users.views.decorators import teacher_required
+from users.views.decorators import teacher_required, student_required
 
 # Importar modelos
 from teachers.models import Teacher
 from students.models import Student
-from classes.models import Activity, Grade, Attendance, Clase, Enrollment, CalificacionParcial, TipoAporte, PromedioCache
+from classes.models import Activity, Grade, Attendance, Clase, Enrollment, CalificacionParcial, TipoAporte, PromedioCache, Deber, DeberEntrega, Curso
 
 # Importar formularios (si existen)
 try:
     from classes.forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm, ClaseForm
 except ImportError:
     pass
+
+
+from .forms import DeberForm, DeberEntregaForm, CalificacionForm
 
 
 # ============================================
@@ -1681,3 +1684,517 @@ def whatsapp_attendance_report(request, student_id):
     
     whatsapp_url = generate_whatsapp_url(student.parent_phone, message)
     return redirect(whatsapp_url)
+
+
+
+
+# ============================================
+# DEBERES
+# ============================================
+
+@login_required
+def dashboard_profesor(request):
+    """Dashboard principal para profesores"""
+    if not teacher_required(request.user):
+        messages.error(request, 'No tienes permisos para acceder a esta página')
+        return redirect('home')
+
+    # Deberes recientes (últimos 5)
+    deberes_recientes = Deber.objects.filter(
+        profesor=request.user
+    ).select_related('materia').order_by('fecha_asignacion')[:5]
+    
+    # Entregas recientes (últimas 10)
+    entregas_recientes = DeberEntrega.objects.filter(
+        deber__profesor=request.user,
+        estado__in=['entregado', 'tarde']
+    ).select_related('estudiante', 'deber').order_by('-fecha_entrega')[:10]
+    
+    # Deberes próximos a vencer (próximos 7 días)
+    fecha_limite = timezone.now() + timedelta(days=7)
+    deberes_proximos = Deber.objects.filter(
+        profesor=request.user,
+        estado='activo',
+        fecha_entrega__gte=timezone.now(),
+        fecha_entrega__lte=fecha_limite
+    ).order_by('fecha_entrega')[:5]
+    
+    # Estadísticas por materia
+    estadisticas_materias = Clase.objects.filter(
+        profesor=request.user
+    ).annotate(
+        total_deberes=Count('deberes'),
+        deberes_activos_count=Count('deberes', filter=Q(deberes__estado='activo'))
+    ).order_by('-total_deberes')[:5]
+    
+    # Promedio de calificaciones por materia
+    promedios_materias = []
+    for materia in estadisticas_materias:
+        promedio = DeberEntrega.objects.filter(
+            deber__materia=materia,
+            calificacion__isnull=False
+        ).aggregate(Avg('calificacion'))['calificacion__avg']
+        
+        promedios_materias.append({
+            'materia': materia,
+            'promedio': round(promedio, 2) if promedio else 0
+        })
+    
+    # Gráfico de entregas por estado
+    estados_entregas = DeberEntrega.objects.filter(
+        deber__profesor=request.user
+    ).values('estado').annotate(total=Count('id'))
+    
+    deberes = Deber.objects.filter(profesor=request.user)
+    total_deberes = deberes.count()
+
+    deberes_activos = deberes.filter(estado='activo').count()
+
+    total_estudiantes = User.objects.filter(
+        Q(cursos_estudiante__materias__profesor=request.user) |
+        Q(deberes_asignados__profesor=request.user)
+    ).distinct().count()
+
+    entregas_pendientes = DeberEntrega.objects.filter(
+        deber__profesor=request.user,
+        estado='entregado'
+    ).count()
+    
+    context = {
+        'total_deberes': total_deberes,
+        'deberes_activos': deberes_activos,
+        'total_estudiantes': total_estudiantes,
+        'entregas_pendientes': entregas_pendientes,
+        'deberes_recientes': deberes_recientes,
+        'entregas_recientes': entregas_recientes,
+        'deberes_proximos': deberes_proximos,
+        'estadisticas_materias': estadisticas_materias,
+        'promedios_materias': promedios_materias,
+        'estados_entregas': estados_entregas,
+    }
+    
+    return render(request, 'teachers/dashboard_profesor.html', context)
+
+
+@login_required
+def dashboard_estudiante(request):
+    """Dashboard principal para estudiantes"""
+    if not student_required(request.user):
+        messages.error(request, 'No tienes permisos para acceder a esta página')
+        return redirect('home')
+    
+    # Obtener todos los deberes del estudiante
+    todos_deberes = Deber.objects.filter(
+        Q(cursos__in=request.user.cursos_estudiante.all()) |
+        Q(estudiantes_especificos=request.user),
+        estado='activo'
+    ).distinct()
+    
+    # Deberes pendientes (no entregados y no vencidos)
+    deberes_pendientes = []
+    deberes_vencidos = []
+    deberes_proximos = []
+    
+    for deber in todos_deberes:
+        entrega = DeberEntrega.objects.filter(
+            deber=deber,
+            estudiante=request.user
+        ).first()
+        
+        if not entrega or entrega.estado == 'pendiente':
+            if deber.esta_vencido():
+                deberes_vencidos.append(deber)
+            else:
+                deberes_pendientes.append(deber)
+                # Próximos 3 días
+                if deber.dias_restantes() <= 3:
+                    deberes_proximos.append(deber)
+    
+    # Estadísticas
+    total_deberes = todos_deberes.count()
+    total_pendientes = len(deberes_pendientes)
+    total_vencidos = len(deberes_vencidos)
+    
+    # Entregas realizadas
+    mis_entregas = DeberEntrega.objects.filter(
+        estudiante=request.user,
+        estado__in=['entregado', 'revisado', 'tarde']
+    ).select_related('deber', 'deber__materia').order_by('-fecha_entrega')[:10]
+    
+    total_entregados = mis_entregas.count()
+    
+    # Calificaciones recientes
+    calificaciones_recientes = DeberEntrega.objects.filter(
+        estudiante=request.user,
+        estado='revisado',
+        calificacion__isnull=False
+    ).select_related('deber', 'deber__materia').order_by('-fecha_actualizacion')[:5]
+    
+    # Promedio general
+    promedio_general = DeberEntrega.objects.filter(
+        estudiante=request.user,
+        calificacion__isnull=False
+    ).aggregate(Avg('calificacion'))['calificacion__avg']
+    
+    # Estadísticas por materia
+    materias_stats = {}
+    for entrega in DeberEntrega.objects.filter(
+        estudiante=request.user,
+        calificacion__isnull=False
+    ).select_related('deber__materia'):
+        materia_nombre = entrega.deber.materia.nombre
+        if materia_nombre not in materias_stats:
+            materias_stats[materia_nombre] = {
+                'calificaciones': [],
+                'total_puntos': 0,
+                'puntos_obtenidos': 0
+            }
+        materias_stats[materia_nombre]['calificaciones'].append(float(entrega.calificacion))
+        materias_stats[materia_nombre]['total_puntos'] += float(entrega.deber.puntos_totales)
+        materias_stats[materia_nombre]['puntos_obtenidos'] += float(entrega.calificacion)
+    
+    # Calcular promedios por materia
+    promedios_materias = []
+    for materia, stats in materias_stats.items():
+        promedio = sum(stats['calificaciones']) / len(stats['calificaciones'])
+        porcentaje = (stats['puntos_obtenidos'] / stats['total_puntos']) * 100 if stats['total_puntos'] > 0 else 0
+        promedios_materias.append({
+            'materia': materia,
+            'promedio': round(promedio, 2),
+            'porcentaje': round(porcentaje, 1)
+        })
+    
+    context = {
+        'total_deberes': total_deberes,
+        'total_pendientes': total_pendientes,
+        'total_entregados': total_entregados,
+        'total_vencidos': total_vencidos,
+        'deberes_pendientes': deberes_pendientes[:5],
+        'deberes_proximos': deberes_proximos,
+        'mis_entregas': mis_entregas,
+        'calificaciones_recientes': calificaciones_recientes,
+        'promedio_general': round(promedio_general, 2) if promedio_general else 0,
+        'promedios_materias': promedios_materias,
+    }
+    
+    return render(request, 'teachers/dashboard_estudiante.html', context)
+
+# ===== VISTAS PARA PROFESORES =====
+
+@login_required
+def crear_deber(request):
+    """Vista para crear un nuevo deber (solo profesores)"""
+    
+    # Verificar que el usuario es profesor
+    if not teacher_required(request.user):
+        messages.error(request, 'No tienes permisos para acceder a esta página')
+        return redirect('home')
+    
+    # Obtener la instancia de Teacher asociada al usuario logueado
+    try:
+        teacher_instance = Teacher.objects.get(user=request.user)
+    except Teacher.DoesNotExist:
+        messages.error(request, 'No se encontró tu perfil de profesor')
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = DeberForm(request.POST, request.FILES, teacher=teacher_instance)
+        if form.is_valid():
+            deber = form.save(commit=False)
+            deber.teacher = teacher_instance  # asignar el Teacher correcto
+            deber.save()
+            form.save_m2m()  # guardar relaciones ManyToMany
+            
+            messages.success(request, f'✅ Deber "{deber.titulo}" creado exitosamente')
+            return redirect('lista_deberes_profesor')
+        else:
+            messages.error(request, 'Por favor corrige los errores en el formulario')
+    else:
+        form = DeberForm(teacher=teacher_instance)
+    
+    context = {
+        'form': form,
+        'titulo': 'Crear Nuevo Deber'
+    }
+    return render(request, 'teachers/deberes/crear_deber.html', context)
+
+
+@login_required
+def editar_deber(request, deber_id):
+    """Vista para editar un deber existente"""
+    deber = get_object_or_404(Deber, id=deber_id, profesor=request.user)
+    
+    if request.method == 'POST':
+        form = DeberForm(request.POST, request.FILES, instance=deber, profesor=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'✅ Deber "{deber.titulo}" actualizado exitosamente')
+            return redirect('lista_deberes_profesor')
+    else:
+        form = DeberForm(instance=deber, profesor=request.user)
+    
+    context = {
+        'form': form,
+        'deber': deber, 
+        'titulo': 'Editar Deber'
+    }
+    return render(request, 'teachers/deberes/crear_deber.html', context)
+
+@login_required
+def eliminar_deber(request, deber_id):
+    """Vista para eliminar un deber"""
+    deber = get_object_or_404(Deber, id=deber_id, profesor=request.user)
+    
+    if request.method == 'POST':
+        titulo = deber.titulo
+        deber.delete()
+        messages.success(request, f'🗑️ Deber "{titulo}" eliminado exitosamente')
+        return redirect('lista_deberes_profesor')
+    
+    context = {'deber': deber}
+    return render(request, 'teachers/deberes/confirmar_eliminar.html', context)
+
+@login_required
+def lista_deberes_profesor(request):
+    """Vista para listar todos los deberes del profesor"""
+    if not teacher_required(request.user):
+        messages.error(request, 'No tienes permisos para acceder a esta página')
+        return redirect('home')
+    # Obtener el objeto Teacher vinculado al usuario logueado
+    teacher_instance = Teacher.objects.get(user=request.user)
+
+    # Filtros
+    estado_filtro = request.GET.get('estado', 'todos')
+    materia_filtro = request.GET.get('materia', 'todas')
+    
+    # Query base
+    deberes = Deber.objects.filter(teacher=request.user).select_related('clase')
+    
+    # Aplicar filtros
+    if estado_filtro != 'todos':
+        deberes = deberes.filter(estado=estado_filtro)
+    
+    if materia_filtro != 'todas':
+        deberes = deberes.filter(materia_id=materia_filtro)
+    
+    # Agregar estadísticas
+    deberes = deberes.annotate(
+        total_entregas=Count('entregas'),
+        entregas_revisadas=Count('entregas', filter=Q(entregas__estado='revisado'))
+    )
+    
+    # Estadísticas generales
+    total_deberes = Deber.objects.filter(teacher=request.user).count()
+    deberes_activos = Deber.objects.filter(teacher=request.user, estado='activo').count()
+    total_entregas_pendientes = DeberEntrega.objects.filter(
+        deber__teacher=request.user,
+        estado='entregado'
+    ).count()
+    
+    # Obtener materias para el filtro
+    clase = Clase.objects.filter(teacher=request.user.teacher_profile)
+
+    context = {
+        'deberes': deberes,
+        'total_deberes': total_deberes,
+        'deberes_activos': deberes_activos,
+        'total_entregas_pendientes': total_entregas_pendientes,
+        'clase': clase,
+        'estado_filtro': estado_filtro,
+        'materia_filtro': materia_filtro,
+    }
+    return render(request, 'teachers/deberes/lista_deberes_profesor.html', context)
+
+@login_required
+def ver_entregas(request, deber_id):
+    """Vista para ver todas las entregas de un deber"""
+    deber = get_object_or_404(Deber, id=deber_id, profesor=request.user)
+    
+    # Obtener todos los estudiantes que deberían entregar
+    estudiantes_curso = User.objects.filter(cursos_estudiante__in=deber.cursos.all())
+    todos_estudiantes = (estudiantes_curso | deber.estudiantes_especificos.all()).distinct()
+    
+    # Obtener entregas existentes
+    entregas = DeberEntrega.objects.filter(deber=deber).select_related('estudiante')
+    
+    # Crear lista con estado de cada estudiante
+    lista_estudiantes = []
+    for estudiante in todos_estudiantes:
+        entrega = entregas.filter(estudiante=estudiante).first()
+        lista_estudiantes.append({
+            'estudiante': estudiante,
+            'entrega': entrega,
+            'tiene_entrega': entrega is not None,
+        })
+    
+    # Ordenar: primero los que entregaron
+    lista_estudiantes.sort(key=lambda x: (not x['tiene_entrega'], x['estudiante'].last_name))
+    
+    # Filtro de estado
+    estado_filtro = request.GET.get('estado', 'todos')
+    if estado_filtro == 'entregados':
+        lista_estudiantes = [e for e in lista_estudiantes if e['tiene_entrega']]
+    elif estado_filtro == 'pendientes':
+        lista_estudiantes = [e for e in lista_estudiantes if not e['tiene_entrega']]
+    
+    context = {
+        'deber': deber,
+        'lista_estudiantes': lista_estudiantes,
+        'total_estudiantes': todos_estudiantes.count(),
+        'total_entregados': entregas.filter(estado__in=['entregado', 'revisado', 'tarde']).count(),
+        'estado_filtro': estado_filtro,
+    }
+    return render(request, 'teachers/deberes/ver_entregas.html', context)
+
+@login_required
+def calificar_entrega(request, entrega_id):
+    """Vista para calificar una entrega"""
+    entrega = get_object_or_404(DeberEntrega, id=entrega_id)
+    
+    # Verificar que el profesor sea el dueño del deber
+    if entrega.deber.profesor != request.user:
+        return HttpResponseForbidden("No tienes permisos para calificar esta entrega")
+    
+    if request.method == 'POST':
+        form = CalificacionForm(request.POST, instance=entrega)
+        if form.is_valid():
+            entrega = form.save(commit=False)
+            entrega.estado = 'revisado'
+            entrega.save()
+            
+            messages.success(request, f'✅ Entrega de {entrega.estudiante.get_full_name()} calificada exitosamente')
+            return redirect('ver_entregas', deber_id=entrega.deber.id)
+    else:
+        form = CalificacionForm(instance=entrega)
+    
+    context = {
+        'form': form,
+        'entrega': entrega,
+    }
+    return render(request, 'teachers/deberes/calificar_entrega.html', context)
+
+# ===== VISTAS PARA ESTUDIANTES =====
+
+@login_required
+def mis_deberes(request):
+    """Vista para que los estudiantes vean sus deberes asignados"""
+    if not student_required(request.user):
+        messages.error(request, 'No tienes permisos para acceder a esta página')
+        return redirect('home')
+    
+    # Obtener deberes asignados al estudiante
+    deberes = Deber.objects.filter(
+        Q(cursos__in=request.user.cursos_estudiante.all()) |
+        Q(estudiantes_especificos=request.user),
+        estado='activo'
+    ).distinct().select_related('materia', 'profesor').prefetch_related(
+        Prefetch('entregas', queryset=DeberEntrega.objects.filter(estudiante=request.user))
+    )
+    
+    # Agregar información de entrega para cada deber
+    deberes_con_estado = []
+    for deber in deberes:
+        entrega = deber.entregas.first() if deber.entregas.exists() else None
+        
+        deberes_con_estado.append({
+            'deber': deber,
+            'entrega': entrega,
+            'esta_vencido': deber.esta_vencido(),
+            'tiene_entrega': entrega is not None,
+            'dias_restantes': deber.dias_restantes(),
+        })
+    
+    # Separar por categorías
+    pendientes = [d for d in deberes_con_estado if not d['tiene_entrega'] and not d['esta_vencido']]
+    entregados = [d for d in deberes_con_estado if d['tiene_entrega']]
+    vencidos = [d for d in deberes_con_estado if not d['tiene_entrega'] and d['esta_vencido']]
+    
+    # Ordenar por fecha de entrega
+    pendientes.sort(key=lambda x: x['deber'].fecha_entrega)
+    
+    context = {
+        'pendientes': pendientes,
+        'entregados': entregados,
+        'vencidos': vencidos,
+        'total_pendientes': len(pendientes),
+        'total_entregados': len(entregados),
+    }
+    return render(request, 'teachers/deberes/mis_deberes.html', context)
+
+@login_required
+def entregar_deber(request, deber_id):
+    """Vista para que el estudiante entregue un deber"""
+    from django.contrib.auth.models import User
+    
+    deber = get_object_or_404(Deber, id=deber_id)
+    
+    # Verificar que el estudiante tenga acceso a este deber
+    tiene_acceso = (
+        request.user.cursos_estudiante.filter(deberes=deber).exists() or
+        deber.estudiantes_especificos.filter(id=request.user.id).exists()
+    )
+    
+    if not tiene_acceso:
+        messages.error(request, 'No tienes acceso a este deber')
+        return redirect('mis_deberes')
+    
+    # Verificar si ya existe una entrega
+    entrega, created = DeberEntrega.objects.get_or_create(
+        deber=deber,
+        estudiante=request.user,
+        defaults={'estado': 'pendiente'}
+    )
+    
+    # No permitir reenvío si ya está revisado
+    if entrega.estado == 'revisado' and not created:
+        messages.warning(request, 'Este deber ya ha sido calificado y no se puede modificar')
+        return redirect('mis_deberes')
+    
+    if request.method == 'POST':
+        form = DeberEntregaForm(request.POST, request.FILES, instance=entrega)
+        if form.is_valid():
+            entrega = form.save(commit=False)
+            entrega.estado = 'entregado'
+            entrega.save()
+            
+            messages.success(request, '✅ Deber entregado exitosamente')
+            return redirect('mis_deberes')
+    else:
+        form = DeberEntregaForm(instance=entrega)
+    
+    context = {
+        'form': form,
+        'deber': deber,
+        'entrega': entrega,
+        'puede_entregar': not deber.esta_vencido() or entrega.estado == 'pendiente',
+    }
+    return render(request, 'teachers/deberes/entregar_deber.html', context)
+
+@login_required
+def detalle_deber(request, deber_id):
+    """Vista para ver los detalles de un deber"""
+    deber = get_object_or_404(Deber, id=deber_id)
+    
+    # Verificar acceso
+    if teacher_required(request.user):
+        if deber.profesor != request.user:
+            return HttpResponseForbidden("No tienes acceso a este deber")
+    elif student_required(request.user):
+        tiene_acceso = (
+            request.user.cursos_estudiante.filter(deberes=deber).exists() or
+            deber.estudiantes_especificos.filter(id=request.user.id).exists()
+        )
+        if not tiene_acceso:
+            return HttpResponseForbidden("No tienes acceso a este deber")
+    
+    # Obtener entrega si es estudiante
+    entrega = None
+    if student_required(request.user):
+        entrega = DeberEntrega.objects.filter(deber=deber, estudiante=request.user).first()
+    
+    context = {
+        'deber': deber,
+        'entrega': entrega,
+        'es_profesor': teacher_required(request.user),
+    }
+    return render(request, 'teachers/deberes/detalle_deber.html', context)

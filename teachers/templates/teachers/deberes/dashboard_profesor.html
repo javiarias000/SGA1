@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Profesor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        border-left: 4px solid;
+        transition: transform 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    .stat-icon {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+    .mini-card {
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .mini-card:hover {
+        background-color: #f8f9fa;
+    }
+    .progress-circle {
+        width: 60px;
+        height: 60px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-0">
+                <i class="bi bi-speedometer2"></i> Dashboard del Profesor
+            </h2>
+            <p class="text-muted">Bienvenido, {{ user.get_full_name|default:user.username }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'deberes:crear_deber' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Crear Nuevo Deber
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Estadísticas Principales -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stat-card border-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Total Deberes</h6>
+                            <h2 class="mb-0">{{ total_deberes }}</h2>
+                            <small class="text-muted">Creados</small>
+                        </div>
+                        <div class="stat-icon text-primary">
+                            <i class="bi bi-clipboard-data"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stat-card border-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Deberes Activos</h6>
+                            <h2 class="mb-0">{{ deberes_activos }}</h2>
+                            <small class="text-muted">En curso</small>
+                        </div>
+                        <div class="stat-icon text-success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stat-card border-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Por Revisar</h6>
+                            <h2 class="mb-0">{{ entregas_pendientes }}</h2>
+                            <small class="text-muted">Entregas</small>
+                        </div>
+                        <div class="stat-icon text-warning">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stat-card border-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Estudiantes</h6>
+                            <h2 class="mb-0">{{ total_estudiantes }}</h2>
+                            <small class="text-muted">Total</small>
+                        </div>
+                        <div class="stat-icon text-info">
+                            <i class="bi bi-people"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Columna Izquierda -->
+        <div class="col-lg-8">
+            <!-- Deberes Próximos a Vencer -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Deberes Próximos a Vencer
+                    </h5>
+                    <small>Próximos 7 días</small>
+                </div>
+                <div class="card-body">
+                    {% if deberes_proximos %}
+                        <div class="list-group list-group-flush">
+                            {% for deber in deberes_proximos %}
+                                <div class="list-group-item mini-card" onclick="window.location.href='{% url 'ver_entregas' deber.id %}'">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ deber.titulo }}</h6>
+                                            <small class="text-muted">
+                                                <i class="bi bi-book"></i> {{ deber.materia.nombre }}
+                                            </small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-clock"></i> {{ deber.dias_restantes }} días
+                                            </span>
+                                            <br>
+                                            <small class="text-muted">
+                                                {{ deber.fecha_entrega|date:"d/m/Y H:i" }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-success" style="width: {{ deber.porcentaje_entrega }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ deber.entregas_completadas }} / {{ deber.total_estudiantes }} entregas</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            <i class="bi bi-check-circle"></i> No hay deberes próximos a vencer
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Entregas Recientes -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-inbox"></i> Entregas Recientes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if entregas_recientes %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Estudiante</th>
+                                        <th>Deber</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entrega in entregas_recientes %}
+                                        <tr>
+                                            <td>{{ entrega.estudiante.get_full_name|default:entrega.estudiante.username }}</td>
+                                            <td>{{ entrega.deber.titulo|truncatewords:4 }}</td>
+                                            <td>
+                                                <small>{{ entrega.fecha_entrega|date:"d/m/Y H:i" }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-{% if entrega.estado == 'tarde' %}warning{% else %}info{% endif %}">
+                                                    {{ entrega.get_estado_display }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'calificar_entrega' entrega.id %}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i> Calificar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">No hay entregas recientes</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div class="col-lg-4">
+            <!-- Deberes Recientes -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history"></i> Deberes Recientes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if deberes_recientes %}
+                        <div class="list-group list-group-flush">
+                            {% for deber in deberes_recientes %}
+                                <a href="{% url 'ver_entregas' deber.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">{{ deber.titulo|truncatewords:5 }}</h6>
+                                            <small class="text-muted">{{ deber.materia.nombre }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ deber.estado|yesno:'success,secondary,danger' }}">
+                                            {{ deber.get_estado_display }}
+                                        </span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar"></i> {{ deber.created_at|date:"d/m/Y" }}
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'lista_deberes_profesor' %}" class="btn btn-outline-primary btn-sm w-100 mt-3">
+                            Ver Todos los Deberes
+                        </a>
+                    {% else %}
+                        <p class="text-muted text-center py-3">No hay deberes creados</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Estadísticas por Materia -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart"></i> Estadísticas por Materia
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if promedios_materias %}
+                        {% for item in promedios_materias %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small class="text-muted">{{ item.materia.nombre }}</small>
+                                    <small class="text-muted">
+                                        <strong>Promedio: {{ item.promedio }}</strong>
+                                    </small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: {{ item.promedio|floatformat:0 }}0%"></div>
+                                </div>
+                                <small class="text-muted">
+                                    Total deberes: {{ item.materia.total_deberes }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center py-3">Sin datos estadísticos</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-refresh cada 5 minutos para actualizaciones en tiempo real
+    setTimeout(function(){
+        location.reload();
+    }, 300000); // 5 minutos
+</script>
+{% endblock %}

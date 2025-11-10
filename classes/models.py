@@ -1,7 +1,3 @@
-# ============================================
-# ACTUALIZAR models.py - Agregar StudentUser
-# ============================================
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -12,8 +8,7 @@ from students.models import Student
 from django.db.models.signals import post_save, post_delete
 from django.db import models
 from decimal import Decimal
-
-
+from datetime import timezone
 
 class Clase(models.Model):
     """Modelo para Clases/Cursos teóricos donde los estudiantes se matriculan"""
@@ -712,4 +707,96 @@ def save_teacher_profile(sender, instance, **kwargs):
         instance.teacher_profile.save()
 
 
+# ============================================
+# DEBERES
+# ============================================
 
+class Curso(models.Model):
+    nombre = models.CharField(max_length=100)
+    nivel = models.CharField(max_length=50)
+    estudiantes = models.ManyToManyField(User, related_name='cursos_estudiante', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Cursos"
+        ordering = ['nombre']
+    
+    def __str__(self):
+        return self.nombre
+
+class Deber(models.Model):
+    ESTADO_CHOICES = [
+        ('borrador', 'Borrador'),
+        ('activo', 'Activo'),
+        ('cerrado', 'Cerrado'),
+    ]
+    
+    titulo = models.CharField(max_length=200)
+    descripcion = models.TextField(blank=True)
+    fecha_asignacion = models.DateTimeField(auto_now_add=True)
+    fecha_entrega = models.DateTimeField()
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deberes_profesor')
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True)
+    puntos_totales = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+    archivo_adjunto = models.FileField(upload_to='deberes/adjuntos/', blank=True, null=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='activo')
+    cursos = models.ManyToManyField(Curso, related_name='deberes', blank=True)
+    estudiantes_especificos = models.ManyToManyField(User, related_name='deberes_asignados', blank=True)
+    
+    class Meta:
+        verbose_name_plural = "Deberes"
+        ordering = ['-fecha_entrega']
+    
+    def __str__(self):
+        return f"{self.titulo} - {self.materia.nombre}"
+    
+    def total_estudiantes(self):
+        estudiantes_por_curso = User.objects.filter(cursos_estudiante__in=self.cursos.all())
+        return (estudiantes_por_curso | self.estudiantes_especificos.all()).distinct().count()
+    
+    def entregas_completadas(self):
+        return self.entregas.filter(estado__in=['entregado', 'revisado', 'tarde']).count()
+    
+    def porcentaje_entrega(self):
+        total = self.total_estudiantes()
+        if total == 0:
+            return 0
+        return round((self.entregas_completadas() / total) * 100, 1)
+    
+    def esta_vencido(self):
+        return timezone.now() > self.fecha_entrega
+
+class DeberEntrega(models.Model):
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('entregado', 'Entregado'),
+        ('revisado', 'Revisado'),
+        ('tarde', 'Entregado Tarde'),
+    ]
+    
+    deber = models.ForeignKey(Deber, on_delete=models.CASCADE, related_name='entregas')
+    estudiante = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mis_entregas')
+    fecha_entrega = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    archivo_entrega = models.FileField(upload_to='deberes/entregas/', blank=True, null=True)
+    comentario = models.TextField(blank=True)
+    calificacion = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    retroalimentacion = models.TextField(blank=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    
+    class Meta:
+        verbose_name_plural = "Entregas de Deberes"
+        unique_together = ['deber', 'estudiante']
+        ordering = ['-fecha_entrega']
+    
+    def __str__(self):
+        return f"{self.deber.titulo} - {self.estudiante.username}"
+    
+    def esta_tarde(self):
+        return self.fecha_entrega > self.deber.fecha_entrega
+    
+    def save(self, *args, **kwargs):
+        if self.estado == 'entregado' and self.esta_tarde():
+            self.estado = 'tarde'
+        super().save(*args, **kwargs)

@@ -1,0 +1,29 @@
+{% extends 'deberes/base.html' %}
+
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="bi bi-trash3-fill"></i> Confirmar Eliminación</h4>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">¿Estás seguro que deseas eliminar el deber <strong>"{{ deber.titulo }}"</strong>?</p>
+                    <div class="mb-3">
+                        <span class="badge bg-secondary">{{ deber.materia.nombre }}</span>
+                        <span class="ms-2 text-muted">Fecha límite: {{ deber.fecha_entrega|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2"><i class="bi bi-trash"></i> Sí, eliminar</button>
+                        <a href="{% url 'detalle_deber' deber.id %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

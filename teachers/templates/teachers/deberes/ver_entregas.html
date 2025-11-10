@@ -1,0 +1,144 @@
+<!-- deberes/templates/deberes/ver_entregas.html -->
+{% extends 'base.html' %}
+
+{% block title %}Entregas - {{ deber.titulo }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .estudiante-row {
+        transition: background-color 0.2s;
+    }
+    .estudiante-row:hover {
+        background-color: #f8f9fa;
+    }
+    .badge-estado-entrega {
+        min-width: 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Encabezado del Deber -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h3 class="mb-2">{{ deber.titulo }}</h3>
+                <p class="text-muted mb-2">
+                    <i class="bi bi-book"></i> {{ deber.materia.nombre }}
+                </p>
+                <p class="mb-0">
+                    <small class="text-muted">
+                        <i class="bi bi-calendar-event"></i>
+                        Fecha de entrega: {{ deber.fecha_entrega|date:"d/m/Y H:i" }}
+                    </small>
+                    <small class="text-muted ms-3">
+                        <i class="bi bi-trophy"></i>
+                        {{ deber.puntos_totales }} puntos
+                    </small>
+                </p>
+            </div>
+            <div class="text-end">
+                <div class="mb-2">
+                    <h2 class="mb-0">{{ total_entregados }}/{{ total_estudiantes }}</h2>
+                    <small class="text-muted">Entregas completadas</small>
+                </div>
+                <div class="progress" style="width: 150px; height: 8px;">
+                    <div class="progress-bar bg-success" 
+                         style="width: {{ deber.porcentaje_entrega }}%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="GET" class="d-flex gap-2 align-items-center">
+            <label class="small text-muted mb-0">Filtrar:</label>
+            <select name="estado" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                <option value="todos" {% if estado_filtro == 'todos' %}selected{% endif %}>Todos</option>
+                <option value="entregados" {% if estado_filtro == 'entregados' %}selected{% endif %}>Entregados</option>
+                <option value="pendientes" {% if estado_filtro == 'pendientes' %}selected{% endif %}>Pendientes</option>
+            </select>
+            
+            {% if estado_filtro != 'todos' %}
+                <a href="{% url 'ver_entregas' deber.id %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-x"></i>
+                </a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- Lista de Estudiantes y Entregas -->
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Estudiantes y Entregas</h5>
+    </div>
+    <div class="list-group list-group-flush">
+        {% for item in lista_estudiantes %}
+            <div class="list-group-item estudiante-row">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 38px; height: 38px; font-size: 1.2rem;">
+                                {{ item.estudiante.get_iniciales }}
+                            </div>
+                            <div>
+                                <strong>{{ item.estudiante.get_full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ item.estudiante.email }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6 mt-2 mt-md-0">
+                        {% if item.entrega %}
+                            <span class="badge bg-success badge-estado-entrega">
+                                Entregado
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger badge-estado-entrega">
+                                Pendiente
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 col-6 mt-2 mt-md-0">
+                        {% if item.entrega %}
+                            <span class="text-success">
+                                <i class="bi bi-clock"></i>
+                                {{ item.entrega.fecha_entrega|date:"d/m/Y H:i" }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">
+                                <i class="bi bi-clock"></i>
+                                Sin entrega
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3 text-end mt-2 mt-md-0">
+                        {% if item.entrega %}
+                            <a href="{% url 'detalle_entrega' item.entrega.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Ver entrega
+                            </a>
+                            {% if item.entrega.calificacion %}
+                                <span class="badge bg-warning text-dark ms-2">
+                                    {{ item.entrega.calificacion }} / {{ deber.puntos_totales }} pts
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item text-center text-muted py-4">
+                No hay estudiantes asignados para este deber.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

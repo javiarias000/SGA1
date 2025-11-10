@@ -1,0 +1,61 @@
+{% extends "deberes/base.html" %}
+{% block title %}Entregar Deber{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 650px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-upload"></i> Entregar Deber</h3>
+        </div>
+        <div class="card-body">
+            <h4 class="mb-2">{{ deber.titulo }}</h4>
+            <span class="badge bg-secondary">{{ deber.materia.nombre }}</span>
+            <p class="mt-3">{{ deber.descripcion }}</p>
+            <ul class="list-group mb-4">
+                <li class="list-group-item">
+                    <strong>Fecha límite:</strong>
+                    {{ deber.fecha_entrega|date:"d/m/Y H:i" }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Profesor:</strong>
+                    {{ deber.profesor.get_full_name }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Puntos:</strong>
+                    {{ deber.puntos_totales }}
+                </li>
+            </ul>
+            {% if form %}
+                <form method="post" enctype="multipart/form-data" class="mt-3">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.archivo.label_tag }}
+                        {{ form.archivo }}
+                        {% if form.archivo.errors %}
+                            <div class="text-danger small mt-1">{{ form.archivo.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Puedes subir un archivo (PDF, DOCX, imágenes, etc.)</div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.comentario.label_tag }}
+                        {{ form.comentario }}
+                        {% if form.comentario.errors %}
+                            <div class="text-danger small mt-1">{{ form.comentario.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Comentario opcional para el profesor</div>
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-send-check"></i> Entregar
+                    </button>
+                    <a href="{% url 'mis_deberes' %}" class="btn btn-outline-secondary ms-2">
+                        <i class="bi bi-chevron-left"></i> Volver
+                    </a>
+                </form>
+            {% else %}
+                <div class="alert alert-info">No se puede entregar este deber. Por favor, contacta a tu profesor.</div>
+                <a href="{% url 'mis_deberes' %}" class="btn btn-outline-secondary"><i class="bi bi-chevron-left"></i> Volver</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -72,4 +72,12 @@ urlpatterns = [
     path('libreta/<int:student_id>/', 
          views.ver_libreta_estudiante, 
          name='libreta_estudiante'),
+
+    # Deberes
+    path('deberes/', views.lista_deberes_profesor, name='lista_deberes_profesor'),
+    path('deberes/crear/', views.crear_deber, name='crear_deber'),
+    path('deberes/editar/<int:deber_id>/', views.editar_deber, name='editar_deber'),
+    path('deberes/eliminar/<int:deber_id>/', views.eliminar_deber, name='eliminar_deber'),
+    path('deberes/entregas/<int:deber_id>/', views.ver_entregas, name='ver_entregas'),
+    path('deberes/calificar/<int:entrega_id>/', views.calificar_entrega, name='calificar_entrega'),
 ]

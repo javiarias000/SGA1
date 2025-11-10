@@ -1,0 +1,179 @@
+{% extends "deberes/base.html" %}
+
+{% block title %}Detalle del Deber{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="bi bi-journal-bookmark"></i> {{ deber.titulo }}</h2>
+                </div>
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">
+                        <i class="bi bi-collection"></i> {{ deber.materia.nombre }}
+                    </span>
+                    <span class="badge bg-info text-dark mb-2 ms-2">
+                        <i class="bi bi-award"></i> {{ deber.puntos_totales }} puntos
+                    </span>
+                    <ul class="list-unstyled my-2">
+                        <li>
+                            <i class="bi bi-person-badge"></i>
+                            Profesor: {{ deber.profesor.get_full_name }}
+                        </li>
+                        <li>
+                            <i class="bi bi-clock"></i>
+                            Fecha límite: {{ deber.fecha_entrega|date:"d/m/Y H:i" }}
+                        </li>
+                    </ul>
+                    <hr>
+                    <div>
+                        <h5>Descripción:</h5>
+                        <p>{{ deber.descripcion|linebreaks }}</p>
+                    </div>
+                    {% if deber.archivo %}
+                        <div class="mb-2">
+                            <strong><i class="bi bi-paperclip"></i> Archivo:</strong>
+                            <a href="{{ deber.archivo.url }}" target="_blank" class="btn btn-outline-primary btn-sm ms-2">
+                                <i class="bi bi-download"></i> Descargar
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Sección de entrega para estudiantes -->
+            {% if user.is_authenticated and user.groups.all.0.name == 'Estudiantes' %}
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <i class="bi bi-upload"></i> Entrega de Deber
+                    </div>
+                    <div class="card-body">
+                        {% if ya_entregado %}
+                            <div class="alert alert-success">
+                                <strong><i class="bi bi-check-circle"></i> Ya entregaste este deber.</strong>
+                                <ul class="mt-2 mb-0">
+                                    <li>
+                                        <i class="bi bi-calendar-check"></i>
+                                        <span>Fecha de entrega: {{ entrega.fecha_entrega|date:"d/m/Y H:i" }}</span>
+                                    </li>
+                                    <li>
+                                        <i class="bi bi-paperclip"></i>
+                                        <a href="{{ entrega.archivo_entrega.url }}" target="_blank">Ver archivo entregado</a>
+                                    </li>
+                                    {% if entrega.comentario %}
+                                        <li>
+                                            <i class="bi bi-card-text"></i>
+                                            Comentario: <span>{{ entrega.comentario }}</span>
+                                        </li>
+                                    {% endif %}
+                                    {% if entrega.calificacion %}
+                                    <li>
+                                        <i class="bi bi-award"></i>
+                                        Calificación: <strong>{{ entrega.calificacion }}</strong> / {{ deber.puntos_totales }}
+                                    </li>
+                                    {% endif %}
+                                    {% if entrega.retroalimentacion %}
+                                        <li>
+                                            <i class="bi bi-chat-dots"></i>
+                                            <span>Retroalimentación: {{ entrega.retroalimentacion }}</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% elif vencido %}
+                            <div class="alert alert-danger">
+                                <i class="bi bi-exclamation-octagon"></i>
+                                Ya no puedes entregar este deber (vencido).
+                            </div>
+                        {% else %}
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    {{ form.as_p }}
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-upload"></i> Entregar Deber
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Sección de calificar para profesores -->
+            {% if user.is_authenticated and user.groups.all.0.name == 'Profesores' %}
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="bi bi-list-check"></i> Entregas de Estudiantes
+                    </div>
+                    <div class="card-body">
+                        {% if entregas %}
+                            <div class="table-responsive">
+                                <table class="table align-middle table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Estudiante</th>
+                                            <th>Archivo</th>
+                                            <th>Comentario</th>
+                                            <th>Fecha de Entrega</th>
+                                            <th>Calificación</th>
+                                            <th>Retroalimentación</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for entrega in entregas %}
+                                        <tr>
+                                            <td>{{ entrega.estudiante.get_full_name }}</td>
+                                            <td>
+                                                <a href="{{ entrega.archivo_entrega.url }}" target="_blank">
+                                                    <i class="bi bi-file-earmark-arrow-down"></i> Descargar
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ entrega.comentario|default:'-' }}
+                                            </td>
+                                            <td>
+                                                {{ entrega.fecha_entrega|date:"d/m/Y H:i" }}
+                                            </td>
+                                            <td>
+                                                {% if entrega.calificacion %}
+                                                    <span class="badge bg-success">{{ entrega.calificacion }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">No calificado</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ entrega.retroalimentacion|default:'-' }}
+                                            </td>
+                                            <td>
+                                                <!-- Botón para calificar (puede ser modal o ir a otra vista) -->
+                                                <a href="{% url 'calificar_entrega' entrega.id %}" class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-pencil-square"></i> Calificar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                No hay entregas de estudiantes aún.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <a href="{% url 'mis_deberes' %}" class="btn btn-secondary mt-2">
+                <i class="bi bi-arrow-left"></i> Volver a Mis Deberes
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

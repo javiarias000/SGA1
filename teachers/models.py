@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.utils import timezone
 
 class Teacher(models.Model):
     """Perfil extendido del docente"""
@@ -51,3 +51,5 @@ def save_teacher_profile(sender, instance, **kwargs):
     """Guardar perfil de docente"""
     if not instance.is_superuser and hasattr(instance, 'teacher_profile'):
         instance.teacher_profile.save()
+
+
