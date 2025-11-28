@@ -16,7 +16,16 @@
       <div class="mt-3" style="display:flex; gap:10px; flex-wrap:wrap;">
         <a href="{% url 'teachers:student_edit' student.id %}" class="btn btn-primary">✏️ Editar</a>
         <a href="{% url 'teachers:report_card' student.id %}" class="btn btn-view">📒 Libreta</a>
+        <button onclick="toggleCode()" class="btn btn-purple">🔑 Ver Código</button>
         <a href="{% url 'teachers:estudiantes' %}" class="btn btn-secondary">← Volver</a>
+      </div>
+
+      <div id="registration-code-section" class="mt-3" style="display: none;">
+        <p><strong>Código de Registro del Estudiante:</strong></p>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #F3F4F6; border-radius: 8px;">
+          <strong id="registration-code" style="font-size: 1.2em; font-family: monospace; color: #4B5563;">{{ student.registration_code }}</strong>
+          <button class="btn btn-secondary" onclick="copyCode()">Copiar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -90,6 +99,24 @@ function showSection(section) {
   document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById(section + '-section').classList.add('active');
+}
+
+function copyCode() {
+  const code = document.getElementById('registration-code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    alert('Código copiado al portapapeles');
+  }, () => {
+    alert('Error al copiar el código');
+  });
+}
+
+function toggleCode() {
+  const codeSection = document.getElementById('registration-code-section');
+  if (codeSection.style.display === 'none') {
+    codeSection.style.display = 'block';
+  } else {
+    codeSection.style.display = 'none';
+  }
 }
 </script>
 

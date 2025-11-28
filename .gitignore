@@ -57,3 +57,4 @@ Thumbs.db
 
 # Backups
 *.backup
+db.sqlite3

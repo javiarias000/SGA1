@@ -1,0 +1,16 @@
+# Directorios ignorados
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv
+/media
+/static
+
+# Archivos de logs y configuración local
+*.log
+.DS_Store
+.vscode
+.git
+.gitignore

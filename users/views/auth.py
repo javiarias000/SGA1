@@ -90,9 +90,9 @@ def unified_register_view(request):
             return redirect('users:login')
 
         elif role == 'student':
-            student_code = request.POST.get('student_code')
+            student_code = request.POST.get('student_code', '').strip()
             try:
-                student = Student.objects.get(id=int(student_code), active=True)
+                student = Student.objects.get(registration_code=student_code, active=True)
             except (Student.DoesNotExist, ValueError):
                 messages.error(request, 'Código de estudiante inválido.')
                 return render(request, 'users/register.html')

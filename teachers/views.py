@@ -189,7 +189,7 @@ def teacher_dashboard(request):
         try:
             cache_promedio = PromedioCache.objects.get(
                 student=estudiante,
-                subject='GENERAL',
+                subject=None,
                 tipo_promedio='general'
             )
             promedio = float(cache_promedio.promedio)
