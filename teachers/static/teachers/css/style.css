@@ -9,8 +9,8 @@
 
 :root {
     --primary-color: #667eea;
-    --primary-dark: #5568d3;
-    --secondary-color: #764ba2;
+    --primary-dark: #0f2ac2;
+    --secondary-color: hwb(248 0% 60%);    
     --success-color: #10B981;
     --danger-color: #EF4444;
     --warning-color: #F59E0B;
@@ -180,7 +180,7 @@ body {
 }
 
 .stat-blue .stat-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, #4b4ca2 100%);
 }
 
 .stat-green .stat-icon {

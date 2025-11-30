@@ -29,7 +29,7 @@
             </div>
             
             <nav class="sidebar-nav">
-<a href="{% url 'teachers:teacher_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">
+                <a href="{% url 'teachers:teacher_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">
                     <span class="icon">📊</span>
                     <span>Dashboard</span>
                 </a>

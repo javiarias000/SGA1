@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,31 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Sistema Musical Docentes</title>
     <style>
+        /* Definición de variables CSS para usar en todo el formulario */
+        :root {
+            --cb-blue-900: #00204a; /* Azul muy oscuro */
+            --cb-blue-800: #002e6d; /* Azul principal */
+            --cb-blue-700: #004299; /* Azul de acento */
+            --cb-gold-500: #e0ac00; /* Dorado */
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        /* ESTILOS DE FONDO Y OVERLAY */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            
+            /* DEBES REEMPLAZAR 'img/login-bg.jpg' CON TU IMAGEN REAL */
+            background: url('{% static 'img/Niños.jpg' %}') no-repeat center center fixed;
+            background-size: cover;
         }
         
+        /* Overlay oscuro institucional (cb-blue-800 con 85% de opacidad) */
+        body::before {
+            background:  rgba(0, 32, 74, 0.605);
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+        }
+        
+        /* CONTENEDOR PRINCIPAL */
         .register-container {
-            background: white;
+            background: rgba(255, 255, 255, 0.846);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
             max-width: 600px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+            z-index: 10;
         }
         
         .register-header {
@@ -37,8 +62,9 @@
             margin-bottom: 30px;
         }
         
+        /* TÍTULOS E INSTITUCIONALIZACIÓN */
         .register-header h1 {
-            color: #667eea;
+            color: var(--cb-blue-800); /* Título principal en azul */
             font-size: 2em;
             margin-bottom: 10px;
         }
@@ -47,6 +73,7 @@
             color: #6B7280;
         }
         
+        /* CAMPOS DE FORMULARIO */
         .form-group {
             margin-bottom: 20px;
         }
@@ -62,14 +89,15 @@
             width: 100%;
             padding: 12px;
             border: 2px solid #D1D5DB;
-            border-radius: 10px;
+            border-radius: 8px; /* Bordes más sutiles */
             font-size: 14px;
-            transition: border 0.3s;
+            transition: border 0.3s, box-shadow 0.3s;
         }
         
         .form-control:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--cb-blue-700);
+            box-shadow: 0 0 0 3px rgba(0, 66, 153, 0.2); /* Sombra de foco azul */
         }
         
         .form-row {
@@ -78,27 +106,30 @@
             gap: 15px;
         }
         
+        /* BOTÓN DE REGISTRO */
         .btn-register {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: var(--cb-blue-800);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
         
         .btn-register:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background-color: var(--cb-blue-700);
+            box-shadow: 0 5px 15px rgba(0, 46, 109, 0.5); /* Sombra institucional */
         }
         
+        /* ALERTAS y ENLACES */
         .alert {
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
         
@@ -122,13 +153,15 @@
         }
         
         .login-link a {
-            color: #667eea;
+            color: var(--cb-blue-700);
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s;
         }
         
         .login-link a:hover {
             text-decoration: underline;
+            color: var(--cb-gold-500); /* Hover dorado */
         }
         
         .password-hint {
@@ -151,7 +184,14 @@
 <body>
     <div class="register-container">
         <div class="register-header">
-            <h1>🎼</h1>
+            <div style="margin-bottom: 10px;">
+                <img 
+                    src="{% static 'img/LogoCB.jpg' %}" 
+                    alt="Logo Conservatorio Bolívar" 
+                    style="height: 55px; width: auto; margin-left: auto; margin-right: auto; object-fit: contain;"
+                >
+            </div>
+
             <h1>Crear Cuenta</h1>
             <p>Selecciona tu tipo de registro</p>
         </div>
@@ -165,7 +205,6 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- Selección de rol -->
             <div class="form-group">
                 <label>Registrarme como:</label>
                 <select name="role" id="roleSelect" class="form-control" required>
@@ -196,7 +235,6 @@
                 <input type="email" name="email" class="form-control" required>
             </div>
 
-            <!-- Campos específicos de docente -->
             <div id="teacherFields" style="display:none;">
                 <div class="form-group">
                     <label>Teléfono</label>
@@ -208,7 +246,6 @@
                 </div>
             </div>
 
-            <!-- Campos específicos de estudiante -->
             <div id="studentFields" style="display:none;">
                 <div class="form-group">
                     <label>Código de Estudiante *</label>
@@ -231,7 +268,7 @@
         </form>
 
         <div class="login-link">
-<p>¿Ya tienes una cuenta? <a href="{% url 'users:login' %}">Inicia sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{% url 'users:login' %}">Inicia sesión aquí</a></p>
         </div>
     </div>
 
