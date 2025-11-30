@@ -1,0 +1,8 @@
+.nav-item.active {
+    background-color: var(--cb-gold-400);
+    color: var(--cb-blue-900);
+    font-weight: bold;
+}
+.nav-item.active .icon {
+    color: var(--cb-blue-900);
+}
