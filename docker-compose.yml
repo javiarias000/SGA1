@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Django
+  web:
+    build: .
+    # Reemplaza 'music_registry' con el nombre de tu carpeta de proyecto principal si es diferente
+    command: sh -c "python SGA1/manage.py collectstatic --noinput && python SGA1/manage.py migrate && python SGA1/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  # Servicio de la Base de Datos PostgreSQL
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # Las variables de entorno de PostgreSQL se pueden definir aquí o en el archivo .env
+      POSTGRES_DB: music_registry_db
+      POSTGRES_USER: music_user
+      POSTGRES_PASSWORD: music_password
+    # Expone el puerto 5432 (opcional, para conectarse desde fuera del contenedor)
+    # ports:
+    #   - "5432:5432"
+
+  # Servicio de Redis (para Celery)
+  redis:
+    image: redis:7-alpine
+    expose:
+      - 6379
+
+# Volúmenes para persistir los datos de la base de datos
+volumes:
+  postgres_data:

@@ -57,6 +57,17 @@ def unified_login_view(request):
 
 
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError, transaction # Importaciones clave
+
+# Asume que estos modelos están disponibles en el contexto de tu vista
+from teachers.models import Teacher 
+# from students.models import Student ya está importado dentro de la función
+User = get_user_model()
+
+
 def unified_register_view(request):
     from students.models import Student
     """Vista de registro unificada para docentes y estudiantes."""
@@ -68,51 +79,87 @@ def unified_register_view(request):
         password2 = request.POST.get('password2')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-
+        
+        # --- 1. VALIDACIÓN BÁSICA ---
         if password1 != password2:
             messages.error(request, 'Las contraseñas no coinciden.')
             return render(request, 'users/register.html')
 
+        # --- 2. VALIDACIÓN DE UNICIDAD DE USUARIO ---
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya existe.')
+            messages.error(request, f"El nombre de usuario '{username}' ya existe. Por favor, elija otro.")
+            return render(request, 'users/register.html')
+        
+        # También es buena práctica verificar el email
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'La dirección de correo electrónico ya está registrada.')
             return render(request, 'users/register.html')
 
-        if role == 'teacher':
-            phone = request.POST.get('phone', '')
-            specialization = request.POST.get('specialization', '')
+        # --- 3. PROCESO DE REGISTRO EN TRANSACCIÓN ATÓMICA ---
+        # Si algo falla dentro de este bloque, se hace un ROLLBACK de todo.
+        try:
+            with transaction.atomic(): 
+                if role == 'teacher':
+                    phone = request.POST.get('phone', '')
+                    specialization = request.POST.get('specialization', '')
 
-            user = User.objects.create_user(
-                username=username, email=email, password=password1,
-                first_name=first_name, last_name=last_name
-            )
-            Teacher.objects.create(user=user, phone=phone, specialization=specialization)
-            messages.success(request, 'Docente registrado correctamente.')
-            return redirect('users:login')
+                    # 3a. Creación del usuario
+                    user = User.objects.create_user(
+                        username=username, email=email, password=password1,
+                        first_name=first_name, last_name=last_name
+                    )
+                    # 3b. Creación del perfil secundario
+                    Teacher.objects.create(user=user, phone=phone, specialization=specialization)
+                    
+                    messages.success(request, 'Docente registrado correctamente.')
+                    return redirect('users:login')
 
-        elif role == 'student':
-            student_code = request.POST.get('student_code', '').strip()
-            try:
-                student = Student.objects.get(registration_code=student_code, active=True)
-            except (Student.DoesNotExist, ValueError):
-                messages.error(request, 'Código de estudiante inválido.')
-                return render(request, 'users/register.html')
+                elif role == 'student':
+                    student_code = request.POST.get('student_code', '').strip()
+                    try:
+                        student = Student.objects.get(registration_code=student_code, active=True)
+                    except (Student.DoesNotExist, ValueError):
+                        # Si el código es inválido, mostramos error y salimos sin crear el User
+                        messages.error(request, 'Código de estudiante inválido.')
+                        return render(request, 'users/register.html')
 
-            if student.user:
-                messages.error(request, 'Este estudiante ya tiene cuenta.')
-                return render(request, 'users/register.html')
+                    if student.user:
+                        messages.error(request, 'Este estudiante ya tiene cuenta.')
+                        return render(request, 'users/register.html')
+                    
+                    # 3a. Creación del usuario
+                    user = User.objects.create_user(
+                        username=username, email=email, password=password1,
+                        first_name=first_name, last_name=last_name
+                    )
+                    # 3b. Vinculación del perfil existente
+                    student.user = user
+                    student.save()
+                    
+                    messages.success(request, 'Estudiante registrado correctamente.')
+                    return redirect('users:login')
 
-            user = User.objects.create_user(
-                username=username, email=email, password=password1,
-                first_name=first_name, last_name=last_name
-            )
-            student.user = user
-            student.save()
-            messages.success(request, 'Estudiante registrado correctamente.')
-            return redirect('users:login')
+                else:
+                    messages.error(request, 'Debes seleccionar un tipo de registro.')
 
-        else:
-            messages.error(request, 'Debes seleccionar un tipo de registro.')
+        # --- 4. MANEJO DE ERRORES DE BASE DE DATOS ---
+        except IntegrityError as e:
+            # Captura errores de unicidad *que no fueron validados antes* (como tu error de secuencia)
+            # La transacción.atomic() ya revertirá el user.
+            
+            # Puedes ser más específico si quieres dar mensajes para errores concretos
+            if 'teachers_teacher_user_id_key' in str(e):
+                messages.error(request, "Error de registro: Conflicto en la base de datos (clave duplicada). Por favor, contacte al administrador.")
+            else:
+                messages.error(request, "Error de registro: Los datos proporcionados violan una restricción de la base de datos.")
+            
+            return render(request, 'users/register.html')
 
+        except Exception as e:
+            # Captura cualquier otro error inesperado (ej. problema de conexión a DB)
+            messages.error(request, f"Ocurrió un error inesperado al registrar: {e}")
+            return render(request, 'users/register.html')
+            
     return render(request, 'users/register.html')
 
 

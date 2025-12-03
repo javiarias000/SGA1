@@ -83,8 +83,13 @@ WSGI_APPLICATION = 'music_registry.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',  # Cambia a PostgreSQL
+        'NAME': os.environ.get('DB_NAME', 'music_registry_db'),
+        'USER': os.environ.get('DB_USER', 'music_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'music_password'),
+        # El nombre 'db' es el nombre del servicio en docker-compose.yml
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -159,8 +164,12 @@ EMAIL_HOST_PASSWORD = 'mtqhlljcsuonbqkw'
 DEFAULT_FROM_EMAIL = 'Sistema Musical <javiarias000@gmail.com>'
 
 # Celery Configuration
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# Usa el host 'redis' para conectarse al contenedor de Redis
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
