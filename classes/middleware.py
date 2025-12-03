@@ -24,8 +24,11 @@ class RoleBasedAccessMiddleware:
         # Evitar ejecutar lógica para peticiones de archivos estáticos u cosas sin path
         path = request.path or "/"
 
-        # Permitir admin, estáticos y media sin interferencia
-        if path.startswith('/admin/') or path.startswith('/static/') or path.startswith('/media/'):
+        # Permitir admin, estáticos, media y las URL de reseteo de contraseña
+        if (path.startswith('/admin/') or 
+            path.startswith('/static/') or 
+            path.startswith('/media/') or
+            path.startswith('/reset/')):
             return self.get_response(request)
 
         # URLs públicas
@@ -34,6 +37,8 @@ class RoleBasedAccessMiddleware:
             safe_reverse('users:login', default='/users/login/'),
             safe_reverse('users:logout', default='/users/logout/'),
             safe_reverse('users:register', default='/users/register/'),
+            safe_reverse('users:password_reset', default='/users/password_reset/'),
+            safe_reverse('users:password_reset_done', default='/users/password_reset/done/'),
         ]
         # Asegura que public_urls contenga strings válidos
         public_urls = [u for u in public_urls if u]

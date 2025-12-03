@@ -153,15 +153,19 @@ LOGOUT_REDIRECT_URL = '/users/login/'
 
 
 
-# Configuración de Email (Gmail)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_USE_TLS = False
-EMAIL_HOST_USER = 'javiarias000@gmail.com'
-EMAIL_HOST_PASSWORD = 'mtqhlljcsuonbqkw'
-DEFAULT_FROM_EMAIL = 'Sistema Musical <javiarias000@gmail.com>'
+# Configuración de Email (Gmail) - Comentado para desarrollo
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = False
+# EMAIL_HOST_USER = 'javiarias000@gmail.com'
+# EMAIL_HOST_PASSWORD = 'mtqhlljcsuonbqkw'
+# DEFAULT_FROM_EMAIL = 'Sistema Musical <javiarias000@gmail.com>'
+
+# Para desarrollo: Imprimir correos en la consola
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Celery Configuration
 # Usa el host 'redis' para conectarse al contenedor de Redis
