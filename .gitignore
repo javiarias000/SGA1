@@ -58,3 +58,12 @@ Thumbs.db
 # Backups
 *.backup
 db.sqlite3
+
+# Scripts de un solo uso en la raíz del proyecto
+/editar_asignaciones.py
+/generate_agrupaciones_template.py
+/generate_template.py
+/manual_assignment.py
+
+# Archivos de datos JSON en la raíz
+/asignaciones_docentes.json

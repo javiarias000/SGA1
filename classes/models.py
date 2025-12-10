@@ -647,31 +647,6 @@ def actualizar_cache_promedios(sender, instance, **kwargs):
         
 
 # ============================================
-# SIGNALS - Mantener los mismos
-# ============================================
-
-
-@receiver(post_save, sender=User)
-def create_teacher_profile(sender, instance, created, **kwargs):
-    """Crear perfil de docente automáticamente cuando se crea un usuario"""
-    if created and not instance.is_superuser:
-        # Solo crear Teacher si no existe student_profile
-        if not hasattr(instance, 'student_profile'):
-            Teacher.objects.get_or_create(
-                user=instance,
-                defaults={
-                    'full_name': f"{instance.first_name} {instance.last_name}".strip() or instance.username
-                }
-            )
-
-@receiver(post_save, sender=User)
-def save_teacher_profile(sender, instance, **kwargs):
-    """Guardar perfil de docente"""
-    if not instance.is_superuser and hasattr(instance, 'teacher_profile'):
-        instance.teacher_profile.save()
-
-
-# ============================================
 # DEBERES
 # ============================================
 

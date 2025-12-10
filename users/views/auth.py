@@ -165,7 +165,51 @@ def unified_register_view(request):
 
 
 
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+
 def logout_view(request):
     logout(request)
     messages.info(request, 'Has cerrado sesión correctamente.')
     return redirect('home')
+
+@login_required
+def change_password_view(request):
+    """
+    Vista para que el usuario cambie su propia contraseña.
+    Es usada por el middleware ForcePasswordChangeMiddleware.
+    """
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Actualizar la sesión del usuario para que no se desloguee
+            update_session_auth_hash(request, user)
+            
+            # Marcar que el cambio de contraseña ya se ha realizado
+            if hasattr(user, 'profile'):
+                user.profile.must_change_password = False
+                user.profile.save()
+
+            messages.success(request, '¡Tu contraseña ha sido cambiada exitosamente!')
+            
+            # Redirigir al dashboard correspondiente
+            if hasattr(user, 'student_profile'):
+                return redirect('students:student_dashboard')
+            elif hasattr(user, 'teacher_profile'):
+                return redirect('teachers:teacher_dashboard')
+            else:
+                return redirect('users:login')
+        else:
+            messages.error(request, 'Por favor corrige los errores señalados.')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    # Añadir un flag al contexto para saber si el cambio es forzado
+    is_forced = request.user.profile.must_change_password
+    
+    return render(request, 'users/change_password.html', {
+        'form': form,
+        'is_forced': is_forced
+    })
