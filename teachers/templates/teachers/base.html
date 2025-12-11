@@ -15,7 +15,8 @@
      <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    {% block extra_css %}{% endblock %}
+    {% block extra_css %}
+{% endblock %}
     <!-- Chart.js CDN for charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -44,9 +45,9 @@
                     <span>Informes</span>
                 </a>
 
-                <a href="{% url 'teachers:clases_teoricas' %}" class="nav-item {% if request.resolver_match.url_name == 'clases_teoricas' %}active{% endif %}">
+                <a href="{% url 'teachers:clases_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'clases_dashboard' %}active{% endif %}">
                     <span class="icon">🏫</span>
-                    <span>Clases Teóricas</span>
+                    <span>Clases</span>
                 </a>
 
                 <a href="{% url 'teachers:lista_deberes_profesor' %}" class="nav-item {% if 'deberes' in request.path %}active{% endif %}">

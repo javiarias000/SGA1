@@ -815,17 +815,169 @@ def student_code_view(request, student_id):
     return render(request, 'teachers/student_code.html', {'student': student})
 
 
+@login_required
+@teacher_required
+def clases_dashboard_view(request):
+    """
+    Dashboard para la sección de Clases, mostrando los tipos de materia.
+    """
+    teacher = request.user.teacher_profile
+    
+    # Estadísticas para cada tipo de materia
+    stats = {
+        'teoria': {
+            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='TEORIA').count(),
+            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='TEORIA').distinct().count()
+        },
+        'agrupacion': {
+            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='AGRUPACION').count(),
+            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='AGRUPACION').distinct().count()
+        },
+        'instrumento': {
+            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='INSTRUMENTO').count(),
+            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='INSTRUMENTO').distinct().count()
+        },
+    }
+
+    context = {
+        'teacher': teacher,
+        'stats': stats,
+    }
+    return render(request, 'teachers/clases_dashboard.html', context)
+
+
 # ============================================
-# CLASES TEÓRICAS (Gestión)
+# CLASES POR TIPO (Teoría, Agrupación, Instrumento)
 # ============================================
 
-@teacher_required
-def clases_teoricas_view(request):
+def _subject_type_list_context(request, subject_type_param, subject_type_display_name, template_name):
     teacher = request.user.teacher_profile
-    clases = Clase.objects.filter(teacher=teacher).order_by('subject', 'name')
-    return render(request, 'teachers/clases.html', {
+    
+    # Obtener todas las Clases del docente para este tipo de materia
+    clases = Clase.objects.filter(
+        teacher=teacher,
+        subject__tipo_materia=subject_type_param
+    ).order_by('subject__name', 'name')
+
+    # Obtener todos los estudiantes únicos matriculados en estas clases
+    # y también los estudiantes asignados directamente al docente que tienen clases de este tipo
+    students_in_classes_ids = Enrollment.objects.filter(clase__in=clases).values_list('student__id', flat=True)
+    
+    # También considerar estudiantes directamente asociados al profesor que tienen alguna actividad en una materia de este tipo
+    students_with_activities_ids = Activity.objects.filter(
+        clase__in=clases,
+        student__teacher=teacher
+    ).values_list('student__id', flat=True)
+
+    all_related_student_ids = list(set(list(students_in_classes_ids) + list(students_with_activities_ids)))
+    
+    estudiantes = Student.objects.filter(id__in=all_related_student_ids, active=True).order_by('name')
+
+    total_students_in_type = estudiantes.count()
+    total_classes_in_type = clases.count()
+
+    # Preparar estadísticas detalladas por estudiante
+    estudiantes_con_stats = []
+    for estudiante in estudiantes:
+        # Clases de este tipo que el estudiante ha tomado/está tomando
+        student_clases = clases.filter(enrollment__student=estudiante).distinct()
+        student_activities_count = Activity.objects.filter(
+            student=estudiante,
+            clase__in=clases
+        ).count()
+
+        # Promedio general de calificaciones para este tipo de materia
+        # Calcular de forma más granular, solo considerando las calificaciones de las materias de este tipo
+        calificaciones_tipo_materia = CalificacionParcial.objects.filter(
+            student=estudiante,
+            subject__tipo_materia=subject_type_param
+        )
+        
+        promedio_tipo = Decimal('0.00')
+        if calificaciones_tipo_materia.exists():
+            # Agrupar por materia para calcular promedio de cada materia y luego el general de ese tipo
+            subjects_in_type = calificaciones_tipo_materia.values_list('subject', flat=True).distinct()
+            promedios_materias_tipo = []
+            for sub_id in subjects_in_type:
+                sub_instance = get_object_or_404(Subject, id=sub_id)
+                prom_q1 = CalificacionParcial.calcular_promedio_quimestre(estudiante, sub_instance, 'Q1')
+                prom_q2 = CalificacionParcial.calcular_promedio_quimestre(estudiante, sub_instance, 'Q2')
+                
+                if prom_q1 > 0 and prom_q2 > 0:
+                    promedios_materias_tipo.append((float(prom_q1) + float(prom_q2)) / 2)
+                elif prom_q1 > 0:
+                    promedios_materias_tipo.append(float(prom_q1))
+                elif prom_q2 > 0:
+                    promedios_materias_tipo.append(float(prom_q2))
+            
+            if promedios_materias_tipo:
+                promedio_tipo = Decimal(str(round(sum(promedios_materias_tipo) / len(promedios_materias_tipo), 2)))
+        
+        # Últimas actividades en este tipo de materia
+        recent_activities = Activity.objects.filter(
+            student=estudiante,
+            clase__in=clases
+        ).order_by('-date')[:3] # Mostrar 3 últimas actividades
+
+
+        escala = {}
+        if promedio_tipo > 0:
+            temp_calif = CalificacionParcial(calificacion=Decimal(str(promedio_tipo)))
+            escala = temp_calif.get_escala_cualitativa()
+
+
+        estudiantes_con_stats.append({
+            'estudiante': estudiante,
+            'clases_tipo_count': student_activities_count,
+            'promedio_tipo': promedio_tipo,
+            'escala': escala,
+            'en_riesgo': promedio_tipo < 7 and promedio_tipo > 0,
+            'recent_activities': recent_activities,
+        })
+    
+    # Ordenar por promedio (descendente)
+    estudiantes_con_stats.sort(key=lambda x: x['promedio_tipo'], reverse=True)
+
+    context = {
+        'teacher': teacher,
+        'subject_type_display_name': subject_type_display_name,
         'clases': clases,
-    })
+        'estudiantes_con_stats': estudiantes_con_stats,
+        'total_students_in_type': total_students_in_type,
+        'total_classes_in_type': total_classes_in_type,
+        'subject_type_param': subject_type_param, # Useful for dynamic links/forms
+    }
+    return render(request, template_name, context)
+
+@login_required
+@teacher_required
+def teoria_view(request):
+    return _subject_type_list_context(
+        request, 
+        subject_type_param='TEORIA', 
+        subject_type_display_name='Clases de Teoría', 
+        template_name='teachers/teoria.html'
+    )
+
+@login_required
+@teacher_required
+def agrupaciones_view(request):
+    return _subject_type_list_context(
+        request, 
+        subject_type_param='AGRUPACION', 
+        subject_type_display_name='Clases de Agrupación', 
+        template_name='teachers/agrupaciones.html'
+    )
+
+@login_required
+@teacher_required
+def instrumento_view(request):
+    return _subject_type_list_context(
+        request, 
+        subject_type_param='INSTRUMENTO', 
+        subject_type_display_name='Clases de Instrumento', 
+        template_name='teachers/instrumento.html'
+    )
 
 # ============================================
 # ACTIVIDADES/CLASES

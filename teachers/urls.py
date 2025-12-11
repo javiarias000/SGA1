@@ -19,7 +19,12 @@ urlpatterns = [
     path('aportes/', views.gestionar_tipos_aportes, name='gestionar_aportes'),
     
     # Clases teóricas (gestión)
-    path('clases/', views.clases_teoricas_view, name='clases_teoricas'),
+    path('clases/', views.clases_dashboard_view, name='clases_dashboard'),
+
+    # Clases por tipo
+    path('teoria/', views.teoria_view, name='teoria_list'),
+    path('agrupaciones/', views.agrupaciones_view, name='agrupaciones_list'),
+    path('instrumento/', views.instrumento_view, name='instrumento_list'),
 
     # Actividades/Clases
     path('registro/', views.registro_view, name='registro'),

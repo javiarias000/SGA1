@@ -111,6 +111,44 @@
         </div>
     </div>
 
+    <!-- Clases por Tipo -->
+    <h2 class="h4 mb-3">Clases por Tipo</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <a href="{% url 'teachers:teoria_list' %}" class="card stat-card border-0 shadow-sm h-100 text-decoration-none">
+                <div class="card-body text-center">
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-book fa-2x"></i>
+                    </div>
+                    <h4 class="mb-1">Teoría</h4>
+                    <p class="text-muted mb-0 small">Gestión de Clases Teóricas</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'teachers:agrupaciones_list' %}" class="card stat-card border-0 shadow-sm h-100 text-decoration-none">
+                <div class="card-body text-center">
+                    <div class="text-success mb-2">
+                        <i class="fas fa-users-cog fa-2x"></i>
+                    </div>
+                    <h4 class="mb-1">Agrupaciones</h4>
+                    <p class="text-muted mb-0 small">Gestión de Clases de Agrupación</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'teachers:instrumento_list' %}" class="card stat-card border-0 shadow-sm h-100 text-decoration-none">
+                <div class="card-body text-center">
+                    <div class="text-info mb-2">
+                        <i class="fas fa-guitar fa-2x"></i>
+                    </div>
+                    <h4 class="mb-1">Instrumento</h4>
+                    <p class="text-muted mb-0 small">Gestión de Clases de Instrumento</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <!-- Distribución por Escala -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-white">
@@ -183,8 +221,8 @@
                         <label class="form-label fw-bold">Materia *</label>
                         <select name="subject" id="subjectSelect" class="form-select" required>
                             <option value="">Seleccionar materia...</option>
-                            {% for code, name in materias %}
-                            <option value="{{ code }}">{{ name }}</option>
+                            {% for materia in materias %}
+                            <option value="{{ materia.id }}">{{ materia.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

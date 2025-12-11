@@ -11,14 +11,15 @@ ENV PYTHONUNBUFFERED 1
 # Instala dependencias del sistema necesarias
 # En este caso, solo necesitas libpq-dev para el conector de PostgreSQL
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev \
+    && apt-get install -y --no-install-recommends gcc libpq-dev python3-dev g++ \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Copia el archivo requirements.txt (o los listados en el prompt) y los instala
 # Reemplaza 'requirements.txt' con el nombre de tu archivo si es diferente
 # NOTA: Los requerimientos proporcionados serán instalados
 COPY requirements.txt .
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip setuptools wheel
+
 # Instala las dependencias. Utiliza 'psycopg2-binary' para la conexión a PostgreSQL.
 # Se asume que el listado de requerimientos proporcionado está en 'requirements.txt'
 RUN pip install -r requirements.txt psycopg2-binary

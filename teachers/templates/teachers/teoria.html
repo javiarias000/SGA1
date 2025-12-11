@@ -1,0 +1,105 @@
+{% extends 'teachers/base.html' %}
+
+{% block title %}Clases de {{ subject_type_display_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1 class="mb-4">🗂️ {{ subject_type_display_name }}</h1>
+
+  <div class="row g-4">
+    {# Sección de Clases #}
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Mis Clases de {{ subject_type_display_name }}</h4>
+        </div>
+        <div class="card-body">
+          {% if clases %}
+            <div class="table-responsive">
+              <table class="table table-striped align-middle">
+                <thead>
+                  <tr>
+                    <th>Materia</th>
+                    <th>Nombre de la Clase</th>
+                    <th>Cupos</th>
+                    <th>Activa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for c in clases %}
+                  <tr>
+                    <td>{{ c.subject.name }}</td>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.get_enrolled_count }} / {{ c.max_students }}</td>
+                    <td>
+                      {% if c.active %}<span class="badge bg-success">Sí</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">Aún no tienes clases de {{ subject_type_display_name }} asignadas.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {# Sección de Estadísticas de Estudiantes #}
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Estudiantes en Clases de {{ subject_type_display_name }} ({{ total_students_in_type }})</h4>
+        </div>
+        <div class="card-body">
+          {% if estudiantes_con_stats %}
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>Estudiante</th>
+                    <th>Promedio ({{ subject_type_display_name }})</th>
+                    <th>Escala</th>
+                    <th>Clases Actividad Registradas</th>
+                    <th>Últimas Actividades</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in estudiantes_con_stats %}
+                  <tr {% if item.en_riesgo %}class="table-warning"{% endif %}>
+                    <td>
+                        <a href="{% url 'teachers:student_detail' student_id=item.estudiante.id %}">{{ item.estudiante.name }}</a>
+                    </td>
+                    <td>
+                        <span class="badge" style="background-color: {{ item.escala.color|default:'#6c757d' }}; color: {{ item.escala.text_color|default:'#ffffff' }};">
+                            {{ item.promedio_tipo|floatformat:2 }} ({{ item.escala.codigo|default:'N/A' }})
+                        </span>
+                    </td>
+                    <td>{{ item.escala.nombre|default:'N/A' }}</td>
+                    <td>{{ item.clases_tipo_count }}</td>
+                    <td>
+                        {% if item.recent_activities %}
+                            <ul class="list-unstyled mb-0">
+                                {% for activity in item.recent_activities %}
+                                    <li><small>{{ activity.date|date:"d M Y" }}: {{ activity.performance }}</small></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <small class="text-muted">Sin actividades recientes</small>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">No hay estudiantes asignados a clases de {{ subject_type_display_name }} aún.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
