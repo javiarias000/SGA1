@@ -1,0 +1,2004 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Alvarado Chicaiza Alejandra Elizabeth",
+      "docente_nombre": "Tapia García Kevin Paúl",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Allan Paul",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Amancha Moposita Juan Pablo",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Ocaña Uriarte Gabriel Alejandro",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Andaluz Coba Hayden Joshua",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Cristellot Garcés Bianca Grazziela",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Terán Anchaguano Danna Maite",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Bastidas Choco Anika Juliette",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Guamán Zapata Helen Camila",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Guerrero Moya Luciana Salomé",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Chicaiza Chiluisa Sarahi Fernanda",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Guanopatin Chicaiza José David",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Chalán Jinde Alex Damián",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Bayas Bayas Noelia Abigail",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Naranjo Noboa Mateo Sebastián",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Tirado Freiré Danilo Joel",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Romero Mora Wilmer Joel",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Andaluz Coba Jhordan Omar",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Paucar Guamán Jonathan Ismael",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Chuncha Choco Josué Daniel",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Paredes Proaño David Ismael",
+      "docente_nombre": "Tapia García Kevin Paúl",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Pérez Carvajal Andrea Salome",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Duran Ordoñez Adriana Valentina",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Gaibor Tipanluiza Daniel Benjamín",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Chérrez Rivadeneira Valeria Alejandra",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Guachambala Ramos Nayeli Arlette",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Matute Tunja Damaris Renata",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Valencia Ashqui Ariel Sebastián",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Cumbal Fonseca Larissa Sara",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 31,
+    "fields": {
+      "full_name": "Gavilanes Pinto Leonardo Alexander",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 32,
+    "fields": {
+      "full_name": "Pérez Torres Isabela Valentina",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 33,
+    "fields": {
+      "full_name": "Guaigua Abril Daralyn Emilce",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 34,
+    "fields": {
+      "full_name": "Guashpa Pucuna Justin Mateo",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 35,
+    "fields": {
+      "full_name": "Morales Núñez Camila Mayté",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 36,
+    "fields": {
+      "full_name": "Palma Arciniega Angie Pamela",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 37,
+    "fields": {
+      "full_name": "Sánchez Gavilanes Aaron Isaac",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 38,
+    "fields": {
+      "full_name": "Tiviano Aucatoma Franklin Ronaldhino",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 39,
+    "fields": {
+      "full_name": "Yancha Cunachi Oscar Sebastián",
+      "docente_nombre": "Pèrez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 40,
+    "fields": {
+      "full_name": "Chérrez Rivadeneira Nadia Soledad",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 41,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 42,
+    "fields": {
+      "full_name": "Villacrés López Verónica Kamila",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 43,
+    "fields": {
+      "full_name": "Mena Ramírez María Gracia",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 44,
+    "fields": {
+      "full_name": "Guamanquispe Silva Matías Aldair",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 45,
+    "fields": {
+      "full_name": "Olivo Urvina Leandro Esteban",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 46,
+    "fields": {
+      "full_name": "Robalino Guerrero Ian Yngwie",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 47,
+    "fields": {
+      "full_name": "Guaigua Verdezoto Sophia Victoria",
+      "docente_nombre": "Rendí Prueba De Ubicación No Tengo Maestro Asignado",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 48,
+    "fields": {
+      "full_name": "Moya Medina Renato Rodrigo",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 49,
+    "fields": {
+      "full_name": "Peñaloza Zumbana Jade Sarahi",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 50,
+    "fields": {
+      "full_name": "Castillo Romero Elizabeth Victoria",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 51,
+    "fields": {
+      "full_name": "Jara Casillas Katherin Abigail",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 52,
+    "fields": {
+      "full_name": "Jaramillo Yanchaliquin Lenin Adrian",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 53,
+    "fields": {
+      "full_name": "Quishpi Pulig Saira Miley",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 54,
+    "fields": {
+      "full_name": "Salazar Freire Adriana Michelle",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 55,
+    "fields": {
+      "full_name": "Villaba Pazmiño Camila Valentina",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 56,
+    "fields": {
+      "full_name": "Fiallos Jácome Daniela Elizabeth",
+      "docente_nombre": "Zumbana Quinapanta Santiago Maximiliano",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 57,
+    "fields": {
+      "full_name": "Tapia Cando Luciana Katherine",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 58,
+    "fields": {
+      "full_name": "Córdova Clavijo Matías Alejandro",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 59,
+    "fields": {
+      "full_name": "Narváez Borja Emily Abigail",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 60,
+    "fields": {
+      "full_name": "Quinapanta Pérez Josué Alexander",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 61,
+    "fields": {
+      "full_name": "Salazar Chicaiza Josué Alejandro",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 62,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 63,
+    "fields": {
+      "full_name": "Cambo Chimborazo Jaime Daniel",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 64,
+    "fields": {
+      "full_name": "Anja Cruz Ángeles Daniela",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 65,
+    "fields": {
+      "full_name": "Checa Guerrero Emilia Salomé",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 66,
+    "fields": {
+      "full_name": "Velástegui Vilcacundo Martín Ignacio",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 67,
+    "fields": {
+      "full_name": "Yaule Chingo Matías Joel",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 68,
+    "fields": {
+      "full_name": "Rosales Jordán Andrés Sebastián",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 69,
+    "fields": {
+      "full_name": "Torres Tonato Brianna Valentina",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 70,
+    "fields": {
+      "full_name": "Caguana Paucar Keyla Nicole",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 71,
+    "fields": {
+      "full_name": "Fierro Amores Martín Santiago",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 72,
+    "fields": {
+      "full_name": "López Noboa Jorge Marcelo",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 73,
+    "fields": {
+      "full_name": "Reyes Acosta Valeria Cristina",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 74,
+    "fields": {
+      "full_name": "López Naranjo Kristy Victoria",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 75,
+    "fields": {
+      "full_name": "Pérez Bermeo Samantha Berenice",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 76,
+    "fields": {
+      "full_name": "Durán Noboa Camila Alejandra",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 77,
+    "fields": {
+      "full_name": "Vega Ruiz Emerson Mateo",
+      "docente_nombre": null,
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 78,
+    "fields": {
+      "full_name": "Flores Freire Kiara Simone",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 79,
+    "fields": {
+      "full_name": "Neira Ortiz Naomi Abigail",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 80,
+    "fields": {
+      "full_name": "Nuñez Recalde Doménica Monserrate",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 81,
+    "fields": {
+      "full_name": "Moya Medina Salomé Valentina",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 82,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 83,
+    "fields": {
+      "full_name": "Erazo Gavilanes Naomi Thais",
+      "docente_nombre": "Tapia García Kevin Paúl",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 84,
+    "fields": {
+      "full_name": "Guachambala Ramos Matías Caleb",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 85,
+    "fields": {
+      "full_name": "Guaman Vargas Karla Analía",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 86,
+    "fields": {
+      "full_name": "Calle Apo Erick Alexander",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 87,
+    "fields": {
+      "full_name": "Cordovilla Pérez Daniel Isaac",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 88,
+    "fields": {
+      "full_name": "Tobar Pérez Camila Alejandra",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 89,
+    "fields": {
+      "full_name": "Bonilla Calderón Camilo Sebastián",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 90,
+    "fields": {
+      "full_name": "Amancha Moposita Sol Isabel",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 91,
+    "fields": {
+      "full_name": "Freire Villegas Danna Camila",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 92,
+    "fields": {
+      "full_name": "Quile Quinaguano Estefany Juliet",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 93,
+    "fields": {
+      "full_name": "Muso Lasluisa Juan Isaac",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 94,
+    "fields": {
+      "full_name": "Poaquiza Cordova Daniel Alexander",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 95,
+    "fields": {
+      "full_name": "Tapia Cando Ariana Celeste",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 96,
+    "fields": {
+      "full_name": "Pérez Criollo Camila Anahí",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 97,
+    "fields": {
+      "full_name": "Rovalino Gallegos Emily Daniela",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 98,
+    "fields": {
+      "full_name": "Vasquez Sánchez Dilan Ricardo",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 99,
+    "fields": {
+      "full_name": "Mancheno Llanos Nicolas Emiliano",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 100,
+    "fields": {
+      "full_name": "Serrano Acosta Naomi Monserrath",
+      "docente_nombre": "Zumbana Quinapanta Santiago Maximiliano",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 101,
+    "fields": {
+      "full_name": "Tucta Barrera Anahi Rafaela",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 102,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 103,
+    "fields": {
+      "full_name": "Jordán Pico Noa Micaela",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 104,
+    "fields": {
+      "full_name": "Muzo Espinoza Santiago Jesús",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 105,
+    "fields": {
+      "full_name": "Jiménez Proaño María Paz",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 106,
+    "fields": {
+      "full_name": "Rivadeneira Vivar David Sebastián",
+      "docente_nombre": "Tapia García Kevin Paúl",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 107,
+    "fields": {
+      "full_name": "Paredes Proaño Luciana Daniela",
+      "docente_nombre": "Zumbana Quinapanta Santiago Maximiliano",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 108,
+    "fields": {
+      "full_name": "Rosero Villacrés Christopher Alessandro",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 109,
+    "fields": {
+      "full_name": "Méndez Torres Dannaé Monserrath",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 110,
+    "fields": {
+      "full_name": "Coronel Cárdenas Victoria Celeste",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 111,
+    "fields": {
+      "full_name": "Silva Camacho Sophia Regina",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 112,
+    "fields": {
+      "full_name": "Zamora López Jorge Joshua",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 113,
+    "fields": {
+      "full_name": "Aguilar Calero Helen Angelina",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 114,
+    "fields": {
+      "full_name": "Chuqui Caguano Ailen Sarahi",
+      "docente_nombre": "Zumbana Quinapanta Santiago Maximiliano",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 115,
+    "fields": {
+      "full_name": "Herrera Morocho Emily Daniela",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 116,
+    "fields": {
+      "full_name": "Solís Pérez Paola Monserrath",
+      "docente_nombre": "Amores Valdivieso Jenny Natividad",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 117,
+    "fields": {
+      "full_name": "Túquerez Villacís Gianella Fernanda",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 118,
+    "fields": {
+      "full_name": "Aldáz Sánchez Stefano Nicolás",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 119,
+    "fields": {
+      "full_name": "Cárdenas García Gabriela Analia",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 120,
+    "fields": {
+      "full_name": "Espinoza Silva Alan Daniel",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 121,
+    "fields": {
+      "full_name": "Fiallos Jácome Matías Sebastián",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 122,
+    "fields": {
+      "full_name": "Manobanda Yanez Emily Nicole",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 123,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": "Maestro De Instrumento",
+      "clase": "Complementario",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 124,
+    "fields": {
+      "full_name": "Caguana Paucar Bryanna Solange",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 125,
+    "fields": {
+      "full_name": "Fonseca Pérez Joffre Gabriel",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 126,
+    "fields": {
+      "full_name": "Guaman Mullo Daisy Noemí",
+      "docente_nombre": "Zumbana Quinapanta Santiago Maximiliano",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 127,
+    "fields": {
+      "full_name": "Iza Mero Carlos Mateo",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 128,
+    "fields": {
+      "full_name": "Vega Ruiz Ángela Sofía",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 129,
+    "fields": {
+      "full_name": "De La Cruz Aucatoma Edwin Alexander",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 130,
+    "fields": {
+      "full_name": "Lopez Andaluz Domenica Guadalupe",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 131,
+    "fields": {
+      "full_name": "Poaquiza Ruiz Nixon Alan",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 132,
+    "fields": {
+      "full_name": "Tipan Alomaliza Luis Omar",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 133,
+    "fields": {
+      "full_name": "Toapanta Avalos Ailyn Monserrath",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 134,
+    "fields": {
+      "full_name": "Gavilema Caiza Santiago Ismael",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Complementario",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 135,
+    "fields": {
+      "full_name": "Navarro Chillagana Britany Estefanía",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 136,
+    "fields": {
+      "full_name": "Ruiz Castillo Camila Scarlett",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 137,
+    "fields": {
+      "full_name": "Verdesoto Alarcón Paula Doménica",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 138,
+    "fields": {
+      "full_name": "Coronel Cardenas José Luis",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 139,
+    "fields": {
+      "full_name": "Guaman Gavilanez Alizee Estefania",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 140,
+    "fields": {
+      "full_name": "Parra Montiel Amaru Luciano",
+      "docente_nombre": "Gutama Galan Juan Diego",
+      "clase": "Complementario",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 141,
+    "fields": {
+      "full_name": "Guáitara Macías Adiel Julián",
+      "docente_nombre": "Obando Mayorga Byron Geovanny",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 142,
+    "fields": {
+      "full_name": "Hernández Pinos Christopher Alexander",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Complementario",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 143,
+    "fields": {
+      "full_name": "Sinche Masaquiza Mirza Zafiro",
+      "docente_nombre": "Villena Cárdenas Maria Isabel",
+      "clase": "Complementario",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Complementario",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

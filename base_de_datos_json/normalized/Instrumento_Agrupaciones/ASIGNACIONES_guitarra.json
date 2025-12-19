@@ -1,0 +1,576 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Cristellot Garcés Adrián Ismael",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Gancino Guananga Adrián Vinicio",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Yuquilema Anilema Danna Yamileth",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Chicaiza Chiluisa Sarahi Fernanda",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "López Noboa Jorge Marcelo",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Moya Medina Renato Rodrigo",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Valencia Ashqui Ariel Sebastián",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Quishpi Pulig Saira Miley",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Tapia Cando Luciana Katherine",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Flores Fonseca Lucia Alejandra",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Moreno Bermeo Angie Gabriela",
+      "docente_nombre": "Arias Cuenca Jorge Javier",
+      "clase": "Guitarra",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Hernández Pinos Christopher Alexander",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Caiza Hurtado Joseph Emiliano",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Chulco Bimboza Dereck David",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Solis Ruiz Lenin Gabriel",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Alvarado Chávez Mathias Josue",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Dylan Gael",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Ipiales Torres Marco Emilio",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Mera Hurtado Martin Ricardo",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Villacrés López Verónica Kamila",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Robalino Guerrero Ian Yngwie",
+      "docente_nombre": "Chicaiza Cuenca Rubén Geovany",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Taco Lagos Doménica Monserrath",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Chasi Zurita Sofía Maricela",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Mena Ramírez María Gracia",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Guamanquispe Silva Matías Aldair",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Olivo Urvina Leandro Esteban",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Quile Quinaguano Estefany Juliet",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Chalán Jinde Alex Damián",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Chuncha Choco Josué Daniel",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Jiménez Chicaiza Joseline Mayely",
+      "docente_nombre": "Chico Espinoza Edwin Patricio",
+      "clase": "Guitarra",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 31,
+    "fields": {
+      "full_name": "Morocho Chuqui Paula Thais",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 32,
+    "fields": {
+      "full_name": "Garcés Jerez Joseph William",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 33,
+    "fields": {
+      "full_name": "Calle Apo Erick Alexander",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 34,
+    "fields": {
+      "full_name": "Fierro Amores Martín Santiago",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 35,
+    "fields": {
+      "full_name": "Guanopatin Chicaiza José David",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 36,
+    "fields": {
+      "full_name": "Jaramillo Yanchaliquin Lenin Adrian",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 37,
+    "fields": {
+      "full_name": "Gavilanes Pinto Leonardo Alexander",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 38,
+    "fields": {
+      "full_name": "López Naranjo Kristy Victoria",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 39,
+    "fields": {
+      "full_name": "Zamora López Jorge Joshua",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 40,
+    "fields": {
+      "full_name": "Córdova Clavijo Matías Alejandro",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 41,
+    "fields": {
+      "full_name": "Mancheno Llanos Nicolas Emiliano",
+      "docente_nombre": "Cumbicos Macas José Luis",
+      "clase": "Guitarra",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Guitarras",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

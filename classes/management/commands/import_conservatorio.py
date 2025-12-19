@@ -7,6 +7,7 @@ from students.models import Student
 from teachers.models import Teacher
 from classes.models import Clase, Enrollment
 from subjects.models import Subject
+from users.models import Usuario # Added import
 
 
 def norm(s):
@@ -26,23 +27,42 @@ def slug_username(name):
     return candidate
 
 
-def get_or_create_teacher(full_name):
-    full_name = norm(full_name)
+def get_or_create_teacher(full_name_raw: str) -> Teacher:
+    full_name = norm(full_name_raw)
     if not full_name:
         full_name = "Docente Sistema"
-    teacher = Teacher.objects.filter(full_name__iexact=full_name).first()
-    if teacher:
-        return teacher
-    # Crear usuario base
-    username = slug_username(full_name)
-    import secrets, string
-    rand = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
-    user = User.objects.create_user(username=username, password=rand)
-    user.first_name = full_name
-    user.save()
-    teacher = user.teacher_profile
-    teacher.full_name = full_name
-    teacher.save()
+
+    # Try to find an existing Usuario (teacher role) with this name
+    usuario = Usuario.objects.filter(rol=Usuario.Rol.DOCENTE, nombre__iexact=full_name).first()
+
+    if not usuario:
+        # If Usuario doesn't exist, create it along with a Django User
+        username = slug_username(full_name)
+        # Generate a random password for the User
+        import secrets, string
+        rand = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+        
+        user = User.objects.create_user(
+            username=username,
+            password=rand,
+            email=f"{username}@example.com", # Placeholder email
+            first_name=full_name.split(' ')[0],
+            last_name=' '.join(full_name.split(' ')[1:]),
+            is_staff=True # Ensure teachers are staff
+        )
+        user.save()
+
+        usuario = Usuario.objects.create(
+            auth_user=user,
+            rol=Usuario.Rol.DOCENTE,
+            nombre=full_name,
+            email=user.email,
+        )
+        usuario.save()
+
+    # Now, ensure a Teacher profile exists for this Usuario
+    # The Teacher model will automatically inherit the full_name from Usuario via property
+    teacher, _ = Teacher.objects.get_or_create(usuario=usuario)
     return teacher
 
 

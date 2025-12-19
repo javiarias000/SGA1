@@ -1,0 +1,3863 @@
+[
+  {
+    "model": "academia.horario",
+    "pk": 1,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "07:30 a 08:15",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 2,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 3,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "07:30 a 08:15",
+      "clase": "Audioperceptiva",
+      "docente": "Larreátegui Feijoó Inés María",
+      "aula": "Sala Sala 4 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 4,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "08:15 a 09:00",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 5,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 6,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "08:15 a 09:00",
+      "clase": "Audioperceptiva",
+      "docente": "Larreátegui Feijoó Inés María",
+      "aula": "Sala Sala 4 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 7,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 8,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 9,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Reyes Garcés Elizabeth Del Rocío",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 10,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 11,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 12,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Reyes Garcés Elizabeth Del Rocío",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 13,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Nuñez Cunalata Zoila Delia",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 14,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 15,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 16,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Nuñez Cunalata Zoila Delia",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 17,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 18,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 19,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "09:00 a 09:45",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 20,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "09:00 a 09:45",
+      "clase": "Audioperceptiva",
+      "docente": "Larreátegui Feijoó Inés María",
+      "aula": "Sala Sala 4 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 21,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "09:45 a 10:30",
+      "clase": "Coro",
+      "docente": "Laura Guamán Christian Daniel",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 22,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:45 a 10:30",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 23,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "09:45 a 10:30",
+      "clase": "Audioperceptiva",
+      "docente": "Larreátegui Feijoó Inés María",
+      "aula": "Sala Sala 4 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 24,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 25,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "10:30 a 11:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 26,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Coro",
+      "docente": "Marco Tocto",
+      "aula": "Sala 8 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 27,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Reyes Garcés Elizabeth Del Rocío",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 28,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Jenny Amores",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 29,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Coro",
+      "docente": "Marco Tocto",
+      "aula": "Sala 8 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 30,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Reyes Garcés Elizabeth Del Rocío",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 31,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Jenny Amores",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 32,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 33,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Jenny Amores",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 34,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Coro",
+      "docente": "Marco Tocto",
+      "aula": "Sala 8 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 35,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Orquesta Pedagógica",
+      "docente": "Jenny Amores",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 36,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Coro",
+      "docente": "Marco Tocto",
+      "aula": "Sala 8 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 37,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Nuñez Cunalata Zoila Delia",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 38,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 39,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Educación rítmica audioperceptiva",
+      "docente": "Nuñez Cunalata Zoila Delia",
+      "aula": "Sala 5 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 40,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 41,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Lenguaje musical",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 42,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "Villena Cárdenas Maria Isabel, Guananga Aizabucha Javier Santiago, Larreátegui Feijoó Inés María, Pérez Toapanta Diego Armando, Cumbicos Macas José Luis, Laura Guamán Christian Daniel, Quinapanta Tibán Angel Rodrigo",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 43,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "07:30 a 08:15",
+      "clase": "Lenguaje musical",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 44,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 45,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Lenguaje musical",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 46,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 47,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "08:15 a 09:00",
+      "clase": "Lenguaje musical",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 48,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 49,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 50,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 51,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 52,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 53,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 54,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 10 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 55,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 10 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 56,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 10 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 57,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 10 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 58,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 59,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Guillermo Fonseca",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 60,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 61,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 62,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 63,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 64,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 65,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Andrea Peña",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 66,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 67,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 68,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 69,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "07:30 a 08:15",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 70,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 71,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 72,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "JUEVES",
+      "hora": "08:15 a 09:00",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 73,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 74,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 75,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 76,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 77,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 78,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 79,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 80,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Rafael Guzñay",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 81,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Rafael Guzñay",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 82,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Rafael Guzñay",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 83,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Rafael Guzñay",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 84,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 85,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 86,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 87,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 88,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Fabricio Chico",
+      "aula": "Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 89,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Fabricio Chico",
+      "aula": "Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 90,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Fabricio Chico",
+      "aula": "Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 91,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Fabricio Chico",
+      "aula": "Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 92,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "07:30 a 08:15",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 93,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 94,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 95,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "08:15 a 09:00",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Solís",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 96,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 97,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 98,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 99,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 100,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Jorge De La Cruz",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 101,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 102,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Jorge De La Cruz",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 103,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 104,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Jorge De La Cruz",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 105,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 106,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Jorge De La Cruz",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 107,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 108,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 109,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 110,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 111,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Israel Pérez",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 112,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 113,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 114,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Israel Pérez",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 115,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 116,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Conjunto instrumental",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 117,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 118,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 119,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Israel Pérez",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 120,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 121,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Israel Pérez",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 122,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Acosta Karolina",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 123,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 124,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Acosta Karolina",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 125,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 126,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 127,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Acosta Karolina",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 128,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 129,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Acosta Karolina",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 130,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 131,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 132,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Roberto Caiza",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 133,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Roberto Caiza",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 134,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 135,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 136,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 137,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Roberto Caiza",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 138,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 139,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 140,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 141,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Roberto Caiza",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 142,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Lenguaje musical",
+      "docente": "Félix Amancha",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 143,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 144,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 145,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Lenguaje musical",
+      "docente": "Félix Amancha",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 146,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 147,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 148,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:00 a 09:45",
+      "clase": "Lenguaje musical",
+      "docente": "Félix Amancha",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 149,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 150,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:45 a 10:30",
+      "clase": "Lenguaje musical",
+      "docente": "Félix Amancha",
+      "aula": "Sala 1 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 151,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 152,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 153,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 154,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Danny Toapanta",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 155,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 156,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Danny Toapanta",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 157,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 158,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 159,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Danny Toapanta",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 160,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 161,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Danny Toapanta",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 162,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Diego Gutama",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 163,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Diego Gutama",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 164,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Diego Gutama",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 165,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Juan Diego Gutama",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 166,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 167,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 168,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 169,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 170,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 171,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 172,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 173,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 174,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 175,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 176,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 177,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:00 a 09:45",
+      "clase": "Lenguaje musical",
+      "docente": "Angel Quinapanta",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 178,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Lenguaje musical",
+      "docente": "Angel Quinapanta",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 179,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 180,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 181,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Acompañamiento",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 182,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "14:45 a 15:30",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 183,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 184,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Acompañamiento",
+      "docente": "Juan Solís",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 185,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 186,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Christian Peralta",
+      "aula": "Sala 9 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 187,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 188,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Christian Peralta",
+      "aula": "Sala 9 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 189,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 190,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Christian Peralta",
+      "aula": "Sala 9 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 191,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 192,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Christian Peralta",
+      "aula": "Sala 9 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 193,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "14:45 a 15:30",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 194,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Santiago Zumbana",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 195,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 196,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Santiago Zumbana",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 197,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Santiago Zumbana",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 198,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Santiago Zumbana",
+      "aula": "Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 199,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 200,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 201,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Acompañamiento",
+      "docente": "Juan Solís",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 202,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 203,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 204,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "07:30 a 08:15",
+      "clase": "Formación Y Orientación",
+      "docente": "Rubén Chicaiza",
+      "aula": "Laboral  Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 205,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 206,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 207,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "08:15 a 09:00",
+      "clase": "Informática Aplicada",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 208,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 209,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 210,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:00 a 09:45",
+      "clase": "Capacitación en música",
+      "docente": "Diego Túquerez",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 211,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Armonía",
+      "docente": "Marcelo Chicaiza",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 212,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 213,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Acompañamiento",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 214,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Informática Aplicada",
+      "docente": "David Díaz",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 215,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Acompañamiento",
+      "docente": "Diego Pérez",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 216,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Formación Y Orientación Laboral",
+      "docente": "Rubén Chicaiza",
+      "aula": " Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 217,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Informática Aplicada",
+      "docente": "David Díaz",
+      "aula": "Sala 4 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 218,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Acompañamiento",
+      "docente": "Diego Pérez",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 219,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Capacitación en música",
+      "docente": "Jorge De La Cruz",
+      "aula": "Sala 1 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 220,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "Peralta Aponte Christian Hernán, Arias Cuenca Jorge Javier, Erazo Moreno Carlos Efrén, Obando Mayorga Byron Geovanny",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 221,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 222,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "Peralta Aponte Christian Hernán, Arias Cuenca Jorge Javier, Erazo Moreno Carlos Efrén, Obando Mayorga Byron Geovanny",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 223,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 224,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "Peralta Aponte Christian Hernán, Arias Cuenca Jorge Javier, Erazo Moreno Carlos Efrén, Obando Mayorga Byron Geovanny",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 225,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 226,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "Peralta Aponte Christian Hernán, Arias Cuenca Jorge Javier, Erazo Moreno Carlos Efrén, Obando Mayorga Byron Geovanny",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 227,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 228,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 229,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 230,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 231,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 232,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:00 a 09:45",
+      "clase": "Armonía",
+      "docente": "Marcelo Chicaiza",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 233,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Historia de la Música",
+      "docente": "Jorge Arevalo",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 234,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "09:45 a 10:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 235,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 236,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Formas musicales",
+      "docente": "José Luis Cumbicos",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 237,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MARTES",
+      "hora": "10:30 a 11:15",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 238,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Acompañamiento",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 239,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "14:45 a 15:30",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala1 2 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 240,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 241,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Formas musicales",
+      "docente": "Edwin Chico",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 242,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Acompañamiento",
+      "docente": "Diego Pérez",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 243,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Formas musicales",
+      "docente": "Edwin Chico",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 244,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Acompañamiento",
+      "docente": "Diego Pérez",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 245,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Historia de la Música",
+      "docente": "Jorge Arevalo",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 246,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 247,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 248,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 249,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 250,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 251,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 252,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 253,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 254,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 255,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Creación y arreglos",
+      "docente": "Jorge Arias",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 256,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "15:30 a 16:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 257,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 258,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Creación y arreglos",
+      "docente": "Jorge Arias",
+      "aula": "Sala 13 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 259,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "16:15 a 17:00",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 260,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 261,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 262,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Formas musicales",
+      "docente": "Mauricio Jiménez",
+      "aula": "Sala  3 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 263,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 264,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 265,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 266,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Formas musicales",
+      "docente": "Mauricio Jiménez",
+      "aula": "Sala  3 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 267,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 268,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "dia": "VIERNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Complementario",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 269,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 270,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "07:30 a 08:15",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 271,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 272,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "08:15 a 09:00",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 273,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Armonía",
+      "docente": "Santiago Guananga",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 274,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "MIERCOLES",
+      "hora": "09:00 a 09:45",
+      "clase": "Producción Artístico Musical",
+      "docente": "Paredes Sandoval Marco Antonio",
+      "aula": "Sala 6 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 275,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "09:00 a 09:45",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 276,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "09:45 a 10:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 277,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "LUNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 278,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "dia": "VIERNES",
+      "hora": "10:30 a 11:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 279,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "15:30 a 16:15",
+      "clase": "Acompañamiento",
+      "docente": "Diego Pérez",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 280,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 281,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "15:30 a 16:15",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 282,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Producción Artístico Musical",
+      "docente": "Marco Tocto",
+      "aula": "Sala 8 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 283,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Historia de la Música",
+      "docente": "Arevalo Catañeda Angel Jorge",
+      "aula": "Sala 3 Bloque 2"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 284,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "16:15 a 17:00",
+      "clase": "Armonía",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 285,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 286,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 287,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:00 a 17:45",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 288,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Creación y arreglos",
+      "docente": "Chicaiza Yánez Jefferson Alexander",
+      "aula": "Sala 12 Bloque 1"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 289,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "MARTES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 290,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "dia": "JUEVES",
+      "hora": "17:45 a 18:30",
+      "clase": "Agrupacion: Orquesta, Banda, Ensamble de Guitarra O Coro",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 291,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "MARTES",
+      "hora": "15:30 a 16:15",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 292,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "LUNES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 293,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "MARTES",
+      "hora": "16:15 a 17:00",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 294,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "LUNES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 295,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "MIERCOLES",
+      "hora": "17:00 a 17:45",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 296,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "LUNES",
+      "hora": "17:45 a 18:30",
+      "clase": "Instrumento",
+      "docente": "ND",
+      "aula": "ND"
+    }
+  },
+  {
+    "model": "academia.horario",
+    "pk": 297,
+    "fields": {
+      "curso": "Primero Extraordinario \"B\"",
+      "paralelo": "ND",
+      "dia": "MIERCOLES",
+      "hora": "17:45 a 18:30",
+      "clase": "Lenguaje musical",
+      "docente": "Vásquez Sánchez Enrique David",
+      "aula": "ND"
+    }
+  }
+]

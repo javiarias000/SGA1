@@ -31,9 +31,7 @@ urlpatterns = [
     path('actividades/<int:activity_id>/editar/', views.activity_edit_view, name='activity_edit'),
     path('actividades/<int:activity_id>/eliminar/', views.activity_delete_view, name='activity_delete'),
 
-    # Calificaciones (CRUD)
-    path('calificaciones/<int:grade_id>/editar/', views.grade_edit_view, name='grade_edit'),
-    path('calificaciones/<int:grade_id>/eliminar/', views.grade_delete_view, name='grade_delete'),
+
     
     # Informes
     path('informes/', views.informes_view, name='informes'),
@@ -56,10 +54,7 @@ urlpatterns = [
     # API
     path('api/estadisticas/', views.api_estadisticas, name='api_estadisticas'),
     
-    # Asistencia
-    path('asistencia/', views.attendance_view, name='attendance'),
-    path('asistencia/<int:attendance_id>/editar/', views.attendance_edit_view, name='attendance_edit'),
-    path('asistencia/<int:attendance_id>/eliminar/', views.attendance_delete_view, name='attendance_delete'),
+
     
     # API
     path('api/class-number/', views.get_class_number, name='get_class_number'),

@@ -1,0 +1,25 @@
+{
+  "applied_at_utc": "20251218_223153",
+  "plan": [
+    {
+      "key": "saxofon",
+      "canonical": {
+        "id": 17,
+        "name": "Saxofón",
+        "tipo_materia": "INSTRUMENTO"
+      },
+      "alias": {
+        "id": 18,
+        "name": "Saxofon",
+        "tipo_materia": "INSTRUMENTO"
+      },
+      "refs": {
+        "clases": 1,
+        "activities": 0,
+        "grades": 0,
+        "calif_parciales": 0,
+        "promedio_cache": 0
+      }
+    }
+  ]
+}

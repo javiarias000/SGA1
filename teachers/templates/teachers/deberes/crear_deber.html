@@ -91,25 +91,7 @@
                         {% endif %}
                     </div>
                     
-                    <!-- Asignar a Cursos -->
-                    <div class="mb-3">
-                        <label class="form-label">
-                            {{ form.cursos.label }}
-                        </label>
-                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
-                            {% for checkbox in form.cursos %}
-                                <div class="form-check">
-                                    {{ checkbox.tag }}
-                                    <label class="form-check-label" for="{{ checkbox.id_for_label }}">
-                                        {{ checkbox.choice_label }}
-                                    </label>
-                                </div>
-                            {% empty %}
-                                <p class="text-muted mb-0">No tienes cursos asignados</p>
-                            {% endfor %}
-                        </div>
-                        <small class="text-muted">Selecciona los cursos que realizarán este deber</small>
-                    </div>
+
                     
                     <!-- Estudiantes Específicos (opcional) -->
                     <div class="mb-3">

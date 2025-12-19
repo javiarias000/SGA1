@@ -1,0 +1,128 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Lucero Urresta Karol Sulamith",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Díaz Santana John Alex",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Maisanche Guaman Maykel Leonel",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Nuela Durán Maikel Sebastian",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Pérez Aveiga Mikaela Elizabeth",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Amancha Moposita Juan Pablo",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Jiménez Proaño María Paz",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Yaule Chingo Matías Joel",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Espinoza Silva Alan Daniel",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Clarinete",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

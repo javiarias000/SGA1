@@ -8,7 +8,7 @@ from users.views.decorators import student_required
 
 # Importar modelos
 from students.models import Student
-from classes.models import Activity, Grade, Attendance, Clase, Enrollment, Subject, Deber, DeberEntrega
+from classes.models import Activity, Clase, Enrollment, Subject, Deber, DeberEntrega, Calificacion, Asistencia, CalificacionParcial
 
 
 # ============================================
@@ -26,29 +26,29 @@ def student_dashboard_view(request):
     
     # Últimas actividades y calificaciones
     mis_actividades = Activity.objects.filter(student=estudiante).order_by('-date')[:10]
-    mis_calificaciones = Grade.objects.filter(student=estudiante).order_by('-date')[:5]
-    mis_asistencias_qs = Attendance.objects.filter(student=estudiante).order_by('-date')
+    mis_calificaciones = CalificacionParcial.objects.filter(student=estudiante).order_by('-fecha_actualizacion')[:5]
+    mis_asistencias_qs = Asistencia.objects.filter(inscripcion__estudiante=estudiante.usuario).order_by('-fecha')
     mis_asistencias = list(mis_asistencias_qs[:10])
 
     # Clases disponibles y ya matriculadas
     # Clases activas globales (independiente del docente), excluyendo ya matriculadas
     clases_candidatas = Clase.objects.filter(active=True).exclude(
-        enrollments__student=estudiante,
-        enrollments__active=True
+        enrollments__estudiante=estudiante.usuario,
+        enrollments__estado='ACTIVO'
     )
     # Aplicar reglas de aptitud y cupo
     clases_disponibles = [c for c in clases_candidatas if estudiante.can_take_subject(c.subject) and c.has_space()]
 
     mis_clases = Clase.objects.filter(
-        enrollments__student=estudiante,
-        enrollments__active=True
+        enrollments__estudiante=estudiante.usuario,
+        enrollments__estado='ACTIVO'
     )
     
     # Estadísticas
-    total_clases = Activity.objects.filter(student=estudiante).count()
-    total_asistencias = len(mis_asistencias)
-    presente_count = sum(1 for a in mis_asistencias if a.status == 'Presente')
-    promedio = Grade.objects.filter(student=estudiante).aggregate(promedio=Avg('score'))['promedio'] or 0
+    total_clases = mis_clases.count()
+    total_asistencias = mis_asistencias_qs.count()
+    presente_count = mis_asistencias_qs.filter(estado='Presente').count()
+    promedio = CalificacionParcial.calcular_promedio_general(estudiante)
     asistencia_porcentaje = (presente_count / total_asistencias * 100) if total_asistencias else 0
     subjects = estudiante.get_subjects()
 
@@ -103,16 +103,16 @@ def student_classes_view(request):
     # Obtener clases disponibles para matricularse
     # Clases activas globales (independiente del docente), excluyendo ya matriculadas
     clases_candidatas = Clase.objects.filter(active=True).exclude(
-        enrollments__student=student,
-        enrollments__active=True
+        enrollments__estudiante=student.usuario,
+        enrollments__estado='ACTIVO'
     )
     # Aptitud por grado y cupo
     clases_disponibles = [c for c in clases_candidatas if student.can_take_subject(c.subject) and c.has_space()]
     
     # Obtener clases matriculadas
     mis_clases = Clase.objects.filter(
-        enrollments__student=student,
-        enrollments__active=True
+        enrollments__estudiante=student.usuario,
+        enrollments__estado='ACTIVO'
     )
     
     
@@ -140,12 +140,12 @@ def student_enroll_view(request, clase_id):
     if not student.can_take_subject(clase.subject):
         messages.error(request, "No cumples los requisitos para esta materia según tu grado.")
     # Verificar si ya está matriculado
-    elif Enrollment.objects.filter(student=student, clase=clase, active=True).exists():
+    elif Enrollment.objects.filter(estudiante=student.usuario, clase=clase, estado='ACTIVO').exists():
         messages.info(request, "Ya estás matriculado en esta clase.")
     elif not clase.has_space():
         messages.error(request, "Esta clase ya está llena.")
     else:
-        Enrollment.objects.create(student=student, clase=clase, active=True)
+        Enrollment.objects.create(estudiante=student.usuario, clase=clase, estado='ACTIVO')
         messages.success(request, f"Te has matriculado correctamente en {clase.name}")
 
     return redirect('students:classes')
@@ -155,71 +155,7 @@ def student_enroll_view(request, clase_id):
 # CALIFICACIONES DEL ESTUDIANTE
 # ============================================
 
-@student_required
-def student_grades_view(request):
-    """Calificaciones del estudiante"""
-    student = request.user.student_profile
-    grades = Grade.objects.filter(student=student).order_by('subject', '-date')
-    
-    # Agrupar por materia
-    grades_by_subject = {}
-    for grade in grades:
-        if grade.subject not in grades_by_subject:
-            grades_by_subject[grade.subject] = {
-                'grades': [],
-                'average': 0
-            }
-        grades_by_subject[grade.subject]['grades'].append(grade)
-    
-    # Calcular promedios por materia
-    for subject in grades_by_subject:
-        subject_grades = grades_by_subject[subject]['grades']
-        if subject_grades:
-            avg = sum(float(g.score) for g in subject_grades) / len(subject_grades)
-            grades_by_subject[subject]['average'] = round(avg, 2)
-    
-    # Calcular promedio general
-    promedio_general = 0
-    if grades:
-        promedio_general = sum(float(g.score) for g in grades) / len(grades)
-        promedio_general = round(promedio_general, 2)
-    
-    return render(request, 'students/grades.html', {
-        'student': student,
-        'grades_by_subject': grades_by_subject,
-        'promedio_general': promedio_general,
-    })
 
-
-# ============================================
-# ASISTENCIA DEL ESTUDIANTE
-# ============================================
-
-@student_required
-def student_attendance_view(request):
-    """Asistencia del estudiante"""
-    student = request.user.student_profile
-    attendances = Attendance.objects.filter(student=student).order_by('-date')
-    
-    # Calcular estadísticas
-    total = attendances.count()
-    presente = attendances.filter(status='Presente').count()
-    ausente = attendances.filter(status='Ausente').count()
-    tardanza = attendances.filter(status='Tardanza').count()
-    justificado = attendances.filter(status='Justificado').count()
-    
-    presente_pct = (presente / total * 100) if total > 0 else 0
-    
-    return render(request, 'students/attendance.html', {
-        'student': student,
-        'attendances': attendances,
-        'total': total,
-        'presente': presente,
-        'ausente': ausente,
-        'tardanza': tardanza,
-        'justificado': justificado,
-        'presente_pct': round(presente_pct, 1),
-    })
 
 
 # ============================================
@@ -237,17 +173,15 @@ def student_homework_view(request):
         return redirect('users:login')
 
     # Obtener los IDs de las clases en las que el estudiante está matriculado
-    enrolled_class_ids = student.enrollments.filter(active=True).values_list('clase__id', flat=True)
+    enrolled_class_ids = student.enrollments.filter(estado='ACTIVO').values_list('clase__id', flat=True)
 
     # Obtener deberes asignados a las clases del estudiante o directamente al estudiante
-    # Asumiendo que 'estudiantes_especificos' en Deber es un ManyToMany a User,
-    # y que student.user es el User asociado al Student.
     homework_assigned_to_classes = Deber.objects.filter(
         clase__id__in=enrolled_class_ids
     ).distinct()
     
     homework_directly_assigned = Deber.objects.filter(
-        estudiantes_especificos=student.user
+        estudiantes_especificos=student.usuario
     ).distinct()
 
     # Combinar y eliminar duplicados
@@ -256,7 +190,7 @@ def student_homework_view(request):
     # Para cada deber, obtener el estado de entrega del estudiante
     homework_with_submission_status = []
     for hw in all_homework:
-        submission = DeberEntrega.objects.filter(deber=hw, estudiante=student.user).first()
+        submission = DeberEntrega.objects.filter(deber=hw, estudiante=student.usuario).first()
         homework_with_submission_status.append({
             'homework': hw,
             'submission': submission,
@@ -290,18 +224,16 @@ def student_profile_view(request):
     
     # Estadísticas generales
     total_clases = Activity.objects.filter(student=student).count()
-    total_asistencias = Attendance.objects.filter(student=student).count()
-    promedio = Grade.objects.filter(student=student).aggregate(
-        promedio=Avg('score')
-    )['promedio'] or 0
+    total_asistencias = Asistencia.objects.filter(inscripcion__estudiante=student.usuario).count()
+    promedio = CalificacionParcial.calcular_promedio_general(student)
     
     # Materias que está cursando
-    materias = Subject.objects.filter(activities__student=student).distinct()
+    materias = student.get_subjects()
     
     # Clases matriculadas
     clases_matriculadas = Clase.objects.filter(
-        enrollments__student=student,
-        enrollments__active=True
+        enrollments__estudiante=student.usuario,
+        enrollments__estado='ACTIVO'
     )
     
     return render(request, 'students/profile.html', {

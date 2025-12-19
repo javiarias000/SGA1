@@ -1,40 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Teacher, Student, Activity, Grade, Attendance, Clase
+from .models import Activity, Attendance, Clase, GradeLevel, Enrollment, Horario, CalificacionParcial, TipoAporte
 from subjects.models import Subject
-
-class StudentForm(forms.ModelForm):
-    """Formulario para agregar/editar estudiantes"""
-    class Meta:
-        model = Student
-        fields = ['name', 'grade', 'parent_name', 'parent_email', 'parent_phone', 'notes']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Nombre completo del estudiante'
-            }),
-'grade': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ej: 1ro Bachillerato A'
-            }),
-            'parent_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Nombre del padre/madre'
-            }),
-            'parent_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'correo@ejemplo.com'
-            }),
-            'parent_phone': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '0999999999'
-            }),
-            'notes': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Notas adicionales sobre el estudiante...'
-            })
-        }
+from users.models import Usuario
+# Student and Teacher models are now imported locally within __init__ or methods where needed to avoid circular dependencies.
+from students.models import Student # Temporarily keeping for some forms before full refactor
+from teachers.models import Teacher # Temporarily keeping for some forms before full refactor
 
 
 class ActivityForm(forms.ModelForm):
@@ -97,17 +68,25 @@ class ActivityForm(forms.ModelForm):
         self.teacher = kwargs.pop('teacher', None)
         super().__init__(*args, **kwargs)
         
-        # Filtrar solo estudiantes del docente actual
+        # Filtrar estudiantes/clases asignadas al docente vía inscripciones
         if self.teacher:
-            self.fields['student'].queryset = Student.objects.filter(
-                teacher=self.teacher,
-                active=True
-            )
-            # Filtrar clases del docente
-            self.fields['clase'].queryset = Clase.objects.filter(
-                teacher=self.teacher,
-                active=True
-            ).order_by('subject', 'name')
+            teacher_usuario = getattr(self.teacher, 'usuario', None)
+            if teacher_usuario:
+                self.fields['student'].queryset = Student.objects.filter(
+                    usuario__enrollments_as_student__docente=teacher_usuario,
+                    usuario__enrollments_as_student__estado='ACTIVO',
+                    active=True
+                ).distinct().order_by('name')
+
+                self.fields['clase'].queryset = Clase.objects.filter(
+                    enrollments__docente=teacher_usuario,
+                    enrollments__estado='ACTIVO',
+                    active=True
+                ).distinct().order_by('subject', 'name')
+            else:
+                self.fields['student'].queryset = Student.objects.none()
+                self.fields['clase'].queryset = Clase.objects.none()
+
             self.fields['subject'].queryset = self.teacher.subjects.all()
         
         # Valores iniciales útiles
@@ -122,31 +101,34 @@ class ActivityForm(forms.ModelForm):
             self.fields['class_number'].widget = forms.HiddenInput()
 
 
-class GradeForm(forms.ModelForm):
-    """Formulario para registrar calificaciones"""
+class GradeForm(forms.ModelForm): # Renamed from GradeForm if it's for CalificacionParcial
+    """Formulario para registrar calificaciones parciales"""
     subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    tipo_aporte = forms.ModelChoiceField(queryset=TipoAporte.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    
     class Meta:
-        model = Grade
-        fields = ['student', 'subject', 'period', 'score', 'comments', 'date']
+        model = CalificacionParcial # Use CalificacionParcial model
+        fields = ['student', 'subject', 'parcial', 'quimestre', 'tipo_aporte', 'calificacion', 'observaciones']
         widgets = {
             'student': forms.Select(attrs={'class': 'form-control'}),
-            'period': forms.Select(attrs={'class': 'form-control'}),
-            'score': forms.NumberInput(attrs={
+            'parcial': forms.Select(attrs={'class': 'form-control'}),
+            'quimestre': forms.Select(attrs={'class': 'form-control'}),
+            'calificacion': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': 0,
                 'max': 10,
                 'step': 0.1,
                 'placeholder': '0.00'
             }),
-            'comments': forms.Textarea(attrs={
+            'observaciones': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
                 'placeholder': 'Comentarios sobre la calificación...'
             }),
-            'date': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date'
-            }),
+            # 'fecha_registro': forms.DateInput(attrs={ # Removed 'fecha_registro'
+            #     'class': 'form-control',
+            #     'type': 'date'
+            # }),
         }
     
     def __init__(self, *args, **kwargs):
@@ -155,15 +137,16 @@ class GradeForm(forms.ModelForm):
         
         # Valores iniciales útiles
         from datetime import date as _date
-        if not self.initial.get('date'):
-            self.fields['date'].initial = _date.today()
+        if not self.initial.get('fecha_registro'):
+            self.fields['fecha_registro'].initial = _date.today()
         
         # Filtrar solo estudiantes del docente actual
         if self.teacher:
+            # Assumes teacher has 'students' related_name
             self.fields['student'].queryset = Student.objects.filter(
-                teacher=self.teacher,
-                active=True
-            )
+                usuario__enrollments_as_student__docente=self.teacher.usuario,
+                usuario__enrollments_as_student__estado='ACTIVO'
+            ).distinct()
             self.fields['subject'].queryset = self.teacher.subjects.all()
 
 
@@ -209,7 +192,7 @@ class ClaseForm(forms.ModelForm):
     subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}))
     class Meta:
         model = Clase
-        fields = ['name', 'subject', 'description', 'schedule', 'room', 'max_students', 'active']
+        fields = ['name', 'subject', 'ciclo_lectivo', 'paralelo', 'description', 'schedule', 'room', 'max_students', 'active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -227,32 +210,75 @@ class ClaseForm(forms.ModelForm):
 
     def save(self, commit=True):
         obj = super().save(commit=False)
-        if self.teacher is not None:
-            obj.teacher = self.teacher
+        # `Clase` ya no tiene FK directa a Teacher.
         if commit:
             obj.save()
         return obj
 
 
 class TeacherProfileForm(forms.ModelForm):
-    """Formulario para editar perfil del docente"""
+    """Formulario para editar perfil del docente.
+
+    - Datos de identidad/contacto viven en `users.Usuario`.
+    - Datos propios del perfil docente viven en `teachers.Teacher`.
+    """
+
+    nombre = forms.CharField(
+        label='Nombre completo',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre completo'})
+    )
+    email = forms.EmailField(
+        label='Email (opcional)',
+        required=False,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'correo@ejemplo.com'})
+    )
+    phone = forms.CharField(
+        label='Teléfono (opcional)',
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '0999999999'})
+    )
+    cedula = forms.CharField(
+        label='Cédula (opcional)',
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cédula'})
+    )
+
     class Meta:
         model = Teacher
-        fields = ['full_name', 'specialization', 'phone', 'photo']
+        fields = ['specialization', 'photo'] # 'subjects' removed
         widgets = {
-            'full_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Nombre completo'
-            }),
             'specialization': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ej: Guitarra Clásica, Teoría Musical...'
             }),
-            'phone': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '0999999999'
-            }),
+            # 'subjects': forms.SelectMultiple(attrs={'class': 'form-select'}), # 'subjects' widget removed
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and getattr(self.instance, 'usuario_id', None):
+            self.fields['nombre'].initial = self.instance.usuario.nombre
+            self.fields['email'].initial = self.instance.usuario.email
+            self.fields['phone'].initial = self.instance.usuario.phone
+            self.fields['cedula'].initial = self.instance.usuario.cedula
+
+    def save(self, commit=True):
+        teacher = super().save(commit=False)
+
+        if teacher.usuario_id:
+            usuario = teacher.usuario
+            usuario.nombre = (self.cleaned_data.get('nombre') or '').strip()
+            usuario.email = (self.cleaned_data.get('email') or '').strip() or None
+            usuario.phone = (self.cleaned_data.get('phone') or '').strip() or None
+            usuario.cedula = (self.cleaned_data.get('cedula') or '').strip() or None
+            usuario.rol = Usuario.Rol.DOCENTE
+            usuario.save()
+
+        if commit:
+            teacher.save()
+            self.save_m2m()
+
+        return teacher
 
 
 class UnifiedEntryForm(forms.Form):
@@ -337,10 +363,10 @@ class UnifiedEntryForm(forms.Form):
 
     # Calificación
     grade_period = forms.ChoiceField(
-        choices=Grade.PERIOD_CHOICES,
+        choices=CalificacionParcial.PARCIAL_CHOICES,
         required=False,
         widget=forms.Select(attrs={'class': 'form-select'}),
-        label='Período'
+        label='Parcial'
     )
     grade_score = forms.DecimalField(
         required=False,
@@ -351,7 +377,7 @@ class UnifiedEntryForm(forms.Form):
     grade_comments = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
-        label='Comentarios'
+        label='Observaciones de Calificación'
     )
 
     def __init__(self, *args, **kwargs):
@@ -368,8 +394,8 @@ class UnifiedEntryForm(forms.Form):
         cleaned = super().clean()
         # Validación condicional para calificación
         score = cleaned.get('grade_score')
-        period = cleaned.get('grade_period')
-        if score is not None and period in (None, ''):
+        parcial = cleaned.get('grade_period') # Renamed from 'period' to 'parcial' for clarity
+        if score is not None and parcial in (None, ''):
             self.add_error('grade_period', 'Selecciona el período para la calificación')
         return cleaned
 

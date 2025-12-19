@@ -1,0 +1,3222 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Albuja Cortes Sofia",
+      "email": "sofua06albuja@gmail.com",
+      "username": "sofua06albuja@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1003499223.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Cambo Chimborazo Jaime Daniel",
+      "email": "danielcambo777@gmail.com",
+      "username": "danielcambo777@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804056115.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Guananga Carrera Daniela Alexandra",
+      "email": "sonia1509g85@hotmail.com",
+      "username": "sonia1509g85@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804013769.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Guáitara Macías Adiel Julián",
+      "email": "nerymacias205500@gmail.com",
+      "username": "nerymacias205500@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802295491.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Hernández Pinos Christopher Alexander",
+      "email": "pinosv3@gmail.com",
+      "username": "pinosv3@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803221462.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Andaluz Coba Jhordan Omar",
+      "email": "omarandaluz@yahoo.es",
+      "username": "omarandaluz@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803205879.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Castillo Romero Joshua",
+      "email": "emanuel7jorgito@gmail.com",
+      "username": "emanuel7jorgito@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1800828905.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Cárdenas García Gabriela Analia",
+      "email": "jimeg1971@gmail.com",
+      "username": "jimeg1971@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 201183175.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Espinoza Silva Alan Daniel",
+      "email": "caryespinoza1989@gmail.com",
+      "username": "caryespinoza1989@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1105081119.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Estrada Supe Saila Irais",
+      "email": "estradasaila6@gmail.com",
+      "username": "estradasaila6@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802328227.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Fiallos Jácome Matías Sebastián",
+      "email": "matiasfiallos45@gmail.com",
+      "username": "matiasfiallos45@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803797107.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Manobanda Yanez Emily Nicole",
+      "email": "wilson13may@hotmail.com",
+      "username": "wilson13may@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803813136.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Moya Medina Salomé Valentina",
+      "email": "veros1@hotmail.com",
+      "username": "veros1@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802355220.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Narváez Borja Emily Abigail",
+      "email": "abigail.narvaez.borja.15@gmail.com",
+      "username": "abigail.narvaez.borja.15@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804277505.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Paucar Guamán Jonathan Ismael",
+      "email": "ismaelpaucar303@gmail.com",
+      "username": "ismaelpaucar303@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802847549.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Pérez Criollo Camila Anahí",
+      "email": "adrys_cvp@hotmail.com",
+      "username": "adrys_cvp@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803719796.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Pérez Criollo Daniela Abigail",
+      "email": "adrys_cvp@hotmail.com",
+      "username": "adrys_cvp@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803719796.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Vasquez Sánchez Dilan Ricardo",
+      "email": "jackeline.sanchez22@yahoo.es",
+      "username": "jackeline.sanchez22@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802317535.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Chuncha Choco Josué Daniel",
+      "email": "josuedaniel22002@gmail.com",
+      "username": "josuedaniel22002@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1801721034.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Chérrez Rivadeneira Nadia Soledad",
+      "email": "solesitoch47@gmail.com",
+      "username": "solesitoch47@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804968764.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Córdova Clavijo Matías Alejandro",
+      "email": "aclavijobe86@gmail.com",
+      "username": "aclavijobe86@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1720027083.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Mancheno Llanos Nicolas Emiliano",
+      "email": "bllanos.istt@gmail.com",
+      "username": "bllanos.istt@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802995173.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Quinapanta Pérez Josué Alexander",
+      "email": "aquinapanta@gmail.com",
+      "username": "aquinapanta@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802700326.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Rovalino Gallegos Emily Daniela",
+      "email": "ale_nebula@hotmail.com",
+      "username": "ale_nebula@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803451804.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Salazar Chicaiza Josué Alejandro",
+      "email": "veroms2381m@gmail.com",
+      "username": "veroms2381m@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803457504.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Serrano Acosta Naomi Monserrath",
+      "email": "danielserranocf25@gmail.com",
+      "username": "danielserranocf25@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804275970.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Tucta Barrera Anahi Rafaela",
+      "email": "darwinwilfrido@yahoo.es",
+      "username": "darwinwilfrido@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802375814.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Aguinda Cevallos Eliana Saraí",
+      "email": "elyces9mariela@hotmail.com",
+      "username": "elyces9mariela@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1718749078.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Azogue Poaquiza Bayoleth Samantha",
+      "email": "thaliapoaquiza3@gmail.com",
+      "username": "thaliapoaquiza3@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": NaN
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Chamorro Martinez Dominick David",
+      "email": "jaz-akire05@hotmail.com",
+      "username": "jaz-akire05@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804898086.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 31,
+    "fields": {
+      "full_name": "León Villacrés Emma Joy",
+      "email": "angie.villacres.v@gmail.com",
+      "username": "angie.villacres.v@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804200416.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 32,
+    "fields": {
+      "full_name": "Mongón Choez Darla Valentina",
+      "email": "lorenamarybel@outlook.com",
+      "username": "lorenamarybel@outlook.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804882361.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 33,
+    "fields": {
+      "full_name": "Real Silva Celeste Aylin",
+      "email": "itsbolivar.1520@gmail.com",
+      "username": "itsbolivar.1520@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804471215.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 34,
+    "fields": {
+      "full_name": "Sagñay Pomaquero Elian Mathias",
+      "email": "aidapomaquero@gmail.com",
+      "username": "aidapomaquero@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "A (MATUTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803338035.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 35,
+    "fields": {
+      "full_name": "Acosta Vaca Jonathan Gabriel",
+      "email": "jonnyacostab@gmail.com",
+      "username": "jonnyacostab@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802320174.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 36,
+    "fields": {
+      "full_name": "Arcos Bravo Elian Alejandro",
+      "email": "briggitebravo3d@gmail.com",
+      "username": "briggitebravo3d@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1206813212.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 37,
+    "fields": {
+      "full_name": "Benavides Revelo Martina Eunice",
+      "email": "revelomaria69@gmail.com",
+      "username": "revelomaria69@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 401737069.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 38,
+    "fields": {
+      "full_name": "Benavides Revelo Maya Fiorella",
+      "email": "revelomaria69@gmail.com",
+      "username": "revelomaria69@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 401737069.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 39,
+    "fields": {
+      "full_name": "Espín Mancheno Juliana Lucía",
+      "email": "danielespin87@gmail.comda",
+      "username": "danielespin87@gmail.comda",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804216495.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 40,
+    "fields": {
+      "full_name": "Gavilanes Guaman Brianna Yamile",
+      "email": "ab.agavilanes89@outlook.es",
+      "username": "ab.agavilanes89@outlook.es",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804710083.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 41,
+    "fields": {
+      "full_name": "Jara Casillas Arianne Belén",
+      "email": "rafa832@hotmail.com",
+      "username": "rafa832@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803340163.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 42,
+    "fields": {
+      "full_name": "Lema Intriago Celeste Valentina",
+      "email": "mc.intriago7@gmail.com",
+      "username": "mc.intriago7@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804381273.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 43,
+    "fields": {
+      "full_name": "López Pazmiño Elí Natanael",
+      "email": "pazmino.rebeca_87@yahoo.com",
+      "username": "pazmino.rebeca_87@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804316493.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 44,
+    "fields": {
+      "full_name": "Mantilla Paredes Elisa Margoth",
+      "email": "ambamielecuador@gmail.com",
+      "username": "ambamielecuador@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804621454.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 45,
+    "fields": {
+      "full_name": "Manzano Ramos Noemí Hadassah",
+      "email": "ramospiedad540@gmail.com",
+      "username": "ramospiedad540@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803296019.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 46,
+    "fields": {
+      "full_name": "Masabanda Contreras Janis Emilia",
+      "email": "myligol501@gmail.com",
+      "username": "myligol501@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804263257.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 47,
+    "fields": {
+      "full_name": "Paredes Armas David Eduardo",
+      "email": "eaparedes2@gmail.com",
+      "username": "eaparedes2@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803159712.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 48,
+    "fields": {
+      "full_name": "Pérez Llanos Valery Mikaela",
+      "email": "byper34@hotmail.com",
+      "username": "byper34@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803086213.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 49,
+    "fields": {
+      "full_name": "Pérez Romo Martin Israel",
+      "email": "ma-fer92@hotmail.com",
+      "username": "ma-fer92@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804664488.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 50,
+    "fields": {
+      "full_name": "Solórzano Borja Benjamín Caleb",
+      "email": "adrianaborjacalderon@gmail.com",
+      "username": "adrianaborjacalderon@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803144995.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 51,
+    "fields": {
+      "full_name": "Sumbana Freire Isaac Daniel",
+      "email": "musicaluis11@gmail.com",
+      "username": "musicaluis11@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802884542.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 52,
+    "fields": {
+      "full_name": "Sánchez Maldonado Axel Rafael",
+      "email": "paulsanchez25@gmail.com",
+      "username": "paulsanchez25@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803540101.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 53,
+    "fields": {
+      "full_name": "Sánchez Villena José Julián",
+      "email": "isavillenacardenas@gmail.com",
+      "username": "isavillenacardenas@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803096419.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 54,
+    "fields": {
+      "full_name": "Zamora Chafla Ian Esteban",
+      "email": "adry1087@gmail.com",
+      "username": "adry1087@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804087805.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 55,
+    "fields": {
+      "full_name": "Ñacato Ulloa Danna Rafaela",
+      "email": "majrock1@yahoo.es",
+      "username": "majrock1@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "B (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803012374.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 56,
+    "fields": {
+      "full_name": "Ashqui Aldas Elian Jared",
+      "email": "anysther2010@gmail.com",
+      "username": "anysther2010@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 999287487.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 57,
+    "fields": {
+      "full_name": "Caguana Paucar Leonel Emiliano",
+      "email": "alexcaguana93@gmail.com",
+      "username": "alexcaguana93@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804835153.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 58,
+    "fields": {
+      "full_name": "Chisag Mayorga Paulette Milagros",
+      "email": "gabogus1804@hotmail.com",
+      "username": "gabogus1804@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804332292.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 59,
+    "fields": {
+      "full_name": "Culque Rumipamba María Alejandra",
+      "email": "mary.trabajo44@gmail.com",
+      "username": "mary.trabajo44@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803386489.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 60,
+    "fields": {
+      "full_name": "Cunama Guachambala Reilly Henry",
+      "email": "guachambaladanny1@gmail.com",
+      "username": "guachambaladanny1@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804132726.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 61,
+    "fields": {
+      "full_name": "Curicama Curicama Camila Valentina",
+      "email": "curicamarocio@gmail.com",
+      "username": "curicamarocio@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803388832.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 62,
+    "fields": {
+      "full_name": "Freire Gualpa Esteban Emilio",
+      "email": "vivilmgualpa1601@gmail.com",
+      "username": "vivilmgualpa1601@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804569547.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 63,
+    "fields": {
+      "full_name": "Intriago Marino Daniel Agustin",
+      "email": "mercedesdelourdes85@gmail.com",
+      "username": "mercedesdelourdes85@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1718249590.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 64,
+    "fields": {
+      "full_name": "Manya Santiago Yarely Alejandra",
+      "email": "m.santiago@semisud.edu.ec",
+      "username": "m.santiago@semisud.edu.ec",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 604016519.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 65,
+    "fields": {
+      "full_name": "Minta Choco Lía Samara",
+      "email": "fannylu10ch@gmail.com",
+      "username": "fannylu10ch@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804317178.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 66,
+    "fields": {
+      "full_name": "Ochoa Lascano Eliette Eloiza",
+      "email": "lascanokarina27@gmail.com",
+      "username": "lascanokarina27@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1850103449.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 67,
+    "fields": {
+      "full_name": "Paredes Nuñez Alicia Valentina",
+      "email": "veronica_nug86@hotmail.com",
+      "username": "veronica_nug86@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 503167751.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 68,
+    "fields": {
+      "full_name": "Quishpe Galarza Nathan Jasid",
+      "email": "gladysgalarza777@gmail.com",
+      "username": "gladysgalarza777@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803840980.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 69,
+    "fields": {
+      "full_name": "Salazar Arias Amalia Ariadna",
+      "email": "debolo1474@gmail.com",
+      "username": "debolo1474@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802863504.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 70,
+    "fields": {
+      "full_name": "Segovia Mero Camila Sarahi",
+      "email": "jacque1912@gmail.com",
+      "username": "jacque1912@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804615068.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 71,
+    "fields": {
+      "full_name": "Sánchez Miño Angélica Siloé",
+      "email": "mdamarisnoemi@yahoo.com",
+      "username": "mdamarisnoemi@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1850681337.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 72,
+    "fields": {
+      "full_name": "Sánchez Pazmiño Benjamín Isaí",
+      "email": "bryan-alexandersa@outlook.com",
+      "username": "bryan-alexandersa@outlook.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804158119.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 73,
+    "fields": {
+      "full_name": "Torres Tonato Alba Arianna",
+      "email": "mctonato@yahoo.es",
+      "username": "mctonato@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803872090.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 74,
+    "fields": {
+      "full_name": "Troncoso Chacha Eva Violeta",
+      "email": "veritocg228@gmail.com",
+      "username": "veritocg228@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804022901.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 75,
+    "fields": {
+      "full_name": "Villacrés Mayorga María Paz",
+      "email": "fermayorga22@gmail.com",
+      "username": "fermayorga22@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 996713493.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 76,
+    "fields": {
+      "full_name": "Virguez Barrios Sergio Alejandro",
+      "email": "kariany.pbarrios.r@gmail.com",
+      "username": "kariany.pbarrios.r@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "1o",
+      "paralelo": "C (VESPERTINO)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1851873818.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 77,
+    "fields": {
+      "full_name": "Acosta Ruíz Samuel Alexander",
+      "email": "ivan-ap01@hotmail.com",
+      "username": "ivan-ap01@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803296290.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 78,
+    "fields": {
+      "full_name": "Caiza Hurtado Joseph Emiliano",
+      "email": "djivan199314@gmail.com",
+      "username": "djivan199314@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804906566.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 79,
+    "fields": {
+      "full_name": "Chaglla Toasa Ayeleth Hadasha",
+      "email": "veronicatoasa@gmail.com",
+      "username": "veronicatoasa@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804826681.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 80,
+    "fields": {
+      "full_name": "Chisag Guamán Ricardo Sebastián",
+      "email": "valeriagaltamirano@gmail.com",
+      "username": "valeriagaltamirano@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804609418.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 81,
+    "fields": {
+      "full_name": "Chulco Bimboza Dereck David",
+      "email": "tanniabimboza@gmail.com",
+      "username": "tanniabimboza@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805139738.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 82,
+    "fields": {
+      "full_name": "Cárdenas Basantes Samara Elizabeth",
+      "email": "diana.deby.basantes85@gmail.com",
+      "username": "diana.deby.basantes85@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 503699654.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 83,
+    "fields": {
+      "full_name": "Guerrero Valencia Dylan Nicolás",
+      "email": "valenciaanny12@gmail.com",
+      "username": "valenciaanny12@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805382593.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 84,
+    "fields": {
+      "full_name": "Jiménez Rivadeneira Amelia Sofía",
+      "email": "carlarivadeneira@yahoo.es",
+      "username": "carlarivadeneira@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1719780304.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 85,
+    "fields": {
+      "full_name": "López Iza Eduardo José",
+      "email": "sandrapio1979@gmail.com",
+      "username": "sandrapio1979@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803009461.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 86,
+    "fields": {
+      "full_name": "Martinez Chafla Zoe Ivanna",
+      "email": "katro7ch@gmail.com",
+      "username": "katro7ch@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1714688064.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 87,
+    "fields": {
+      "full_name": "Muñiz Medina Israel Roberto",
+      "email": "anitamedina8019@gmail.com",
+      "username": "anitamedina8019@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 183090230.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 88,
+    "fields": {
+      "full_name": "Muñoz Toasa Karla Sarahí",
+      "email": "gabytatoasa.94@gmail.com",
+      "username": "gabytatoasa.94@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1600786758.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 89,
+    "fields": {
+      "full_name": "Quispe Toasa Arlet Sarahi",
+      "email": "marisoltoasa.mt@gmail.com",
+      "username": "marisoltoasa.mt@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803582152.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 90,
+    "fields": {
+      "full_name": "Ramos Chango Mathias Jair",
+      "email": "roli.ramos@hotmail.com",
+      "username": "roli.ramos@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802893949.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 91,
+    "fields": {
+      "full_name": "Revelo Pico Alessandro Salvatore",
+      "email": "arquirecord@gmail.com",
+      "username": "arquirecord@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802689610.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 92,
+    "fields": {
+      "full_name": "Santana Miranda Lesly Salome",
+      "email": "mafer_conamor@hotmail.com",
+      "username": "mafer_conamor@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804158267.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 93,
+    "fields": {
+      "full_name": "Solis Ruiz Lenin Gabriel",
+      "email": "cynthiaruizcastillo1@gmail.com",
+      "username": "cynthiaruizcastillo1@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804937793.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 94,
+    "fields": {
+      "full_name": "Toapanta Avalos Ariana Nicole",
+      "email": "mikaelaavalos20@gmail.com",
+      "username": "mikaelaavalos20@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804367595.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 95,
+    "fields": {
+      "full_name": "Alvarado Chávez Mathias Josue",
+      "email": "chave287@hotmail.com",
+      "username": "chave287@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803521424.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 96,
+    "fields": {
+      "full_name": "Anilema Yuquilema Aylen Yuleisy",
+      "email": "mariazoilayuquilema9554@gmail.com",
+      "username": "mariazoilayuquilema9554@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 504289554.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 97,
+    "fields": {
+      "full_name": "Campaña Núñez Lucia Guadalupe",
+      "email": "crisfernuez@gmail.com",
+      "username": "crisfernuez@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804611091.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 98,
+    "fields": {
+      "full_name": "Chávez Garcés Ángel David",
+      "email": "wilmagarces2014@gmail.com",
+      "username": "wilmagarces2014@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802778454.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 99,
+    "fields": {
+      "full_name": "Coral Narváez Sara Emilia",
+      "email": "chelita-77@hotmail.com",
+      "username": "chelita-77@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1724317423.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 100,
+    "fields": {
+      "full_name": "Cruz Sotomayor Cayetano Javier",
+      "email": "fer_srobles@hotmail.com",
+      "username": "fer_srobles@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804144432.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 101,
+    "fields": {
+      "full_name": "Gaibor Tipanluiza Nahomy Isabella",
+      "email": "marthatipanluiza@gmail.com",
+      "username": "marthatipanluiza@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802946457.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 102,
+    "fields": {
+      "full_name": "Guamán Flores Mathías Leonel",
+      "email": "mfm380146@gmail.com",
+      "username": "mfm380146@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 2100426853.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 103,
+    "fields": {
+      "full_name": "Herrera Martínez María Alejandra",
+      "email": "martinez2004karen@gmail.com",
+      "username": "martinez2004karen@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805089669.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 104,
+    "fields": {
+      "full_name": "Maisanche Guaman Maykel Leonel",
+      "email": "anaguaman2024@gmail.com",
+      "username": "anaguaman2024@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1850311190.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 105,
+    "fields": {
+      "full_name": "Marfetán Salinas Andrea Belén",
+      "email": "anamarisolsalinasfreire@gmail.com",
+      "username": "anamarisolsalinasfreire@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803017241.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 106,
+    "fields": {
+      "full_name": "Martínez López Wendy Sofía",
+      "email": "gabbylo3ruby@gmail.com",
+      "username": "gabbylo3ruby@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804636692.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 107,
+    "fields": {
+      "full_name": "Muzo Espinoza Paúl Alejandro",
+      "email": "patricia.d.espinoza.s@gmail.com",
+      "username": "patricia.d.espinoza.s@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1716547565.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 108,
+    "fields": {
+      "full_name": "Nuñez Conteron Yanniz Charlotte",
+      "email": "charlobelldyn@gmail.com",
+      "username": "charlobelldyn@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803332673.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 109,
+    "fields": {
+      "full_name": "Ortiz Arias Josué Alexander",
+      "email": "josueo1790@gmail.com",
+      "username": "josueo1790@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804024022.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 110,
+    "fields": {
+      "full_name": "Paredes Crespo Josué Antonio",
+      "email": "infoparedesmarco@gmail.com",
+      "username": "infoparedesmarco@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803929825.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 111,
+    "fields": {
+      "full_name": "Pérez Sánchez Isabella Sofía",
+      "email": "ger_sanchez39@hotmail.com",
+      "username": "ger_sanchez39@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803736188.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 112,
+    "fields": {
+      "full_name": "Ruiz Gavilanez Martín Emiliano",
+      "email": "daygav@hotmail.com",
+      "username": "daygav@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804538955.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 113,
+    "fields": {
+      "full_name": "Salazar Córdova Mathías Andrés",
+      "email": "veritocv_18@hotmail.com",
+      "username": "veritocv_18@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804173449.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 114,
+    "fields": {
+      "full_name": "Sánchez Chávez Ana Paula",
+      "email": "pilita-chavez1994@hotmail.com",
+      "username": "pilita-chavez1994@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805523469.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 115,
+    "fields": {
+      "full_name": "Yanez Rivera Maykel Isdrael",
+      "email": "nelsonyanez1992@gmail.com",
+      "username": "nelsonyanez1992@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805330303.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 116,
+    "fields": {
+      "full_name": "Acosta Pazmiño Alejandra Victoria",
+      "email": "natyb89paz@gmail.com",
+      "username": "natyb89paz@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 987029766.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 117,
+    "fields": {
+      "full_name": "Aragón Peñafiel Didier Rubén",
+      "email": "j17241666@gmail.com",
+      "username": "j17241666@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804310546.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 118,
+    "fields": {
+      "full_name": "Calderón Trujillo Rodrigo Alejandro",
+      "email": "andreatrujillo.bb@gmail.com",
+      "username": "andreatrujillo.bb@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1723391650.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 119,
+    "fields": {
+      "full_name": "Chaglla Villacres Darla Angelina",
+      "email": "alecavillacres87@gmail.com",
+      "username": "alecavillacres87@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803808367.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 120,
+    "fields": {
+      "full_name": "Curay Barona Jaidy Kathleen",
+      "email": "karlabarona2019@gmail.com",
+      "username": "karlabarona2019@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1851036366.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 121,
+    "fields": {
+      "full_name": "Flores Acurio Doménica Carolina",
+      "email": "paoacdg55paz@gmail.com",
+      "username": "paoacdg55paz@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804716510.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 122,
+    "fields": {
+      "full_name": "Flores Velastegui Maylin Ariana",
+      "email": "consuelovelasteguip@gmail.com",
+      "username": "consuelovelasteguip@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804359410.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 123,
+    "fields": {
+      "full_name": "Guaman Chillo Ana Paula",
+      "email": "ksguaman15@gmail.com",
+      "username": "ksguaman15@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1204150864.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 124,
+    "fields": {
+      "full_name": "Guerrero Santana Martin Rafael",
+      "email": "raffa_guitarg@hotmail.com",
+      "username": "raffa_guitarg@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803383593.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 125,
+    "fields": {
+      "full_name": "Gutiérrez Ajila Mateo David",
+      "email": "ndavidgutierrezva@hotmail.com",
+      "username": "ndavidgutierrezva@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804701397.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 126,
+    "fields": {
+      "full_name": "Herrera Morocho Juan Diego",
+      "email": "danielherrera8427@gmail.com",
+      "username": "danielherrera8427@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804549754.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 127,
+    "fields": {
+      "full_name": "Huayta Mundocorre Grace Anely",
+      "email": "laimsusan@gmail.com",
+      "username": "laimsusan@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1755095583.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 128,
+    "fields": {
+      "full_name": "Jimenez Paredes Daphne Victoria",
+      "email": "diannyrpc2008@hotmail.es",
+      "username": "diannyrpc2008@hotmail.es",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804665352.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 129,
+    "fields": {
+      "full_name": "Masabanda Shambi Mateo Adrian",
+      "email": "veroshambi2011@yahoo.com",
+      "username": "veroshambi2011@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804018362.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 130,
+    "fields": {
+      "full_name": "Moposita Chango Daniela Abigail",
+      "email": "vinimoposita@gmail.com",
+      "username": "vinimoposita@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803818929.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 131,
+    "fields": {
+      "full_name": "Naranjo Duque Génesis Ariana",
+      "email": "mariaduquesa.82@gmail.com",
+      "username": "mariaduquesa.82@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 503539611.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 132,
+    "fields": {
+      "full_name": "Paredes Toasa Julián Emanuel",
+      "email": "andresparedes@iavq.edu.ec",
+      "username": "andresparedes@iavq.edu.ec",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804815528.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 133,
+    "fields": {
+      "full_name": "Rosero Zurita Martina Salome",
+      "email": "paoygod_7@hotmail.com",
+      "username": "paoygod_7@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 180376057.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 134,
+    "fields": {
+      "full_name": "Villacís Sánchez Martín André",
+      "email": "andysan37c@hotmail.com",
+      "username": "andysan37c@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804608097.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 135,
+    "fields": {
+      "full_name": "Villalva Reinoso Mayte Isabella",
+      "email": "cristinayrs@hotmail.com",
+      "username": "cristinayrs@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804064846.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 136,
+    "fields": {
+      "full_name": "Yuquilema Anilema Abraham Ezequiel",
+      "email": "cristianyuquilema13@gmail.com",
+      "username": "cristianyuquilema13@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "2o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804580577.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 137,
+    "fields": {
+      "full_name": "Acosta Guamán Lucas Benjamín",
+      "email": "alicia519.7148@gmail.com",
+      "username": "alicia519.7148@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803578473.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 138,
+    "fields": {
+      "full_name": "Aguilar Moreta Dylan Abiel",
+      "email": "elymoretam2008@gmail.com",
+      "username": "elymoretam2008@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 999775513.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 139,
+    "fields": {
+      "full_name": "Caguana Yanchapanta Dulce Maria",
+      "email": "losmensajeroskanito@hotmail.com",
+      "username": "losmensajeroskanito@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803567278.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 140,
+    "fields": {
+      "full_name": "Cañar Machuca Christopher Ariel",
+      "email": "alex882023@hotmail.com",
+      "username": "alex882023@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803401536.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 141,
+    "fields": {
+      "full_name": "Coronel Cardenas Sol Maythe",
+      "email": "michelac80@hotmail.com",
+      "username": "michelac80@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803111192.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 142,
+    "fields": {
+      "full_name": "Cushpa Paredes Ángeles Daniela",
+      "email": "pattyparedesjba@gmail.com",
+      "username": "pattyparedesjba@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803625688.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 143,
+    "fields": {
+      "full_name": "Hidalgo Escobar María Paz",
+      "email": "jeanettealejo@hotmail.com",
+      "username": "jeanettealejo@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804165593.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 144,
+    "fields": {
+      "full_name": "Iza Mero Jesús Mathias",
+      "email": "katymero1992@gmail.com",
+      "username": "katymero1992@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804831691.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 145,
+    "fields": {
+      "full_name": "Lopez Andaluz Martin Alexander",
+      "email": "kleberlopez2012@hotmail.com",
+      "username": "kleberlopez2012@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803527157.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 146,
+    "fields": {
+      "full_name": "Lozada Tituaña Samuel Benjamin",
+      "email": "anitatituan225@gmail.com",
+      "username": "anitatituan225@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802930121.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 147,
+    "fields": {
+      "full_name": "Naranjo Meneses Scarlett Nahomi",
+      "email": "villegaskrn300@gmail.com",
+      "username": "villegaskrn300@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804924650.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 148,
+    "fields": {
+      "full_name": "Olovacha Tubon José Andrés",
+      "email": "minimarket.jv.quis@gmail.com",
+      "username": "minimarket.jv.quis@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 987517351.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 149,
+    "fields": {
+      "full_name": "Pullutasig Moposita Mathias Jesús",
+      "email": "ximenamoposita@gmail.com",
+      "username": "ximenamoposita@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803954724.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 150,
+    "fields": {
+      "full_name": "Punina Guaman Adonis Jared",
+      "email": "alexandraguaman833@gmail.com",
+      "username": "alexandraguaman833@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804444337.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 151,
+    "fields": {
+      "full_name": "Quispe Ayuquina Lourdes Ayme",
+      "email": "jq92406@gmail.com",
+      "username": "jq92406@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803934437.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 152,
+    "fields": {
+      "full_name": "Quispe Toasa Ian Gael",
+      "email": "marisoltoasa.mt@gmail.com",
+      "username": "marisoltoasa.mt@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803582152.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 153,
+    "fields": {
+      "full_name": "Villacres Santiana Genesis Elizabeth",
+      "email": "santianaj78@gmail.com",
+      "username": "santianaj78@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805020748.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 154,
+    "fields": {
+      "full_name": "Altamirano Castillo Arelys Macarena",
+      "email": "lorecastilloch@gmail.com",
+      "username": "lorecastilloch@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803551355.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 155,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Dylan Gael",
+      "email": "claudia_elizt@yahoo.com",
+      "username": "claudia_elizt@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1600299539.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 156,
+    "fields": {
+      "full_name": "Anilema Yuquilema Mathias Grabriel",
+      "email": "luisdanielanilema@gmail.com",
+      "username": "luisdanielanilema@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804205068.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 157,
+    "fields": {
+      "full_name": "Cevallos Gavilanes Santiago David",
+      "email": "mischiquitinescdi@gmail.com",
+      "username": "mischiquitinescdi@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803047180.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 158,
+    "fields": {
+      "full_name": "Curillo Chipantiza Josue Aaron",
+      "email": "patricia1992chicaiza@gmail.com",
+      "username": "patricia1992chicaiza@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1805295928.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 159,
+    "fields": {
+      "full_name": "Ipiales Torres Marco Emilio",
+      "email": "paulytorres2011@hotmail.com",
+      "username": "paulytorres2011@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804606208.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 160,
+    "fields": {
+      "full_name": "Morocho Chuqui Paula Thais",
+      "email": "juanys2404@gmail.com",
+      "username": "juanys2404@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803107885.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 161,
+    "fields": {
+      "full_name": "Nuñez Chávez Martin David",
+      "email": "david-mabe@hotmail.com",
+      "username": "david-mabe@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 201794195.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 162,
+    "fields": {
+      "full_name": "Rios Simba Emiliana Hadasa",
+      "email": "wendy.simba.10@gmail.com",
+      "username": "wendy.simba.10@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1723035125.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 163,
+    "fields": {
+      "full_name": "Solis Jerez Jared Sebastián",
+      "email": "silviaf.f1990@gmail.com",
+      "username": "silviaf.f1990@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804247466.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 164,
+    "fields": {
+      "full_name": "Tapia Barona Dana Sahyri",
+      "email": "alejandrabarona1992@gmail.com",
+      "username": "alejandrabarona1992@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804505905.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 165,
+    "fields": {
+      "full_name": "Tipan Toalombo Alan Samuel",
+      "email": "carmita_isabel@yahoo.com",
+      "username": "carmita_isabel@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804172854.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 166,
+    "fields": {
+      "full_name": "Tipán Chalán Josué Benjamín",
+      "email": "josetipan@hotmail.com",
+      "username": "josetipan@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803010618.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 167,
+    "fields": {
+      "full_name": "Tustón Lucero Leandro Gael",
+      "email": "coralejahermosa123@gmail.com",
+      "username": "coralejahermosa123@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804250932.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 168,
+    "fields": {
+      "full_name": "Valle Ortiz Ana Paula",
+      "email": "loren26062012@gmail.com",
+      "username": "loren26062012@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804157467.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 169,
+    "fields": {
+      "full_name": "Villalva Pinto Diogo Alexander",
+      "email": "christian_villalv@yahoo.com",
+      "username": "christian_villalv@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804731840.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 170,
+    "fields": {
+      "full_name": "Alulema Meza Kaely Valentina",
+      "email": "gabymezacueva85@gmail.com",
+      "username": "gabymezacueva85@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804024121.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 171,
+    "fields": {
+      "full_name": "Andachi González Carlos Ariel",
+      "email": "monisgonzalez1987@gmail.com",
+      "username": "monisgonzalez1987@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1312734427.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 172,
+    "fields": {
+      "full_name": "Andaluz Coba Anton Jhosmar",
+      "email": "omarandaluz@yahoo.es",
+      "username": "omarandaluz@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803205879.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 173,
+    "fields": {
+      "full_name": "Cambo Cuji Keyla Lucíana",
+      "email": "diego.t77@hotmail.com",
+      "username": "diego.t77@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803338340.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 174,
+    "fields": {
+      "full_name": "Carvajal Aguaguiña Andrea Mayte",
+      "email": "aguaguinapaulina@gmail.com",
+      "username": "aguaguinapaulina@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804015939.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 175,
+    "fields": {
+      "full_name": "Casa Martínez Adrián Alexander",
+      "email": "flakitoharrypotter@gmail.com",
+      "username": "flakitoharrypotter@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804366308.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 176,
+    "fields": {
+      "full_name": "Chuqui Anilema Dante Zaed",
+      "email": "jane1992ani@gmail.com",
+      "username": "jane1992ani@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804646329.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 177,
+    "fields": {
+      "full_name": "Cortes Sanchez Kalebh Felipe",
+      "email": "dany7sanchez@gmail.com",
+      "username": "dany7sanchez@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1760438828.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 178,
+    "fields": {
+      "full_name": "Gaibor Abril Ariana Polette",
+      "email": "angieabr17l@hotmail.com",
+      "username": "angieabr17l@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804148854.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 179,
+    "fields": {
+      "full_name": "Garcés Jerez Joseph William",
+      "email": "blnmorenita@gmail.com",
+      "username": "blnmorenita@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804762837.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 180,
+    "fields": {
+      "full_name": "Gavilanes Pinto Erick Kalel",
+      "email": "tierna_paver@hotmail.com",
+      "username": "tierna_paver@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804394672.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 181,
+    "fields": {
+      "full_name": "Manya Santiago Eliel Armando",
+      "email": "diegomanya504@gmail.com",
+      "username": "diegomanya504@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803685385.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 182,
+    "fields": {
+      "full_name": "Ochoa Lascano Fernando Ariel",
+      "email": "lascanokarina27@gmail.com",
+      "username": "lascanokarina27@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1850103449.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 183,
+    "fields": {
+      "full_name": "Paz Tamayo Marcus Evan",
+      "email": "tamayo2188@gmail.com",
+      "username": "tamayo2188@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804230447.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 184,
+    "fields": {
+      "full_name": "Portero Escudero Violeta Franchezka",
+      "email": "victoriaebonilla@outlook.es",
+      "username": "victoriaebonilla@outlook.es",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804192530.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 185,
+    "fields": {
+      "full_name": "Reinoso Proaño Danna Rafaela",
+      "email": "fe2766lixx@hotmail.com",
+      "username": "fe2766lixx@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803666500.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 186,
+    "fields": {
+      "full_name": "Sailema Villacres Adrián De Jesús",
+      "email": "clarita_villacres@hotmail.com",
+      "username": "clarita_villacres@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803838372.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 187,
+    "fields": {
+      "full_name": "Shyhua Ramos Yanua Jahel",
+      "email": "asamnoson@yahoo.com",
+      "username": "asamnoson@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1600399453.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 188,
+    "fields": {
+      "full_name": "Supe Rojas Dayana Isabella",
+      "email": "miryamrojas815@gmail.com",
+      "username": "miryamrojas815@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803141090.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 189,
+    "fields": {
+      "full_name": "Valencia Ashqui Santiago David",
+      "email": "micaela.ashqui.2016@gmail.com",
+      "username": "micaela.ashqui.2016@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "3o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804587010.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 190,
+    "fields": {
+      "full_name": "Caguana Condemaita Bryanna Solange",
+      "email": "rodrigochochin@hotmail.com",
+      "username": "rodrigochochin@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804760179.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 191,
+    "fields": {
+      "full_name": "Fonseca Pérez Joffre Gabriel",
+      "email": "cecitaperez12@gmail.com",
+      "username": "cecitaperez12@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 502802259.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 192,
+    "fields": {
+      "full_name": "Guaman Mullo Daisy Noemí",
+      "email": "rositamaria1410@gmail.com",
+      "username": "rositamaria1410@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 602580268.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 193,
+    "fields": {
+      "full_name": "Iza Mero Carlos Mateo",
+      "email": "katymero1992@gmail.com",
+      "username": "katymero1992@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804831681.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 194,
+    "fields": {
+      "full_name": "Sinche Masaquiza Mirza Zafiro",
+      "email": "ecoplastgalapagos2016@gmail.com",
+      "username": "ecoplastgalapagos2016@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802393403.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 195,
+    "fields": {
+      "full_name": "Sánchez Villacorte Tamya Soledad",
+      "email": "soledadmatita@gmail.com",
+      "username": "soledadmatita@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804009544.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 196,
+    "fields": {
+      "full_name": "Vega Ruiz Ángela Sofía",
+      "email": "ruizp0475@gmail.com",
+      "username": "ruizp0475@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "A (MATUTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804453296.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 197,
+    "fields": {
+      "full_name": "Alvarado Chicaiza Alejandra Elizabeth",
+      "email": "ruty1403@hotmail.com",
+      "username": "ruty1403@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804159828.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 198,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Allan Paul",
+      "email": "claudia_elizt@yahoo.com",
+      "username": "claudia_elizt@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1600299539.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 199,
+    "fields": {
+      "full_name": "Amancha Moposita Juan Pablo",
+      "email": "solamancha132@gmail.com",
+      "username": "solamancha132@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802300440.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 200,
+    "fields": {
+      "full_name": "Anja Cruz Ángeles Daniela",
+      "email": "danydaniel717@outlook.es",
+      "username": "danydaniel717@outlook.es",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804665295.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 201,
+    "fields": {
+      "full_name": "Arias Alarcón Mateo Sebastián",
+      "email": "maryualarcon5@gmail.com",
+      "username": "maryualarcon5@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804075041.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 202,
+    "fields": {
+      "full_name": "Checa Guerrero Emilia Salomé",
+      "email": "che_quim@yahoo.es",
+      "username": "che_quim@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1001979184.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 203,
+    "fields": {
+      "full_name": "Erazo Gavilanes Naomi Thais",
+      "email": "carlostudobem@gmail.com",
+      "username": "carlostudobem@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1102619317.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 204,
+    "fields": {
+      "full_name": "Flores Fernandez Alison Sarahi",
+      "email": "jopaf23@hotmail.com",
+      "username": "jopaf23@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802935484.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 205,
+    "fields": {
+      "full_name": "Guachambala Ramos Matías Caleb",
+      "email": "tuespaciobellezap@gmail.com",
+      "username": "tuespaciobellezap@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803513579.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 206,
+    "fields": {
+      "full_name": "Guaman Vargas Karla Analía",
+      "email": "jvargas300681@gmail.com",
+      "username": "jvargas300681@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803444734.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 207,
+    "fields": {
+      "full_name": "Jordán Pico Noa Micaela",
+      "email": "vane_pico31@hotmail.com",
+      "username": "vane_pico31@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804977658.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 208,
+    "fields": {
+      "full_name": "Muzo Espinoza Santiago Jesús",
+      "email": "patricia.d.espinoza.s@gmail.com",
+      "username": "patricia.d.espinoza.s@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1716547565.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 209,
+    "fields": {
+      "full_name": "Ocaña Uriarte Gabriel Alejandro",
+      "email": "consuuriarte80@gmail.com",
+      "username": "consuuriarte80@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 201636685.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 210,
+    "fields": {
+      "full_name": "Paredes Proaño David Ismael",
+      "email": "dparedesproanio1@gmail.com",
+      "username": "dparedesproanio1@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803078797.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 211,
+    "fields": {
+      "full_name": "Pérez Carvajal Andrea Salome",
+      "email": "maricelacarvajal44@gmail.com",
+      "username": "maricelacarvajal44@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803835956.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 212,
+    "fields": {
+      "full_name": "Velástegui Vilcacundo Martín Ignacio",
+      "email": "gruporadialcontinental@hotmail.com",
+      "username": "gruporadialcontinental@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802342939.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 213,
+    "fields": {
+      "full_name": "Villacrés López Verónica Kamila",
+      "email": "mayve.0110@gmail.com",
+      "username": "mayve.0110@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "B (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1802488534.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 214,
+    "fields": {
+      "full_name": "Andaluz Coba Hayden Joshua",
+      "email": "omarandaluz@yahoo.es",
+      "username": "omarandaluz@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803205879.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 215,
+    "fields": {
+      "full_name": "Bastidas Toapanta Helen Domenica",
+      "email": "bastidas.alex@yahoo.com",
+      "username": "bastidas.alex@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804983821.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 216,
+    "fields": {
+      "full_name": "Calle Apo Erick Alexander",
+      "email": "elbaapo22@gmail.com",
+      "username": "elbaapo22@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803721958.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 217,
+    "fields": {
+      "full_name": "Cordovilla Pérez Daniel Isaac",
+      "email": "repm18@yahoo.es",
+      "username": "repm18@yahoo.es",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803576121.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 218,
+    "fields": {
+      "full_name": "Cristellot Garcés Bianca Grazziela",
+      "email": "andreasolgarces@gmail.com",
+      "username": "andreasolgarces@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1713914156.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 219,
+    "fields": {
+      "full_name": "Gómez Párraga Jesús Alexander",
+      "email": "parragafabiola18@gmail.com",
+      "username": "parragafabiola18@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1308974672.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 220,
+    "fields": {
+      "full_name": "Jiménez Proaño María Paz",
+      "email": "deniseproao@gmail.com",
+      "username": "deniseproao@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803732567.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 221,
+    "fields": {
+      "full_name": "Medina Alcívar Dorian Dimitri",
+      "email": "vanessaalcivardova@gmail.com",
+      "username": "vanessaalcivardova@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804144671.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 222,
+    "fields": {
+      "full_name": "Rivadeneira Vivar David Sebastián",
+      "email": "mariesther7@gmail.com",
+      "username": "mariesther7@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803100492.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 223,
+    "fields": {
+      "full_name": "Sánchez Salinas Steven Adriel",
+      "email": "mercesc1980@hotmail.com",
+      "username": "mercesc1980@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803360106.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 224,
+    "fields": {
+      "full_name": "Telenchana Sánchez Alisson Evolet",
+      "email": "marydekcarmen1710@gmail.com",
+      "username": "marydekcarmen1710@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804174181.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 225,
+    "fields": {
+      "full_name": "Terán Anchaguano Danna Maite",
+      "email": "sabelitan@hotmail.com",
+      "username": "sabelitan@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 502074040.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 226,
+    "fields": {
+      "full_name": "Tobar Pérez Camila Alejandra",
+      "email": "glizperm@yahoo.com",
+      "username": "glizperm@yahoo.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803499266.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 227,
+    "fields": {
+      "full_name": "Valladares Mayorga Daniel Maximiliano",
+      "email": "daniela.mayorga1983@gmail.com",
+      "username": "daniela.mayorga1983@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1803591898.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 228,
+    "fields": {
+      "full_name": "Vallejo Insuasti Juan David",
+      "email": "elizsanec@hotmail.com",
+      "username": "elizsanec@hotmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1711119022.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 229,
+    "fields": {
+      "full_name": "Villa Sevilla Thiago Josué",
+      "email": "anitakity28@gmail.com",
+      "username": "anitakity28@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 1804015533.0
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 230,
+    "fields": {
+      "full_name": "Yaule Chingo Matías Joel",
+      "email": "matiasyaule56@gmail.com",
+      "username": "matiasyaule56@gmail.com",
+      "password_plano": "Cb2025$",
+      "grado": "5o",
+      "paralelo": "C (VESPERTINA)",
+      "rol": "ESTUDIANTE",
+      "rep_cedula": 503271082.0
+    }
+  }
+]

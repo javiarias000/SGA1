@@ -3,66 +3,180 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from teachers.models import Teacher
 from students.models import Student
 from django.db.models.signals import post_save, post_delete
-from django.db import models
 from decimal import Decimal
-from datetime import timezone
+from datetime import timezone, time
 from subjects.models import Subject
+from teachers.models import Teacher
+from users.models import Usuario
+
+
+class GradeLevel(models.Model):
+    """Modelo para Grado y Paralelo"""
+    LEVEL_CHOICES = [
+        ('1', 'Primero'),
+        ('2', 'Segundo'),
+        ('3', 'Tercero'),
+        ('4', 'Cuarto'),
+        ('5', 'Quinto'),
+        ('6', 'Sexto'),
+        ('7', 'Séptimo'),
+        ('8', 'Octavo'),
+        ('9', 'Noveno'),
+        ('10', 'Décimo'),
+        ('11', 'Onceavo'),
+    ]
+
+    level = models.CharField(
+        max_length=20,
+        choices=LEVEL_CHOICES,
+        verbose_name="Nivel"
+    )
+    section = models.CharField(
+        max_length=100,
+        verbose_name="Paralelo/Sección"
+    )
+
+    class Meta:
+        unique_together = ('level', 'section')
+        verbose_name = "Grado"
+        verbose_name_plural = "Grados"
+        ordering = ['level', 'section']
+
+    def __str__(self):
+        return f"{self.get_level_display()} '{self.section}'"
+
 
 class Clase(models.Model):
-    """Modelo para Clases/Cursos teóricos donde los estudiantes se matriculan"""
-    
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='clases_teoricas', verbose_name="Docente")
+    """Instancia académica de una materia en un ciclo lectivo.
+
+    Regla de negocio:
+    - Teoría/Agrupación: normalmente 1 clase por materia + ciclo + paralelo (o grado/paralelo).
+    - Instrumento: 1 clase por materia + ciclo + docente_base.
+    """
+
     name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='clases', verbose_name="Materia", null=True)
+
+    ciclo_lectivo = models.CharField(max_length=20, default='2025-2026', verbose_name='Ciclo lectivo')
+    paralelo = models.CharField(max_length=100, blank=True, default='', verbose_name='Paralelo')
+
+    # Responsable base (principalmente para Instrumento)
+    docente_base = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='clases_como_docente_base',
+        verbose_name='Docente base'
+    )
+
     description = models.TextField(blank=True, verbose_name="Descripción")
     schedule = models.CharField(max_length=200, blank=True, verbose_name="Horario")
     room = models.CharField(max_length=100, blank=True, verbose_name="Aula/Salón")
     max_students = models.PositiveIntegerField(default=30, verbose_name="Capacidad máxima")
     active = models.BooleanField(default=True, verbose_name="Activa")
     fecha = models.DateField(verbose_name="Fecha", null=True, blank=True)
+    grade_level = models.ForeignKey(GradeLevel, on_delete=models.SET_NULL, related_name='clases', verbose_name="Nivel/Paralelo", null=True, blank=True)
+    periodo = models.CharField(max_length=100, blank=True, verbose_name="Período Académico")
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
-        verbose_name = "Clase Teórica"
-        verbose_name_plural = "Clases Teóricas"
+        verbose_name = "Clase"
+        verbose_name_plural = "Clases"
         ordering = ['subject', 'name']
-    
+        constraints = [
+            # Teoría/Agrupación: subject + ciclo + paralelo
+            models.UniqueConstraint(
+                fields=['subject', 'ciclo_lectivo', 'paralelo'],
+                condition=models.Q(docente_base__isnull=True),
+                name='uniq_clase_subject_ciclo_paralelo_when_no_docente_base'
+            ),
+            # Instrumento: subject + ciclo + docente_base
+            models.UniqueConstraint(
+                fields=['subject', 'ciclo_lectivo', 'docente_base'],
+                condition=models.Q(docente_base__isnull=False),
+                name='uniq_clase_subject_ciclo_docente_base_when_docente_base'
+            ),
+        ]
+
     def __str__(self):
         return f"{self.subject} - {self.name}"
-    
+
     def get_enrolled_count(self):
-        """Número de estudiantes matriculados"""
-        return self.enrollments.filter(active=True).count()
-    
+        return self.enrollments.filter(estado='ACTIVO').count()
+
     def has_space(self):
-        """Verifica si hay espacio disponible"""
         return self.get_enrolled_count() < self.max_students
 
-#==========================================
-#MATRICULA ESTUDIANTES
-#==========================================
 
 class Enrollment(models.Model):
-    """Matrícula de estudiantes en clases teóricas"""
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="enrollments")
-    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="enrollments")
+    """Inscripción Estudiante–Clase–Docente."""
+
+    class Estado(models.TextChoices):
+        ACTIVO = 'ACTIVO', 'Activo'
+        RETIRADO = 'RETIRADO', 'Retirado'
+
+    estudiante = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='enrollments_as_student',
+        verbose_name='Estudiante'
+    )
+    clase = models.ForeignKey(
+        Clase,
+        on_delete=models.CASCADE,
+        related_name='enrollments',
+        verbose_name='Clase'
+    )
+    docente = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='enrollments_as_teacher',
+        verbose_name='Docente asignado'
+    )
+
+    estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.ACTIVO)
     date_enrolled = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ('student', 'clase')
-        verbose_name = "Matrícula"
-        verbose_name_plural = "Matrículas"
+        unique_together = ('estudiante', 'clase')
+        verbose_name = "Inscripción"
+        verbose_name_plural = "Inscripciones"
 
     def __str__(self):
-        return f"{self.student.name} en {self.clase.name}"
+        return f"{self.estudiante.nombre} en {self.clase.name}"
+
+
+class Horario(models.Model):
+    """Modelo para horarios de clases"""
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='horarios', verbose_name="Clase")
+    dia_semana = models.CharField(max_length=20, choices=[
+        ('Lunes', 'Lunes'), ('Martes', 'Martes'), ('Miércoles', 'Miércoles'),
+        ('Jueves', 'Jueves'), ('Viernes', 'Viernes'), ('Sábado', 'Sábado'),
+        ('Domingo', 'Domingo')
+    ], verbose_name="Día de la Semana")
+    hora_inicio = models.TimeField(verbose_name="Hora de Inicio")
+    hora_fin = models.TimeField(verbose_name="Hora de Fin")
+
+    class Meta:
+        unique_together = ('clase', 'dia_semana', 'hora_inicio')
+        verbose_name = "Horario"
+        verbose_name_plural = "Horarios"
+        ordering = ['dia_semana', 'hora_inicio']
+
+    def __str__(self):
+        return f"{self.clase.name} - {self.get_dia_semana_display()} ({self.hora_inicio}-{self.hora_fin})"
+
 
 class Activity(models.Model):
     """Modelo de Actividad/Clase"""
-    
+
     PERFORMANCE_CHOICES = [
         ('Excelente', 'Excelente'),
         ('Muy Bueno', 'Muy Bueno'),
@@ -70,7 +184,7 @@ class Activity(models.Model):
         ('Regular', 'Regular'),
         ('Necesita mejorar', 'Necesita mejorar'),
     ]
-    
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='activities', verbose_name="Estudiante")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='activities')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='activities', verbose_name="Materia", null=True)
@@ -117,11 +231,26 @@ class Activity(models.Model):
         super().save(*args, **kwargs)
     
     def get_teacher(self):
-        return self.student.teacher
+        # Obtener docente desde la inscripción del estudiante en la clase
+        if not self.student.usuario:
+            return None
+        enrollment = self.clase.enrollments.filter(estudiante=self.student.usuario, estado='ACTIVO').first()
+        if enrollment and enrollment.docente:
+            return enrollment.docente
+        return None
+
+
+# ============================================
+# LEGACY (compatibilidad)
+# ============================================
 
 
 class Grade(models.Model):
-    """Modelo para calificaciones/notas"""
+    """Modelo legacy de calificaciones (compatibilidad con vistas/templates antiguas).
+
+    Nota: El sistema nuevo usa Calificacion (por Enrollment) y/o CalificacionParcial.
+    """
+
     PERIOD_CHOICES = [
         ('Primer Parcial', 'Primer Parcial'),
         ('Segundo Parcial', 'Segundo Parcial'),
@@ -130,48 +259,105 @@ class Grade(models.Model):
         ('Quimestre 1', 'Quimestre 1'),
         ('Quimestre 2', 'Quimestre 2'),
     ]
-    
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades', verbose_name="Estudiante")
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades', verbose_name="Materia", null=True)
-    period = models.CharField(max_length=50, choices=PERIOD_CHOICES, verbose_name="Período")
-    score = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(10)], verbose_name="Calificación")
-    comments = models.TextField(blank=True, verbose_name="Comentarios")
-    date = models.DateField(verbose_name="Fecha de calificación")
+
+    student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='grades', verbose_name='Estudiante')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='grades', verbose_name='Materia', null=True)
+
+    period = models.CharField(max_length=50, choices=PERIOD_CHOICES, verbose_name='Período')
+    score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+        verbose_name='Calificación'
+    )
+    comments = models.TextField(blank=True, verbose_name='Comentarios')
+    date = models.DateField(verbose_name='Fecha de calificación')
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
+        verbose_name = 'Calificación'
+        verbose_name_plural = 'Calificaciones'
         ordering = ['-date']
-        verbose_name = "Calificación"
-        verbose_name_plural = "Calificaciones"
-        unique_together = ['student', 'subject', 'period']
-    
+        unique_together = [('student', 'subject', 'period')]
+
     def __str__(self):
-        return f"{self.student.name} - {self.subject} - {self.period}: {self.score}"
+        return f"{self.student} - {self.subject} - {self.period}: {self.score}"
 
 
 class Attendance(models.Model):
-    """Modelo para control de asistencia"""
+    """Modelo legacy de asistencia (compatibilidad con vistas/templates antiguas).
+
+    Nota: El sistema nuevo usa Asistencia (por Enrollment).
+    """
+
     STATUS_CHOICES = [
         ('Presente', '✅ Presente'),
         ('Ausente', '❌ Ausente'),
         ('Tardanza', '⏰ Tardanza'),
         ('Justificado', '📝 Justificado'),
     ]
-    
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='attendances', verbose_name="Estudiante")
-    date = models.DateField(verbose_name="Fecha")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Presente', verbose_name="Estado")
-    notes = models.TextField(blank=True, verbose_name="Observaciones")
+
+    student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='attendances', verbose_name='Estudiante')
+    date = models.DateField(verbose_name='Fecha')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Presente', verbose_name='Estado')
+    notes = models.TextField(blank=True, verbose_name='Observaciones')
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
+        verbose_name = 'Asistencia'
+        verbose_name_plural = 'Asistencias'
         ordering = ['-date']
-        verbose_name = "Asistencia"
-        verbose_name_plural = "Asistencias"
-        unique_together = ['student', 'date']
-    
+        unique_together = [('student', 'date')]
+
     def __str__(self):
-        return f"{self.student.name} - {self.date} - {self.status}"
+        return f"{self.student} - {self.date} - {self.status}"
+
+
+# ============================================
+# SISTEMA NUEVO (Enrollment-based)
+# ============================================
+
+
+class Calificacion(models.Model):
+    """Calificaciones por inscripción (permite múltiples notas por estudiante en una misma clase)."""
+
+    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='calificaciones')
+    descripcion = models.CharField(max_length=200)
+    nota = models.DecimalField(max_digits=5, decimal_places=2)
+    fecha = models.DateField()
+
+    class Meta:
+        verbose_name = 'Calificación'
+        verbose_name_plural = 'Calificaciones'
+        ordering = ['-fecha', 'id']
+
+    def __str__(self):
+        return f"{self.inscripcion.estudiante.nombre} - {self.descripcion}: {self.nota}"
+
+
+class Asistencia(models.Model):
+    """Asistencia por inscripción."""
+
+    class Estado(models.TextChoices):
+        PRESENTE = 'Presente', 'Presente'
+        AUSENTE = 'Ausente', 'Ausente'
+        JUSTIFICADO = 'Justificado', 'Justificado'
+
+    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='asistencias')
+    fecha = models.DateField()
+    estado = models.CharField(max_length=20, choices=Estado.choices)
+    observacion = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'Asistencia'
+        verbose_name_plural = 'Asistencias'
+        ordering = ['-fecha', 'id']
+        unique_together = [('inscripcion', 'fecha')]
+
+    def __str__(self):
+        return f"{self.inscripcion.estudiante.nombre} - {self.fecha} - {self.estado}"
+
+
 
 
 
@@ -242,7 +428,7 @@ class CalificacionParcial(models.Model):
     
     quimestre = models.CharField(
         max_length=2,
-        choices=QUIMESTRE_CHOICES,
+        choices=QUIMESTRE_CHOICES, # Corrected typo here
         default='Q1',
         verbose_name="Quimestre"
     )
@@ -289,7 +475,7 @@ class CalificacionParcial(models.Model):
         verbose_name = "Calificación Parcial"
         verbose_name_plural = "Calificaciones Parciales"
         unique_together = ['student', 'subject', 'parcial', 'quimestre', 'tipo_aporte']
-        ordering = ['-fecha_actualizacion', 'student__name']
+        ordering = ['-fecha_actualizacion', 'student__usuario__nombre']
         indexes = [
             models.Index(fields=['student', 'subject', 'parcial']),
             models.Index(fields=['student', 'quimestre']),
@@ -650,18 +836,7 @@ def actualizar_cache_promedios(sender, instance, **kwargs):
 # DEBERES
 # ============================================
 
-class Curso(models.Model):
-    nombre = models.CharField(max_length=100)
-    nivel = models.CharField(max_length=50)
-    estudiantes = models.ManyToManyField(User, related_name='cursos_estudiante', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        verbose_name_plural = "Cursos"
-        ordering = ['nombre']
-    
-    def __str__(self):
-        return self.nombre
+
 
 class Deber(models.Model):
     ESTADO_CHOICES = [
@@ -674,13 +849,13 @@ class Deber(models.Model):
     descripcion = models.TextField(blank=True)
     fecha_asignacion = models.DateTimeField(auto_now_add=True)
     fecha_entrega = models.DateTimeField()
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deberes_profesor')
+    teacher = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='deberes_profesor')
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='deberes', null=True, blank=True)
     puntos_totales = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     archivo_adjunto = models.FileField(upload_to='deberes/adjuntos/', blank=True, null=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='activo')
-    cursos = models.ManyToManyField(Curso, related_name='deberes', blank=True)
-    estudiantes_especificos = models.ManyToManyField(User, related_name='deberes_asignados', blank=True)
+
+    estudiantes_especificos = models.ManyToManyField(Usuario, related_name='deberes_asignados', blank=True)
     
     class Meta:
         verbose_name_plural = "Deberes"
@@ -689,9 +864,7 @@ class Deber(models.Model):
     def __str__(self):
         return f"{self.titulo} - {self.clase.subject}"
     
-    def total_estudiantes(self):
-        estudiantes_por_curso = User.objects.filter(cursos_estudiante__in=self.cursos.all())
-        return (estudiantes_por_curso | self.estudiantes_especificos.all()).distinct().count()
+
     
     def entregas_completadas(self):
         return self.entregas.filter(estado__in=['entregado', 'revisado', 'tarde']).count()
@@ -714,7 +887,7 @@ class DeberEntrega(models.Model):
     ]
     
     deber = models.ForeignKey(Deber, on_delete=models.CASCADE, related_name='entregas')
-    estudiante = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mis_entregas')
+    estudiante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='mis_entregas') # Changed to Usuario
     fecha_entrega = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
@@ -730,7 +903,7 @@ class DeberEntrega(models.Model):
         ordering = ['-fecha_entrega']
     
     def __str__(self):
-        return f"{self.deber.titulo} - {self.estudiante.username}"
+        return f"{self.deber.titulo} - {self.estudiante.nombre}" # Changed to .nombre
     
     def esta_tarde(self):
         return self.fecha_entrega > self.deber.fecha_entrega

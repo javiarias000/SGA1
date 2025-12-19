@@ -1,0 +1,1500 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Anilema Yuquilema Mathias Grabriel",
+      "docente_nombre": "Nulo",
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Cevallos Gavilanes Santiago David",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Curillo Chipantiza Josue Aaron",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Nuñez Chávez Martin David",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Valle Ortiz Ana Paula",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Villalva Pinto Diogo Alexander",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Carvajal Aguaguiña Andrea Mayte",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Manya Santiago Eliel Armando",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Paz Tamayo Marcus Evan",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Valencia Ashqui Santiago David",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Arboleda Jiménez Martin Emiliano",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Moreta Hernández María Emilia",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Núñez Caiza María Emilia",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Reinoso Toscano Ariana Michelle",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Segovia Mero Andrea Valentina",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Espín Hurtado Pablo Steffano",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Núñez Morales Mateo Sebastián",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Poalasin Paucar Fatima Ariana",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Santamaría Pérez Óscar Matías",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Arias Alarcón Mateo Sebastián",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Flores Fernandez Alison Sarahi",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Bastidas Toapanta Helen Domenica",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Gómez Párraga Jesús Alexander",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Sánchez Salinas Steven Adriel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Telenchana Sánchez Alisson Evolet",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Valladares Mayorga Daniel Maximiliano",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Vallejo Insuasti Juan David",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Villa Sevilla Thiago Josué",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Gavilanes Pinto Erick Kalel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 31,
+    "fields": {
+      "full_name": "Córdova Clavijo Luciana Valentina",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 32,
+    "fields": {
+      "full_name": "Urquizo Navarrete Mila Akemi",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 33,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 34,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Dylan Gael",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 35,
+    "fields": {
+      "full_name": "Ipiales Torres Marco Emilio",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 36,
+    "fields": {
+      "full_name": "Morocho Chuqui Paula Thais",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 37,
+    "fields": {
+      "full_name": "Garcés Jerez Joseph William",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 38,
+    "fields": {
+      "full_name": "Cristellot Garcés Adrián Ismael",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 39,
+    "fields": {
+      "full_name": "Gancino Guananga Adrián Vinicio",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 40,
+    "fields": {
+      "full_name": "Taco Lagos Doménica Monserrath",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 41,
+    "fields": {
+      "full_name": "Yuquilema Anilema Danna Yamileth",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 42,
+    "fields": {
+      "full_name": "Chasi Zurita Sofía Maricela",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 43,
+    "fields": {
+      "full_name": "Mera Hurtado Martin Ricardo",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 44,
+    "fields": {
+      "full_name": "Villacrés López Verónica Kamila",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 45,
+    "fields": {
+      "full_name": "Calle Apo Erick Alexander",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 46,
+    "fields": {
+      "full_name": "Mena Ramírez María Gracia",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 47,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 48,
+    "fields": {
+      "full_name": "Nuela Durán Maikel Sebastian",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 49,
+    "fields": {
+      "full_name": "Pérez Aveiga Mikaela Elizabeth",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 50,
+    "fields": {
+      "full_name": "Amancha Moposita Juan Pablo",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 51,
+    "fields": {
+      "full_name": "Jiménez Proaño María Paz",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 52,
+    "fields": {
+      "full_name": "Yaule Chingo Matías Joel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 53,
+    "fields": {
+      "full_name": "Solis Jerez Jared Sebastián",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 54,
+    "fields": {
+      "full_name": "Ochoa Lascano Fernando Ariel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 55,
+    "fields": {
+      "full_name": "Núñez Caiza Adrián Mateo",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 56,
+    "fields": {
+      "full_name": "Merino López Emily Monserrath",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 57,
+    "fields": {
+      "full_name": "Velástegui Vilcacundo Martín Ignacio",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 58,
+    "fields": {
+      "full_name": "Andaluz Coba Anton Jhosmar",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 59,
+    "fields": {
+      "full_name": "Yanez Rivera Angelo Josue",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 60,
+    "fields": {
+      "full_name": "Muzo Espinoza Santiago Jesús",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 61,
+    "fields": {
+      "full_name": "Casa Martínez Adrián Alexander",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 62,
+    "fields": {
+      "full_name": "Guachambala Ramos Matías Caleb",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 63,
+    "fields": {
+      "full_name": "Cordovilla Pérez Daniel Isaac",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 64,
+    "fields": {
+      "full_name": "Apellidos Del Estudiante Nombres Del Estudiante",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "Año de estudio",
+      "paralelo": "PARALELO (señalar el mismo paralelo en el que estuvieron el año anterior)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 65,
+    "fields": {
+      "full_name": "Tapia Barona Dana Sahyri",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 66,
+    "fields": {
+      "full_name": "Tustón Lucero Leandro Gael",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 67,
+    "fields": {
+      "full_name": "Gaibor Abril Ariana Polette",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 68,
+    "fields": {
+      "full_name": "Alvarado Chávez Dana Noemi",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 69,
+    "fields": {
+      "full_name": "Ramírez Castro Johan Gabriel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 70,
+    "fields": {
+      "full_name": "Chuqui Anilema Dante Zaed",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 71,
+    "fields": {
+      "full_name": "Shyhua Ramos Yanua Jahel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 72,
+    "fields": {
+      "full_name": "Aponte Ipiales Ivanna Lucero",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 73,
+    "fields": {
+      "full_name": "Narvaez Borja Isabella Valentina",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 74,
+    "fields": {
+      "full_name": "Anja Cruz Ángeles Daniela",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 75,
+    "fields": {
+      "full_name": "Altamirano Castillo Arelys Macarena",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 76,
+    "fields": {
+      "full_name": "Rios Simba Emiliana Hadasa",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 77,
+    "fields": {
+      "full_name": "Tipán Chalán Josué Benjamín",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 78,
+    "fields": {
+      "full_name": "Tipan Toalombo Alan Samuel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 79,
+    "fields": {
+      "full_name": "Andachi González Carlos Ariel",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 80,
+    "fields": {
+      "full_name": "Cambo Cuji Keyla Lucíana",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 81,
+    "fields": {
+      "full_name": "Portero Escudero Violeta Franchezka",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 82,
+    "fields": {
+      "full_name": "Reinoso Proaño Danna Rafaela",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 83,
+    "fields": {
+      "full_name": "Sailema Villacres Adrián De Jesús",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 84,
+    "fields": {
+      "full_name": "Supe Rojas Dayana Isabella",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 85,
+    "fields": {
+      "full_name": "Núñez Caiza Germán Alejandro",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 86,
+    "fields": {
+      "full_name": "Pérez Moncayo Bianca Emilia",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 87,
+    "fields": {
+      "full_name": "Pérez Sánchez Camila Sarahí",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 88,
+    "fields": {
+      "full_name": "Santiana Ortega Anayeli Samantha",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 89,
+    "fields": {
+      "full_name": "Solís Zanipatin Megan Amaya",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 90,
+    "fields": {
+      "full_name": "Calucho Hurtado Violeta Salome",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 91,
+    "fields": {
+      "full_name": "Chagmana Toapanta Kerly Alejandra",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 92,
+    "fields": {
+      "full_name": "Garcés Espinoza Ángel Emiliano",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 93,
+    "fields": {
+      "full_name": "Oñate Vargas María José",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 94,
+    "fields": {
+      "full_name": "Amancha Montesdeoca Allan Paul",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 95,
+    "fields": {
+      "full_name": "Checa Guerrero Emilia Salomé",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 96,
+    "fields": {
+      "full_name": "Guaman Vargas Karla Analía",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 97,
+    "fields": {
+      "full_name": "Jordán Pico Noa Micaela",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 98,
+    "fields": {
+      "full_name": "Ocaña Uriarte Gabriel Alejandro",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 99,
+    "fields": {
+      "full_name": "Pérez Carvajal Andrea Salome",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 100,
+    "fields": {
+      "full_name": "Andaluz Coba Hayden Joshua",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 101,
+    "fields": {
+      "full_name": "Cristellot Garcés Bianca Grazziela",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 102,
+    "fields": {
+      "full_name": "Terán Anchaguano Danna Maite",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 103,
+    "fields": {
+      "full_name": "Romero Ortiz Valentina Monserrath",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 104,
+    "fields": {
+      "full_name": "Cortes Sanchez Kalebh Felipe",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 105,
+    "fields": {
+      "full_name": "Tobar Pérez Camila Alejandra",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 106,
+    "fields": {
+      "full_name": "Medina Alcívar Dorian Dimitri",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 107,
+    "fields": {
+      "full_name": "Alulema Meza Kaely Valentina",
+      "docente_nombre": null,
+      "clase": "Conj. Inst",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Conj. Inst",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

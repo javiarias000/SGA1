@@ -1,32 +1,28 @@
 from django import forms
-from classes.models import Deber, DeberEntrega, Curso, Clase
+from classes.models import Deber, DeberEntrega, Clase
 from django.contrib.auth.models import User
 
 from teachers.models import Teacher 
+from users.models import Usuario # Added import
 # Removed: from subjects.models import Subject
 
 class DeberForm(forms.ModelForm):
     # Removed: subject field
 
-    cursos = forms.ModelMultipleChoiceField(
-        queryset=Curso.objects.none(),  # se filtrará en __init__
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        label="Asignar a Cursos"
-    )
+
 
     estudiantes_especificos = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(groups__name='Estudiantes'),
+        queryset=Usuario.objects.filter(rol=Usuario.Rol.ESTUDIANTE),
         widget=forms.CheckboxSelectMultiple,
         required=False,
         label="Estudiantes Específicos (opcional)",
-        help_text="Deja vacío para asignar a todos los estudiantes de los cursos seleccionados"
+        help_text="Deja vacío para asignar a todos los estudiantes"
     )
 
     class Meta:
         model = Deber
-        fields = ['titulo', 'descripcion', 'clase', 'fecha_entrega', # Removed 'subject'
-                  'puntos_totales', 'archivo_adjunto', 'estado', 'cursos', 'estudiantes_especificos']
+        fields = ['titulo', 'descripcion', 'clase', 'fecha_entrega',
+                  'puntos_totales', 'archivo_adjunto', 'estado', 'estudiantes_especificos']
         widgets = {
             'titulo': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -70,8 +66,7 @@ class DeberForm(forms.ModelForm):
             # Filtrar solo las clases del profesor
             self.fields['clase'].queryset = Clase.objects.filter(teacher=teacher)
 
-            # Filtrar cursos relacionados con las clases del teacher
-            self.fields['cursos'].queryset = Curso.objects.all()
+
 
             # Si no hay clases, agregar mensaje de ayuda
             if not self.fields['clase'].queryset.exists():

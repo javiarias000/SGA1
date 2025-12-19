@@ -1,0 +1,1696 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Nuñez Conteron Yanniz Charlotte",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Paredes Toasa Julián Emanuel",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Arboleda Jiménez Martin Emiliano",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Valle Ortiz Ana Paula",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Fernández Jaque André Matias",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Perez Alvarez Alex Steven",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Aguinda Cevallos Cristian Francisco",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Solis Vizuete Emilia Marcela",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Pinda Allaica Misael Awki",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Usulla Quilligana Mathias Alexander",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Checa Vivanco Sarahí Escarlett",
+      "docente_nombre": "Acosta Zagal Karolina",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Martínez López Wendy Sofía",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Huayta Mundocorre Grace Anely",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Curillo Chipantiza Josue Aaron",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Paz Tamayo Marcus Evan",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Núñez Caiza María Emilia",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Segovia Mero Andrea Valentina",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Valladares Mayorga Daniel Maximiliano",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Checa Vivanco Jordy Gael",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Barrionuevo Mejia Danna Valeska",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Sánchez Gavilanes Samantha Sarahí",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Guerrero Valencia Dylan Nicolás",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Villacres Santiana Genesis Elizabeth",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Chisag Guamán Doménica Anahí",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Salazar Córdova Mathías Andrés",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Guachanbala Cunama Maily Magdalena",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Quispe Castillo Ailin Escarleth",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Veloz Rojas Valeria Elizabeth",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Miranda Villacrés Zoe Nebraska",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Manjarres Bonilla Alisson Mayreth",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 31,
+    "fields": {
+      "full_name": "Mena Ramírez Cristian Iván",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 32,
+    "fields": {
+      "full_name": "Cárdenas Basantes Samara Elizabeth",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 33,
+    "fields": {
+      "full_name": "Chaglla Toasa Ayeleth Hadasha",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 34,
+    "fields": {
+      "full_name": "Paredes Crespo Josué Antonio",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 35,
+    "fields": {
+      "full_name": "Chaglla Villacres Darla Angelina",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 36,
+    "fields": {
+      "full_name": "Bastidas Toapanta Helen Domenica",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 37,
+    "fields": {
+      "full_name": "Sánchez Salinas Steven Adriel",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 38,
+    "fields": {
+      "full_name": "Villa Sevilla Thiago Josué",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 39,
+    "fields": {
+      "full_name": "Hidalgo Guevara Andres Sebastian",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 40,
+    "fields": {
+      "full_name": "Jiménez Chicaiza Willams Mateo",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 41,
+    "fields": {
+      "full_name": "Aragón Peñafiel Danna Julieth",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 42,
+    "fields": {
+      "full_name": "Barreno Ocaña Analia Monserratte",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 43,
+    "fields": {
+      "full_name": "Chávez Viera Matías Gabriel",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 44,
+    "fields": {
+      "full_name": "Anilema Yuquilema Mathias Grabriel",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 45,
+    "fields": {
+      "full_name": "Arias Alarcón Mateo Sebastián",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 46,
+    "fields": {
+      "full_name": "Flores Fernandez Alison Sarahi",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 47,
+    "fields": {
+      "full_name": "Chuqui Anilema Diego Aldair",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 48,
+    "fields": {
+      "full_name": "Quinapanta Romero Leandro Javier",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 49,
+    "fields": {
+      "full_name": "Sánchez Placencia Dana Paola",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 50,
+    "fields": {
+      "full_name": "Huayta Mundocorre Evelyn Alina",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 51,
+    "fields": {
+      "full_name": "Rivera Chagmana Lizeth Anabel",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 52,
+    "fields": {
+      "full_name": "Lucio Rojano Fernando Xavier",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 53,
+    "fields": {
+      "full_name": "Moreta Chicaiza Alisson Domenica",
+      "docente_nombre": "Chicaiza Orozco Marcelo Javier",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 54,
+    "fields": {
+      "full_name": "Marfetán Salinas Andrea Belén",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 55,
+    "fields": {
+      "full_name": "Carvajal Aguaguiña Andrea Mayte",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 56,
+    "fields": {
+      "full_name": "Moreta Hernández María Emilia",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 57,
+    "fields": {
+      "full_name": "Telenchana Sánchez Alisson Evolet",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 58,
+    "fields": {
+      "full_name": "Vallejo Insuasti Juan David",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 59,
+    "fields": {
+      "full_name": "Pérez Jaya Richard Alejandro",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 60,
+    "fields": {
+      "full_name": "Guamán Zapata Matías Alejandro",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 61,
+    "fields": {
+      "full_name": "Bastidas Mangui Lemiton Oneal",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 62,
+    "fields": {
+      "full_name": "López Pazmiño Aily De Jesús",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 63,
+    "fields": {
+      "full_name": "Tenesaca Palate Lady Morelia",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 64,
+    "fields": {
+      "full_name": "Cabezas Aveiga Paula Sarahí",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 65,
+    "fields": {
+      "full_name": "Vela Altamirano Alice Samara",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 66,
+    "fields": {
+      "full_name": "Viera Lezano Marco Israel",
+      "docente_nombre": "Díaz Loyola David Descartes",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 67,
+    "fields": {
+      "full_name": "Guananga Carrera Daniela Alexandra",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 68,
+    "fields": {
+      "full_name": "Pérez Sánchez Isabella Sofía",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 69,
+    "fields": {
+      "full_name": "Santana Miranda Lesly Salome",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 70,
+    "fields": {
+      "full_name": "Gómez Párraga Jesús Alexander",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 71,
+    "fields": {
+      "full_name": "Guamán Flores Poleth Anahi",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 72,
+    "fields": {
+      "full_name": "Chuqui Caguano Alison Belen",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 73,
+    "fields": {
+      "full_name": "Paredes Armas Samantha Estefanía",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 74,
+    "fields": {
+      "full_name": "Espinoza De Los Monteros Lema Nahomi Salomé",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 75,
+    "fields": {
+      "full_name": "Rodríguez Bazurto Bryan Ismael",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 76,
+    "fields": {
+      "full_name": "Lema Peñaloza Paula Ivanova",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 77,
+    "fields": {
+      "full_name": "Estrada Supe Saila Irais",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 78,
+    "fields": {
+      "full_name": "Pérez Criollo Daniela Abigail",
+      "docente_nombre": "Erazo Moreno Carlos Efrén",
+      "clase": "Piano",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 79,
+    "fields": {
+      "full_name": "Ramos Chango Mathias Jair",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 80,
+    "fields": {
+      "full_name": "Villalva Pinto Diogo Alexander",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 81,
+    "fields": {
+      "full_name": "Bombón Montero Dylan Jair",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 82,
+    "fields": {
+      "full_name": "Bagua Buenaño Ariel Sebastián",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 83,
+    "fields": {
+      "full_name": "Sánchez Gavilanes Andrea Estefania",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 84,
+    "fields": {
+      "full_name": "Albuja Cortes Sofia",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 85,
+    "fields": {
+      "full_name": "Manya Santiago Eliel Armando",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 86,
+    "fields": {
+      "full_name": "Pérez Carvajal Mateo Gabriel",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 87,
+    "fields": {
+      "full_name": "Villar Contreras Christian Andrés",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 88,
+    "fields": {
+      "full_name": "Castillo Romero Joshua",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 89,
+    "fields": {
+      "full_name": "Vallejo Insuasti Aaron Sebastian",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 90,
+    "fields": {
+      "full_name": "Zamora López Keyla Paulina",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 91,
+    "fields": {
+      "full_name": "Cañar Machuca Christopher Ariel",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 92,
+    "fields": {
+      "full_name": "Pullutasig Moposita Mathias Jesús",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 93,
+    "fields": {
+      "full_name": "López Lozada Luis Sebastian",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 94,
+    "fields": {
+      "full_name": "Ojeda Villacres Angel Matias",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 95,
+    "fields": {
+      "full_name": "Herrera Martínez María Alejandra",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 96,
+    "fields": {
+      "full_name": "Masabanda Shambi Mateo Adrian",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 97,
+    "fields": {
+      "full_name": "Reinoso Toscano Ariana Michelle",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 98,
+    "fields": {
+      "full_name": "Espín Hurtado Pablo Steffano",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 99,
+    "fields": {
+      "full_name": "Núñez Morales Mateo Sebastián",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 100,
+    "fields": {
+      "full_name": "Poalasin Paucar Fatima Ariana",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 101,
+    "fields": {
+      "full_name": "Santamaría Pérez Óscar Matías",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 102,
+    "fields": {
+      "full_name": "Bonilla Costales Ismael Alejandro",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 103,
+    "fields": {
+      "full_name": "Acosta Guamán Lucas Benjamín",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 104,
+    "fields": {
+      "full_name": "Cushpa Paredes Ángeles Daniela",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 105,
+    "fields": {
+      "full_name": "Iza Mero Jesús Mathias",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 106,
+    "fields": {
+      "full_name": "Chulco Bimboza Solange Anahi",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 107,
+    "fields": {
+      "full_name": "Mena Rampón Dante Mena",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 108,
+    "fields": {
+      "full_name": "Vargas Masabanda Matías Samuel",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 109,
+    "fields": {
+      "full_name": "Sánchez Villacorte Tamya Soledad",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 110,
+    "fields": {
+      "full_name": "Cedeño Vanegas Karen Daniela",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 111,
+    "fields": {
+      "full_name": "Fonseca Pérez Christopher Alexander",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 112,
+    "fields": {
+      "full_name": "Cevallos Gavilanes Santiago David",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 113,
+    "fields": {
+      "full_name": "Nuñez Chávez Martin David",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 114,
+    "fields": {
+      "full_name": "Valencia Ashqui Santiago David",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 115,
+    "fields": {
+      "full_name": "Acurio Pérez Naomi Salomé",
+      "docente_nombre": "Solís Solís Juan Francisco",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 116,
+    "fields": {
+      "full_name": "Lopez Llanos Dylan Maximiliano",
+      "docente_nombre": "Chicaiza Yánez Jefferson Alexander",
+      "clase": "Piano",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 117,
+    "fields": {
+      "full_name": "Alulema Meza Kaely Valentina",
+      "docente_nombre": "De La Cruz Changalombo Jorge Ramiro",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 118,
+    "fields": {
+      "full_name": "Medina Alcívar Dorian Dimitri",
+      "docente_nombre": "Caiza Caiza Roberto Carlos",
+      "clase": "Piano",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 119,
+    "fields": {
+      "full_name": "Coral Narváez Sara Emilia",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 120,
+    "fields": {
+      "full_name": "Guerrón La Rosa Emily Madeline",
+      "docente_nombre": "Pérez Toapanta Diego Armando",
+      "clase": "Piano",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 121,
+    "fields": {
+      "full_name": "Cortes Sanchez Kalebh Felipe",
+      "docente_nombre": "Quinapanta Tibán Angel Rodrigo",
+      "clase": "Piano",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Teclados",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

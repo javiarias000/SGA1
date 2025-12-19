@@ -1,0 +1,44 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Gaibor Tipanluiza Nahomy Isabella",
+      "docente_nombre": "Vasquez Sánchez David Hernán",
+      "clase": "Contrabajo",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Ortiz Arias Josué Alexander",
+      "docente_nombre": "Vasquez Sánchez David Hernán",
+      "clase": "Contrabajo",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Gutiérrez Ajila Mateo David",
+      "docente_nombre": "Vasquez Sánchez David Hernán",
+      "clase": "Contrabajo",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

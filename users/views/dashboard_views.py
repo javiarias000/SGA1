@@ -8,7 +8,7 @@ from django.db.models import Avg
 from users.views.decorators import teacher_required, student_required
 
 # Importar modelos
-from classes.models import Clase, Activity, Attendance, Grade
+from classes.models import Clase, Activity, Attendance, CalificacionParcial
 
 
 # ============================================
@@ -98,9 +98,9 @@ def student_dashboard_view(request):
     ).order_by('-date')[:10]
     
     # Obtener calificaciones
-    mis_calificaciones = Grade.objects.filter(
+    mis_calificaciones = CalificacionParcial.objects.filter(
         student=estudiante
-    ).order_by('-date')[:5]
+    ).order_by('-fecha_registro')[:5]
     
     # Obtener asistencias recientes
     mis_asistencias = Attendance.objects.filter(
@@ -116,9 +116,7 @@ def student_dashboard_view(request):
     ).count()
     
     # Calcular promedio de calificaciones
-    promedio = Grade.objects.filter(student=estudiante).aggregate(
-        promedio=Avg('score')
-    )['promedio'] or 0
+    promedio = CalificacionParcial.calcular_promedio_general(estudiante)
     
     # Calcular porcentaje de asistencia
     porcentaje_asistencia = 0

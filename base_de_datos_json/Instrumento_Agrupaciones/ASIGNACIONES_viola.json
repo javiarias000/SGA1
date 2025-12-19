@@ -1,0 +1,128 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Sánchez Chávez Ana Paula",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Viola",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Chuqui Anilema Dante Zaed",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Viola",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Shyhua Ramos Yanua Jahel",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Viola",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Aponte Ipiales Ivanna Lucero",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Viola",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Anja Cruz Ángeles Daniela",
+      "docente_nombre": "Jiménez Vega Mauricio Marmonte",
+      "clase": "Viola",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Vallejo Larrea Maria Isabella",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Viola",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Curay Barona Jaidy Kathleen",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Viola",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Narvaez Borja Isabella Valentina",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Viola",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Vasquez Sánchez Dilan Ricardo",
+      "docente_nombre": "Sumbana Quinapanta Luis Enrique",
+      "clase": "Viola",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

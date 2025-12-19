@@ -184,6 +184,41 @@
         </div>
     </div>
 
+    <!-- Mis Clases Asignadas -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0"><i class="fas fa-chalkboard-teacher"></i> Mis Clases Asignadas</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Horario</th>
+                            <th>Materia</th>
+                            <th>Curso</th>
+                            <th>Aula</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for clase in teacher_clases %}
+                        <tr>
+                            <td>{{ clase.schedule }}</td>
+                            <td>{{ clase.subject.name }}</td>
+                            <td>{{ clase.grade_level }}</td>
+                            <td>{{ clase.room|default:'N/A' }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">No tienes clases asignadas.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- Formulario de Registro de Calificaciones -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-primary text-white">

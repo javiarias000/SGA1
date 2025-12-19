@@ -12,11 +12,6 @@ urlpatterns = [
     path('clases/', views.student_classes_view, name='classes'),
     path('matricula/<int:clase_id>/', views.student_enroll_view, name='enroll'),
     
-    # Calificaciones
-    path('calificaciones/', views.student_grades_view, name='grades'),
-    
-    # Asistencia
-    path('asistencia/', views.student_attendance_view, name='attendance'),
 
     # Deberes
     path('deberes/', views.student_homework_view, name='homework'),

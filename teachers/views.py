@@ -19,21 +19,101 @@ from users.views.decorators import teacher_required, student_required
 # Importar modelos
 from teachers.models import Teacher
 from students.models import Student
-from classes.models import Activity, Grade, Attendance, Clase, Enrollment, CalificacionParcial, TipoAporte, PromedioCache, Deber, DeberEntrega, Curso
+from subjects.models import Subject
+from classes.models import (
+    Activity,
+    Attendance,
+    CalificacionParcial,
+    Clase,
+    Deber,
+    DeberEntrega,
+    Enrollment,
+    PromedioCache,
+    TipoAporte,
+)
 
-# Importar formularios (si existen)
-try:
-    from classes.forms import StudentForm, ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm, ClaseForm
-except ImportError:
-    pass
+from students.forms import StudentForm
+from classes.forms import ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm, ClaseForm
 
 
 from .forms import DeberForm, DeberEntregaForm, CalificacionForm
 
-
 # ============================================
 # DASHBOARD DOCENTE
 # ============================================
+
+
+def _teacher_usuario(teacher: Teacher):
+    return getattr(teacher, 'usuario', None)
+
+
+def _teacher_clases_qs(teacher: Teacher):
+    """Clases asociadas a un docente según el modelo nuevo.
+
+    - Por instrumentación: Clase.docente_base = teacher.usuario
+    - Por asignación: Enrollment.docente = teacher.usuario
+    """
+    tu = _teacher_usuario(teacher)
+    if not tu:
+        return Clase.objects.none()
+
+    return Clase.objects.filter(
+        Q(docente_base=tu) | Q(enrollments__docente=tu)
+    ).distinct()
+
+
+def _coerce_subject(subject_value):
+    """Acepta id o instancia; devuelve Subject o None."""
+    if not subject_value:
+        return None
+    if isinstance(subject_value, Subject):
+        return subject_value
+    try:
+        return Subject.objects.get(pk=subject_value)
+    except Exception:
+        return Subject.objects.filter(name=str(subject_value).strip()).first()
+
+
+def _get_or_create_clase_for_teacher_subject(teacher: Teacher, student: Student, subject: Subject) -> Clase:
+    tu = _teacher_usuario(teacher)
+    if not tu:
+        raise ValueError('Teacher.usuario no está configurado')
+
+    # 1) Buscar Enrollment existente (más fiel a la realidad)
+    if student and getattr(student, 'usuario_id', None):
+        enrollment = Enrollment.objects.filter(
+            estudiante=student.usuario,
+            clase__subject=subject,
+            docente=tu,
+            estado='ACTIVO',
+        ).select_related('clase').first()
+        if enrollment:
+            return enrollment.clase
+
+    # 2) Buscar Clase de instrumento del docente
+    clase = Clase.objects.filter(subject=subject, docente_base=tu, ciclo_lectivo='2025-2026').first()
+    if clase:
+        return clase
+
+    # 3) Crear Clase + Enrollment mínimo
+    clase = Clase.objects.create(
+        name=f"{subject.name} - {teacher.full_name}",
+        subject=subject,
+        ciclo_lectivo='2025-2026',
+        docente_base=tu,
+        paralelo='',
+        active=True,
+        description='Clase auto-creada para informes desde dashboard',
+    )
+
+    if student and getattr(student, 'usuario_id', None):
+        Enrollment.objects.get_or_create(
+            estudiante=student.usuario,
+            clase=clase,
+            defaults={'docente': tu, 'estado': 'ACTIVO'},
+        )
+
+    return clase
 
 
 
@@ -89,22 +169,19 @@ def teacher_dashboard(request):
                 student = get_object_or_404(Student, id=student_id, teacher=teacher)
                 fecha = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-                # Obtener o crear Clase asociada del docente por materia
-                clase = Clase.objects.filter(teacher=teacher, subject=subject).first()
-                if not clase:
-                    clase = Clase.objects.create(
-                        teacher=teacher,
-                        name=f"{subject} - {teacher.full_name}",
-                        subject=subject,
-                        description='Clase auto-creada para informes desde dashboard',
-                        active=True
-                    )
+                subject_obj = _coerce_subject(subject)
+                if not subject_obj:
+                    messages.error(request, 'Materia inválida')
+                    return redirect('teachers:teacher_dashboard')
+
+                # Obtener o crear Clase asociada del docente por materia (modelo nuevo)
+                clase = _get_or_create_clase_for_teacher_subject(teacher, student, subject_obj)
 
                 # Número de clase se autogenera en save() si se deja en blanco
                 activity = Activity(
                     student=student,
                     clase=clase,
-                    subject=subject,
+                    subject=subject_obj,
                     class_number=0,
                     date=fecha,
                     topics_worked=topics,
@@ -122,7 +199,7 @@ def teacher_dashboard(request):
                     reports_root = os.path.join(settings.BASE_DIR, 'static', 'teachers', 'reports', str(student.id))
                     os.makedirs(reports_root, exist_ok=True)
                     filename = f"Docente_{student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
-                    content = f"""REGISTRO ACADÉMICO - MÚSICA\nInforme para el Docente\n\nFecha: {activity.date.strftime('%d/%m/%Y')}\nID Registro: #{activity.id}\nClase #{activity.class_number}\n\nESTUDIANTE: {student.name}\nAño escolar: {student.grade}\nMateria: {activity.subject}\nDocente: {teacher.full_name}\n\nCONTENIDO DE LA CLASE:\n{activity.topics_worked or 'No especificado'}\n\nTÉCNICAS:\n{activity.techniques or 'No especificado'}\n\nREPERTORIO:\n{activity.pieces or 'No especificado'}\n\nEVALUACIÓN: {activity.performance}\n\nNOTAS:\n{activity.observations or 'Sin observaciones'}\n"""
+                    content = f"""REGISTRO ACADÉMICO - MÚSICA\nInforme para el Docente\n\nFecha: {activity.date.strftime('%d/%m/%Y')}\nID Registro: #{activity.id}\nClase #{activity.class_number}\n\nESTUDIANTE: {student.name}\nAño escolar: {student.grade_level}\nMateria: {activity.subject}\nDocente: {teacher.full_name}\n\nCONTENIDO DE LA CLASE:\n{activity.topics_worked or 'No especificado'}\n\nTÉCNICAS:\n{activity.techniques or 'No especificado'}\n\nREPERTORIO:\n{activity.pieces or 'No especificado'}\n\nEVALUACIÓN: {activity.performance}\n\nNOTAS:\n{activity.observations or 'Sin observaciones'}\n"""
                     with open(os.path.join(reports_root, filename), 'w', encoding='utf-8') as f:
                         f.write(content)
                 except Exception:
@@ -142,7 +219,7 @@ def teacher_dashboard(request):
     # ==========================================
     
     # Estudiantes activos
-    estudiantes = teacher.students.filter(active=True).order_by('name')
+    estudiantes = teacher.students.filter(active=True).order_by('usuario__nombre')
     total_students = estudiantes.count()
     
     # Actividades y clases
@@ -153,16 +230,7 @@ def teacher_dashboard(request):
         date=today
     ).select_related('student')
     
-    # Asistencias de hoy y formulario de asistencia en dashboard
-    attendances_today = Attendance.objects.filter(
-        student__teacher=teacher,
-        date=today
-    ).select_related('student').order_by('student__name')
-    attendance_form = None
-    try:
-        attendance_form = AttendanceForm(teacher=teacher)
-    except Exception:
-        attendance_form = None
+
     
     # Última semana
     last_week = today - timedelta(days=7)
@@ -242,6 +310,9 @@ def teacher_dashboard(request):
             else:
                 colores.append('#EF4444')
 
+    # Clases del docente
+    teacher_clases = _teacher_clases_qs(teacher).select_related('subject').order_by('subject__name', 'name')
+
     context = {
         'teacher': teacher,
         'total_students': total_students,
@@ -252,8 +323,6 @@ def teacher_dashboard(request):
         'tipos_aportes': tipos_aportes,
         'materias': materias,
         'calificaciones_recientes': calificaciones_recientes,
-        'attendances_today': attendances_today,
-        'attendance_form': attendance_form,
         'top_estudiantes': top_estudiantes,
         'estudiantes_en_riesgo': estudiantes_en_riesgo,
         'stats_por_escala': stats_por_escala,
@@ -263,6 +332,7 @@ def teacher_dashboard(request):
         'estudiantes_nombres': json.dumps(nombres),
         'estudiantes_promedios': json.dumps(promedios),
         'colores_escalas': json.dumps(colores),
+        'teacher_clases': teacher_clases,
     }
 
     return render(request, 'teachers/dashboard_unified.html', context)
@@ -273,6 +343,10 @@ def _guardar_calificaciones(request, teacher):
     try:
         student_id = request.POST.get('student_id')
         subject = request.POST.get('subject')
+        subject_obj = _coerce_subject(subject)
+        if not subject_obj:
+            messages.error(request, 'Materia inválida')
+            return redirect('teachers:teacher_dashboard')
         parcial = request.POST.get('parcial', '1P')
         quimestre = request.POST.get('quimestre', 'Q1')
         observaciones_generales = request.POST.get('observaciones', '')
@@ -332,7 +406,7 @@ def _guardar_calificaciones(request, teacher):
                         # Crear o actualizar calificación
                         calif, created = CalificacionParcial.objects.update_or_create(
                             student=student,
-                            subject=subject,
+                            subject=subject_obj,
                             parcial=parcial,
                             quimestre=quimestre,
                             tipo_aporte=tipo_aporte,
@@ -354,7 +428,7 @@ def _guardar_calificaciones(request, teacher):
         if calificaciones_guardadas > 0:
             # Calcular promedio del parcial
             promedio_parcial = CalificacionParcial.calcular_promedio_parcial(
-                student, subject, parcial, quimestre
+                student, subject_obj, parcial, quimestre
             )
             
             messages.success(
@@ -397,6 +471,10 @@ def _guardar_unificado(request, teacher):
     try:
         student_id = request.POST.get('student_id')
         subject = request.POST.get('subject')
+        subject_obj = _coerce_subject(subject)
+        if not subject_obj:
+            messages.error(request, 'Materia inválida')
+            return redirect('teachers:teacher_dashboard')
         parcial = request.POST.get('parcial', '1P')
         quimestre = request.POST.get('quimestre', 'Q1')
         fecha_str = request.POST.get('date')
@@ -435,7 +513,7 @@ def _guardar_unificado(request, teacher):
                     observaciones_completas = f"{observaciones_generales}\n{obs_aporte}".strip()
                     CalificacionParcial.objects.update_or_create(
                         student=student,
-                        subject=subject,
+                        subject=subject_obj,
                         parcial=parcial,
                         quimestre=quimestre,
                         tipo_aporte=tipo_aporte,
@@ -449,11 +527,34 @@ def _guardar_unificado(request, teacher):
         att_status = request.POST.get('att_status')
         att_notes = request.POST.get('att_notes', '')
         if att_status:
-            Attendance.objects.update_or_create(
-                student=student,
-                date=fecha,
-                defaults={'status': att_status, 'notes': att_notes}
-            )
+            from subjects.models import Subject
+            from classes.models import Asistencia
+            subject_obj = Subject.objects.filter(name=subject).first()
+            if subject_obj:
+                clase = Clase.objects.filter(docente_base=teacher.usuario, subject=subject_obj).first()
+                if not clase:
+                    clase = Clase.objects.create(
+                        docente_base=teacher.usuario,
+                        name=f"{subject_obj.name} - {teacher.full_name}",
+                        subject=subject_obj,
+                        description='Clase auto-creada para asistencia unificada',
+                        active=True
+                    )
+                
+                if student.usuario:
+                    enrollment, _ = Enrollment.objects.get_or_create(
+                        estudiante=student.usuario,
+                        clase=clase,
+                        defaults={
+                            'docente': teacher.usuario,
+                            'estado': 'ACTIVO'
+                        }
+                    )
+                    Asistencia.objects.update_or_create(
+                        inscripcion=enrollment,
+                        fecha=fecha,
+                        defaults={'estado': att_status, 'observacion': att_notes}
+                    )
 
         # 3) Informe (Activity)
         rep_performance = request.POST.get('rep_performance', 'Bueno')
@@ -466,19 +567,11 @@ def _guardar_unificado(request, teacher):
         rep_areas_to_improve = request.POST.get('rep_areas_to_improve', '')
         rep_homework = request.POST.get('rep_homework', '')
         if any([rep_topics, rep_techniques, rep_pieces, rep_observations, rep_strengths, rep_areas_to_improve, rep_homework, rep_practice_time]):
-            clase = Clase.objects.filter(teacher=teacher, subject=subject).first()
-            if not clase:
-                clase = Clase.objects.create(
-                    teacher=teacher,
-                    name=f"{subject} - {teacher.full_name}",
-                    subject=subject,
-                    description='Clase auto-creada para informes desde dashboard',
-                    active=True
-                )
+            clase = _get_or_create_clase_for_teacher_subject(teacher, student, subject_obj)
             activity = Activity(
                 student=student,
                 clase=clase,
-                subject=subject,
+                subject=subject_obj,
                 class_number=0,
                 date=fecha,
                 topics_worked=rep_topics,
@@ -501,7 +594,7 @@ def _guardar_unificado(request, teacher):
             activity.save()
 
         if calificaciones_guardadas > 0:
-            promedio_parcial = CalificacionParcial.calcular_promedio_parcial(student, subject, parcial, quimestre)
+            promedio_parcial = CalificacionParcial.calcular_promedio_parcial(student, subject_obj, parcial, quimestre)
             messages.success(request, f'✅ Guardado unificado para {student.name}. Calificaciones: {calificaciones_guardadas}. Promedio parcial: <strong>{promedio_parcial}</strong>')
         else:
             messages.success(request, f'✅ Asistencia e informe guardados para {student.name}')
@@ -716,23 +809,23 @@ def estudiantes_view(request):
         form = StudentForm()
     
     search = request.GET.get('search', '')
-    grade_filter = request.GET.get('grade', '')
+    grade_filter = request.GET.get('grade_level', '')
     
     students = teacher.students.filter(active=True)
     
     # Opciones dinámicas de grados
-    grade_choices = list(students.values_list('grade', flat=True).distinct())
+    grade_choices = list(students.values_list('grade_level__level', flat=True).distinct())
     
     if search:
         students = students.filter(
-            Q(name__icontains=search) | 
+            Q(usuario__nombre__icontains=search) |
             Q(parent_name__icontains=search)
         )
     
     if grade_filter:
-        students = students.filter(grade=grade_filter)
+        students = students.filter(grade_level__level=grade_filter)
     
-    students = students.annotate(class_count=Count('activities')).order_by('name')
+    students = students.annotate(class_count=Count('activities')).order_by('usuario__nombre')
     
     return render(request, 'teachers/estudiantes.html', {
         'form': form,
@@ -794,10 +887,12 @@ def student_delete_view(request, student_id):
     student = get_object_or_404(Student, id=student_id, teacher=teacher)
     
     if request.method == 'POST':
-        if student.user:
-            student.user.is_active = False
-            student.user.save()
-        
+        # Si existe auth_user asociado (vía Usuario), desactívalo
+        if student.usuario and student.usuario.auth_user_id:
+            auth_user = student.usuario.auth_user
+            auth_user.is_active = False
+            auth_user.save(update_fields=['is_active'])
+
         student.active = False
         student.save()
         messages.success(request, f'Estudiante {student.name} desactivado')
@@ -824,18 +919,27 @@ def clases_dashboard_view(request):
     teacher = request.user.teacher_profile
     
     # Estadísticas para cada tipo de materia
+    clases_docente = _teacher_clases_qs(teacher)
+
+    def _students_count_for(tipo):
+        usuario_ids = Enrollment.objects.filter(
+            clase__in=clases_docente.filter(subject__tipo_materia=tipo),
+            estado='ACTIVO',
+        ).values_list('estudiante_id', flat=True).distinct()
+        return Student.objects.filter(usuario_id__in=usuario_ids, active=True).distinct().count()
+
     stats = {
         'teoria': {
-            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='TEORIA').count(),
-            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='TEORIA').distinct().count()
+            'count': clases_docente.filter(subject__tipo_materia='TEORIA').count(),
+            'students': _students_count_for('TEORIA'),
         },
         'agrupacion': {
-            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='AGRUPACION').count(),
-            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='AGRUPACION').distinct().count()
+            'count': clases_docente.filter(subject__tipo_materia='AGRUPACION').count(),
+            'students': _students_count_for('AGRUPACION'),
         },
         'instrumento': {
-            'count': Clase.objects.filter(teacher=teacher, subject__tipo_materia='INSTRUMENTO').count(),
-            'students': Student.objects.filter(enrollments__clase__teacher=teacher, enrollments__clase__subject__tipo_materia='INSTRUMENTO').distinct().count()
+            'count': clases_docente.filter(subject__tipo_materia='INSTRUMENTO').count(),
+            'students': _students_count_for('INSTRUMENTO'),
         },
     }
 
@@ -854,14 +958,16 @@ def _subject_type_list_context(request, subject_type_param, subject_type_display
     teacher = request.user.teacher_profile
     
     # Obtener todas las Clases del docente para este tipo de materia
-    clases = Clase.objects.filter(
-        teacher=teacher,
+    clases = _teacher_clases_qs(teacher).filter(
         subject__tipo_materia=subject_type_param
     ).order_by('subject__name', 'name')
 
     # Obtener todos los estudiantes únicos matriculados en estas clases
     # y también los estudiantes asignados directamente al docente que tienen clases de este tipo
-    students_in_classes_ids = Enrollment.objects.filter(clase__in=clases).values_list('student__id', flat=True)
+    students_in_classes_usuario_ids = Enrollment.objects.filter(
+        clase__in=clases,
+        estado='ACTIVO'
+    ).values_list('estudiante_id', flat=True)
     
     # También considerar estudiantes directamente asociados al profesor que tienen alguna actividad en una materia de este tipo
     students_with_activities_ids = Activity.objects.filter(
@@ -869,9 +975,14 @@ def _subject_type_list_context(request, subject_type_param, subject_type_display
         student__teacher=teacher
     ).values_list('student__id', flat=True)
 
+    students_in_classes_ids = Student.objects.filter(
+        usuario_id__in=students_in_classes_usuario_ids,
+        active=True
+    ).values_list('id', flat=True)
+
     all_related_student_ids = list(set(list(students_in_classes_ids) + list(students_with_activities_ids)))
     
-    estudiantes = Student.objects.filter(id__in=all_related_student_ids, active=True).order_by('name')
+    estudiantes = Student.objects.filter(id__in=all_related_student_ids, active=True).select_related('usuario').order_by('usuario__nombre')
 
     total_students_in_type = estudiantes.count()
     total_classes_in_type = clases.count()
@@ -880,7 +991,7 @@ def _subject_type_list_context(request, subject_type_param, subject_type_display
     estudiantes_con_stats = []
     for estudiante in estudiantes:
         # Clases de este tipo que el estudiante ha tomado/está tomando
-        student_clases = clases.filter(enrollment__student=estudiante).distinct()
+        student_clases = clases.filter(enrollments__estudiante=estudiante.usuario, enrollments__estado='ACTIVO').distinct()
         student_activities_count = Activity.objects.filter(
             student=estudiante,
             clase__in=clases
@@ -1093,7 +1204,7 @@ def carpetas_view(request):
     activities = Activity.objects.filter(
         student__teacher=teacher,
         student__active=True
-    ).select_related('student').order_by('subject', 'student__name', 'class_number')
+    ).select_related('student', 'student__usuario').order_by('subject', 'student__usuario__nombre', 'class_number')
     
     folders_by_subject = {}
     
@@ -1193,7 +1304,7 @@ def calificaciones_detalladas_view(request):
     parcial = request.GET.get('parcial', '1P')
     
     # Obtener estudiantes y tipos de aportes
-    estudiantes = teacher.students.filter(active=True).order_by('name')
+    estudiantes = teacher.students.filter(active=True).order_by('usuario__nombre')
     from classes.models import TipoAporte, CalificacionParcial
     tipos_aportes = TipoAporte.objects.filter(activo=True)
     
@@ -1301,107 +1412,13 @@ def guardar_calificacion_parcial(request):
 # CALIFICACIONES (CRUD)
 # ============================================
 
-@teacher_required
-def grade_edit_view(request, grade_id):
-    """Editar una calificación existente"""
-    teacher = request.user.teacher_profile
-    grade = get_object_or_404(Grade, id=grade_id, student__teacher=teacher)
 
-    if request.method == 'POST':
-        form = GradeForm(request.POST, instance=grade, teacher=teacher)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Calificación actualizada')
-            return redirect('teachers:student_detail', student_id=grade.student.id)
-    else:
-        form = GradeForm(instance=grade, teacher=teacher)
-
-    return render(request, 'teachers/grade_edit.html', {
-        'form': form,
-        'grade': grade,
-    })
-
-
-@teacher_required
-def grade_delete_view(request, grade_id):
-    """Eliminar una calificación (confirmación)"""
-    teacher = request.user.teacher_profile
-    grade = get_object_or_404(Grade, id=grade_id, student__teacher=teacher)
-
-    if request.method == 'POST':
-        student_id = grade.student.id
-        grade.delete()
-        messages.success(request, 'Calificación eliminada')
-        return redirect('teachers:student_detail', student_id=student_id)
-
-    return render(request, 'teachers/grade_confirm_delete.html', {
-        'grade': grade,
-    })
 
 # ============================================
 # ASISTENCIA
 # ============================================
 
-@teacher_required
-def attendance_view(request):
-    """Control de asistencia"""
-    teacher = request.user.teacher_profile
-    
-    if request.method == 'POST':
-        form = AttendanceForm(request.POST, teacher=teacher)
-        if form.is_valid():
-            attendance = form.save()
-            messages.success(request, f'Asistencia registrada: {attendance.student.name} - {attendance.status}')
-            return redirect('teachers:attendance')
-    else:
-        form = AttendanceForm(teacher=teacher)
-    
-    today = date.today()
-    attendances = Attendance.objects.filter(
-        student__teacher=teacher,
-        date=today
-    ).select_related('student').order_by('student__name')
-    
-    return render(request, 'teachers/attendance.html', {
-        'form': form,
-        'attendances': attendances,
-        'today': today,
-    })
 
-
-@teacher_required
-def attendance_edit_view(request, attendance_id):
-    """Editar asistencia"""
-    teacher = request.user.teacher_profile
-    attendance = get_object_or_404(Attendance, id=attendance_id, student__teacher=teacher)
-    
-    if request.method == 'POST':
-        form = AttendanceForm(request.POST, instance=attendance, teacher=teacher)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Asistencia actualizada')
-            return redirect('teachers:attendance')
-    else:
-        form = AttendanceForm(instance=attendance, teacher=teacher)
-    
-    return render(request, 'teachers/attendance_edit.html', {
-        'form': form,
-        'attendance': attendance
-    })
-
-
-@teacher_required
-def attendance_delete_view(request, attendance_id):
-    """Eliminar asistencia"""
-    teacher = request.user.teacher_profile
-    attendance = get_object_or_404(Attendance, id=attendance_id, student__teacher=teacher)
-    
-    if request.method == 'POST':
-        attendance.delete()
-        messages.success(request, 'Registro eliminado')
-        return redirect('teachers:attendance')
-    
-    return render(request, 'teachers/attendance_confirm_delete.html', {'attendance': attendance})
 
 
 # ============================================
@@ -1445,7 +1462,7 @@ Fecha: {activity.date.strftime('%d/%m/%Y')}
 Clase #{activity.class_number}
 
 Estudiante: {activity.student.name}
-Año escolar: {activity.student.grade}
+Año escolar: {activity.student.grade_level}
 Materia: {activity.subject}
 Docente: {teacher.full_name}
 
@@ -1499,7 +1516,7 @@ ID Registro: #{activity.id}
 Clase #{activity.class_number}
 
 ESTUDIANTE: {activity.student.name}
-Año escolar: {activity.student.grade}
+Año escolar: {activity.student.grade_level}
 Materia: {activity.subject}
 Docente: {teacher.full_name}
 
@@ -1802,29 +1819,38 @@ def dashboard_profesor(request):
         messages.error(request, 'No tienes permisos para acceder a esta página')
         return redirect('home')
 
+    # Get the Teacher instance for the logged-in user
+    try:
+        # Assuming request.user.teacher_profile is already populated by middleware/signals
+        teacher_instance = request.user.teacher_profile
+    except Teacher.DoesNotExist:
+        messages.error(request, 'No se encontró el perfil de docente para este usuario.')
+        return redirect('home')
+
     # Deberes recientes (últimos 5)
     deberes_recientes = Deber.objects.filter(
-        teacher=request.user
+        teacher=teacher_instance.usuario # Use teacher_instance.usuario
     ).select_related('clase__subject').order_by('fecha_asignacion')[:5]
     
     # Entregas recientes (últimas 10)
     entregas_recientes = DeberEntrega.objects.filter(
-        deber__profesor=request.user,
+        deber__teacher=teacher_instance.usuario, # Use deber__teacher
         estado__in=['entregado', 'tarde']
     ).select_related('estudiante', 'deber').order_by('-fecha_entrega')[:10]
     
     # Deberes próximos a vencer (próximos 7 días)
     fecha_limite = timezone.now() + timedelta(days=7)
     deberes_proximos = Deber.objects.filter(
-        profesor=request.user,
+        teacher=teacher_instance.usuario, # Use teacher
         estado='activo',
         fecha_entrega__gte=timezone.now(),
         fecha_entrega__lte=fecha_limite
     ).order_by('fecha_entrega')[:5]
     
     # Estadísticas por materia
+    # Filter Clases by docente_base (which is a Usuario)
     estadisticas_materias = Clase.objects.filter(
-        profesor=request.user
+        docente_base=teacher_instance.usuario
     ).annotate(
         total_deberes=Count('deberes'),
         deberes_activos_count=Count('deberes', filter=Q(deberes__estado='activo'))
@@ -1834,7 +1860,7 @@ def dashboard_profesor(request):
     promedios_materias = []
     for materia in estadisticas_materias:
         promedio = DeberEntrega.objects.filter(
-            deber__clase__subject=materia,
+            deber__clase__subject=materia.subject, # Use materia.subject
             calificacion__isnull=False
         ).aggregate(Avg('calificacion'))['calificacion__avg']
         
@@ -1845,22 +1871,33 @@ def dashboard_profesor(request):
     
     # Gráfico de entregas por estado
     estados_entregas = DeberEntrega.objects.filter(
-        deber__profesor=request.user
+        deber__teacher=teacher_instance.usuario # Use deber__teacher
     ).values('estado').annotate(total=Count('id'))
     
-    deberes = Deber.objects.filter(profesor=request.user)
+    deberes = Deber.objects.filter(teacher=teacher_instance.usuario) # Use teacher
     total_deberes = deberes.count()
 
     deberes_activos = deberes.filter(estado='activo').count()
 
-    total_estudiantes = User.objects.filter(
-        Q(cursos_estudiante__materias__profesor=request.user) |
-        Q(deberes_asignados__profesor=request.user)
-    ).distinct().count()
+    # total_estudiantes needs to be re-evaluated.
+    # It should be the count of unique students that have any homework assigned by this teacher
+    # either directly through estudiantes_especificos or indirectly through clases taught by this teacher
+    assigned_students_direct = Deber.objects.filter(
+        teacher=teacher_instance.usuario
+    ).values_list('estudiantes_especificos', flat=True)
+    
+    assigned_students_via_clase = Deber.objects.filter(
+        clase__docente_base=teacher_instance.usuario
+    ).values_list('clase__enrollments__estudiante', flat=True)
+
+    # Combine and count unique Usuarios
+    all_assigned_usuarios_ids = list(set(list(assigned_students_direct) + list(assigned_students_via_clase)))
+    total_estudiantes = len(all_assigned_usuarios_ids)
+
 
     entregas_pendientes = DeberEntrega.objects.filter(
-        deber__profesor=request.user,
-        estado='entregado'
+        deber__teacher=teacher_instance.usuario, # Use deber__teacher
+        estado='pendiente' # Changed from 'entregado' as per typical understanding of 'pending'
     ).count()
     
     context = {
@@ -1886,10 +1923,17 @@ def dashboard_estudiante(request):
         messages.error(request, 'No tienes permisos para acceder a esta página')
         return redirect('home')
     
+    # Get the Student profile for the logged-in user
+    try:
+        student_profile = request.user.student_profile
+    except Student.DoesNotExist:
+        messages.error(request, 'No se encontró el perfil de estudiante para este usuario.')
+        return redirect('home')
+
     # Obtener todos los deberes del estudiante
     todos_deberes = Deber.objects.filter(
-        Q(cursos__in=request.user.cursos_estudiante.all()) |
-        Q(estudiantes_especificos=request.user),
+        Q(estudiantes_especificos=student_profile.usuario) | # Deberes asignados directamente al Usuario
+        Q(clase__enrollments__estudiante=student_profile.usuario), # Deberes asignados a Clases en las que está inscrito el Usuario
         estado='activo'
     ).distinct()
     
@@ -1901,7 +1945,7 @@ def dashboard_estudiante(request):
     for deber in todos_deberes:
         entrega = DeberEntrega.objects.filter(
             deber=deber,
-            estudiante=request.user
+            estudiante=student_profile.usuario # Use student_profile.usuario
         ).first()
         
         if not entrega or entrega.estado == 'pendiente':
@@ -1910,7 +1954,8 @@ def dashboard_estudiante(request):
             else:
                 deberes_pendientes.append(deber)
                 # Próximos 3 días
-                if deber.dias_restantes() <= 3:
+                # Assuming deber.dias_restantes() exists and works correctly
+                if hasattr(deber, 'dias_restantes') and deber.dias_restantes() is not None and deber.dias_restantes() <= 3:
                     deberes_proximos.append(deber)
     
     # Estadísticas
@@ -1920,7 +1965,7 @@ def dashboard_estudiante(request):
     
     # Entregas realizadas
     mis_entregas = DeberEntrega.objects.filter(
-        estudiante=request.user,
+        estudiante=student_profile.usuario, # Use student_profile.usuario
         estado__in=['entregado', 'revisado', 'tarde']
     ).select_related('deber', 'deber__clase__subject').order_by('-fecha_entrega')[:10]
     
@@ -1928,21 +1973,21 @@ def dashboard_estudiante(request):
     
     # Calificaciones recientes
     calificaciones_recientes = DeberEntrega.objects.filter(
-        estudiante=request.user,
+        estudiante=student_profile.usuario, # Use student_profile.usuario
         estado='revisado',
         calificacion__isnull=False
     ).select_related('deber', 'deber__clase__subject').order_by('-fecha_actualizacion')[:5]
     
     # Promedio general
     promedio_general = DeberEntrega.objects.filter(
-        estudiante=request.user,
+        estudiante=student_profile.usuario, # Use student_profile.usuario
         calificacion__isnull=False
     ).aggregate(Avg('calificacion'))['calificacion__avg']
     
     # Estadísticas por materia
     materias_stats = {}
     for entrega in DeberEntrega.objects.filter(
-        estudiante=request.user,
+        estudiante=student_profile.usuario, # Use student_profile.usuario
         calificacion__isnull=False
     ).select_related('deber__clase__subject'):
         materia_nombre = entrega.deber.clase.subject.name
@@ -1995,8 +2040,10 @@ def crear_deber(request):
     
     # Obtener la instancia de Teacher asociada al usuario logueado
     try:
-        teacher_instance = Teacher.objects.get(user=request.user)
+        teacher_instance = request.user.teacher_profile # Updated line
     except Teacher.DoesNotExist:
+        messages.error(request, 'No se encontró el perfil de docente para este usuario.')
+        return redirect('home')
         messages.error(request, 'No se encontró tu perfil de profesor')
         return redirect('home')
 

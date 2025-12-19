@@ -1,25 +1,62 @@
 from django.contrib import admin
-from .models import Activity, Grade, Attendance, Clase, Enrollment, TipoAporte, CalificacionParcial, PromedioCache
 from django.utils.html import format_html
-    
+
+from .models import (
+    Activity,
+    Asistencia,
+    Calificacion,
+    CalificacionParcial,
+    Clase,
+    Enrollment,
+    GradeLevel,
+    Horario,
+    PromedioCache,
+    TipoAporte,
+)
+
+
+@admin.register(GradeLevel) # Register GradeLevel
+class GradeLevelAdmin(admin.ModelAdmin):
+    list_display = ['level', 'section']
+    search_fields = ['level', 'section']
+    # If using autocomplete_fields elsewhere, this model needs a search_fields attribute
+
+
 
 @admin.register(Clase)
 class ClaseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'subject', 'teacher', 'max_students', 'get_enrolled_count', 'active']
-    list_filter = ['subject', 'active', 'teacher']
-    search_fields = ['name', 'teacher__full_name']
+    # Removed 'teacher', added 'grade_level' and 'periodo'
+    list_display = ['name', 'subject', 'grade_level', 'periodo', 'max_students', 'get_enrolled_count', 'active']
+    # Removed 'teacher', added 'grade_level' and 'periodo'
+    list_filter = ['subject', 'active', 'grade_level', 'periodo']
+    # Removed 'teacher__full_name'
+    search_fields = ['name']
+    # Removed 'teacher', added 'grade_level'
+    autocomplete_fields = ['subject', 'grade_level'] # Keep 'subject'
+
+    # Fieldsets might need adjustment if 'teacher' was explicitly in them
+    # For now, assuming no explicit 'teacher' in fieldsets, or it's handled implicitly
 
 @admin.register(Enrollment)
 class EnrollmentAdmin(admin.ModelAdmin):
-    list_display = ['student', 'clase', 'date_enrolled', 'active']
-    list_filter = ['active', 'clase__subject', 'clase__teacher']
-    search_fields = ['student__name', 'clase__name', 'clase__teacher__full_name']
+    list_display = ['estudiante', 'clase', 'docente', 'date_enrolled', 'estado']
+    list_filter = ['estado', 'clase__subject', 'docente', 'clase__grade_level', 'clase__periodo', 'clase__ciclo_lectivo']
+    search_fields = ['estudiante__nombre', 'clase__name', 'docente__nombre']
+    autocomplete_fields = ['estudiante', 'clase', 'docente']
+
+@admin.register(Horario) # New Admin class for Horario
+class HorarioAdmin(admin.ModelAdmin):
+    list_display = ['clase', 'dia_semana', 'hora_inicio', 'hora_fin']
+    list_filter = ['dia_semana', 'clase__subject', 'clase__grade_level', 'clase__periodo']
+    search_fields = ['clase__name', 'clase__subject__name']
+    autocomplete_fields = ['clase']
+
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ['student', 'subject', 'class_number', 'date', 'performance', 'get_teacher', 'created_at']
-    list_filter = ['subject', 'performance', 'date', 'student__teacher']
-    search_fields = ['student__name', 'student__teacher__full_name', 'topics_worked', 'pieces']
+    list_filter = ['subject', 'performance', 'date']
+    search_fields = ['student__usuario__nombre', 'topics_worked', 'pieces']
     date_hierarchy = 'date'
     readonly_fields = ['created_at', 'updated_at']
     
@@ -45,63 +82,37 @@ class ActivityAdmin(admin.ModelAdmin):
         }),
     )
     
+    # This get_teacher method needs to be adapted since Clase no longer has a direct teacher
+    # It should look for the teacher in the Enrollment related to this activity's student and clase
     def get_teacher(self, obj):
-        return obj.get_teacher().full_name
-    get_teacher.short_description = 'Docente'
+        if not obj.student.usuario:
+            return "N/A"
+        enrollment = obj.clase.enrollments.filter(estudiante=obj.student.usuario, estado='ACTIVO').first()
+        if enrollment and enrollment.docente:
+            return enrollment.docente.nombre
+        return "N/A"
+    get_teacher.short_description = 'Docente Asignado'
 
 
-@admin.register(Grade)
-class GradeAdmin(admin.ModelAdmin):
-    list_display = ['student', 'subject', 'period', 'score', 'date', 'get_teacher']
-    list_filter = ['subject', 'period', 'date', 'student__teacher']
-    search_fields = ['student__name', 'student__teacher__full_name']
-    date_hierarchy = 'date'
-    readonly_fields = ['created_at']
-    
-    fieldsets = (
-        ('Información Básica', {
-            'fields': ('student', 'subject', 'period', 'date')
-        }),
-        ('Calificación', {
-            'fields': ('score', 'comments')
-        }),
-        ('Metadata', {
-            'fields': ('created_at',),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def get_teacher(self, obj):
-        return obj.student.teacher.full_name
-    get_teacher.short_description = 'Docente'
 
 
-@admin.register(Attendance)
-class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ['student', 'date', 'status', 'get_teacher']
-    list_filter = ['status', 'date', 'student__teacher']
-    search_fields = ['student__name', 'student__teacher__full_name']
-    date_hierarchy = 'date'
-    readonly_fields = ['created_at']
-    
-    fieldsets = (
-        ('Información Básica', {
-            'fields': ('student', 'date', 'status')
-        }),
-        ('Observaciones', {
-            'fields': ('notes',)
-        }),
-        ('Metadata', {
-            'fields': ('created_at',),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def get_teacher(self, obj):
-        return obj.student.teacher.full_name
-    get_teacher.short_description = 'Docente'
+
 
     
+@admin.register(Calificacion)
+class CalificacionAdmin(admin.ModelAdmin):
+    list_display = ['inscripcion', 'descripcion', 'nota', 'fecha']
+    list_filter = ['fecha', 'inscripcion__clase__subject', 'inscripcion__clase__ciclo_lectivo']
+    search_fields = ['inscripcion__estudiante__nombre', 'descripcion']
+    autocomplete_fields = ['inscripcion']
+
+
+@admin.register(Asistencia)
+class AsistenciaAdmin(admin.ModelAdmin):
+    list_display = ['inscripcion', 'fecha', 'estado']
+    list_filter = ['estado', 'fecha', 'inscripcion__clase__subject', 'inscripcion__clase__ciclo_lectivo']
+    search_fields = ['inscripcion__estudiante__nombre', 'inscripcion__clase__name']
+    autocomplete_fields = ['inscripcion']
 
 
 @admin.register(TipoAporte)
@@ -141,31 +152,30 @@ class TipoAporteAdmin(admin.ModelAdmin):
 class CalificacionParcialAdmin(admin.ModelAdmin):
     """Administración de calificaciones parciales"""
     list_display = [
-        'student_nombre', 
-        'subject', 
-        'parcial_badge', 
+        'student_nombre',
+        'subject',
+        'parcial_badge',
         'quimestre_badge',
-        'tipo_aporte', 
+        'tipo_aporte',
         'calificacion_badge',
         'escala_badge',
         'fecha_actualizacion'
     ]
     list_filter = [
-        'parcial', 
-        'quimestre', 
-        'subject', 
+        'parcial',
+        'quimestre',
+        'subject',
         'tipo_aporte',
         'fecha_registro',
         'registrado_por'
     ]
     search_fields = [
-        'student__name', 
-        'student__user__username',
+        'student__usuario__nombre',
         'observaciones'
     ]
     date_hierarchy = 'fecha_registro'
     readonly_fields = ['fecha_registro', 'fecha_actualizacion']
-    autocomplete_fields = ['student', 'registrado_por']
+    autocomplete_fields = ['student', 'subject', 'tipo_aporte', 'registrado_por']
     
     fieldsets = (
         ('Información del Estudiante', {
@@ -187,7 +197,7 @@ class CalificacionParcialAdmin(admin.ModelAdmin):
     def student_nombre(self, obj):
         return obj.student.name
     student_nombre.short_description = 'Estudiante'
-    student_nombre.admin_order_field = 'student__name'
+    student_nombre.admin_order_field = 'student__usuario__nombre'
     
     def parcial_badge(self, obj):
         colors = {
@@ -232,7 +242,7 @@ class CalificacionParcialAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Optimizar consultas"""
         qs = super().get_queryset(request)
-        return qs.select_related('student', 'tipo_aporte', 'registrado_por')
+        return qs.select_related('student', 'student__usuario', 'subject', 'tipo_aporte', 'registrado_por', 'registrado_por__usuario')
     
     actions = ['calcular_promedios', 'exportar_excel']
     
@@ -269,14 +279,14 @@ class PromedioCacheAdmin(admin.ModelAdmin):
         'subject',
         'fecha_calculo'
     ]
-    search_fields = ['student__name']
+    search_fields = ['student__usuario__nombre']
     readonly_fields = ['fecha_calculo']
     date_hierarchy = 'fecha_calculo'
     
     def student_nombre(self, obj):
         return obj.student.name
     student_nombre.short_description = 'Estudiante'
-    student_nombre.admin_order_field = 'student__name'
+    student_nombre.admin_order_field = 'student__usuario__nombre'
     
     def tipo_promedio_badge(self, obj):
         colors = {

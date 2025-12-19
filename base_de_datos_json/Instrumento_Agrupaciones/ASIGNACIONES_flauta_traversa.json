@@ -1,0 +1,366 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Iza Mero Carlos Mateo",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Córdova Clavijo Luciana Valentina",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Chérrez Rivadeneira Valeria Alejandra",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Coronel Cárdenas Victoria Celeste",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Méndez Torres Dannaé Monserrath",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Guachambala Ramos Nayeli Arlette",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Durán Noboa Camila Alejandra",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Villaba Pazmiño Camila Valentina",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Tapia Cando Ariana Celeste",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Manobanda Yanez Emily Nicole",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Paucar Guamán Jonathan Ismael",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Lucio Rojano Ingrid Valeria",
+      "docente_nombre": "Larreátegui Feijoó Inés María",
+      "clase": "Flauta Traversa",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Gavilanes Pinto Erick Kalel",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Urquizo Navarrete Mila Akemi",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Bastidas Choco Anika Juliette",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Guerrero Moya Luciana Salomé",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Jara Casillas Katherin Abigail",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Guaigua Abril Daralyn Emilce",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Palma Arciniega Angie Pamela",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Aguinda Cevallos Adriana Elizabeth",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Jerez Junta Rachell Zoe",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Manzano Ramos Elias Israel",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Morales Garcés Edith Mirely",
+      "docente_nombre": "Nuñez Cunalata Zoila Delia",
+      "clase": "Flauta Traversa",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Silva Camacho Sophia Regina",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Flauta Traversa",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Romero Mora Wilmer Joel",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Flauta Traversa",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Túquerez Villacís Gianella Fernanda",
+      "docente_nombre": "Reyes Garcés Elizabeth Del Rocío",
+      "clase": "Flauta Traversa",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

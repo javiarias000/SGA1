@@ -1,0 +1,352 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Chisag Guamán Ricardo Sebastián",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Revelo Pico Alessandro Salvatore",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Toapanta Avalos Ariana Nicole",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Caguana Yanchapanta Dulce Maria",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Lopez Andaluz Martin Alexander",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Lozada Tituaña Samuel Benjamin",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Quispe Ayuquina Lourdes Ayme",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Tisalema Talahua Fernando Martín",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "De La Cruz Aucatoma Edwin Alexander",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Poaquiza Ruiz Nixon Alan",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Tipan Alomaliza Luis Omar",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Coronel Cardenas José Luis",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Cambo Chimborazo Jaime Daniel",
+      "docente_nombre": "Amancha Hidalgo Félix Marcelo",
+      "clase": "Trompeta",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Muzo Espinoza Paúl Alejandro",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Casa Martínez Adrián Alexander",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Guachambala Ramos Matías Caleb",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Cordovilla Pérez Daniel Isaac",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Bonilla Calderón Camilo Sebastián",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Yancha Cunachi Oscar Sebastián",
+      "docente_nombre": "Pèrez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Andaluz Coba Jhordan Omar",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Salazar Chicaiza Josué Alejandro",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Criollo Cuenca Ángel Fabián",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Lucero Urresta Winston Samir",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Paucar Guaman Marcelo Jesús",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Chillagana Coronel Edward Alexis",
+      "docente_nombre": "Pérez Mayorga Edwin Israel",
+      "clase": "Trompeta",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

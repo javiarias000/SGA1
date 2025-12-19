@@ -4,14 +4,14 @@ from .models import Student
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'grade', 'teacher', 'active', 'get_class_count', 'created_at']
-    list_filter = ['grade', 'active', 'teacher', 'created_at']
-    search_fields = ['name', 'parent_name', 'teacher__full_name']
+    list_display = ['name', 'grade_level', 'teacher', 'active', 'get_class_count', 'created_at']
+    list_filter = ['grade_level', 'active', 'teacher', 'created_at']
+    search_fields = ['usuario__nombre', 'parent_name', 'teacher__full_name']
     readonly_fields = ['created_at']
     
     fieldsets = (
         ('Información del Estudiante', {
-            'fields': ('teacher', 'name', 'grade', 'active')
+            'fields': ('teacher', 'grade_level', 'active')
         }),
         ('Información de Contacto', {
             'fields': ('parent_name', 'parent_email', 'parent_phone')

@@ -67,3 +67,8 @@ db.sqlite3
 
 # Archivos de datos JSON en la raíz
 /asignaciones_docentes.json
+
+# Sensitive files identified by Gemini CLI
+db_access_instructions.txt
+inconsistencias_docentes.txt
+inconsistencias_nombres.txt

@@ -22,11 +22,17 @@ def unified_login_view(request):
         # Si ya está logueado, respeta "next" si apunta a un área válida
         if next_url and (next_url.startswith('/students/') or next_url.startswith('/teachers/')):
             return redirect(next_url)
-        # Por defecto, prioriza el dashboard de estudiante si existe
-        if hasattr(request.user, 'student_profile'):
-            return redirect('students:student_dashboard')
-        elif hasattr(request.user, 'teacher_profile'):
-            return redirect('teachers:teacher_dashboard')
+        # Check profiles directly from request.user.usuario
+        if hasattr(request.user, 'usuario'):
+            if request.user.usuario.rol == Usuario.Rol.ESTUDIANTE and hasattr(request.user.usuario, 'student_profile'):
+                return redirect('students:student_dashboard')
+            elif request.user.usuario.rol == Usuario.Rol.DOCENTE and hasattr(request.user.usuario, 'teacher_profile'):
+                return redirect('teachers:teacher_dashboard')
+            else:
+                # Usuario exists but no matching role profile (e.g., PENDIENTE or missing specific profile)
+                logout(request)
+                messages.warning(request, 'Tu cuenta no tiene un perfil de rol asignado (Estudiante/Docente).')
+                return redirect('users:login')
         else:
             logout(request)
             messages.warning(request, 'Tu cuenta no tiene un perfil asignado.')
@@ -39,17 +45,23 @@ def unified_login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Si viene desde una URL protegida, respeta ese destino
-            if next_url and (next_url.startswith('/students/') or next_url.startswith('/teachers/')):
-                return redirect(next_url)
-            # Por defecto, prioriza estudiante si existe, luego docente
-            if hasattr(user, 'student_profile'):
-                return redirect('students:student_dashboard')
-            elif hasattr(user, 'teacher_profile'):
-                return redirect('teachers:teacher_dashboard')
+            # After login, the user object might not immediately have middleware-attached profiles.
+            # It's safer to check the associated Usuario object directly.
+            # We need to re-fetch the user or assume request.user now has its attributes
+            # Or, best, just use the `user` object directly and its relations if they exist
+            if hasattr(user, 'usuario'): # Check if Usuario object exists
+                if user.usuario.rol == Usuario.Rol.ESTUDIANTE and hasattr(user.usuario, 'student_profile'):
+                    return redirect('students:student_dashboard')
+                elif user.usuario.rol == Usuario.Rol.DOCENTE and hasattr(user.usuario, 'teacher_profile'):
+                    return redirect('teachers:teacher_dashboard')
+                else:
+                    # Usuario exists but no matching role profile (e.g., PENDIENTE or missing specific profile)
+                    logout(request)
+                    messages.error(request, 'Tu cuenta no tiene un perfil de rol asignado (Estudiante/Docente).')
             else:
+                # User authenticated but no Usuario object exists at all
                 logout(request)
-                messages.error(request, 'Tu cuenta no tiene perfil asignado.')
+                messages.error(request, 'Tu cuenta no tiene un perfil asignado.')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
 

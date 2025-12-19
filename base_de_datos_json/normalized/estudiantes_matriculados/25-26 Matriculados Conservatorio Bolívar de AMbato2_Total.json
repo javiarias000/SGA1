@@ -1,0 +1,310 @@
+[
+  {
+    "model": "academia.estudiante",
+    "pk": 1,
+    "fields": {
+      "Unnamed: 0": "CONSERVATORIO \"BOLIVAR DE AMBATO\"",
+      "Unnamed: 1": null,
+      "Unnamed: 2": null,
+      "Unnamed: 3": null,
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 2,
+    "fields": {
+      "Unnamed: 0": "CICLO LECTIVO 2025-2026",
+      "Unnamed: 1": null,
+      "Unnamed: 2": null,
+      "Unnamed: 3": null,
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 3,
+    "fields": {
+      "Unnamed: 0": "CURSO\n Y PARALELO",
+      "Unnamed: 1": "A",
+      "Unnamed: 2": null,
+      "Unnamed: 3": "B",
+      "Unnamed: 4": null,
+      "Unnamed: 5": "C",
+      "Unnamed: 6": null,
+      "Unnamed: 7": "TOTAL"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 4,
+    "fields": {
+      "Unnamed: 0": null,
+      "Unnamed: 1": "M",
+      "Unnamed: 2": "F",
+      "Unnamed: 3": "M",
+      "Unnamed: 4": "F",
+      "Unnamed: 5": "M",
+      "Unnamed: 6": "F",
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 5,
+    "fields": {
+      "Unnamed: 0": "PRIMERO",
+      "Unnamed: 1": "3",
+      "Unnamed: 2": "4",
+      "Unnamed: 3": "10",
+      "Unnamed: 4": "11",
+      "Unnamed: 5": "6",
+      "Unnamed: 6": "14",
+      "Unnamed: 7": "48"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 6,
+    "fields": {
+      "Unnamed: 0": "SEGUNDO",
+      "Unnamed: 1": "9",
+      "Unnamed: 2": "8",
+      "Unnamed: 3": "11",
+      "Unnamed: 4": "9",
+      "Unnamed: 5": "8",
+      "Unnamed: 6": "14",
+      "Unnamed: 7": "59"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 7,
+    "fields": {
+      "Unnamed: 0": "TERCERO",
+      "Unnamed: 1": "11",
+      "Unnamed: 2": "7",
+      "Unnamed: 3": "10",
+      "Unnamed: 4": "5",
+      "Unnamed: 5": "13",
+      "Unnamed: 6": "7",
+      "Unnamed: 7": "53"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 8,
+    "fields": {
+      "Unnamed: 0": "CUARTO",
+      "Unnamed: 1": "5",
+      "Unnamed: 2": "7",
+      "Unnamed: 3": "5",
+      "Unnamed: 4": "12",
+      "Unnamed: 5": "8",
+      "Unnamed: 6": "10",
+      "Unnamed: 7": "47"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 9,
+    "fields": {
+      "Unnamed: 0": "QUINTO ",
+      "Unnamed: 1": "2",
+      "Unnamed: 2": "4",
+      "Unnamed: 3": "8",
+      "Unnamed: 4": "9",
+      "Unnamed: 5": "10",
+      "Unnamed: 6": "5",
+      "Unnamed: 7": "38"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 10,
+    "fields": {
+      "Unnamed: 0": "SEXTO",
+      "Unnamed: 1": null,
+      "Unnamed: 2": null,
+      "Unnamed: 3": "11",
+      "Unnamed: 4": "9",
+      "Unnamed: 5": "8",
+      "Unnamed: 6": "10",
+      "Unnamed: 7": "38"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 11,
+    "fields": {
+      "Unnamed: 0": "SEPTIMO",
+      "Unnamed: 1": "8",
+      "Unnamed: 2": "3",
+      "Unnamed: 3": "3",
+      "Unnamed: 4": "10",
+      "Unnamed: 5": "4",
+      "Unnamed: 6": "8",
+      "Unnamed: 7": "36"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 12,
+    "fields": {
+      "Unnamed: 0": "OCTAVO ",
+      "Unnamed: 1": "1",
+      "Unnamed: 2": "4",
+      "Unnamed: 3": "6",
+      "Unnamed: 4": "10",
+      "Unnamed: 5": "8",
+      "Unnamed: 6": "10",
+      "Unnamed: 7": "39"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 13,
+    "fields": {
+      "Unnamed: 0": "NOVENO (1o Bach)",
+      "Unnamed: 1": "3",
+      "Unnamed: 2": "1",
+      "Unnamed: 3": "6",
+      "Unnamed: 4": "15",
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": "25"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 14,
+    "fields": {
+      "Unnamed: 0": "DECIMO (2o Bach)",
+      "Unnamed: 1": "3",
+      "Unnamed: 2": "2",
+      "Unnamed: 3": "6",
+      "Unnamed: 4": "7",
+      "Unnamed: 5": "5",
+      "Unnamed: 6": "3",
+      "Unnamed: 7": "26"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 15,
+    "fields": {
+      "Unnamed: 0": "DECIMO PRIMERO (3o Bach)",
+      "Unnamed: 1": "0",
+      "Unnamed: 2": "2",
+      "Unnamed: 3": "9",
+      "Unnamed: 4": "10",
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": "21"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 16,
+    "fields": {
+      "Unnamed: 0": "1o Extraordinario B",
+      "Unnamed: 1": null,
+      "Unnamed: 2": "5",
+      "Unnamed: 3": "3",
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": "8"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 17,
+    "fields": {
+      "Unnamed: 0": null,
+      "Unnamed: 1": "45",
+      "Unnamed: 2": "47",
+      "Unnamed: 3": "88",
+      "Unnamed: 4": "107",
+      "Unnamed: 5": "70",
+      "Unnamed: 6": "81",
+      "Unnamed: 7": "438"
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 18,
+    "fields": {
+      "Unnamed: 0": null,
+      "Unnamed: 1": null,
+      "Unnamed: 2": null,
+      "Unnamed: 3": null,
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 19,
+    "fields": {
+      "Unnamed: 0": null,
+      "Unnamed: 1": "Masculino",
+      "Unnamed: 2": "Femenino",
+      "Unnamed: 3": "total",
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 20,
+    "fields": {
+      "Unnamed: 0": "Total Matutino",
+      "Unnamed: 1": "45",
+      "Unnamed: 2": "47",
+      "Unnamed: 3": "92",
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 21,
+    "fields": {
+      "Unnamed: 0": "Vespertino",
+      "Unnamed: 1": "158",
+      "Unnamed: 2": "188",
+      "Unnamed: 3": "346",
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  },
+  {
+    "model": "academia.estudiante",
+    "pk": 22,
+    "fields": {
+      "Unnamed: 0": null,
+      "Unnamed: 1": "203",
+      "Unnamed: 2": "235",
+      "Unnamed: 3": "438",
+      "Unnamed: 4": null,
+      "Unnamed: 5": null,
+      "Unnamed: 6": null,
+      "Unnamed: 7": null
+    }
+  }
+]

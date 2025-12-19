@@ -1,336 +1,220 @@
-import os
 import json
+import os
+import re
 from django.core.management.base import BaseCommand
-from classes.models import Enrollment, Clase
 from students.models import Student
+from classes.models import Clase, Enrollment
+from teachers.models import Teacher
 from subjects.models import Subject
-from django.db import IntegrityError
+from .normalization import similarity_ratio, normalize_name
+
+# Helper function to convert JSON grade and section to a comparable format
+def convert_grade_and_section(grade_json, section_json):
+    grade_conversion = {
+        '1o': 'Primero', '2o': 'Segundo', '3o': 'Tercero', '4o': 'Cuarto', '5o': 'Quinto',
+        '6o': 'Sexto', '7o': 'Septimo', '8o': 'Octavo', '9o': 'Noveno', 
+        '10o': 'Decimo', '10o (2o Bachillerato)': 'Decimo',
+        '11o': 'Decimo Primer', '11o (3o Bachillerato)': 'Decimo Primer',
+        '12o': 'Decimo Segundo',
+        'Primero': 'Primero', 'Segundo': 'Segundo', 'Tercero': 'Tercero', 'Cuarto': 'Cuarto', 'Quinto': 'Quinto',
+        'Sexto': 'Sexto', 'Septimo': 'Septimo', 'Octavo': 'Octavo', 'Noveno': 'Noveno', 'Decimo': 'Decimo',
+        'Decimo Primer': 'Decimo Primer', 'Decimo Segundo': 'Decimo Segundo',
+        '1o Extraordinario': 'Primero Extraordinario'
+    }
+    
+    # Clean section: remove text in parentheses and standardize
+    cleaned_section = re.sub(r'\s*\(.*?\)\s*', '', section_json).strip()
+    
+    # Convert grade
+    converted_grade = grade_conversion.get(grade_json.strip(), grade_json.strip())
+
+    return normalize_name(f"{converted_grade} {cleaned_section}")
 
 class Command(BaseCommand):
-    help = 'Import enrollments from JSON files'
+    help = 'Imports student enrollments from JSON files.'
 
-    def handle(self, *args, **kwargs):
-        self.stdout.write(self.style.SUCCESS('--- Importando Matrículas ---'))
+    def handle(self, *args, **options):
+        # Optional: Clear all previous enrollments
+        # Enrollment.objects.all().delete()
+        # self.stdout.write(self.style.SUCCESS('Previous enrollments deleted.'))
+
+        json_folder = 'base_de_datos_json/Instrumento_Agrupaciones/'
         
-        # --- Manual Mapping for Data Inconsistencies (from import_classes) ---
-        teacher_name_map = {
-            "Daniel Laura.": "Laura Guamán Christian Daniel",
-            "Marco Paredes": "Paredes Santana Marco Antonio",
-            "Inés Larreátegui": "Larreátegui Feijoó Inés María",
-            "Daniel Laura": "Laura Guamán Christian Daniel",
-            "Elizabeth Reyes": "Reyes Garcés Elizabeth Del Rocío",
-            "Delia Núñez": "Nuñez Cunalata Zoila Delia",
-            "Jenny Amores": "Amores Valdivieso Jenny Natividad",
-            "Diego Túquerez": "Túquerez Núñez Diego Javier",
-            "Andrea Peña": "Peña Núñez Andrea Michelle",
-            "Guillermo Fonseca": "Fonseca Sandoval Walter Guillermo",
-            "Juan Solís": "Solís Solís Juan Francisco",
-            "Rafael Guzñay": "Guzñay Paca Inti Rafael",
-            "Fabricio Chico": "Chico Analuisa Fabricio Renato",
-            "Acosta Karolina": "Acosta Zagal Karolina",
-            "Roberto Caiza": "Caiza Caiza Roberto Carlos",
-            "Félix Amancha": "Amancha Hidalgo Félix Marcelo",
-            "Danny Toapanta": "Toapanta Arequipa Danny Alexander",
-            "Juan Diego Gutama": "Gutama Galan Juan Diego",
-            "Angel Quinapanta": "Quinapanta Tibán Angel Rodrigo",
-            "Jorge Arevalos": "Arevalo Catañeda Angel Jorge",
-            "Alex Chicaiza": "Chicaiza Yánez Jefferson Alexander",
-            "Christian Peralta": "Peralta Aponte Christian Hernán",
-            "Santiago Zumbana": "Zumbana Quinapanta Santiago Maximiliano",
-            "Jorge Arias": "Arias Cuenca Jorge Javier",
-            "David Vásquez": "Vasquez Sánchez David Hernán",
-            "Edwin Chico": "Chico Espinoza Edwin Patricio",
-            "Marcelo Chicaiza": "Chicaiza Orozco Marcelo Javier",
-            "Santiago Guananga": "Guananga Aizabucha Javier Santiago",
-            "Diego Pérez": "Pérez Toapanta Diego Armando",
-            "Marco Tocto": "Tocto Villareal Marco Antonio",
-            "Jorge De La Cruz": "De La Cruz Changalombo Jorge Ramiro",
-            "David Díaz": "Díaz Loyola David Descartes",
-            "Mgs.Israel Pérez": "Pérez Mayorga Edwin Israel",
-            "Dr. Rubén Chicaiza": "Chicaiza Cuenca Rubén Geovany",
-            "Mgs. Mauricio Jiménez": "Jiménez Vega Mauricio Marmonte",
-            "Jorge Arevalo": "Arevalo Catañeda Angel Jorge",
-            "Mgs.Jorge De La Cruz": "De La Cruz Changalombo Jorge Ramiro",
-            "José Luis Cumbicos": "Cumbicos Macas José Luis",
-            "Mgs.Marco Tocto": "Tocto Villareal Marco Antonio",
+        students_in_db = list(Student.objects.all())
+        teachers_in_db = list(Teacher.objects.all())
+        subjects_in_db = list(Subject.objects.all())
+        classes_in_db = list(Clase.objects.all())
+
+        enrollment_count = 0
+        
+        # Mapping for JSON subject names to DB subject names
+        subject_name_mapping = {
+            'Acompañamiento': 'Acompañamiento',
+            'Clarinete': 'Clarinete',
+            'Complementario': 'Complementario',
+            'Conj. Inst': 'Conj. Inst',
+            'Contrabajo': 'Contrabajo',
+            'Flauta Traversa': 'Flauta Traversa',
+            'Guitarra': 'Guitarra',
+            'Percusión': 'Percusión',
+            'Piano': 'Piano',
+            'Saxofón': 'Saxofón',
+            'Saxofon': 'Saxofón', # Handle typo in JSON
+            'Trombón': 'Trombón',
+            'Trompeta': 'Trompeta',
+            'Viola': 'Viola',
+            'Violonchelo': 'Violonchelo',
+            'Violín': 'Violín',
+            # "Instrumento Que Estudia En El Conservatorio Bolívar" should be ignored as per user
         }
-        
-        subject_name_map = {
-            "Acompañamiento Para Pianistas": "Acompañamiento",
-            "Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro": "Agrupaciones",
-            "Capacitacion En Música": "Capacitación en música",
-            "Capacitación En Música": "Capacitación en música",
-            "Conjunto Instrumental/Vocal O Mixto": "Conjunto instrumental",
-            "Coro Mgs.Marco Tocto": "Coro",
-            "Creacion Y Arreglos": "Creación y arreglos",
-            "Creación Y Arreglos": "Creación y arreglos",
-            "Educación Rítmica Audioperceptiva": "Educación rítmica audioperceptiva",
-            "Formación Y Orientación": "Formación y orientación",
-            "Formación Y Orientación Laboral": "Formación y orientación",
-            "Formas Musical": "Formas musicales",
-            "Formas Musicales": "Formas musicales",
-            "Historia De La Música": "Historia de la música",
-            "Informática Aplicada": "Informática aplicada",
-            "Informática Aplicada 9O B": "Informática aplicada",
-            "Lenguaje Musica": "Lenguaje musical",
-            "Lenguaje Musica Mgs.Israel Pérez": "Lenguaje musical",
-            "Lenguaje Musica Mgs.Jorge De La Cruz": "Lenguaje musical",
-            "Lenguaje Musical": "Lenguaje musical",
-            "Orquesta Pedagógica": "Orquesta pedagógica",
-            "Piano Complementario": "Complementario",
-            "Producción Artístico Musical": "Producción artístico musical",
-            "Lenguaje": "Lenguaje musical",
-            "Armonía": "Armonía",
-            "Coro": "Coro",
-            "Audioperceptiva": "Audioperceptiva",
-            "Instrumento": "Instrumento Principal",
-        }
-        # --- End of Manual Mapping ---
-        
-        
-        json_base_dir = '/usr/src/base_de_datos_json'
-        instrumento_dir = os.path.join(json_base_dir, 'Instrumento_Agrupaciones')
-        agrupaciones_dir = os.path.join(json_base_dir, 'asignaciones_grupales')
-
-        created_count = 0
-        
-        # --- Process Instrumento_Agrupaciones files ---
-        if os.path.exists(instrumento_dir):
-            for filename in os.listdir(instrumento_dir):
-                if filename.endswith('.json') and \
-                   filename != 'ESTUDIANTES_CON_REPRESENTANTES.json' and \
-                   filename != 'ASIGNACIONES_instrumento_que_estudia_en_el_conservatorio_bolívar.json':
-                    
-                    file_path = os.path.join(instrumento_dir, filename)
-                    self.stdout.write(self.style.NOTICE(f'Procesando archivo: {filename}'))
-
-                    # Extract subject name from filename and canonicalize it
-                    raw_subject_name_from_file = filename.replace('ASIGNACIONES_', '').replace('.json', '').replace('_', ' ').strip().capitalize()
-                    # Apply the same subject_name_map for consistency
-                    canonical_subject_name_from_file = subject_name_map.get(raw_subject_name_from_file, raw_subject_name_from_file)
-
-                    self.stdout.write(f"  DEBUG: filename: {filename}")
-                    self.stdout.write(f"  DEBUG: raw_subject_name_from_file: '{raw_subject_name_from_file}'")
-                    self.stdout.write(f"  DEBUG: canonical_subject_name_from_file (after map): '{canonical_subject_name_from_file}'")
-
-                    # Robust subject lookup (copied from import_classes.py)
-                    subject = None
-                    all_subjects = {s.name: s for s in Subject.objects.all()} # Re-fetch to be safe
-                    # 1. Try exact match (case-sensitive)
-                    subject = all_subjects.get(canonical_subject_name_from_file)
-                    
-                    # 2. If not, try exact match (case-insensitive)
-                    if not subject:
-                        for db_subject_name, subject_obj in all_subjects.items():
-                            if db_subject_name.lower() == canonical_subject_name_from_file.lower():
-                                subject = subject_obj
-                                break
-                    
-                    # 3. If not, try "starts with" match (case-insensitive)
-                    if not subject:
-                        for db_subject_name, subject_obj in all_subjects.items():
-                            if db_subject_name.lower().startswith(canonical_subject_name_from_file.lower()):
-                                subject = subject_obj
-                                break # Usar la primera coincidencia encontrada
-                    
-                    self.stdout.write(f"  DEBUG: Subject found in DB: {subject.name if subject else 'None'}")
-                    
-                    if not subject:
-                        self.stdout.write(self.style.WARNING(f"Materia '{canonical_subject_name_from_file}' (del archivo '{filename}') no encontrada en la DB. Omitiendo archivo."))
-                        continue
-
-                    
-                    # Find classes associated with this subject
-                    clases = Clase.objects.filter(subject=subject)
-                    if not clases.exists():
-                        self.stdout.write(self.style.WARNING(f"No se encontraron clases para la materia '{subject.name}'. Omitiendo archivo {filename}"))
-                        continue
-
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        data = json.load(f)
-                    
-                    for item in data: # This loop's content is over-indented by 8 spaces
-                        fields = item.get('fields', {})
-                        student_full_name_json = fields.get('full_name', '').strip() # Assuming this is student's full name from new JSON
-                        docente_nombre_json = fields.get('docente_nombre', '').strip()
-                        specialization_instrument_json = fields.get('specialization_instrument', '').strip()
-
-                        if not student_full_name_json or not docente_nombre_json or not specialization_instrument_json:
-                            self.stdout.write(self.style.WARNING(f"Registro omitido por datos incompletos en {filename}: {fields}"))
-                            continue
-                        
-                        # Find the student
-                        student = Student.objects.filter(name__iexact=student_full_name_json).first()
-                        if not student:
-                            self.stdout.write(self.style.WARNING(f"Estudiante '{student_full_name_json}' no encontrado. No se pudo matricular."))
-                            continue
-                        
-                        # Apply maps for teacher and subject
-                        canonical_teacher_name = teacher_name_map.get(docente_nombre_json, docente_nombre_json)
-                        canonical_subject_name = subject_name_map.get(specialization_instrument_json, specialization_instrument_json)
-
-                        self.stdout.write(f"  DEBUG: Processing Agrupaciones - Raw subject: '{specialization_instrument_json}'")
-                        self.stdout.write(f"  DEBUG: Processing Agrupaciones - Canonical subject: '{canonical_subject_name}'")
-
-                        teacher = Teacher.objects.filter(full_name__iexact=canonical_teacher_name).first()
-                        
-                        # Robust subject lookup (copied from import_classes.py)
-                        subject = None
-                        all_subjects_dict = {s.name: s for s in Subject.objects.all()} # Re-fetch to be safe
-                        # 1. Try exact match (case-sensitive)
-                        subject = all_subjects_dict.get(canonical_subject_name)
-                        
-                        # 2. If not, try exact match (case-insensitive)
-                        if not subject:
-                            for db_subject_name, subject_obj in all_subjects_dict.items():
-                                if db_subject_name.lower() == canonical_subject_name.lower():
-                                    subject = subject_obj
-                                    break
-                        
-                        # 3. If not, try "starts with" match (case-insensitive)
-                        if not subject:
-                            for db_subject_name, subject_obj in all_subjects_dict.items():
-                                if db_subject_name.lower().startswith(canonical_subject_name.lower()):
-                                    subject = subject_obj
-                                    break # Usar la primera coincidencia encontrada
-
-                        self.stdout.write(f"  DEBUG: Processing Agrupaciones - Subject found in DB: {subject.name if subject else 'None'}")
-
-                        if not teacher:
-                            self.stdout.write(self.style.WARNING(f"Docente '{canonical_teacher_name}' no encontrado para '{student_full_name_json}'. No se pudo matricular."))
-                            continue
-                        if not subject:
-                            self.stdout.write(self.style.WARNING(f"Materia '{canonical_subject_name}' no encontrada para '{student_full_name_json}'. No se pudo matricular."))
-                            continue
-                        
-                        # Construct expected class name (same logic as import_classes)
-                        expected_class_name = subject.name
-                        
-                        # Find the specific Clase object
-                        clase = Clase.objects.filter(
-                            name__iexact=expected_class_name,
-                            teacher=teacher,
-                            subject=subject
-                        ).first()
-
-                        if not clase:
-                            self.stdout.write(self.style.WARNING(f"Clase '{expected_class_name}' no encontrada para '{student_full_name_json}'. No se pudo matricular."))
-                            continue
-                        
-                        try:
-                            enrollment, created = Enrollment.objects.get_or_create(
-                                student=student,
-                                clase=clase,
-                                defaults={{'active': True}}
-                            )
-                            if created:
-                                created_count += 1
-                                self.stdout.write(self.style.SUCCESS(f"Matrícula creada: {student.name} en {clase.name}"))
-                        except IntegrityError:
-                            self.stdout.write(self.style.NOTICE(f"Matrícula existente: {student.name} ya está en {clase.name}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Archivo no encontrado: {file_path}"))
-        else:
-            self.stdout.write(self.style.WARNING(f"Directorio no encontrado: {instrumento_dir}"))
 
 
+        for filename in os.listdir(json_folder):
+            if filename.startswith('ASIGNACIONES_') and filename.endswith('.json'):
+                # Ignore the template file
+                if filename == 'ASIGNACIONES_instrumento_que_estudia_en_el_conservatorio_bolívar.json':
+                    self.stdout.write(self.style.NOTICE(f"Skipping template file: {filename}"))
+                    continue
 
-        # --- Process asignaciones_grupales files (e.g., ASIGNACIONES_agrupaciones.json) ---
-        if os.path.exists(agrupaciones_dir):
-            filename = 'ASIGNACIONES_agrupaciones.json'
-            file_path = os.path.join(agrupaciones_dir, filename)
-            if os.path.exists(file_path):
-                self.stdout.write(self.style.NOTICE(f'Procesando archivo: {filename}'))
-
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
+                file_path = os.path.join(json_folder, filename)
                 
-                for item in data:
-                    fields = item.get('fields', {})
-                    student_full_name_json = fields.get('full_name', '').strip()
-                    docente_nombre_json = fields.get('docente_nombre', '').strip()
-                    # Assuming for Agrupaciones, the subject is always 'Agrupaciones' if not explicitly in JSON
-                    specialization_instrument_json = fields.get('specialization_instrument', 'Agrupaciones').strip()
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
 
-                    if not student_full_name_json or not docente_nombre_json or not specialization_instrument_json:
-                        self.stdout.write(self.style.WARNING(f"Registro omitido por datos incompletos en {filename}: {fields}"))
+                self.stdout.write(self.style.SUCCESS(f'Processing file: {filename}'))
+
+                for entry in data:
+                    fields = entry.get('fields', {})
+                    if not fields:
+                        continue
+
+                    student_full_name = fields.get('full_name')
+                    if not student_full_name or student_full_name == 'Apellidos Del Estudiante Nombres Del Estudiante':
+                        continue
+                        
+                    # 1. Find Student
+                    normalized_student_name = normalize_name(student_full_name)
+                    
+                    best_match_student = None
+                    highest_ratio = 0.0
+                    
+                    for student in students_in_db:
+                        normalized_db_name = normalize_name(student.name)
+                        ratio = similarity_ratio(normalized_student_name, normalized_db_name)
+                        if ratio > highest_ratio:
+                            highest_ratio = ratio
+                            best_match_student = student
+                    
+                    if not best_match_student or highest_ratio < 0.65: # Lowered threshold
+                        self.stdout.write(self.style.WARNING(f"Could not find a unique student for: '{student_full_name}' (best match: {best_match_student.name if best_match_student else 'None'}, ratio: {highest_ratio:.2f})"))
                         continue
                     
-                    # Find the student
-                    student = Student.objects.filter(name__iexact=student_full_name_json).first()
-                    if not student:
-                        self.stdout.write(self.style.WARNING(f"Estudiante '{student_full_name_json}' no encontrado. No se pudo matricular."))
+                    student = best_match_student
+
+                    # 2. Find Teacher
+                    teacher_name = fields.get('docente_nombre')
+                    if not teacher_name:
+                        self.stdout.write(self.style.WARNING(f"No teacher name found for student '{student_full_name}' in file {filename}"))
                         continue
                     
-                    # Apply maps for teacher and subject
-                    canonical_teacher_name = teacher_name_map.get(docente_nombre_json, docente_nombre_json)
-                    canonical_subject_name = subject_name_map.get(specialization_instrument_json, specialization_instrument_json)
-
-                    self.stdout.write(f"  DEBUG: Processing Agrupaciones - Raw subject: '{specialization_instrument_json}'")
-                    self.stdout.write(f"  DEBUG: Processing Agrupaciones - Canonical subject: '{canonical_subject_name}'")
-
-                    teacher = Teacher.objects.filter(full_name__iexact=canonical_teacher_name).first()
+                    normalized_teacher_name = normalize_name(teacher_name)
                     
-                    # Robust subject lookup (copied from import_classes.py)
-                    subject = None
-                    all_subjects_dict = {s.name: s for s in Subject.objects.all()} # Re-fetch to be safe
-                    # 1. Try exact match (case-sensitive)
-                    subject = all_subjects_dict.get(canonical_subject_name)
-                    
-                    # 2. If not, try exact match (case-insensitive)
-                    if not subject:
-                        for db_subject_name, subject_obj in all_subjects_dict.items():
-                            if db_subject_name.lower() == canonical_subject_name.lower():
-                                subject = subject_obj
-                                break
-                    
-                    # 3. If not, try "starts with" match (case-insensitive)
-                    if not subject:
-                        for db_subject_name, subject_obj in all_subjects_dict.items():
-                            if db_subject_name.lower().startswith(canonical_subject_name.lower()):
-                                subject = subject_obj
-                                break # Usar la primera coincidencia encontrada
+                    best_match_teacher = None
+                    highest_ratio = 0.0
 
-                    self.stdout.write(f"  DEBUG: Processing Agrupaciones - Subject found in DB: {subject.name if subject else 'None'}")
+                    for teacher in teachers_in_db:
+                        normalized_db_name = normalize_name(teacher.full_name)
+                        ratio = similarity_ratio(normalized_teacher_name, normalized_db_name)
+                        if ratio > highest_ratio:
+                            highest_ratio = ratio
+                            best_match_teacher = teacher
 
-                    if not teacher:
-                        self.stdout.write(self.style.WARNING(f"Docente '{canonical_teacher_name}' no encontrado para '{student_full_name_json}'. No se pudo matricular."))
+                    if not best_match_teacher or highest_ratio < 0.7:
+                        self.stdout.write(self.style.WARNING(f"Could not find a unique teacher for: '{teacher_name}' (best match: {best_match_teacher.full_name if best_match_teacher else 'None'}, ratio: {highest_ratio:.2f})"))
                         continue
-                    if not subject:
-                        self.stdout.write(self.style.WARNING(f"Materia '{canonical_subject_name}' no encontrada para '{student_full_name_json}'. No se pudo matricular."))
+                        
+                    teacher = best_match_teacher
+
+                    # 3. Find Subject
+                    json_subject_name = fields.get('clase')
+                    if not json_subject_name:
+                        self.stdout.write(self.style.WARNING(f"No subject name found for student '{student_full_name}' in file {filename}"))
                         continue
                     
-                    # Construct expected class name (same logic as import_classes)
-                    expected_class_name = subject.name
-                    
-                    # Find the specific Clase object
-                    clase = Clase.objects.filter(
-                        name__iexact=expected_class_name,
-                        teacher=teacher,
-                        subject=subject
-                    ).first()
-
-                    if not clase:
-                        self.stdout.write(self.style.WARNING(f"Clase '{expected_class_name}' no encontrada para '{student_full_name_json}'. No se pudo matricular."))
-                        continue
+                    db_subject_name = subject_name_mapping.get(json_subject_name, json_subject_name)
                     
                     try:
-                        enrollment, created = Enrollment.objects.get_or_create(
-                            student=student,
-                            clase=clase,
-                            defaults={{'active': True}}
-                        )
-                        if created:
-                            created_count += 1
-                            self.stdout.write(self.style.SUCCESS(f"Matrícula creada: {student.name} en {clase.name}"))
-                    except IntegrityError:
-                        self.stdout.write(self.style.NOTICE(f"Matrícula existente: {student.name} ya está en {clase.name}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"Archivo no encontrado: {file_path}"))
-        else:
-            self.stdout.write(self.style.WARNING(f"Directorio no encontrado: {agrupaciones_dir}"))
+                        subject = Subject.objects.get(name=db_subject_name)
+                    except Subject.DoesNotExist:
+                        self.stdout.write(self.style.WARNING(f"Subject '{db_subject_name}' not found in DB (from JSON: '{json_subject_name}'). Skipping student '{student.name}'"))
+                        continue
+
+                    # 4. Find Class - now multiple classes are possible
+                    grade_json = fields.get('grado')
+                    section_json = fields.get('paralelo')
+
+                    if not grade_json or not section_json:
+                        self.stdout.write(self.style.WARNING(f"Incomplete grade/section for student '{student_full_name}' in file {filename}. Skipping."))
+                        continue
+                        
+                    normalized_grade_section_json = convert_grade_and_section(grade_json, section_json)
+
+                    # Find all classes that match the teacher and subject
+                    potential_classes = [c for c in classes_in_db if c.teacher == teacher and c.subject == subject]
+                    
+                    matched_classes_for_student = []
+                    
+                    self.stdout.write(self.style.NOTICE(f"\n--- Debugging Class Matching for Student: '{student.name}' ---"))
+                    self.stdout.write(self.style.NOTICE(f"  JSON Grade/Section: '{grade_json} {section_json}'"))
+                    self.stdout.write(self.style.NOTICE(f"  Normalized JSON Grade/Section: '{normalized_grade_section_json}'"))
+                    self.stdout.write(self.style.NOTICE(f"  Teacher: '{teacher.full_name}', Subject: '{subject.name}'"))
+                    self.stdout.write(self.style.NOTICE(f"  Potential Classes ({len(potential_classes)}): {[c.name for c in potential_classes]}"))
 
 
+                    for clase_obj in potential_classes:
+                        normalized_clase_name = normalize_name(clase_obj.name)
+                        normalized_clase_name_parts = normalized_clase_name.split(' - ')
+                        
+                        class_grade_section_part = ""
+                        if len(normalized_clase_name_parts) > 1:
+                            class_grade_section_part = normalized_clase_name_parts[1]
+                        else:
+                            # If class name is not in expected format, try matching entire name
+                            class_grade_section_part = normalized_clase_name
+                            
+                        # Fuzzy match the parsed JSON grade/section against the class's grade/section part
+                        ratio = similarity_ratio(normalized_grade_section_json, class_grade_section_part)
+                        
+                        self.stdout.write(self.style.NOTICE(f"    - Clase DB: '{clase_obj.name}' (Normalized: '{normalized_clase_name}')"))
+                        self.stdout.write(self.style.NOTICE(f"      Comparing against: '{class_grade_section_part}'"))
+                        self.stdout.write(self.style.NOTICE(f"      Ratio: {ratio:.2f}"))
 
-        self.stdout.write(self.style.SUCCESS('--- Fin de la importación de Matrículas ---'))
-        self.stdout.write(self.style.SUCCESS(f'Total de nuevas matrículas creadas: {created_count}'))
+                        # Use a reasonable threshold for class matching
+                        if ratio > 0.6: # Lowered threshold due to potential variations in grade/section naming
+                            matched_classes_for_student.append((clase_obj, ratio))
+                    
+                    if not matched_classes_for_student:
+                        self.stdout.write(self.style.WARNING(f"  Could not find any suitable class for student '{student.name}' with subject '{subject.name}', teacher '{teacher.full_name}', grade '{grade_json}', section '{section_json}'"))
+                        continue
+                        
+                    # Sort by ratio to get the best match first
+                    matched_classes_for_student.sort(key=lambda x: x[1], reverse=True)
+                    best_match_clase, best_match_ratio = matched_classes_for_student[0]
+
+                    # Check for multiple equally good matches at the top ratio
+                    if len(matched_classes_for_student) > 1 and matched_classes_for_student[0][1] == matched_classes_for_student[1][1]:
+                         self.stdout.write(self.style.WARNING(f"Multiple equally good classes found for '{subject.name} - {grade_json} {section_json}' (best ratio: {best_match_ratio:.2f}). Skipping enrollment for student '{student.name}'"))
+                         continue
+                        
+                    # 5. Create Enrollment
+                    enrollment, created = Enrollment.objects.get_or_create(
+                        student=student,
+                        clase=best_match_clase
+                    )
+                    if created:
+                        enrollment_count += 1
+                        self.stdout.write(self.style.SUCCESS(f"Enrolled '{student.name}' in '{best_match_clase.name}'"))
+                    else:
+                        self.stdout.write(self.style.NOTICE(f"'{student.name}' was already enrolled in '{best_match_clase.name}'"))
+
+        self.stdout.write(self.style.SUCCESS(f'\nFinished processing enrollments. Total enrollments created/found: {enrollment_count}'))

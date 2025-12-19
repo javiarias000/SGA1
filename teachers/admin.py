@@ -1,21 +1,26 @@
 from django.contrib import admin
+
 from .models import Teacher
-from classes.models import Curso, Clase, Deber, DeberEntrega
+from classes.models import Deber, DeberEntrega
+
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'user', 'specialization', 'phone', 'created_at']
-    search_fields = ['full_name', 'user__username', 'user__email']
-    list_filter = ['specialization', 'created_at']
+    list_display = ['full_name', 'usuario', 'specialization', 'phone', 'created_at']
+    search_fields = ['usuario__nombre', 'usuario__email', 'usuario__cedula', 'specialization']
+    list_filter = ['created_at', 'specialization']
     readonly_fields = ['created_at']
-    filter_horizontal = ['subjects']
-    
+    # filter_horizontal = ['subjects'] # Removed subjects
+
     fieldsets = (
         ('Información de Usuario', {
-            'fields': ('user',)
+            'fields': ('usuario',)
         }),
-        ('Datos Personales', {
-            'fields': ('full_name', 'specialization', 'phone', 'subjects')
+        ('Datos Docente', {
+            'fields': ('specialization',) # Removed subjects
+        }),
+        ('Perfil', {
+            'fields': ('photo',)
         }),
         ('Registro', {
             'fields': ('created_at',)
@@ -32,22 +37,14 @@ class TeacherAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(Curso)
-class CursoAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'nivel', 'total_estudiantes']
-    search_fields = ['nombre', 'nivel']
-    filter_horizontal = ['estudiantes']
-    
-    def total_estudiantes(self, obj):
-        return obj.estudiantes.count()
-    total_estudiantes.short_description = 'Estudiantes'
+
 
 @admin.register(Deber)
 class DeberAdmin(admin.ModelAdmin):
     list_display = ['titulo', 'clase', 'teacher', 'fecha_entrega', 'estado', 'porcentaje_entrega']
     list_filter = ['estado', 'clase', 'fecha_entrega']
     search_fields = ['titulo', 'descripcion']
-    filter_horizontal = ['cursos', 'estudiantes_especificos']
+    filter_horizontal = ['estudiantes_especificos']
     date_hierarchy = 'fecha_entrega'
     
     def porcentaje_entrega(self, obj):
@@ -58,5 +55,5 @@ class DeberAdmin(admin.ModelAdmin):
 class DeberEntregaAdmin(admin.ModelAdmin):
     list_display = ['deber', 'estudiante', 'fecha_entrega', 'calificacion', 'estado']
     list_filter = ['estado', 'deber']
-    search_fields = ['deber__titulo', 'estudiante__username', 'estudiante__first_name']
+    search_fields = ['deber__titulo', 'estudiante__nombre']
     readonly_fields = ['fecha_entrega', 'fecha_actualizacion']

@@ -1,0 +1,422 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Merino López Emily Monserrath",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Velástegui Vilcacundo Martín Ignacio",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Poaquiza Cordova Daniel Alexander",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Fiallos Jácome Matías Sebastián",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Masabanda Barrera Carlos Alejandro",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Noboa Barros Kevin Matias",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Cadena Chaglla Emilia Alejandra",
+      "docente_nombre": "Guananga Aizabucha Javier Santiago",
+      "clase": "Saxofón",
+      "grado": "1o",
+      "paralelo": "B extrarodinario",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Aguilar Moreta Dylan Abiel",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Olovacha Tubon José Andrés",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Punina Guaman Adonis Jared",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "3o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Bombón Montero Jeremy Daniel",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Lindo Chillagana Sofía Isabella",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Tipán Alomaliza Marlon Alexander",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Vega Ruiz Ángela Sofía",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Gavilema Caiza Santiago Ismael",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "7o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Núñez Caiza Adrián Mateo",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Rosales Jordán Andrés Sebastián",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Caguana Paucar Keyla Nicole",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Lopez Andaluz Domenica Guadalupe",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Toapanta Avalos Ailyn Monserrath",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "7o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Matute Tunja Damaris Renata",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "7o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Tiviano Aucatoma Franklin Ronaldhino",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Aldáz Sánchez Stefano Nicolás",
+      "docente_nombre": "Toapanta Arequipa Danny Alexander",
+      "clase": "Saxofón",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Naranjo Duque Génesis Ariana",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofón",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Solis Jerez Jared Sebastián",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofón",
+      "grado": "3o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 26,
+    "fields": {
+      "full_name": "Ochoa Lascano Fernando Ariel",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofón",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 27,
+    "fields": {
+      "full_name": "Acosta Ruíz Samuel Alexander",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofon",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 28,
+    "fields": {
+      "full_name": "Guamán Flores Mathías Leonel",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofon",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 29,
+    "fields": {
+      "full_name": "Yanez Rivera Maykel Isdrael",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofon",
+      "grado": "2o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 30,
+    "fields": {
+      "full_name": "Yuquilema Anilema Abraham Ezequiel",
+      "docente_nombre": "Arevalo Catañeda Angel Jorge",
+      "clase": "Saxofon",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

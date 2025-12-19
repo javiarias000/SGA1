@@ -1,0 +1,114 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "López Iza Eduardo José",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Calderón Trujillo Rodrigo Alejandro",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Villalva Reinoso Mayte Isabella",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Andaluz Coba Anton Jhosmar",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Yanez Rivera Angelo Josue",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Muzo Espinoza Santiago Jesús",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "5o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Amancha Moposita Sol Isabel",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Tirado Freiré Danilo Joel",
+      "docente_nombre": "Peralta Aponte Christian Hernán",
+      "clase": "Trombón",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Vientos",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

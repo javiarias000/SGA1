@@ -1,0 +1,352 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Chisag Guamán Doménica Anahí",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Ojeda Villacres Angel Matias",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Cedeño Vanegas Karen Daniela",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Guananga Carrera Daniela Alexandra",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Albuja Cortes Sofia",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Cabezas Aveiga Paula Sarahí",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Checa Vivanco Sarahí Escarlett",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Chuqui Caguano Ailen Sarahi",
+      "docente_nombre": "Violín",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Vela Altamirano Alice Samara",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Viera Lezano Marco Israel",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Castillo Romero Joshua",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Estrada Supe Saila Irais",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Pérez Criollo Daniela Abigail",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Mena Ramírez Cristian Iván",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Zamora López Keyla Paulina",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "11o (3o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 16,
+    "fields": {
+      "full_name": "Espinoza De Los Monteros Lema Nahomi Salomé",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 17,
+    "fields": {
+      "full_name": "Lucio Rojano Fernando Xavier",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 18,
+    "fields": {
+      "full_name": "Manjarres Bonilla Alisson Mayreth",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 19,
+    "fields": {
+      "full_name": "Moreta Chicaiza Alisson Domenica",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 20,
+    "fields": {
+      "full_name": "Pérez Carvajal Mateo Gabriel",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 21,
+    "fields": {
+      "full_name": "Quispe Castillo Ailin Escarleth",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 22,
+    "fields": {
+      "full_name": "Villar Contreras Christian Andrés",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 23,
+    "fields": {
+      "full_name": "Lema Peñaloza Paula Ivanova",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 24,
+    "fields": {
+      "full_name": "Rodríguez Bazurto Bryan Ismael",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 25,
+    "fields": {
+      "full_name": "Sánchez Gavilanes Samantha Sarahí",
+      "docente_nombre": "Piano",
+      "clase": "Acompañamiento",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Acompañamiento",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

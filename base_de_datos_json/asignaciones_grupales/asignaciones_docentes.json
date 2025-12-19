@@ -1,0 +1,47 @@
+
+[
+    {
+        "agrupacion": "Banda Sinfónica Edison Chiluisa",
+        "docente_asignado": "Peralta Aponte Christian Hernán"
+    },
+    {
+        "agrupacion": "Coro Matutino",
+        "docente_asignado": "Quinapanta Tibán Angel Rodrigo"
+    },
+    {
+        "agrupacion": "Coro Vespertino",
+        "docente_asignado": "Laura Guamán Christian Daniel"
+    },
+    {
+        "agrupacion": "Ensamble de Guitarras",
+        "docente_asignado": "Cumbicos Macas José Luis"
+    },
+    {
+        "agrupacion": "Ensamble de guitarras",
+        "docente_asignado": "Arias Cuenca Jorge Javier"
+    },
+    {
+        "agrupacion": "Orquesta Matutina",
+        "docente_asignado": "Pérez Toapanta Diego Armando"
+    },
+    {
+        "agrupacion": "Coro (estudiantes de piano)",
+        "docente_asignado": "Erazo Moreno Carlos Efrén"
+    },
+    {
+        "agrupacion": "Ensamble de Flautas traversas",
+        "docente_asignado": "Larreátegui Feijoó Inés María"
+    },
+    {
+        "agrupacion": "Ensamble de vientos (saxofón, clarinete, trompeta, trombón)",
+        "docente_asignado": "Guananga Aizabucha Javier Santiago"
+    },
+    {
+        "agrupacion": "Orquesta sinfónica bolívar",
+        "docente_asignado": "Obando Mayorga Byron Geovanny"
+    },
+    {
+        "agrupacion": "Orquesta de cuerdas frotadas (violín, viola, violonchelo, contrabajo)",
+        "docente_asignado": "Villena Cárdenas Maria Isabel"
+    }
+]

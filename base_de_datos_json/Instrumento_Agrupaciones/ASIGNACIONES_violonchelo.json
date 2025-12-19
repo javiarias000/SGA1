@@ -1,0 +1,212 @@
+[
+  {
+    "model": "default.data",
+    "pk": 1,
+    "fields": {
+      "full_name": "Quispe Toasa Arlet Sarahi",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "2o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 2,
+    "fields": {
+      "full_name": "Choco Nuñez Kamila Raquel",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "4o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 3,
+    "fields": {
+      "full_name": "Fonseca Pérez Joffre Gabriel",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "5o",
+      "paralelo": "A (matutina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 4,
+    "fields": {
+      "full_name": "Chávez Viera Darla Itamar",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "11o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 5,
+    "fields": {
+      "full_name": "Flores Acurio Doménica Carolina",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 6,
+    "fields": {
+      "full_name": "Moposita Chango Daniela Abigail",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "2o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 7,
+    "fields": {
+      "full_name": "Gaibor Abril Ariana Polette",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "3o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 8,
+    "fields": {
+      "full_name": "Alvarado Chávez Dana Noemi",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "4o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 9,
+    "fields": {
+      "full_name": "Ramírez Castro Johan Gabriel",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "4o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 10,
+    "fields": {
+      "full_name": "Tobar Pérez Camila Alejandra",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "5o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 11,
+    "fields": {
+      "full_name": "Gaibor Tipanluiza Daniel Benjamín",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "6o",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 12,
+    "fields": {
+      "full_name": "Peñaloza Zumbana Jade Sarahi",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "6o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 13,
+    "fields": {
+      "full_name": "Sánchez Gavilanes Aaron Isaac",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "8o",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 14,
+    "fields": {
+      "full_name": "Flores Freire Kiara Simone",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "9o (1o Bachillerato)",
+      "paralelo": "B (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  },
+  {
+    "model": "default.data",
+    "pk": 15,
+    "fields": {
+      "full_name": "Narváez Borja Emily Abigail",
+      "docente_nombre": "Peña Núñez Andrea Michelle",
+      "clase": "Violonchelo",
+      "grado": "10o (2o Bachillerato)",
+      "paralelo": "C (vespertina)",
+      "tipo_asignacion": "Frotadas",
+      "email_estudiante": "FALTANTE",
+      "docente_email": "FALTANTE"
+    }
+  }
+]

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Usuario
 
 # 1. Desregistrar el UserAdmin que viene por defecto
 admin.site.unregister(User)
@@ -38,6 +38,14 @@ class CustomUserAdmin(BaseUserAdmin):
         if not obj:
             return list()
         return super(CustomUserAdmin, self).get_inline_instances(request, obj)
+
+@admin.register(Usuario)
+class UsuarioAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'rol', 'email', 'cedula', 'auth_user')
+    list_filter = ('rol',)
+    search_fields = ('nombre', 'email', 'cedula', 'auth_user__username')
+    autocomplete_fields = ('auth_user',)
+
 
 # Opcional: Registrar el modelo Profile por separado si también se quiere
 # acceder a él directamente (además del inline).

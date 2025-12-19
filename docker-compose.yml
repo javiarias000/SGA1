@@ -8,8 +8,8 @@ services:
     command: sh -c "python manage.py collectstatic --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/app
-      - ../archivos_formularios:/usr/src/archivos_formularios:ro
-      - ../base_de_datos_json:/usr/src/base_de_datos_json:ro
+      - ./archivos_formularios:/usr/src/archivos_formularios:ro
+      - ./base_de_datos_json:/usr/src/base_de_datos_json:rw
     ports:
       - "8000:8000"
     env_file:
