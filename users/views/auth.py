@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
 from teachers.models import Teacher
+from users.models import Usuario
 from django.db import IntegrityError
 
 

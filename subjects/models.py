@@ -5,7 +5,7 @@ class Subject(models.Model):
         ('TEORIA', 'Teoría'),
         ('AGRUPACION', 'Agrupación'),
         ('INSTRUMENTO', 'Instrumento'),
-        ('OTRO', 'Otro'), # Add an 'Other' option for flexibility
+        ('OTRO', 'Otro'), 
     ]
 
     name = models.CharField(max_length=120, unique=True, verbose_name="Nombre de la materia")

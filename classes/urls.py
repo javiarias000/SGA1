@@ -1,6 +1,8 @@
 from django.urls import path
+from . import views
 
-# Esta app solo maneja modelos, no vistas
-# Las URLs están en teachers/ y students/
+app_name = 'classes'
 
-urlpatterns = []
+urlpatterns = [
+    path('enroll_student/', views.enroll_student_view, name='enroll_student_view'),
+]

@@ -72,50 +72,54 @@ def map_grade_level(curso_raw: Any, paralelo_raw: Any) -> GradeLevelParsed:
     # Normalize section like "B (vespertina)" -> "B"
     section = paralelo.split('(')[0].strip() if paralelo else None
 
-    s = norm_key(curso)
+    # Extract primary course name, ignoring parenthesized info for initial mapping
+    curso_main_part = re.sub(r'\s*\(.*\)\s*', '', curso).strip()
+    s_normalized = norm_key(curso_main_part)
 
-    # Support multiple formats:
-    # - "Primero", "Segundo", ...
-    # - "1o", "9o (1o Bachillerato)", ...
-    # IMPORTANT: order matters (e.g. "2o" is substring of "10o"), so we match longer patterns first.
+    # IMPORTANT: order matters (longer patterns first).
+    # Convert keys to normalized form for comparison
     mapping_ordered = [
-        ('11o (3o bachillerato)', '11'),
-        ('10o (2o bachillerato)', '10'),
-        ('9o (1o bachillerato)', '9'),
-        ('11o', '11'),
-        ('10o', '10'),
-        ('9o', '9'),
-        ('8o', '8'),
-        ('7o', '7'),
-        ('6o', '6'),
-        ('5o', '5'),
-        ('4o', '4'),
-        ('3o', '3'),
-        ('2o', '2'),
-        ('1o', '1'),
-        ('undécimo', '11'),
-        ('undecimo', '11'),
-        ('onceavo', '11'),
-        ('décimo', '10'),
-        ('decimo', '10'),
+        ('11o (3o bachillerato)', '11'), # Full form with bachillerato
+        ('10o (2o bachillerato)', '10'), # Full form with bachillerato
+        ('9o (1o bachillerato)', '9'),  # Full form with bachillerato
+
+        ('undécimo año', '11'), ('undecimo año', '11'),
+        ('décimo año', '10'), ('decimo año', '10'),
+        ('noveno año', '9'),
+        ('octavo año', '8'),
+        ('séptimo año', '7'), ('septimo año', '7'),
+        ('sexto año', '6'),
+        ('quinto año', '5'),
+        ('cuarto año', '4'),
+        ('tercero año', '3'),
+        ('segundo año', '2'),
+        ('primero año', '1'),
+
+        ('undécimo', '11'), ('undecimo', '11'), ('onceavo', '11'),
+        ('décimo', '10'), ('decimo', '10'),
         ('noveno', '9'),
         ('octavo', '8'),
-        ('séptimo', '7'),
-        ('septimo', '7'),
+        ('séptimo', '7'), ('septimo', '7'),
         ('sexto', '6'),
         ('quinto', '5'),
         ('cuarto', '4'),
         ('tercero', '3'),
         ('segundo', '2'),
         ('primero', '1'),
+
+        ('11o', '11'), ('10o', '10'), ('9o', '9'), ('8o', '8'), ('7o', '7'),
+        ('6o', '6'), ('5o', '5'), ('4o', '4'), ('3o', '3'), ('2o', '2'), ('1o', '1'),
+        
+        ('11', '11'), ('10', '10'), ('9', '9'), ('8', '8'), ('7', '7'),
+        ('6', '6'), ('5', '5'), ('4', '4'), ('3', '3'), ('2', '2'), ('1', '1'),
     ]
 
     level = None
-    for k, v in mapping_ordered:
-        if k in s:
+    for k_raw, v in mapping_ordered:
+        if s_normalized == norm_key(k_raw): # Exact match after normalization
             level = v
             break
-
+    
     return GradeLevelParsed(level=level, section=section)
 
 

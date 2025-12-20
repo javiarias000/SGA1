@@ -33,14 +33,14 @@ from classes.models import (
 )
 
 from students.forms import StudentForm
-from classes.forms import ActivityForm, GradeForm, AttendanceForm, TeacherProfileForm, ClaseForm
+
 
 
 from .forms import DeberForm, DeberEntregaForm, CalificacionForm
 
 # ============================================
 # DASHBOARD DOCENTE
-# ============================================
+# ============================================ 
 
 
 def _teacher_usuario(teacher: Teacher):
@@ -410,11 +410,7 @@ def _guardar_calificaciones(request, teacher):
                             parcial=parcial,
                             quimestre=quimestre,
                             tipo_aporte=tipo_aporte,
-                            defaults={
-                                'calificacion': nota,
-                                'observaciones': observaciones_completas,
-                                'registrado_por': teacher
-                            }
+                            defaults={'calificacion': nota, 'observaciones': observaciones_completas, 'registrado_por': teacher}
                         )
                         calificaciones_guardadas += 1
                         
@@ -788,9 +784,9 @@ def gestionar_tipos_aportes(request):
 
 
 
-# ============================================
+# ============================================ 
 # ESTUDIANTES - GESTIÓN
-# ============================================
+# ============================================ 
 
 @teacher_required
 def estudiantes_view(request):
@@ -919,7 +915,9 @@ def clases_dashboard_view(request):
     teacher = request.user.teacher_profile
     
     # Estadísticas para cada tipo de materia
-    clases_docente = _teacher_clases_qs(teacher)
+    clases_docente = _teacher_clases_qs(teacher).filter(
+        Q(docente_base=teacher.usuario) | Q(enrollments__docente=teacher.usuario)
+    ).distinct()
 
     def _students_count_for(tipo):
         usuario_ids = Enrollment.objects.filter(
@@ -950,9 +948,9 @@ def clases_dashboard_view(request):
     return render(request, 'teachers/clases_dashboard.html', context)
 
 
-# ============================================
+# ============================================ 
 # CLASES POR TIPO (Teoría, Agrupación, Instrumento)
-# ============================================
+# ============================================ 
 
 def _subject_type_list_context(request, subject_type_param, subject_type_display_name, template_name):
     teacher = request.user.teacher_profile
@@ -1090,9 +1088,9 @@ def instrumento_view(request):
         template_name='teachers/instrumento.html'
     )
 
-# ============================================
+# ============================================ 
 # ACTIVIDADES/CLASES
-# ============================================
+# ============================================ 
 
 @teacher_required
 def registro_view(request):
@@ -1160,9 +1158,9 @@ def activity_delete_view(request, activity_id):
     return render(request, 'teachers/activity_confirm_delete.html', {'activity': activity})
 
 
-# ============================================
+# ============================================ 
 # INFORMES
-# ============================================
+# ============================================ 
 
 @teacher_required
 def informes_view(request):
@@ -1408,22 +1406,22 @@ def guardar_calificacion_parcial(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 
-# ============================================
+# ============================================ 
 # CALIFICACIONES (CRUD)
-# ============================================
+# ============================================ 
 
 
 
-# ============================================
+# ============================================ 
 # ASISTENCIA
-# ============================================
+# ============================================ 
 
 
 
 
-# ============================================
+# ============================================ 
 # PERFIL
-# ============================================
+# ============================================ 
 
 @teacher_required
 def profile_view(request):
@@ -1445,9 +1443,9 @@ def profile_view(request):
     })
 
 
-# ============================================
+# ============================================ 
 # DESCARGAS
-# ============================================
+# ============================================ 
 
 @teacher_required
 def download_parent_report(request, activity_id):
@@ -1496,7 +1494,7 @@ Docente de Música
     """
     
     response = HttpResponse(content, content_type='text/plain; charset=utf-8')
-    filename = f"{activity.student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
+    filename = f"Docente_{activity.student.name.replace(' ', '_')}_Clase{activity.class_number}.txt"
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     
     return response
@@ -1542,9 +1540,9 @@ NOTAS:
     return response
 
 
-# ============================================
+# ============================================ 
 # API ENDPOINTS
-# ============================================
+# ============================================ 
 
 @teacher_required
 def get_class_number(request):
@@ -1600,9 +1598,9 @@ def get_student_subjects(request):
         return JsonResponse({'subjects': []})
 
 
-# ============================================
+# ============================================ 
 # API ESTADÍSTICAS
-# ============================================
+# ============================================ 
 
 @login_required
 @teacher_required
@@ -1619,9 +1617,9 @@ def api_estadisticas(request):
     return JsonResponse({'estudiantes': datos})
 
 
-# ============================================
+# ============================================ 
 # EMAIL
-# ============================================
+# ============================================ 
 
 @teacher_required
 def send_report_email(request, activity_id):
@@ -1718,9 +1716,9 @@ def send_student_report_email(request, student_id):
     return redirect('teachers:informes')
 
 
-# ============================================
+# ============================================ 
 # WHATSAPP
-# ============================================
+# ============================================ 
 
 def generate_whatsapp_url(phone_number, message):
     """Genera URL de WhatsApp"""
@@ -1808,9 +1806,9 @@ def whatsapp_attendance_report(request, student_id):
 
 
 
-# ============================================
+# ============================================ 
 # DEBERES
-# ============================================
+# ============================================ 
 
 @login_required
 def dashboard_profesor(request):
@@ -2111,14 +2109,14 @@ def lista_deberes_profesor(request):
         messages.error(request, 'No tienes permisos para acceder a esta página')
         return redirect('home')
     # Obtener el objeto Teacher vinculado al usuario logueado
-    teacher_instance = Teacher.objects.get(user=request.user)
+    teacher_instance = Teacher.objects.get(usuario__auth_user=request.user)
 
     # Filtros
     estado_filtro = request.GET.get('estado', 'todos')
     materia_filtro = request.GET.get('materia', 'todas')
     
     # Query base
-    deberes = Deber.objects.filter(teacher=request.user).select_related('clase')
+    deberes = Deber.objects.filter(teacher=teacher_instance.usuario).select_related('clase')
     
     # Aplicar filtros
     if estado_filtro != 'todos':
@@ -2134,10 +2132,10 @@ def lista_deberes_profesor(request):
     )
     
     # Estadísticas generales
-    total_deberes = Deber.objects.filter(teacher=request.user).count()
-    deberes_activos = Deber.objects.filter(teacher=request.user, estado='activo').count()
+    total_deberes = Deber.objects.filter(teacher=teacher_instance.usuario).count()
+    deberes_activos = Deber.objects.filter(teacher=teacher_instance.usuario, estado='activo').count()
     total_entregas_pendientes = DeberEntrega.objects.filter(
-        deber__teacher=request.user,
+        deber__teacher=teacher_instance.usuario,
         estado='entregado'
     ).count()
     

@@ -10,14 +10,14 @@ class TeacherAdmin(admin.ModelAdmin):
     search_fields = ['usuario__nombre', 'usuario__email', 'usuario__cedula', 'specialization']
     list_filter = ['created_at', 'specialization']
     readonly_fields = ['created_at']
-    # filter_horizontal = ['subjects'] # Removed subjects
+    # filter_horizontal = ['subjects']
 
     fieldsets = (
         ('Información de Usuario', {
             'fields': ('usuario',)
         }),
         ('Datos Docente', {
-            'fields': ('specialization',) # Removed subjects
+            'fields': ('specialization',)
         }),
         ('Perfil', {
             'fields': ('photo',)
@@ -34,9 +34,6 @@ class TeacherAdmin(admin.ModelAdmin):
 # ============================================
 # DEBERES
 # ============================================
-
-
-
 
 
 @admin.register(Deber)

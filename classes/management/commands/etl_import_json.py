@@ -333,6 +333,13 @@ class Command(BaseCommand):
                     if not estudiante_u:
                         unmatched_students.append(student_name)
                         continue
+                    
+                    # Get the Student profile from the Usuario
+                    student_profile = Student.objects.filter(usuario=estudiante_u).first()
+                    if not student_profile:
+                        self.stdout.write(self.style.WARNING(f"Skipping enrollment for {student_name}: Student profile not found for Usuario {estudiante_u.nombre}."))
+                        unmatched_students.append(student_name)
+                        continue
 
                     subject, created_s = Subject.objects.get_or_create(
                         name=agrupacion,
@@ -360,7 +367,7 @@ class Command(BaseCommand):
                         summary.clases += 1
 
                     enrollment, created_e = Enrollment.objects.get_or_create(
-                        estudiante=estudiante_u,
+                        estudiante=estudiante_u, # Pass the Usuario instance here
                         clase=clase,
                         defaults={
                             'docente': docente_u,
@@ -407,6 +414,13 @@ class Command(BaseCommand):
                             unmatched_students.append(student_name)
                             continue
 
+                        # Get the Student profile from the Usuario
+                        student_profile = Student.objects.filter(usuario=estudiante_u).first()
+                        if not student_profile:
+                            self.stdout.write(self.style.WARNING(f"Skipping enrollment for {student_name}: Student profile not found for Usuario {estudiante_u.nombre}."))
+                            unmatched_students.append(student_name)
+                            continue
+
                         docente_u = find_teacher_usuario_by_name(teacher_name)
                         if not docente_u:
                             unmatched_teachers.append(teacher_name)
@@ -433,21 +447,22 @@ class Command(BaseCommand):
                         if created_c:
                             summary.clases += 1
 
-                        enrollment, created_e = Enrollment.objects.get_or_create(
-                            estudiante=estudiante_u,
-                            clase=clase,
-                            defaults={
-                                'docente': docente_u,
-                                'estado': 'ACTIVO',
-                            }
-                        )
-                        if not created_e:
-                            if enrollment.docente_id != docente_u.id or enrollment.estado != 'ACTIVO':
-                                enrollment.docente = docente_u
-                                enrollment.estado = 'ACTIVO'
-                                enrollment.save(update_fields=['docente', 'estado'])
-                        else:
-                            summary.enrollments += 1
+                    enrollment, created_e = Enrollment.objects.get_or_create(
+                        estudiante=estudiante_u, # Pass the Usuario instance here
+                        clase=clase,
+                        defaults={
+                            'docente': docente_u,
+                            'estado': 'ACTIVO',
+                        }
+                    )
+                    if not created_e:
+                        # update docente si faltaba
+                        if docente_u and enrollment.docente_id != docente_u.id:
+                            enrollment.docente = docente_u
+                            enrollment.estado = 'ACTIVO'
+                            enrollment.save(update_fields=['docente', 'estado'])
+                    else:
+                        summary.enrollments += 1
 
                         # Compatibilidad legacy: mantener Student.teacher (si existe perfil)
                         teacher_profile = Teacher.objects.filter(usuario=docente_u).first()

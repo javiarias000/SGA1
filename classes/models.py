@@ -12,30 +12,26 @@ from teachers.models import Teacher
 from users.models import Usuario
 
 
+from teachers.models import Teacher # Import Teacher model
+
 class GradeLevel(models.Model):
     """Modelo para Grado y Paralelo"""
     LEVEL_CHOICES = [
-        ('1', 'Primero'),
-        ('2', 'Segundo'),
-        ('3', 'Tercero'),
-        ('4', 'Cuarto'),
-        ('5', 'Quinto'),
-        ('6', 'Sexto'),
-        ('7', 'Séptimo'),
-        ('8', 'Octavo'),
-        ('9', 'Noveno'),
-        ('10', 'Décimo'),
-        ('11', 'Onceavo'),
+        ('1', 'Primero'), ('2', 'Segundo'), ('3', 'Tercero'), ('4', 'Cuarto'),
+        ('5', 'Quinto'), ('6', 'Sexto'), ('7', 'Séptimo'), ('8', 'Octavo'),
+        ('9', 'Noveno'), ('10', 'Décimo'), ('11', 'Onceavo'),
     ]
 
-    level = models.CharField(
-        max_length=20,
-        choices=LEVEL_CHOICES,
-        verbose_name="Nivel"
-    )
-    section = models.CharField(
-        max_length=100,
-        verbose_name="Paralelo/Sección"
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, verbose_name="Nivel")
+    section = models.CharField(max_length=100, verbose_name="Paralelo/Sección")
+    docente_tutor = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'rol': 'DOCENTE'},
+        related_name='tutored_grade_levels',
+        verbose_name='Docente Tutor'
     )
 
     class Meta:
@@ -49,25 +45,19 @@ class GradeLevel(models.Model):
 
 
 class Clase(models.Model):
-    """Instancia académica de una materia en un ciclo lectivo.
-
-    Regla de negocio:
-    - Teoría/Agrupación: normalmente 1 clase por materia + ciclo + paralelo (o grado/paralelo).
-    - Instrumento: 1 clase por materia + ciclo + docente_base.
-    """
-
+    """Instancia académica de una materia."""
     name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='clases', verbose_name="Materia", null=True)
-
     ciclo_lectivo = models.CharField(max_length=20, default='2025-2026', verbose_name='Ciclo lectivo')
     paralelo = models.CharField(max_length=100, blank=True, default='', verbose_name='Paralelo')
 
-    # Responsable base (principalmente para Instrumento)
+    # Se agrega limit_choices_to para mostrar solo docentes
     docente_base = models.ForeignKey(
         Usuario,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        limit_choices_to={'rol': 'DOCENTE'}, 
         related_name='clases_como_docente_base',
         verbose_name='Docente base'
     )
@@ -87,13 +77,11 @@ class Clase(models.Model):
         verbose_name_plural = "Clases"
         ordering = ['subject', 'name']
         constraints = [
-            # Teoría/Agrupación: subject + ciclo + paralelo
             models.UniqueConstraint(
                 fields=['subject', 'ciclo_lectivo', 'paralelo'],
                 condition=models.Q(docente_base__isnull=True),
                 name='uniq_clase_subject_ciclo_paralelo_when_no_docente_base'
             ),
-            # Instrumento: subject + ciclo + docente_base
             models.UniqueConstraint(
                 fields=['subject', 'ciclo_lectivo', 'docente_base'],
                 condition=models.Q(docente_base__isnull=False),
@@ -102,7 +90,8 @@ class Clase(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.subject} - {self.name}"
+        docente = f"({self.docente_base.nombre})" if self.docente_base else ""
+        return f"{self.subject} - {self.name} {docente}"
 
     def get_enrolled_count(self):
         return self.enrollments.filter(estado='ACTIVO').count()
@@ -112,12 +101,13 @@ class Clase(models.Model):
 
 
 class Enrollment(models.Model):
-    """Inscripción Estudiante–Clase–Docente."""
+    """Inscripción Estudiante–Clase–Docente (Lógica Conservatorio)."""
 
     class Estado(models.TextChoices):
         ACTIVO = 'ACTIVO', 'Activo'
         RETIRADO = 'RETIRADO', 'Retirado'
 
+    # Se usa Usuario según tu código original
     estudiante = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
@@ -132,17 +122,30 @@ class Enrollment(models.Model):
         related_name='enrollments',
         verbose_name='Clase'
     )
+    # limit_choices_to asegura que solo salgan docentes en el admin
     docente = models.ForeignKey(
         Usuario,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        limit_choices_to={'rol': 'DOCENTE'},
         related_name='enrollments_as_teacher',
         verbose_name='Docente asignado'
     )
 
     estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.ACTIVO)
     date_enrolled = models.DateTimeField(auto_now_add=True)
+    
+    # Este campo define la lógica de validación
+    tipo_materia = models.CharField(
+        max_length=20,
+        choices=[
+            ('TEORICA', 'Teórica (Grupal)'),
+            ('AGRUPACION', 'Agrupación (Ensamble)'),
+            ('INSTRUMENTO', 'Instrumento (Individual)')
+        ],
+        default='TEORICA'
+     )
 
     class Meta:
         unique_together = ('estudiante', 'clase')
@@ -150,7 +153,29 @@ class Enrollment(models.Model):
         verbose_name_plural = "Inscripciones"
 
     def __str__(self):
-        return f"{self.estudiante.nombre} en {self.clase.name}"
+        estudiante_nombre = self.estudiante.nombre if self.estudiante else "Estudiante no asignado"
+        return f"{estudiante_nombre} en {self.clase.name}"
+
+    def clean(self):
+        """Validaciones previas al guardado"""
+        super().clean()
+        if self.tipo_materia == 'INSTRUMENTO' and not self.docente:
+            # Si no hay docente seleccionado, verificar si la clase tiene uno base
+            if self.clase and self.clase.docente_base:
+                pass # Se asignará en save()
+            else:
+                raise ValidationError("Para materias de tipo INSTRUMENTO es obligatorio asignar un Docente específico.")
+
+    def save(self, *args, **kwargs):
+        # 1. Si no se eligió docente, intentar heredar el docente base de la clase
+        if not self.docente and self.clase.docente_base:
+            self.docente = self.clase.docente_base
+            
+        # 2. Si sigue sin haber docente y es Instrumento, lanzar error (doble check)
+        if self.tipo_materia == 'INSTRUMENTO' and not self.docente:
+             raise ValueError("Error crítico: Inscripción de Instrumento sin docente.")
+
+        super().save(*args, **kwargs)
 
 
 class Horario(models.Model):
@@ -171,12 +196,11 @@ class Horario(models.Model):
         ordering = ['dia_semana', 'hora_inicio']
 
     def __str__(self):
-        return f"{self.clase.name} - {self.get_dia_semana_display()} ({self.hora_inicio}-{self.hora_fin})"
+        return f"{self.clase.name} - {self.dia_semana}"
 
 
 class Activity(models.Model):
-    """Modelo de Actividad/Clase"""
-
+    """Modelo de Actividad/Clase Diaria"""
     PERFORMANCE_CHOICES = [
         ('Excelente', 'Excelente'),
         ('Muy Bueno', 'Muy Bueno'),
@@ -225,13 +249,11 @@ class Activity(models.Model):
                 student=self.student,
                 subject=self.subject
             ).order_by('-class_number').first()
-            
             self.class_number = (last_class.class_number + 1) if last_class else 1
-        
         super().save(*args, **kwargs)
     
     def get_teacher(self):
-        # Obtener docente desde la inscripción del estudiante en la clase
+        # Lógica para encontrar al profesor desde la inscripción
         if not self.student.usuario:
             return None
         enrollment = self.clase.enrollments.filter(estudiante=self.student.usuario, estado='ACTIVO').first()
@@ -912,3 +934,36 @@ class DeberEntrega(models.Model):
         if self.estado == 'entregado' and self.esta_tarde():
             self.estado = 'tarde'
         super().save(*args, **kwargs)
+
+# ============================================
+# SISTEMA NUEVO (Enrollment-based)
+# ============================================
+
+class Calificacion(models.Model):
+    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='calificaciones')
+    descripcion = models.CharField(max_length=200)
+    nota = models.DecimalField(max_digits=5, decimal_places=2)
+    fecha = models.DateField()
+    class Meta:
+        verbose_name = 'Calificación'
+        verbose_name_plural = 'Calificaciones'
+        ordering = ['-fecha', 'id']
+    def __str__(self):
+        return f"{self.inscripcion.estudiante.nombre} - {self.descripcion}: {self.nota}"
+
+class Asistencia(models.Model):
+    class Estado(models.TextChoices):
+        PRESENTE = 'Presente', 'Presente'
+        AUSENTE = 'Ausente', 'Ausente'
+        JUSTIFICADO = 'Justificado', 'Justificado'
+    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='asistencias')
+    fecha = models.DateField()
+    estado = models.CharField(max_length=20, choices=Estado.choices)
+    observacion = models.TextField(blank=True)
+    class Meta:
+        verbose_name = 'Asistencia'
+        verbose_name_plural = 'Asistencias'
+        ordering = ['-fecha', 'id']
+        unique_together = [('inscripcion', 'fecha')]
+    def __str__(self):
+        return f"{self.inscripcion.estudiante.nombre} - {self.fecha} - {self.estado}"

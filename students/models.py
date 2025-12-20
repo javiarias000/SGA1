@@ -70,7 +70,7 @@ class Student(models.Model):
         if not self.usuario:
             return Subject.objects.none()
         return Subject.objects.filter(
-            clases__enrollments__estudiante=self.usuario,
+            clases__enrollments__estudiante=self.usuario, # Corrected to filter by the Usuario instance
             clases__enrollments__estado='ACTIVO'
         ).distinct()
 

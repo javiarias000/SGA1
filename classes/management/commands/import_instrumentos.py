@@ -3,349 +3,258 @@ import re
 import difflib
 import os
 from django.core.management.base import BaseCommand
-from teachers.models import Teacher
+from django.db import transaction
+from django.db.models import Q
+
+# IMPORTS ACTUALIZADOS SEGÚN TU NUEVO MODELS.PY
+from users.models import Usuario  # Usamos Usuario, no Teacher
 from subjects.models import Subject
 from students.models import Student
 from classes.models import Clase, GradeLevel, Enrollment
-from django.db import transaction
 
 # Function to clean and normalize teacher names
 def clean_teacher_name(name):
+    if not name:
+        return ""
     name = name.strip().replace('.', '')
-    name = re.sub(r'^(Mgs|Lic|Dr)\s*', '', name, flags=re.IGNORECASE)
+    # Eliminamos títulos comunes
+    name = re.sub(r'^(Mgs|Lic|Dr|Prof|Msc)\.?\s*', '', name, flags=re.IGNORECASE)
     return name.strip().lower()
 
-def find_best_match_teacher_fuzzy(cleaned_name_from_json, all_teachers, threshold=0.6):
+def find_best_match_usuario_fuzzy(cleaned_name_from_json, all_users, threshold=0.6):
     """
-    Finds the best matching teacher using fuzzy string matching.
+    Busca el mejor Usuario (Docente o Estudiante) usando coincidencia difusa.
     """
     best_match = None
     highest_ratio = 0
     
-    for teacher in all_teachers:
-        db_name = teacher.full_name.lower()
+    for user in all_users:
+        # Asumiendo que el modelo Usuario tiene un campo 'nombre' o 'full_name'
+        # Ajusta 'nombre' si tu campo se llama diferente (ej. first_name + last_name)
+        db_name = user.nombre.lower() if hasattr(user, 'nombre') else f"{user.first_name} {user.last_name}".lower()
+        
         ratio = difflib.SequenceMatcher(None, cleaned_name_from_json, db_name).ratio()
         
         if ratio > highest_ratio:
             highest_ratio = ratio
-            best_match = teacher
+            best_match = user
             
     if highest_ratio >= threshold:
-        return best_match, []
-    
-    return None, []
-
-def find_best_match_teacher_by_parts(cleaned_name_from_json, all_teachers):
-    """
-    Finds the best matching teacher using a scoring system based on shared and similar name parts.
-    """
-    json_name_parts = set([p for p in cleaned_name_from_json.split() if len(p) > 1])
-    
-    if not json_name_parts:
-        return None, []
-
-    best_match = None
-    highest_score = 0
-    potential_matches = []
-
-    for teacher in all_teachers:
-        db_name_parts = set([p for p in teacher.full_name.lower().split() if len(p) > 1])
-        
-        common_parts = json_name_parts.intersection(db_name_parts)
-        
-        if not common_parts:
-            continue
-            
-        score = len(common_parts) * 10
-        
-        remaining_json_parts = json_name_parts - common_parts
-        remaining_db_parts = db_name_parts - common_parts
-
-        if remaining_json_parts and remaining_db_parts:
-            for json_part in remaining_json_parts:
-                best_part_ratio = 0
-                for db_part in remaining_db_parts:
-                    ratio = difflib.SequenceMatcher(None, json_part, db_part).ratio()
-                    if ratio > best_part_ratio:
-                        best_part_ratio = ratio
-                
-                if best_part_ratio > 0.7:
-                    score += best_part_ratio * 5
-
-        if score > highest_score:
-            highest_score = score
-            best_match = teacher
-            potential_matches = [teacher]
-        elif score == highest_score and score > 0:
-            potential_matches.append(teacher)
-
-    if len(potential_matches) == 1 and highest_score > 10:
-        return potential_matches[0], []
-    
-    return None, potential_matches
-
-def find_best_match_student_by_parts(json_student_name, all_students):
-    """
-    Finds the best matching student using a scoring system based on shared and similar name parts.
-    """
-    json_name_parts = set([p for p in json_student_name.lower().split() if len(p) > 1])
-    
-    if not json_name_parts:
-        return None
-    
-    best_match = None
-    highest_score = 0
-    
-    for student in all_students:
-        db_name_parts = set([p for p in student.name.lower().split() if len(p) > 1])
-        
-        common_parts = json_name_parts.intersection(db_name_parts)
-        
-        if not common_parts:
-            continue
-            
-        score = len(common_parts) * 10
-        
-        remaining_json_parts = json_name_parts - common_parts
-        remaining_db_parts = db_name_parts - common_parts
-
-        if remaining_json_parts and remaining_db_parts:
-            for json_part in remaining_json_parts:
-                best_part_ratio = 0
-                for db_part in remaining_db_parts:
-                    ratio = difflib.SequenceMatcher(None, json_part, db_part).ratio()
-                    if ratio > best_part_ratio:
-                        best_part_ratio = ratio
-                
-                if best_part_ratio > 0.7:
-                    score += best_part_ratio * 5
-
-        # Consider the length difference, penalize large differences
-        len_diff = abs(len(json_name_parts) - len(db_name_parts))
-        score -= len_diff * 2
-        
-        if score > highest_score:
-            highest_score = score
-            best_match = student
-            
-    # Require a minimum score for a confident match
-    if highest_score > 15: # Tunable threshold
         return best_match
     
     return None
 
+def find_best_match_student_profile(json_student_name, all_students):
+    """
+    Busca el perfil de estudiante (Student) para obtener su Usuario asociado.
+    """
+    # Lógica simplificada de fuzzy match para estudiantes
+    best_match = None
+    highest_ratio = 0
+    
+    # Limpieza básica del nombre del JSON
+    clean_json_name = json_student_name.lower().strip()
+
+    for student in all_students:
+        # Student suele tener 'name' o relación con usuario
+        if student.usuario:
+            db_name = student.usuario.nombre.lower()
+        else:
+            db_name = student.name.lower() # Fallback
+
+        ratio = difflib.SequenceMatcher(None, clean_json_name, db_name).ratio()
+        
+        if ratio > highest_ratio:
+            highest_ratio = ratio
+            best_match = student
+            
+    if highest_ratio > 0.75: # Umbral más alto para estudiantes para evitar cruces
+        return best_match
+    return None
+
+
 class Command(BaseCommand):
-    help = 'Assigns instrument classes to teachers and enrolls students based on the JSON files in Instrumento_Agrupaciones.'
+    help = 'Assigns instrument classes to teachers and enrolls students based on JSON files.'
 
     def handle(self, *args, **options):
         json_folder_path = 'base_de_datos_json/Instrumento_Agrupaciones/'
-        log_file_path = 'instrumentos_inconsistencies.log'
-        unmatched_teachers_log_path = 'unmatched_teachers_instrumentos.log'
-        unmatched_students_log_path = 'unmatched_students_instrumentos.log'
-
-        self.stdout.write(self.style.SUCCESS(f'Starting instrument class import from {json_folder_path}...'))
+        
+        # Logs
         inconsistencies = []
         unmatched_teachers = set()
+        unmatched_students = set()
         
-        # Set to store unique classes to avoid duplicates
+        self.stdout.write(self.style.SUCCESS(f'Starting import from {json_folder_path}...'))
+
+        # 1. Cargar Usuarios Docentes y Perfiles de Estudiantes
+        # Filtramos solo usuarios que son docentes para la búsqueda de profesores
+        all_docentes = list(Usuario.objects.filter(rol='DOCENTE'))
+        all_students = list(Student.objects.select_related('usuario').all())
+
         unique_classes = set()
 
-        # Get all JSON files in the directory
+        # 2. Leer Archivos JSON
         try:
-            json_files = [f for f in os.listdir(json_folder_path) if f.startswith('ASIGNACIONES_') and f.endswith('.json')]
+            json_files = [f for f in os.listdir(json_folder_path) if f.endswith('.json')]
         except FileNotFoundError:
             self.stdout.write(self.style.ERROR(f'Directory not found: {json_folder_path}'))
             return
 
-        all_teachers = list(Teacher.objects.all())
-        all_students = list(Student.objects.all())
+        # Nombres inválidos a ignorar
+        invalid_teacher_names = {'piano', 'maestro de instrumento', 'nulo', 'violín', 'nd', 'sin docente'}
 
-        invalid_teacher_names = {'piano', 'maestro de instrumento', 'rendí prueba de ubicación no tengo maestro asignado', 'nulo', 'violín'}
+        # --- FASE 1: Identificar Clases Únicas ---
         for json_file in json_files:
             json_path = os.path.join(json_folder_path, json_file)
             try:
-                with open(json_path, 'r') as f:
-                    instrumento_data = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError) as e:
-                inconsistencies.append(f"Could not read or decode {json_file}: {e}")
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            except Exception as e:
+                inconsistencies.append(f"Error reading {json_file}: {e}")
                 continue
 
-            for entry in instrumento_data:
+            for entry in data:
                 fields = entry.get('fields', {})
+                raw_teacher = fields.get('docente_nombre')
                 
-                raw_teacher_name = fields.get('docente_nombre')
-                if not raw_teacher_name or raw_teacher_name.upper() == 'ND' or raw_teacher_name.lower() in invalid_teacher_names:
+                if not raw_teacher or clean_teacher_name(raw_teacher) in invalid_teacher_names:
                     continue
 
                 subject_name = fields.get('clase', 'Sin Asignatura').strip()
                 grado = fields.get('grado', '').strip()
                 paralelo = fields.get('paralelo', '').strip()
                 
-                cleaned_teacher_name = clean_teacher_name(raw_teacher_name)
+                # Tupla única para crear la clase
+                unique_classes.add((clean_teacher_name(raw_teacher), subject_name, grado, paralelo))
 
-                # Use a tuple to identify a unique class
-                class_key = (cleaned_teacher_name, subject_name, grado, paralelo)
-                unique_classes.add(class_key)
-
+        # --- FASE 2: Crear Materias y Clases ---
+        self.stdout.write(f"Procesando {len(unique_classes)} clases potenciales...")
+        
         with transaction.atomic():
             for cleaned_teacher_name, subject_name, grado, paralelo in unique_classes:
                 
-                teacher, _ = find_best_match_teacher_fuzzy(cleaned_teacher_name, all_teachers)
-                if not teacher:
-                    teacher, _ = find_best_match_teacher_by_parts(cleaned_teacher_name, all_teachers)
+                # Buscar Docente (Usuario)
+                docente_usuario = find_best_match_usuario_fuzzy(cleaned_teacher_name, all_docentes)
 
-                if not teacher:
-                    msg = f"Teacher '{cleaned_teacher_name}' not found in database. Skipping class creation."
-                    inconsistencies.append(msg)
+                if not docente_usuario:
                     unmatched_teachers.add(cleaned_teacher_name)
                     continue
 
-                subject, _ = Subject.objects.get_or_create(name=subject_name, defaults={'tipo_materia': 'INSTRUMENTO'})
+                # Crear/Obtener Materia (Subject) con tipo INSTRUMENTO
+                subject, _ = Subject.objects.get_or_create(
+                    name=subject_name, 
+                    defaults={'tipo_materia': 'INSTRUMENTO'} # Importante para tu lógica nueva
+                )
 
+                # Determinar Nivel (GradeLevel)
                 level_key = None
                 normalized_curso = grado.lower()
-                
                 level_map = {
-                    r'11o \(3o bachillerato\)': '11',
-                    r'10o \(2o bachillerato\)': '10',
-                    r'9o \(1o bachillerato\)': '9',
-                    '1o': '1', '2o': '2', '3o': '3', '4o': '4',
-                    '5o': '5', '6o': '6', '7o': '7',
-                    '8o': '8', '9o': '9', '10o': '10', '11o': '11'
+                    r'11': '11', r'10': '10', r'9': '9', r'8': '8', 
+                    r'7': '7', r'6': '6', r'5': '5', r'4': '4', 
+                    r'3': '3', r'2': '2', r'1': '1'
                 }
-
-                for pattern, key in level_map.items():
-                    if re.search(pattern, normalized_curso):
-                        level_key = key
+                # Lógica simple de mapeo (puedes mantener tu regex compleja si prefieres)
+                for key, val in level_map.items():
+                    if key in normalized_curso: # Simplificado
+                        level_key = val
                         break
                 
-                # Clean up paralelo
-                paralelo_clean = paralelo.split('(')[0].strip()
+                paralelo_clean = paralelo.split('(')[0].strip() or "A" # Default A si vacío
 
-                if level_key and paralelo_clean:
-                    grade_level, _ = GradeLevel.objects.get_or_create(level=level_key, section=paralelo_clean)
-                else:
-                    msg = f"Could not determine Grade/Section from grado='{grado}', paralelo='{paralelo}'. Skipping."
-                    inconsistencies.append(msg)
+                if not level_key:
+                    inconsistencies.append(f"No se pudo determinar nivel para {grado}")
                     continue
 
+                grade_level, _ = GradeLevel.objects.get_or_create(level=level_key, section=paralelo_clean)
+
+                # Crear Clase
+                # IMPORTANTE: Usamos 'docente_base' según tu nuevo modelo
+                clase_name = f"{subject.name} - {docente_usuario.nombre}" # Convención Conservatorio
+                
                 try:
-                    clase_name = f"{subject.name} - {grade_level}"
-                    
                     clase_obj, created = Clase.objects.update_or_create(
-                        teacher=teacher,
                         subject=subject,
-                        name=clase_name,
-                        defaults={'schedule': 'Por definir', 'room': 'Por definir'}
+                        docente_base=docente_usuario, # CAMBIO CLAVE
+                        grade_level=grade_level,      # Asignamos el nivel
+                        ciclo_lectivo='2025-2026',    # Aseguramos ciclo
+                        defaults={
+                            'name': clase_name,
+                            'active': True
+                        }
                     )
-                    
                     if created:
-                        self.stdout.write(self.style.SUCCESS(f"CREATED Instrumento Clase: {clase_obj}"))
-
+                        self.stdout.write(f"Creada Clase: {clase_obj}")
                 except Exception as e:
-                    msg = f"Error creating or updating Clase for teacher '{teacher.full_name}' and subject '{subject.name}': {e}"
-                    inconsistencies.append(msg)
+                    inconsistencies.append(f"Error creando clase {clase_name}: {e}")
 
-        # --- Student Enrollment ---
-        self.stdout.write(self.style.SUCCESS('--- Starting Student Enrollment ---'))
+        # --- FASE 3: Matricular Estudiantes ---
+        self.stdout.write(self.style.SUCCESS('--- Iniciando Matriculación de Estudiantes ---'))
         enrollment_count = 0
-        unmatched_students = set()
 
         for json_file in json_files:
             json_path = os.path.join(json_folder_path, json_file)
-            try:
-                with open(json_path, 'r') as f:
-                    instrumento_data = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                continue
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
 
-            for entry in instrumento_data:
+            for entry in data:
                 fields = entry.get('fields', {})
-                
                 student_name = fields.get('full_name', '').strip()
-                if not student_name:
-                    continue
-
-                student = find_best_match_student_by_parts(student_name, all_students)
-                if not student:
-                    unmatched_students.add(student_name)
-                    self.stdout.write(self.style.WARNING(f"Student '{student_name}' not found in database. Skipping enrollment."))
-                    continue
-
-                # Find class
-                raw_teacher_name = fields.get('docente_nombre')
-                if not raw_teacher_name or raw_teacher_name.upper() == 'ND' or raw_teacher_name.lower() in invalid_teacher_names:
-                    continue
-
+                raw_teacher = fields.get('docente_nombre')
                 subject_name = fields.get('clase', '').strip()
-                grado = fields.get('grado', '').strip()
-                paralelo = fields.get('paralelo', '').strip()
                 
-                cleaned_teacher_name = clean_teacher_name(raw_teacher_name)
+                if not student_name or not raw_teacher:
+                    continue
+
+                # 1. Buscar Estudiante (Student Profile -> Usuario)
+                student_profile = find_best_match_student_profile(student_name, all_students)
                 
-                teacher, _ = find_best_match_teacher_fuzzy(cleaned_teacher_name, all_teachers)
-                if not teacher:
-                    teacher, _ = find_best_match_teacher_by_parts(cleaned_teacher_name, all_teachers)
-                
-                if not teacher:
+                if not student_profile or not student_profile.usuario:
+                    unmatched_students.add(student_name)
                     continue
                 
-                level_key = None
-                normalized_curso = grado.lower()
-                level_map = {
-                    r'11o \(3o bachillerato\)': '11',
-                    r'10o \(2o bachillerato\)': '10',
-                    r'9o \(1o bachillerato\)': '9',
-                    '1o': '1', '2o': '2', '3o': '3', '4o': '4',
-                    '5o': '5', '6o': '6', '7o': '7',
-                    '8o': '8', '9o': '9', '10o': '10', '11o': '11'
-                }
+                estudiante_usuario = student_profile.usuario # Obtenemos el USUARIO
 
-                for pattern, key in level_map.items():
-                    if re.search(pattern, normalized_curso):
-                        level_key = key
-                        break
+                # 2. Buscar Docente (Usuario)
+                cleaned_teacher = clean_teacher_name(raw_teacher)
+                docente_usuario = find_best_match_usuario_fuzzy(cleaned_teacher, all_docentes)
                 
-                paralelo_clean = paralelo.split('(')[0].strip()
+                if not docente_usuario:
+                    continue
 
-                if level_key and paralelo_clean:
-                    grade_level = GradeLevel.objects.filter(level=level_key, section=paralelo_clean).first()
-                else:
+                # 3. Encontrar la Clase creada anteriormente
+                # Filtramos por materia y docente base
+                clase_qs = Clase.objects.filter(
+                    subject__name=subject_name,
+                    docente_base=docente_usuario
+                )
+                
+                if not clase_qs.exists():
+                    inconsistencies.append(f"No existe clase para {subject_name} con {docente_usuario}")
                     continue
                 
-                if not grade_level:
-                    continue
-                
-                clase_name = f"{subject_name} - {grade_level}"
+                clase_obj = clase_qs.first()
 
+                # 4. Crear Inscripción (Enrollment)
                 try:
-                    clase = Clase.objects.get(name=clase_name, teacher=teacher, subject__name=subject_name)
-                    
-                    _, created = Enrollment.objects.get_or_create(student=student, clase=clase)
+                    enrollment, created = Enrollment.objects.get_or_create(
+                        estudiante=estudiante_usuario, # CAMBIO: Usamos Usuario
+                        clase=clase_obj,
+                        defaults={
+                            'docente': docente_usuario,    # CAMBIO: Obligatorio para instrumento
+                            'tipo_materia': 'INSTRUMENTO', # CAMBIO: Obligatorio
+                            'estado': 'ACTIVO'
+                        }
+                    )
                     if created:
                         enrollment_count += 1
-                except Clase.DoesNotExist:
-                    inconsistencies.append(f"Clase not found for enrollment: {clase_name}")
-                    continue
-        
-        self.stdout.write(self.style.SUCCESS(f'--- Finished Student Enrollment: {enrollment_count} new enrollments ---'))
-        
-        if unmatched_students:
-            with open(unmatched_students_log_path, 'w') as log_file:
-                for s_name in sorted(list(unmatched_students)):
-                    log_file.write(f"{s_name}\n")
-            self.stdout.write(self.style.WARNING(f"Found {len(unmatched_students)} unmatched students. See '{unmatched_students_log_path}' for details."))
+                        print(f"Inscrito: {estudiante_usuario} con {docente_usuario}")
+                except Exception as e:
+                    inconsistencies.append(f"Error inscribiendo a {student_name}: {e}")
 
-        if inconsistencies:
-            with open(log_file_path, 'w') as log_file:
-                for line in inconsistencies:
-                    log_file.write(f"{line}\n")
-            self.stdout.write(self.style.WARNING(f"\nFound {len(inconsistencies)} inconsistencies. See '{log_file_path}' for details."))
-
+        # Reporte Final
+        self.stdout.write(self.style.SUCCESS(f'Importación finalizada. Nuevas inscripciones: {enrollment_count}'))
+        
         if unmatched_teachers:
-            with open(unmatched_teachers_log_path, 'w') as log_file:
-                for teacher_name in sorted(list(unmatched_teachers)):
-                    log_file.write(f"{teacher_name}\n")
-            self.stdout.write(self.style.WARNING(f"Found {len(unmatched_teachers)} unmatched teachers. See '{unmatched_teachers_log_path}' for details."))
-        
-        self.stdout.write(self.style.SUCCESS('Instrument class import process finished.'))
+            self.stdout.write(self.style.WARNING(f"Docentes no encontrados: {len(unmatched_teachers)} (ver logs)"))
+            # Guardar logs...

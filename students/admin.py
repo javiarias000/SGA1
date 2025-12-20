@@ -1,14 +1,14 @@
 from django.contrib import admin
 from .models import Student
 
-
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['name', 'grade_level', 'teacher', 'active', 'get_class_count', 'created_at']
     list_filter = ['grade_level', 'active', 'teacher', 'created_at']
-    search_fields = ['usuario__nombre', 'parent_name', 'teacher__full_name']
+    search_fields = ['usuario__nombre', 'parent_name', 'teacher__usuario__nombre']
     readonly_fields = ['created_at']
-    
+    # filter_horizontal = ['subjects']
+
     fieldsets = (
         ('Información del Estudiante', {
             'fields': ('teacher', 'grade_level', 'active')
@@ -20,11 +20,6 @@ class StudentAdmin(admin.ModelAdmin):
             'fields': ('notes',)
         }),
         ('Metadata', {
-            'fields': ('created_at',),
-            'classes': ('collapse',)
+            'fields': ('created_at',)
         }),
     )
-    
-    def get_class_count(self, obj):
-        return obj.get_class_count()
-    get_class_count.short_description = 'Clases Registradas'

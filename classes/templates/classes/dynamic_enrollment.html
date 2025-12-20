@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Inscripción Dinámica</h1>
+<form method="post">
+    {% csrf_token %}
+    <label for="estudiante">Estudiante:</label>
+    <select name="estudiante" id="estudiante">
+        {% for student in students %}
+        <option value="{{ student.id }}">{{ student.nombre }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="clase">Clase:</label>
+    <select name="clase" id="clase">
+        {% for clase in classes %}
+        <option value="{{ clase.id }}">{{ clase.name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="tipo_materia">Tipo de Materia:</label>
+    <select name="tipo_materia" id="tipo_materia">
+        <option value="TEORICA">Teórica</option>
+        <option value="AGRUPACION">Agrupación</option>
+        <option value="INSTRUMENTO">Instrumento</option>
+    </select>
+    <br>
+    <button type="submit">Inscribir</button>
+</form>
+{% endblock %}

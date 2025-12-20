@@ -17,63 +17,48 @@ from classes.models import Activity, Clase, Enrollment, Subject, Deber, DeberEnt
 @login_required
 @student_required
 def student_dashboard_view(request):
-    """Dashboard para estudiantes"""
+    """Dashboard para estudiantes con inscripción dinámica."""
     try:
         estudiante = request.user.student_profile
     except AttributeError:
         messages.error(request, 'No se encontró tu perfil de estudiante')
         return redirect('users:login')
+
+    # Clases ya matriculadas
+    mis_clases_ids = Enrollment.objects.filter(
+        estudiante=estudiante,
+        estado='ACTIVO'
+    ).values_list('clase_id', flat=True)
     
+    mis_clases = Clase.objects.filter(id__in=mis_clases_ids)
+
+    # Clases disponibles para el grado del estudiante en el ciclo lectivo actual
+    clases_disponibles = []
+    if estudiante.grade_level:
+        clases_disponibles = Clase.objects.filter(
+            active=True,
+            grade_level=estudiante.grade_level,
+            ciclo_lectivo='2025-2026' # Asumiendo ciclo lectivo actual
+        ).exclude(id__in=mis_clases_ids)
+
     # Últimas actividades y calificaciones
-    mis_actividades = Activity.objects.filter(student=estudiante).order_by('-date')[:10]
+    mis_actividades = Activity.objects.filter(student=estudiante).order_by('-date')[:5]
     mis_calificaciones = CalificacionParcial.objects.filter(student=estudiante).order_by('-fecha_actualizacion')[:5]
-    mis_asistencias_qs = Asistencia.objects.filter(inscripcion__estudiante=estudiante.usuario).order_by('-fecha')
-    mis_asistencias = list(mis_asistencias_qs[:10])
-
-    # Clases disponibles y ya matriculadas
-    # Clases activas globales (independiente del docente), excluyendo ya matriculadas
-    clases_candidatas = Clase.objects.filter(active=True).exclude(
-        enrollments__estudiante=estudiante.usuario,
-        enrollments__estado='ACTIVO'
-    )
-    # Aplicar reglas de aptitud y cupo
-    clases_disponibles = [c for c in clases_candidatas if estudiante.can_take_subject(c.subject) and c.has_space()]
-
-    mis_clases = Clase.objects.filter(
-        enrollments__estudiante=estudiante.usuario,
-        enrollments__estado='ACTIVO'
-    )
     
     # Estadísticas
     total_clases = mis_clases.count()
-    total_asistencias = mis_asistencias_qs.count()
-    presente_count = mis_asistencias_qs.filter(estado='Presente').count()
     promedio = CalificacionParcial.calcular_promedio_general(estudiante)
-    asistencia_porcentaje = (presente_count / total_asistencias * 100) if total_asistencias else 0
     subjects = estudiante.get_subjects()
 
-    # Agrupar actividades por materia (si se usa en algún fragmento)
-    actividades_por_materia = {}
-    for actividad in mis_actividades:
-        actividades_por_materia.setdefault(actividad.subject, []).append(actividad)
-    
     context = {
         'student': estudiante,
-        # Aliases esperados por templates existentes
         'recent_activities': mis_actividades,
         'recent_grades': mis_calificaciones,
         'promedio': round(promedio, 2),
-        'asistencia_porcentaje': round(asistencia_porcentaje, 0),
         'subjects': subjects,
         'total_classes': total_clases,
-        
-        # Datos de matrícula para el dashboard
         'clases_disponibles': clases_disponibles,
         'mis_clases': mis_clases,
-
-        # Compatibilidad con otras secciones
-        'mis_asistencias': mis_asistencias,
-        'actividades_por_materia': actividades_por_materia,
     }
     return render(request, 'students/dashboard.html', context)
 
@@ -103,7 +88,7 @@ def student_classes_view(request):
     # Obtener clases disponibles para matricularse
     # Clases activas globales (independiente del docente), excluyendo ya matriculadas
     clases_candidatas = Clase.objects.filter(active=True).exclude(
-        enrollments__estudiante=student.usuario,
+        enrollments__estudiante=student,
         enrollments__estado='ACTIVO'
     )
     # Aptitud por grado y cupo
@@ -111,7 +96,7 @@ def student_classes_view(request):
     
     # Obtener clases matriculadas
     mis_clases = Clase.objects.filter(
-        enrollments__estudiante=student.usuario,
+        enrollments__estudiante=student,
         enrollments__estado='ACTIVO'
     )
     
@@ -140,22 +125,33 @@ def student_enroll_view(request, clase_id):
     if not student.can_take_subject(clase.subject):
         messages.error(request, "No cumples los requisitos para esta materia según tu grado.")
     # Verificar si ya está matriculado
-    elif Enrollment.objects.filter(estudiante=student.usuario, clase=clase, estado='ACTIVO').exists():
+    elif Enrollment.objects.filter(estudiante=student, clase=clase, estado='ACTIVO').exists():
         messages.info(request, "Ya estás matriculado en esta clase.")
     elif not clase.has_space():
         messages.error(request, "Esta clase ya está llena.")
     else:
-        Enrollment.objects.create(estudiante=student.usuario, clase=clase, estado='ACTIVO')
+        # Asigna el docente_base de la clase al enrollment por defecto
+        docente_asignado = clase.docente_base
+        Enrollment.objects.create(
+            estudiante=student, 
+            clase=clase, 
+            docente=docente_asignado,
+            estado='ACTIVO'
+        )
         messages.success(request, f"Te has matriculado correctamente en {clase.name}")
 
-    return redirect('students:classes')
+    return redirect('students:student_dashboard') # Redirigir a dashboard para ver los cambios
 
 
 # ============================================
 # CALIFICACIONES DEL ESTUDIANTE
 # ============================================
 
-
+@login_required
+@student_required
+def student_grades_view(request):
+    """Placeholder view for student grades."""
+    return render(request, 'students/grades.html')
 
 
 # ============================================
@@ -232,7 +228,7 @@ def student_profile_view(request):
     
     # Clases matriculadas
     clases_matriculadas = Clase.objects.filter(
-        enrollments__estudiante=student.usuario,
+        enrollments__estudiante=student,
         enrollments__estado='ACTIVO'
     )
     
