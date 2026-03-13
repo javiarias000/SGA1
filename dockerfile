@@ -17,11 +17,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 COPY requirements.txt .
 
-# Clave: instalar pandas por separado ANTES del resto, con --no-build-isolation
-# Esto evita el entorno de build aislado que pierde pkg_resources
-RUN pip install --no-cache-dir --no-build-isolation pandas==2.0.3
-
-RUN pip install --no-cache-dir -r requirements.txt psycopg2-binary
+RUN pip install --no-cache-dir --no-build-isolation -r requirements.txt psycopg2-binary
 
 COPY . .
 
