@@ -12,11 +12,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt psycopg2-binary
-
-COPY . .
+RUN pip install --no-cache-dir -r requirements.txt psycopg2-binary gunicorn
 
 RUN mkdir -p /usr/src/app/static
+
+COPY . .
 
 EXPOSE 8000
 
