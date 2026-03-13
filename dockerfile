@@ -4,34 +4,35 @@ FROM python:3.12-slim
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
-# Establece variables de entorno para evitar mensajes de pip y forzar la salida a la terminal
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Variables de entorno corregidas (formato KEY=VALUE)
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Instala dependencias del sistema necesarias
-# En este caso, solo necesitas libpq-dev para el conector de PostgreSQL
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev python3-dev g++ \
+# Añadimos build-essential para asegurar que pip pueda compilar cualquier librería
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    python3-dev \
+    g++ \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
-    
-# Copia el archivo requirements.txt (o los listados en el prompt) y los instala
-# Reemplaza 'requirements.txt' con el nombre de tu archivo si es diferente
-# NOTA: Los requerimientos proporcionados serán instalados
+
+# Actualiza herramientas de instalación
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Copia solo los requerimientos primero (optimiza el tiempo de construcción)
 COPY requirements.txt .
-RUN pip install --upgrade pip setuptools wheel
 
-# Instala las dependencias. Utiliza 'psycopg2-binary' para la conexión a PostgreSQL.
-# Se asume que el listado de requerimientos proporcionado está en 'requirements.txt'
-RUN pip install -r requirements.txt psycopg2-binary
+# Instala las dependencias. 
+# Nota: He unido psycopg2-binary aquí para evitar conflictos de instalación doble.
+RUN pip install --no-cache-dir -r requirements.txt psycopg2-binary
 
-# Copia toda la aplicación al directorio de trabajo
-# ¡Asegúrate de que tu 'requirements.txt' esté en la misma carpeta que este Dockerfile!
+# Copia toda la aplicación
 COPY . .
 
 # Expone el puerto que usará Django
 EXPOSE 8000
 
-# Comando para ejecutar la aplicación. 
-# En un entorno de producción, usualmente usarías un servidor WSGI como Gunicorn.
-# Para desarrollo simple:
+# Comando para ejecutar la aplicación
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
