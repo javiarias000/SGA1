@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/subject_provider.dart';
+import 'package:mobile_app/screens/subject_form_screen.dart';
 
 class SubjectDetailScreen extends StatefulWidget {
   final int subjectId;
@@ -15,7 +16,6 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch details when the screen is first built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<SubjectProvider>(context, listen: false).selectSubject(widget.subjectId);
     });
@@ -23,7 +23,6 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
 
   @override
   void dispose() {
-    // Clear the selection when the screen is disposed
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<SubjectProvider>(context, listen: false).clearSelection();
     });
@@ -39,6 +38,27 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
             return Text(provider.selectedSubject?.name ?? 'Subject Detail');
           },
         ),
+        actions: [
+          if (Provider.of<SubjectProvider>(context).selectedSubject != null)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SubjectFormScreen(
+                      subject: Provider.of<SubjectProvider>(context, listen: false).selectedSubject,
+                    ),
+                  ),
+                );
+              },
+            ),
+          if (Provider.of<SubjectProvider>(context).selectedSubject != null)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _confirmDelete(context),
+            ),
+        ],
       ),
       body: Consumer<SubjectProvider>(
         builder: (context, provider, child) {
@@ -61,7 +81,7 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
               children: [
                 Text(
                   'Teachers for this Subject:',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(height: 10),
                 Expanded(
@@ -89,6 +109,34 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    final provider = Provider.of<SubjectProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Subject'),
+        content: const Text('Are you sure you want to delete this subject?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteSubject(provider.selectedSubject!.id);
+              if (context.mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Subject deleted successfully')),
+                );
+                provider.clearSelection();
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }

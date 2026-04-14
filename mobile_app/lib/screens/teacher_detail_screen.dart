@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/teacher_provider.dart';
-import 'package:mobile_app/models/teacher.dart'; // Import Teacher model
+import 'package:mobile_app/models/teacher.dart';
+import 'package:mobile_app/screens/teacher_form_screen.dart';
 
 class TeacherDetailScreen extends StatefulWidget {
   final int teacherId;
@@ -27,6 +28,25 @@ class _TeacherDetailScreenState extends State<TeacherDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teacher Details'),
+        actions: [
+          if (teacherProvider.selectedTeacher != null)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeacherFormScreen(teacher: teacherProvider.selectedTeacher),
+                  ),
+                );
+              },
+            ),
+          if (teacherProvider.selectedTeacher != null)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _confirmDelete(teacherProvider),
+            ),
+        ],
       ),
       body: Center(
         child: teacherProvider.isLoading
@@ -40,6 +60,34 @@ class _TeacherDetailScreenState extends State<TeacherDetailScreen> {
                 : teacherProvider.selectedTeacher == null
                     ? const Text('Teacher not found.')
                     : _buildTeacherDetails(teacherProvider.selectedTeacher!),
+      ),
+    );
+  }
+
+  void _confirmDelete(TeacherProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Teacher'),
+        content: const Text('Are you sure you want to delete this teacher?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteTeacher(provider.selectedTeacher!.id);
+              if (mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Teacher deleted successfully')),
+                );
+                // Go back to list since teacher is gone
+                Provider.of<TeacherProvider>(context, listen: false).clearSelection(); // Note: need to add clearSelection to TeacherProvider
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }
@@ -61,9 +109,6 @@ class _TeacherDetailScreenState extends State<TeacherDetailScreen> {
           Text('Role: ${teacher.usuario.rol}', style: const TextStyle(fontSize: 16)),
           const Divider(),
           Text('Specialization: ${teacher.specialization ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          // You might add an Image.network here for teacher.photo if the URL is valid
-          // if (teacher.photo != null && teacher.photo!.isNotEmpty)
-          //   Image.network(teacher.photo!),
           const SizedBox(height: 10),
         ],
       ),

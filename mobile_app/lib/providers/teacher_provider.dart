@@ -61,4 +61,83 @@ class TeacherProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createTeacher(Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      final newTeacher = await _apiService.createTeacher(data, authToken: authToken);
+      _teachers.add(newTeacher);
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error creating teacher: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateTeacher(int teacherId, Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      final updatedTeacher = await _apiService.updateTeacher(teacherId, data, authToken: authToken);
+
+      final index = _teachers.indexWhere((t) => t.id == teacherId);
+      if (index != -1) {
+        _teachers[index] = updatedTeacher;
+      }
+      if (_selectedTeacher?.id == teacherId) {
+        _selectedTeacher = updatedTeacher;
+      }
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error updating teacher: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteTeacher(int teacherId) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      await _apiService.deleteTeacher(teacherId, authToken: authToken);
+      _teachers.removeWhere((t) => t.id == teacherId);
+      if (_selectedTeacher?.id == teacherId) {
+        _selectedTeacher = null;
+      }
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error deleting teacher: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void clearSelection() {
+    _selectedTeacher = null;
+    _errorMessage = '';
+    notifyListeners();
+  }
 }

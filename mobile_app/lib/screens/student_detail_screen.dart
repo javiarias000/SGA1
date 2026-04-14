@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app/providers/student_provider.dart';
-import 'package:mobile_app/models/student.dart'; // Import Student model
+import 'package:mobile_app/models/student.dart';
+import 'package:mobile_app/screens/student_form_screen.dart';
+import 'package:mobile_app/screens/enrollment_screen.dart';
+import 'package:mobile_app/screens/grade_entry_screen.dart';
 
 class StudentDetailScreen extends StatefulWidget {
   final int studentId;
@@ -27,6 +30,25 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Details'),
+        actions: [
+          if (studentProvider.selectedStudent != null)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StudentFormScreen(student: studentProvider.selectedStudent),
+                  ),
+                );
+              },
+            ),
+          if (studentProvider.selectedStudent != null)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _confirmDelete(studentProvider),
+            ),
+        ],
       ),
       body: Center(
         child: studentProvider.isLoading
@@ -40,6 +62,34 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
                 : studentProvider.selectedStudent == null
                     ? const Text('Student not found.')
                     : _buildStudentDetails(studentProvider.selectedStudent!),
+      ),
+    );
+  }
+
+  void _confirmDelete(StudentProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Student'),
+        content: const Text('Are you sure you want to delete this student?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteStudent(provider.selectedStudent!.id);
+              if (mounted) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Student deleted successfully')),
+                );
+                // Go back to list since student is gone
+                Provider.of<StudentProvider>(context, listen: false).clearSelection();
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }
@@ -70,18 +120,58 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
           Text('Active: ${student.active ? "Yes" : "No"}', style: const TextStyle(fontSize: 16)),
           Text('Registration Code: ${student.registrationCode ?? "N/A"}', style: const TextStyle(fontSize: 16)),
           Text('Created At: ${student.createdAt.toLocal().toShortDateString()}', style: const TextStyle(fontSize: 16)),
-          // You might add an Image.network here for student.photo if the URL is valid
-          // if (student.photo != null && student.photo!.isNotEmpty)
-          //   Image.network(student.photo!),
           const SizedBox(height: 10),
           Text('Notes: ${student.notes ?? "N/A"}', style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EnrollmentScreen(studentId: student.id),
+                ),
+              );
+            },
+            icon: const Icon(Icons.school),
+            label: const Text('Enroll in Class'),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GradeEntryScreen(
+                    studentId: student.id,
+                    subject: 'Matemáticas', // Fixed for now, usually selected from enrollments
+                    parcial: '1P',
+                    quimestre: 'Q1',
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.grade),
+            label: const Text('Enter Grades'),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AttendanceScreen(studentId: student.id),
+                ),
+              );
+            },
+            icon: const Icon(Icons.calendar_today),
+            label: const Text('View Attendance'),
+          ),
         ],
       ),
     );
   }
 }
 
-// Extension to format DateTime to a short date string
 extension on DateTime {
   String toShortDateString() {
     return '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';

@@ -61,4 +61,77 @@ class StudentProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> createStudent(Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      final newStudent = await _apiService.createStudent(data, authToken: authToken);
+      _students.add(newStudent);
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error creating student: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateStudent(int studentId, Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      final updatedStudent = await _apiService.updateStudent(studentId, data, authToken: authToken);
+
+      final index = _students.indexWhere((s) => s.id == studentId);
+      if (index != -1) {
+        _students[index] = updatedStudent;
+      }
+      if (_selectedStudent?.id == studentId) {
+        _selectedStudent = updatedStudent;
+      }
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error updating student: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteStudent(int studentId) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+
+      await _apiService.deleteStudent(studentId, authToken: authToken);
+      _students.removeWhere((s) => s.id == studentId);
+      if (_selectedStudent?.id == studentId) {
+        _selectedStudent = null;
+      }
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error deleting student: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

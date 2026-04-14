@@ -64,8 +64,47 @@ void main() {
             auth,
           ),
         ),
-        ChangeNotifierProvider<SubjectProvider>(
-          create: (context) => SubjectProvider(Provider.of<ClaseProvider>(context, listen: false)),
+        ChangeNotifierProxyProvider<AuthProvider, SubjectProvider>(
+          create: (context) => SubjectProvider(
+            Provider.of<ClaseProvider>(context, listen: false),
+            context.read<ApiService>(),
+            context.read<AuthProvider>(),
+          ),
+          update: (context, auth, previous) => SubjectProvider(
+            Provider.of<ClaseProvider>(context, listen: false),
+            context.read<ApiService>(),
+            auth,
+          ),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, EnrollmentProvider>(
+          create: (context) => EnrollmentProvider(
+            context.read<ApiService>(),
+            context.read<AuthProvider>(),
+          ),
+          update: (context, auth, previous) => EnrollmentProvider(
+            context.read<ApiService>(),
+            auth,
+          ),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, GradeProvider>(
+          create: (context) => GradeProvider(
+            context.read<ApiService>(),
+            context.read<AuthProvider>(),
+          ),
+          update: (context, auth, previous) => GradeProvider(
+            context.read<ApiService>(),
+            auth,
+          ),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, AttendanceProvider>(
+          create: (context) => AttendanceProvider(
+            context.read<ApiService>(),
+            context.read<AuthProvider>(),
+          ),
+          update: (context, auth, previous) => AttendanceProvider(
+            context.read<ApiService>(),
+            auth,
+          ),
         ),
       ],
       child: MyApp(authService: authService), // Pass authService for GoRouter
@@ -83,10 +122,24 @@ class MyApp extends StatelessWidget {
     final AppRouter appRouter = AppRouter(authService: authService, apiService: Provider.of<ApiService>(context));
 
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'SGA Mobile',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          primary: Colors.indigo,
+          secondary: Colors.orangeAccent,
+        ),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 2,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
       ),
       routerConfig: appRouter.router,
     );
@@ -291,31 +344,36 @@ class _MyHomePageState extends State<MyHomePage> {
                                 );
                               },
                             ),
-              const SizedBox(height: 20), // Add some spacing
-              ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context).go('/students');
-                },
-                child: const Text('View Students'),
-              ),
-              const SizedBox(height: 10), // Add some spacing between buttons
-              ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context).go('/teachers');
-                },
-                child: const Text('View Teachers'),
-              ),
-              const SizedBox(height: 10), // Add some spacing between buttons
-              ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context).go('/subjects');
-                },
-                child: const Text('View Subjects'),
-              ),
+              const SizedBox(height: 20),
+              _buildAdminActions(authProvider),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAdminActions(AuthProvider authProvider) {
+    if (authProvider.userRole == 'ESTUDIANTE') {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => GoRouter.of(context).go('/students'),
+          child: const Text('View Students'),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () => GoRouter.of(context).go('/teachers'),
+          child: const Text('View Teachers'),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () => GoRouter.of(context).go('/subjects'),
+          child: const Text('View Subjects'),
+        ),
+      ],
     );
   }
 }

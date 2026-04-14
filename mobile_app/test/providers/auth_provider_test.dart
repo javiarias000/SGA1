@@ -25,11 +25,11 @@ void main() {
 
     test('login success updates isLoggedIn to true', () async {
       // Arrange: When login is called on the mock service, return true
-      when(mockAuthService.login(any<String>(), any<String>())).thenAnswer((_) async => true);
-      
+      when(mockAuthService.login('testuser', 'password')).thenAnswer((_) async => true);
+
       // Act: Call the login method on the provider
       final result = await authProvider.login('testuser', 'password');
-      
+
       // Assert: Verify that the login was successful and the state updated
       expect(result, true);
       expect(authProvider.isLoggedIn, true);
@@ -37,7 +37,7 @@ void main() {
 
     test('login failure keeps isLoggedIn as false', () async {
       // Arrange: When login is called, return false
-      when(mockAuthService.login(any<String>(), any<String>())).thenAnswer((_) async => false);
+      when(mockAuthService.login('testuser', 'wrongpassword')).thenAnswer((_) async => false);
 
       // Act
       final result = await authProvider.login('testuser', 'wrongpassword');
@@ -49,7 +49,7 @@ void main() {
 
     test('logout updates isLoggedIn to false', () async {
       // Arrange: First, simulate a successful login
-      when(mockAuthService.login(any<String>(), any<String>())).thenAnswer((_) async => true);
+      when(mockAuthService.login('testuser', 'password')).thenAnswer((_) async => true);
       await authProvider.login('testuser', 'password');
       expect(authProvider.isLoggedIn, true); // Pre-condition check
 

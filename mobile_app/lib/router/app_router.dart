@@ -84,6 +84,7 @@ class AppRouter {
       redirect: (context, state) async {
         final authProvider = context.read<AuthProvider>();
         final loggedIn = authProvider.isLoggedIn;
+        final role = authProvider.userRole;
         final goingToLogin = state.matchedLocation == '/login';
 
         if (!loggedIn && !goingToLogin) {
@@ -92,6 +93,17 @@ class AppRouter {
         if (loggedIn && goingToLogin) {
           return '/';
         }
+
+        // Role-based access control
+        if (role == 'ESTUDIANTE') {
+          if (state.matchedLocation == '/teachers' ||
+              state.matchedLocation == '/subjects' ||
+              state.matchedLocation.startsWith('/teachers/') ||
+              state.matchedLocation.startsWith('/subjects/')) {
+            return '/'; // Redirect students away from admin/teacher views
+          }
+        }
+
         return null;
       },
       errorBuilder: (context, state) => Scaffold(

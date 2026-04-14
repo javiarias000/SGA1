@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/providers/student_provider.dart';
+import 'package:mobile_app/screens/student_form_screen.dart';
 
 class StudentsListScreen extends StatefulWidget {
   const StudentsListScreen({super.key});
@@ -26,6 +27,17 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Students'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const StudentFormScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: studentProvider.isLoading

@@ -3,9 +3,14 @@ import 'package:mobile_app/models/subject.dart';
 import 'package:mobile_app/providers/clase_provider.dart';
 import 'package:mobile_app/models/clase.dart';
 import 'package:mobile_app/models/teacher.dart';
+import 'package:mobile_app/api/api_service.dart';
+import 'package:mobile_app/providers/auth_provider.dart';
+import 'package:mobile_app/api/api_exceptions.dart';
 
 class SubjectProvider extends ChangeNotifier {
   final ClaseProvider _claseProvider;
+  final ApiService _apiService;
+  final AuthProvider _authProvider;
   List<Subject> _subjects = [];
   bool _isLoading = false;
   String _errorMessage = '';
@@ -13,7 +18,7 @@ class SubjectProvider extends ChangeNotifier {
   Subject? _selectedSubject;
   List<Teacher> _associatedTeachers = [];
 
-  SubjectProvider(this._claseProvider) {
+  SubjectProvider(this._claseProvider, this._apiService, this._authProvider) {
     _claseProvider.addListener(_onClasesUpdated);
     _onClasesUpdated();
   }
@@ -53,7 +58,7 @@ class SubjectProvider extends ChangeNotifier {
 
       final Set<int> seenTeacherIds = {};
       final List<Teacher> teachers = [];
-      
+
       final relevantClases = _claseProvider.clases.where((c) => c.subject?.id == subjectId);
 
       for (var clase in relevantClases) {
@@ -75,6 +80,66 @@ class SubjectProvider extends ChangeNotifier {
     _associatedTeachers = [];
     _errorMessage = '';
     notifyListeners();
+  }
+
+  Future<void> createSubject(Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+      final newSubject = await _apiService.createSubject(data, authToken: authToken);
+      _subjects.add(newSubject);
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error creating subject: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateSubject(int subjectId, Map<String, dynamic> data) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+      final updatedSubject = await _apiService.updateSubject(subjectId, data, authToken: authToken);
+      final index = _subjects.indexWhere((s) => s.id == subjectId);
+      if (index != -1) _subjects[index] = updatedSubject;
+      if (_selectedSubject?.id == subjectId) _selectedSubject = updatedSubject;
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error updating subject: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteSubject(int subjectId) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+    try {
+      final authToken = await _authProvider.getAuthToken();
+      if (authToken == null) throw Exception('User not authenticated.');
+      await _apiService.deleteSubject(subjectId, authToken: authToken);
+      _subjects.removeWhere((s) => s.id == subjectId);
+      if (_selectedSubject?.id == subjectId) _selectedSubject = null;
+    } on UnauthorizedException {
+      await _authProvider.logout();
+    } catch (e) {
+      _errorMessage = 'Error deleting subject: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   @override

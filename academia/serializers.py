@@ -4,9 +4,14 @@ from classes.models import GradeLevel, Subject
 from users.serializers import UsuarioSerializer # Assuming UsuarioSerializer is in users.serializers
 
 class GradeLevelSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField()
+
     class Meta:
         model = GradeLevel
         fields = ['id', 'level', 'section', 'display_name']
+
+    def get_display_name(self, obj):
+        return str(obj)
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:

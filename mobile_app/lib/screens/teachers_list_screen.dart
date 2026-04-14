@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_app/providers/teacher_provider.dart';
+import 'package:mobile_app/screens/teacher_form_screen.dart';
 
 class TeachersListScreen extends StatefulWidget {
   const TeachersListScreen({super.key});
@@ -26,6 +27,17 @@ class _TeachersListScreenState extends State<TeachersListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Teachers'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TeacherFormScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: teacherProvider.isLoading
