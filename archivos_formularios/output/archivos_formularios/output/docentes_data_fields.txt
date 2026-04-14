@@ -1,0 +1,13 @@
+Required Data Fields for Docentes (Teachers)
+
+These are the fields expected by the platform when creating or updating a teacher entry.
+The names are as used in the GraphQL mutations and Django models.
+
+Mandatory fields are marked with (Required).
+
+1.  nombre (Required): Full name of the teacher. (max_length=255)
+2.  rol: The role of the user, should be 'DOCENTE'. (default: 'PENDIENTE', choices: 'DOCENTE', 'ESTUDIANTE', 'PENDIENTE')
+3.  email: Email address of the teacher. Must be unique if provided.
+4.  phone: Phone number of the teacher. (max_length=30)
+5.  cedula: National ID number of the teacher. Must be unique if provided. (max_length=20)
+6.  specialization: The teacher's area of specialization. (max_length=120)

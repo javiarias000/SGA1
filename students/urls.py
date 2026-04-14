@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from students import views
 
 app_name = 'students'
@@ -15,4 +15,7 @@ urlpatterns = [
 
     # Deberes
     path('deberes/', views.student_homework_view, name='homework'),
+
+    # API DRF
+    path('api/v1/', include('students.api.urls')),
 ]

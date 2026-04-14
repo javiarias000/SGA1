@@ -19,12 +19,9 @@ class Usuario(models.Model):
 
     nombre = models.CharField(max_length=255)
     rol = models.CharField(max_length=20, choices=Rol.choices, default=Rol.PENDIENTE)
-
-    # Datos útiles para matching ETL y búsqueda
     email = models.EmailField(blank=True, null=True, unique=True)
     phone = models.CharField(max_length=30, blank=True, null=True)
     cedula = models.CharField(max_length=20, blank=True, null=True, unique=True)
-
     auth_user = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
@@ -52,6 +49,14 @@ class Usuario(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.rol})"
+
+    @property
+    def is_teacher(self):
+        return self.rol == self.Rol.DOCENTE
+
+    @property
+    def is_student(self):
+        return self.rol == self.Rol.ESTUDIANTE
 
 
 class Profile(models.Model):

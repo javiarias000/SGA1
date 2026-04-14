@@ -1,0 +1,1889 @@
+{
+  "teacher_name_to_id": {
+    "acosta karolina": 1750,
+    "acosta zagal karolina": 1269,
+    "amancha hidalgo félix marcelo": 1270,
+    "amores valdivieso jenny natividad": 1271,
+    "andrea peña": 1743,
+    "angel quinapanta": 1755,
+    "arevalo catañeda angel jorge": 1272,
+    "arias cuenca jorge javier": 1273,
+    "caiza caiza roberto carlos": 1274,
+    "chicaiza cuenca rubén geovany": 1275,
+    "chicaiza orozco marcelo javier": 1276,
+    "chicaiza yánez jefferson alexander": 1277,
+    "chico analuisa fabricio renato": 1278,
+    "chico espinoza edwin patricio": 1279,
+    "christian peralta": 1756,
+    "cumbicos macas josé luis": 1280,
+    "daniel laura": 1735,
+    "danny toapanta": 1753,
+    "david díaz": 1760,
+    "david vásquez": 1764,
+    "de la cruz changalombo jorge ramiro": 1281,
+    "diego pérez": 1761,
+    "diego túquerez": 1742,
+    "rubén chicaiza": 1758,
+    "díaz loyola david descartes": 1282,
+    "edwin chico": 1767,
+    "elizabeth reyes": 1739,
+    "erazo moreno carlos efrén": 1283,
+    "fabricio chico": 1747,
+    "fonseca sandoval walter guillermo": 1284,
+    "félix amancha": 1752,
+    "guananga aizabucha javier santiago": 1285,
+    "guillermo fonseca": 1744,
+    "gutama galan juan diego": 1286,
+    "guzñay paca inti rafel": 1287,
+    "inés larreátegui": 1737,
+    "jenny amores": 1741,
+    "jiménez vega mauricio marmonte": 1288,
+    "jorge arevalo": 1765,
+    "jorge arias": 1768,
+    "jorge de la cruz": 1763,
+    "josé luis cumbicos": 1766,
+    "juan diego gutama": 1754,
+    "juan solís": 1745,
+    "larreátegui feijoó inés maría": 1289,
+    "laura guamán christian daniel": 1290,
+    "marcelo chicaiza": 1759,
+    "marco paredes": 1736,
+    "marco tocto": 1771,
+    "mauricio jiménez": 1769,
+    "mgsisrael pérez": 1749,
+    "mgsjorge de la cruz": 1748,
+    "mgsmarco tocto": 1740,
+    "nuñez cunalata zoila delia": 1291,
+    "obando mayorga byron geovanny": 1292,
+    "paredes sandoval marco antonio": 1293,
+    "peralta aponte christian hernán": 1295,
+    "peña núñez andrea michelle": 1294,
+    "pérez mayorga edwin israel": 1296,
+    "pérez toapanta diego armando": 1297,
+    "quinapanta tibán angel rodrigo": 1298,
+    "rafael guzñay": 1746,
+    "reyes garcés elizabeth del rocío": 1268,
+    "roberto caiza": 1751,
+    "santiago guananga": 1770,
+    "santiago zumbana": 1757,
+    "solís solís juan francisco": 1299,
+    "sumbana quinapanta luis enrique": 1300,
+    "tapia garcía kevin paúl": 1301,
+    "toapanta arequipa danny alexander": 1302,
+    "tocto villareal marco antonio": 1303,
+    "túquerez núñez diego javier": 1304,
+    "villena cárdenas maria isabel": 1305,
+    "vásquez sánchez enrique david": 1306,
+    "zumbana quinapanta santiago maximiliano": 1307,
+    "admin": 423,
+    "Reyes Garcés Elizabeth Del Rocío": "2",
+    "Acosta Zagal Karolina": "3",
+    "Amancha Hidalgo Félix Marcelo": "4",
+    "Amores Valdivieso Jenny Natividad": "5",
+    "Arevalo Catañeda Angel Jorge": "6",
+    "Arias Cuenca Jorge Javier": "7",
+    "Caiza Caiza Roberto Carlos": "8",
+    "Chicaiza Cuenca Rubén Geovany": "9",
+    "Chicaiza Orozco Marcelo Javier": "10",
+    "Chicaiza Yánez Jefferson Alexander": "11",
+    "Chico Analuisa Fabricio Renato": "12",
+    "Chico Espinoza Edwin Patricio": "13",
+    "Cumbicos Macas José Luis": "14",
+    "De La Cruz Changalombo Jorge Ramiro": "15",
+    "Díaz Loyola David Descartes": "16",
+    "Erazo Moreno Carlos Efrén": "17",
+    "Fonseca Sandoval Walter Guillermo": "18",
+    "Guananga Aizabucha Javier Santiago": "19",
+    "Gutama Galan Juan Diego": "20",
+    "Guzñay Paca Inti Rafel": "21",
+    "Jiménez Vega Mauricio Marmonte": "22",
+    "Larreátegui Feijoó Inés María": "23",
+    "Laura Guamán Christian Daniel": "24",
+    "Nuñez Cunalata Zoila Delia": "25",
+    "Obando Mayorga Byron Geovanny": "26",
+    "Paredes Sandoval Marco Antonio": "27",
+    "Peña Núñez Andrea Michelle": "28",
+    "Peralta Aponte Christian Hernán": "29",
+    "Pérez Mayorga Edwin Israel": "30",
+    "Pérez Toapanta Diego Armando": "31",
+    "Quinapanta Tibán Angel Rodrigo": "32",
+    "Solís Solís Juan Francisco": "33",
+    "Sumbana Quinapanta Luis Enrique": "34",
+    "Tapia García Kevin Paúl": "35",
+    "Toapanta Arequipa Danny Alexander": "36",
+    "Tocto Villareal Marco Antonio": "37",
+    "Túquerez Núñez Diego Javier": "38",
+    "Villena Cárdenas Maria Isabel": "39",
+    "Vásquez Sánchez Enrique David": "40",
+    "Zumbana Quinapanta Santiago Maximiliano": "41"
+  },
+  "student_name_to_id": {
+    "": 1692,
+    "allan paul": 1707,
+    "bianca grazziela": 1710,
+    "carlos mateo": 1706,
+    "hayden joshua": 1709,
+    "santiago jesús": 1708,
+    "acosta guamán lucas benjamín": 1463,
+    "acosta pazmiño alejandra victoria": 1440,
+    "acosta ruíz samuel alexander": 1403,
+    "acosta vaca jonathan gabriel": 1363,
+    "acurio pérez": 1587,
+    "aguilar calero": 1655,
+    "aguilar moreta": 1336,
+    "aguilar moreta dylan abiel": 1464,
+    "aguinda cevallos": 1337,
+    "aguinda cevallos eliana saraí": 1693,
+    "albuja cortes sofia": 1308,
+    "aldáz sánchez": 1673,
+    "alejandra elizabeth": 1556,
+    "alison sarahi": 1562,
+    "alisson evolet": 1578,
+    "altamirano castillo arelys macarena": 1480,
+    "alulema meza kaely valentina": 1512,
+    "alvarado chávez": 1700,
+    "alvarado chávez mathias josue": 1420,
+    "amancha montesdeoca dylan gael": 1481,
+    "amancha moposita": 1714,
+    "andachi gonzález carlos ariel": 1495,
+    "andaluz coba anton jhosmar": 1696,
+    "andaluz coba jhordan omar": 1313,
+    "andrea salome": 1568,
+    "anilema yuquilema aylen yuleisy": 1421,
+    "anilema yuquilema mathias grabriel": 1482,
+    "aponte ipiales": 1533,
+    "aragón peñafiel": 1629,
+    "aragón peñafiel didier rubén": 1441,
+    "arboleda jiménez": 1523,
+    "arcos bravo elian alejandro": 1364,
+    "armendáriz larreátegui": 1338,
+    "ashqui aldas elian jared": 1356,
+    "azogue poaquiza bayoleth samantha": 1357,
+    "bagua buenaño": 1614,
+    "barreno ocaña": 1674,
+    "barrionuevo mejia": 1621,
+    "bastidas choco": 1588,
+    "bastidas mangui": 1630,
+    "bayas bayas": 1656,
+    "benavides revelo martina eunice": 1365,
+    "benavides revelo maya fiorella": 1694,
+    "bombón montero": 1513,
+    "bonilla calderón": 1589,
+    "bonilla costales": 1643,
+    "bryanna solange": 1551,
+    "cabezas aveiga": 1675,
+    "cadena chaglla emilia alejandra": 1779,
+    "caguana paucar": 1604,
+    "caguana paucar leonel emiliano": 1383,
+    "caguana yanchapanta dulce maria": 1465,
+    "caiza hurtado joseph emiliano": 1404,
+    "calderón trujillo rodrigo alejandro": 1442,
+    "calucho hurtado": 1534,
+    "cambo chimborazo jaime daniel": 1309,
+    "cambo cuji keyla lucíana": 1496,
+    "camila alejandra": 1584,
+    "campaña núñez lucia guadalupe": 1422,
+    "carvajal aguaguiña andrea mayte": 1497,
+    "casa martínez adrián alexander": 1498,
+    "castillo romero": 1622,
+    "castillo romero joshua": 1315,
+    "cañar machuca christopher ariel": 1466,
+    "cedeño vanegas": 1670,
+    "cevallos gavilanes santiago david": 1483,
+    "chaglla toasa ayeleth hadasha": 1406,
+    "chaglla villacres darla angelina": 1443,
+    "chagmana toapanta": 1535,
+    "chalán jinde": 1644,
+    "chamorro martinez dominick david": 1358,
+    "chasi zurita": 1536,
+    "checa vivanco": 1590,
+    "chicaiza chiluisa": 1605,
+    "chillagana coronel edward alexis": 1780,
+    "chisag guamán": 1723,
+    "chisag guamán ricardo sebastián": 1407,
+    "chisag mayorga paulette milagros": 1384,
+    "choco nuñez": 1514,
+    "chulco bimboza": 1698,
+    "chulco bimboza dereck david": 1408,
+    "chuncha choco josué daniel": 1325,
+    "chuqui anilema": 1711,
+    "chuqui anilema dante zaed": 1499,
+    "chuqui caguano": 1591,
+    "chávez garcés ángel david": 1423,
+    "chávez viera": 1615,
+    "chérrez rivadeneira": 1719,
+    "chérrez rivadeneira nadia soledad": 1333,
+    "coral narváez sara emilia": 1462,
+    "coronel cardenas": 1671,
+    "coronel cardenas sol maythe": 1467,
+    "cortes sanchez kalebh felipe": 1511,
+    "criollo cuenca": 1339,
+    "cristellot garcés": 1524,
+    "cruz sotomayor cayetano javier": 1424,
+    "culque rumipamba maría alejandra": 1385,
+    "cumbal fonseca": 1725,
+    "cunama guachambala reilly henry": 1386,
+    "curay barona jaidy kathleen": 1444,
+    "curicama curicama camila valentina": 1387,
+    "curillo chipantiza josue aaron": 1484,
+    "cushpa paredes ángeles daniela": 1468,
+    "cárdenas basantes samara elizabeth": 1405,
+    "cárdenas garcía gabriela analia": 1314,
+    "córdova clavijo": 1701,
+    "córdova clavijo matías alejandro": 1326,
+    "daisy noemí": 1553,
+    "daniel isaac": 1573,
+    "daniel maximiliano": 1580,
+    "danna maite": 1579,
+    "david ismael": 1567,
+    "david sebastián": 1576,
+    "de la cruz guanoluisa": 1515,
+    "de la cruz aucatoma": 1616,
+    "dorian dimitri": 1585,
+    "duran ordoñez": 1592,
+    "durán noboa": 1657,
+    "díaz santana john alex": 1781,
+    "emilia salomé": 1560,
+    "erick alexander": 1572,
+    "espinoza silva alan daniel": 1316,
+    "espinoza de los monteros lema": 1645,
+    "espín hurtado": 1537,
+    "espín mancheno juliana lucía": 1366,
+    "estrada supe saila irais": 1317,
+    "fernández jaque": 1593,
+    "fiallos jácome": 1676,
+    "fiallos jácome matías sebastián": 1318,
+    "fierro amores": 1606,
+    "flores acurio doménica carolina": 1445,
+    "flores fonseca": 1340,
+    "flores freire": 1677,
+    "flores velastegui maylin ariana": 1446,
+    "fonseca pérez": 1731,
+    "freire gualpa esteban emilio": 1388,
+    "freire villegas": 1341,
+    "gabriel alejandro": 1566,
+    "gaibor abril ariana polette": 1500,
+    "gaibor tipanluiza": 1594,
+    "gaibor tipanluiza nahomy isabella": 1425,
+    "gancino guananga": 1525,
+    "garcés espinoza": 1538,
+    "garcés jerez joseph william": 1501,
+    "gavilanes guaman brianna yamile": 1367,
+    "gavilanes pinto": 1726,
+    "gavilanes pinto erick kalel": 1502,
+    "gavilema caiza": 1617,
+    "guachambala ramos": 1722,
+    "guachanbala cunama": 1607,
+    "guaigua abril": 1658,
+    "guaigua verdezoto": 1608,
+    "guaman chillo ana paula": 1447,
+    "guaman gavilanez": 1678,
+    "guamanquispe silva": 1596,
+    "guamán flores": 1712,
+    "guamán flores mathías leonel": 1426,
+    "guamán zapata": 1595,
+    "guananga carrera daniela alexandra": 1311,
+    "guanopatin chicaiza": 1623,
+    "guashpa pucuna": 1659,
+    "guerrero moya": 1597,
+    "guerrero santana martin rafael": 1448,
+    "guerrero valencia dylan nicolás": 1409,
+    "guerrón la rosa": 1355,
+    "gutiérrez ajila mateo david": 1449,
+    "guáitara macías adiel julián": 1310,
+    "helen domenica": 1571,
+    "hernández pinos christopher alexander": 1312,
+    "herrera martínez maría alejandra": 1427,
+    "herrera morocho": 1732,
+    "herrera morocho juan diego": 1450,
+    "hidalgo escobar maría paz": 1469,
+    "hidalgo guevara": 1609,
+    "huayta mundocorre": 1610,
+    "huayta mundocorre grace anely": 1451,
+    "intriago marino daniel agustin": 1389,
+    "ipiales torres marco emilio": 1485,
+    "iza mero jesús mathias": 1470,
+    "jara casillas": 1720,
+    "jara casillas arianne belén": 1368,
+    "jaramillo yanchaliquin": 1624,
+    "jerez junta rachell zoe": 1782,
+    "jesús alexander": 1574,
+    "jimenez paredes daphne victoria": 1452,
+    "jiménez chicaiza": 1342,
+    "jiménez rivadeneira amelia sofía": 1410,
+    "joffre gabriel": 1552,
+    "juan david": 1581,
+    "juan pablo": 1557,
+    "karla analía": 1564,
+    "lema intriago celeste valentina": 1369,
+    "lema peñaloza": 1660,
+    "león villacrés": 1699,
+    "león villacrés emma joy": 1359,
+    "lindo chillagana": 1516,
+    "lopez andaluz": 1717,
+    "lopez andaluz martin alexander": 1471,
+    "lopez llanos": 1716,
+    "lozada tituaña samuel benjamin": 1472,
+    "lucero urresta": 1335,
+    "lucio rojano": 1346,
+    "lópez iza eduardo josé": 1411,
+    "lópez lozada": 1618,
+    "lópez naranjo": 1646,
+    "lópez noboa": 1344,
+    "lópez pazmiño": 1631,
+    "lópez pazmiño elí natanael": 1370,
+    "maisanche guaman maykel leonel": 1428,
+    "mancheno llanos nicolas emiliano": 1327,
+    "manjarres bonilla": 1648,
+    "manobanda yanez emily nicole": 1319,
+    "mantilla paredes elisa margoth": 1371,
+    "manya santiago eliel armando": 1503,
+    "manya santiago yarely alejandra": 1390,
+    "manzano ramos noemí hadassah": 1372,
+    "marfetán salinas andrea belén": 1429,
+    "martinez chafla zoe ivanna": 1412,
+    "martín ignacio": 1569,
+    "martínez lópez wendy sofía": 1430,
+    "martínez pazmiño": 1517,
+    "maría paz": 1575,
+    "masabanda barrera carlos alejandro": 1783,
+    "masabanda contreras janis emilia": 1373,
+    "masabanda shambi mateo adrian": 1453,
+    "mateo sebastián": 1559,
+    "matute tunja": 1632,
+    "matías caleb": 1563,
+    "matías joel": 1583,
+    "mena rampón": 1518,
+    "mena ramírez": 1347,
+    "mera hurtado": 1539,
+    "merino lópez": 1540,
+    "minta choco lía samara": 1391,
+    "miranda villacrés": 1626,
+    "mirza zafiro": 1586,
+    "mongón choez darla valentina": 1360,
+    "moposita chango daniela abigail": 1454,
+    "morales garcés edith mirely": 1784,
+    "morales núñez": 1661,
+    "moreno bermeo": 1348,
+    "moreta chicaiza": 1649,
+    "moreta hernández": 1526,
+    "morocho chuqui paula thais": 1486,
+    "moya medina": 1715,
+    "moya medina salomé valentina": 1320,
+    "muso lasluisa": 1662,
+    "muzo espinoza paúl alejandro": 1431,
+    "muñiz medina israel roberto": 1413,
+    "muñoz toasa karla sarahí": 1414,
+    "méndez torres": 1625,
+    "naomi thais": 1561,
+    "naranjo duque génesis ariana": 1455,
+    "naranjo meneses scarlett nahomi": 1473,
+    "naranjo noboa": 1663,
+    "narvaez borja": 1541,
+    "narváez borja emily abigail": 1321,
+    "navarro chillagana": 1724,
+    "neira ortiz": 1679,
+    "noa micaela": 1565,
+    "noboa barros kevin matias": 1785,
+    "nuela durán": 1542,
+    "nuñez chávez martin david": 1487,
+    "nuñez conteron yanniz charlotte": 1432,
+    "nuñez recalde": 1680,
+    "núñez caiza": 1527,
+    "núñez morales": 1543,
+    "ochoa lascano eliette eloiza": 1392,
+    "ochoa lascano fernando ariel": 1697,
+    "ojeda villacres": 1640,
+    "olivo urvina": 1598,
+    "olovacha tubon josé andrés": 1474,
+    "ortiz arias josué alexander": 1433,
+    "oñate vargas": 1544,
+    "palma arciniega": 1664,
+    "paredes armas": 1721,
+    "paredes armas david eduardo": 1375,
+    "paredes crespo josué antonio": 1434,
+    "paredes nuñez alicia valentina": 1393,
+    "paredes proaño": 1611,
+    "paredes toasa julián emanuel": 1456,
+    "parra montiel": 1672,
+    "paucar guaman": 1354,
+    "paucar guamán jonathan ismael": 1322,
+    "paz tamayo marcus evan": 1504,
+    "pedraza moposita": 1349,
+    "perez alvarez": 1599,
+    "peñaloza zumbana": 1350,
+    "pinda allaica": 1633,
+    "poalasin paucar": 1546,
+    "poaquiza cordova": 1681,
+    "poaquiza ruiz": 1619,
+    "portero escudero violeta franchezka": 1505,
+    "pullutasig moposita mathias jesús": 1475,
+    "punina guaman adonis jared": 1476,
+    "pérez aveiga": 1545,
+    "pérez bermeo": 1351,
+    "pérez carvajal": 1727,
+    "pérez criollo camila anahí": 1323,
+    "pérez criollo daniela abigail": 1691,
+    "pérez jaya": 1612,
+    "pérez llanos valery mikaela": 1376,
+    "pérez moncayo": 1528,
+    "pérez romo martin israel": 1377,
+    "pérez sánchez": 1702,
+    "pérez sánchez isabella sofía": 1435,
+    "pérez torres": 1651,
+    "quile quinaguano": 1634,
+    "quinapanta pérez josué alexander": 1328,
+    "quinapanta romero": 1600,
+    "quishpe galarza nathan jasid": 1394,
+    "quishpi pulig": 1653,
+    "quispe ayuquina lourdes ayme": 1477,
+    "quispe castillo": 1652,
+    "quispe toasa arlet sarahi": 1415,
+    "quispe toasa ian gael": 1695,
+    "ramos chango mathias jair": 1416,
+    "ramírez castro": 1547,
+    "rea arteaga": 1352,
+    "real silva celeste aylin": 1361,
+    "reinoso proaño danna rafaela": 1506,
+    "reinoso toscano": 1529,
+    "revelo pico alessandro salvatore": 1417,
+    "reyes acosta": 1627,
+    "rios simba emiliana hadasa": 1488,
+    "rivera chagmana": 1635,
+    "robalino guerrero": 1601,
+    "rodríguez bazurto": 1665,
+    "romero mora": 1682,
+    "romero ortiz": 1550,
+    "rosales jordán": 1602,
+    "rosero villacrés": 1613,
+    "rosero zurita martina salome": 1457,
+    "rovalino gallegos emily daniela": 1329,
+    "ruiz castillo": 1641,
+    "ruiz gavilanez martín emiliano": 1436,
+    "sagñay pomaquero elian mathias": 1362,
+    "sailema villacres adrián de jesús": 1507,
+    "salazar arias amalia ariadna": 1395,
+    "salazar chicaiza josué alejandro": 1330,
+    "salazar córdova mathías andrés": 1437,
+    "salazar freire": 1666,
+    "santamaría pérez": 1548,
+    "santana miranda lesly salome": 1458,
+    "santiana ortega": 1530,
+    "segovia mero": 1703,
+    "segovia mero camila sarahi": 1398,
+    "serrano acosta naomi monserrath": 1331,
+    "shyhua ramos yanua jahel": 1508,
+    "silva camacho": 1654,
+    "solis jerez jared sebastián": 1489,
+    "solis ruiz lenin gabriel": 1418,
+    "solis vizuete": 1628,
+    "solís pérez": 1683,
+    "solís zanipatin": 1531,
+    "solórzano borja benjamín caleb": 1380,
+    "steven adriel": 1577,
+    "sumbana freire isaac daniel": 1381,
+    "supe rojas dayana isabella": 1509,
+    "sánchez gavilanes": 1667,
+    "sánchez chávez ana paula": 1438,
+    "sánchez maldonado axel rafael": 1378,
+    "sánchez miño angélica siloé": 1396,
+    "sánchez pazmiño benjamín isaí": 1397,
+    "sánchez placencia": 1603,
+    "sánchez villena josé julián": 1379,
+    "taco lagos": 1532,
+    "tamya soledad": 1554,
+    "tapia barona dana sahyri": 1490,
+    "tapia cando": 1685,
+    "tenesaca palate": 1636,
+    "thiago josué": 1582,
+    "tipan toalombo alan samuel": 1492,
+    "tipán chalán josué benjamín": 1491,
+    "tipán alomaliza": 1519,
+    "tirado freiré": 1686,
+    "tisalema talahua": 1520,
+    "tiviano aucatoma": 1668,
+    "toapanta avalos": 1718,
+    "toapanta avalos ariana nicole": 1419,
+    "torres tonato": 1713,
+    "torres tonato alba arianna": 1399,
+    "troncoso chacha eva violeta": 1400,
+    "tucta barrera anahi rafaela": 1332,
+    "tustón lucero leandro gael": 1493,
+    "túquerez villacís": 1687,
+    "urquizo navarrete": 1549,
+    "usulla quilligana": 1637,
+    "valencia ashqui": 1638,
+    "valencia ashqui santiago david": 1510,
+    "valle ortiz ana paula": 1494,
+    "vallejo insuasti": 1733,
+    "vallejo larrea": 1521,
+    "vargas masabanda": 1522,
+    "vasquez sánchez dilan ricardo": 1324,
+    "vega ruiz": 1729,
+    "vela altamirano": 1688,
+    "veloz rojas": 1639,
+    "verdesoto alarcón": 1642,
+    "verónica kamila": 1570,
+    "viera lezano": 1689,
+    "villaba pazmiño": 1730,
+    "villacres santiana genesis elizabeth": 1478,
+    "villacrés mayorga maría paz": 1401,
+    "villacís sánchez martín andré": 1459,
+    "villalva pinto diogo alexander": 1479,
+    "villalva reinoso mayte isabella": 1460,
+    "villar contreras": 1728,
+    "virguez barrios sergio alejandro": 1402,
+    "yancha cunachi": 1669,
+    "yanez rivera": 1705,
+    "yanez rivera maykel isdrael": 1439,
+    "yuquilema anilema": 1704,
+    "yuquilema anilema abraham ezequiel": 1461,
+    "zamora chafla ian esteban": 1382,
+    "zamora lópez": 1353,
+    "ángela sofía": 1555,
+    "ángeles daniela": 1558,
+    "ñacato ulloa danna rafaela": 1374,
+    "Albuja Cortes Sofia": "42",
+    "Cambo Chimborazo Jaime Daniel": "43",
+    "Guáitara Macías Adiel Julián": "44",
+    "Guananga Carrera Daniela Alexandra": "45",
+    "Hernández Pinos Christopher Alexander": "46",
+    "Andaluz Coba Jhordan Omar": "47",
+    "Cárdenas García Gabriela Analia": "48",
+    "Castillo Romero Joshua": "49",
+    "Espinoza Silva Alan Daniel": "50",
+    "Estrada Supe Saila Irais": "51",
+    "Fiallos Jácome Matías Sebastián": "52",
+    "Manobanda Yanez Emily Nicole": "53",
+    "Moya Medina Salomé Valentina": "54",
+    "Narváez Borja Emily Abigail": "55",
+    "Paucar Guamán Jonathan Ismael": "56",
+    "Pérez Criollo Camila Anahí": "57",
+    "Pérez Criollo Daniela Abigail": "61",
+    "Vasquez Sánchez Dilan Ricardo": "62",
+    "Chuncha Choco Josué Daniel": "63",
+    "Córdova Clavijo Matías Alejandro": "64",
+    "Mancheno Llanos Nicolas Emiliano": "65",
+    "Quinapanta Pérez Josué Alexander": "66",
+    "Rovalino Gallegos Emily Daniela": "67",
+    "Salazar Chicaiza Josué Alejandro": "68",
+    "Serrano Acosta Naomi Monserrath": "69",
+    "Tucta Barrera Anahi Rafaela": "70",
+    "Chérrez Rivadeneira Nadia Soledad": "71",
+    "Chávez Viera": "419",
+    "Lucero Urresta": "83",
+    "Aguilar Moreta": "74",
+    "Aguinda Cevallos": "389",
+    "Armendáriz Larreátegui": "76",
+    "Criollo Cuenca": "77",
+    "Flores Fonseca": "78",
+    "Freire Villegas": "396",
+    "Jiménez Chicaiza": "402",
+    "López Naranjo": "476",
+    "López Noboa": "404",
+    "Lucio Rojano": "477",
+    "Mena Ramírez": "406",
+    "Moreno Bermeo": "86",
+    "Pedraza Moposita": "87",
+    "Peñaloza Zumbana": "411",
+    "Pérez Bermeo": "480",
+    "Rea Arteaga": "90",
+    "Zamora López": "490",
+    "Paucar Guaman": "92",
+    "Guerrón La Rosa": "93",
+    "Ashqui Aldas Elian Jared": "94",
+    "Aguinda Cevallos Eliana Saraí": "96",
+    "Azogue Poaquiza Bayoleth Samantha": "97",
+    "Chamorro Martinez Dominick David": "98",
+    "León Villacrés Emma Joy": "99",
+    "Mongón Choez Darla Valentina": "100",
+    "Real Silva Celeste Aylin": "101",
+    "Sagñay Pomaquero Elian Mathias": "102",
+    "Acosta Vaca Jonathan Gabriel": "103",
+    "Arcos Bravo Elian Alejandro": "104",
+    "Benavides Revelo Martina Eunice": "105",
+    "Benavides Revelo Maya Fiorella": "107",
+    "Espín Mancheno Juliana Lucía": "108",
+    "Gavilanes Guaman Brianna Yamile": "109",
+    "Jara Casillas Arianne Belén": "110",
+    "Lema Intriago Celeste Valentina": "111",
+    "López Pazmiño Elí Natanael": "112",
+    "Mantilla Paredes Elisa Margoth": "113",
+    "Manzano Ramos Noemí Hadassah": "114",
+    "Masabanda Contreras Janis Emilia": "115",
+    "Ñacato Ulloa Danna Rafaela": "116",
+    "Paredes Armas David Eduardo": "117",
+    "Pérez Llanos Valery MIkaela": "118",
+    "Pérez Romo Martin Israel": "119",
+    "Sánchez Maldonado Axel Rafael": "120",
+    "Sánchez Villena José Julián": "121",
+    "Solórzano Borja Benjamín Caleb": "122",
+    "Sumbana Freire Isaac Daniel": "123",
+    "Zamora Chafla Ian Esteban": "124",
+    "Caguana Paucar Leonel Emiliano": "125",
+    "Chisag Mayorga Paulette Milagros": "126",
+    "Culque Rumipamba María Alejandra": "127",
+    "Cunama Guachambala Reilly Henry": "128",
+    "Curicama Curicama Camila Valentina": "129",
+    "Freire Gualpa Esteban Emilio": "130",
+    "Intriago Marino Daniel Agustin": "131",
+    "Manya Santiago Yarely Alejandra": "132",
+    "Minta Choco Lía Samara": "133",
+    "Ochoa Lascano Eliette Eloiza": "134",
+    "Paredes Nuñez Alicia Valentina": "135",
+    "Quishpe Galarza Nathan Jasid": "136",
+    "Salazar Arias Amalia Ariadna": "137",
+    "Sánchez Miño Angélica Siloé": "138",
+    "Sánchez Pazmiño Benjamín Isaí": "139",
+    "Segovia Mero Camila Sarahi": "140",
+    "Torres Tonato Alba Arianna": "141",
+    "Troncoso Chacha Eva Violeta": "142",
+    "Villacrés Mayorga María Paz": "143",
+    "Virguez Barrios Sergio Alejandro": "144",
+    "Acosta Ruíz Samuel Alexander": "145",
+    "Caiza Hurtado Joseph Emiliano": "146",
+    "Cárdenas Basantes Samara Elizabeth": "147",
+    "Chaglla Toasa Ayeleth Hadasha": "148",
+    "Chisag Guamán Ricardo Sebastián": "149",
+    "Chulco Bimboza Dereck David": "150",
+    "Guerrero Valencia Dylan Nicolás": "151",
+    "Jiménez Rivadeneira Amelia Sofía": "152",
+    "López Iza Eduardo José": "153",
+    "Martinez Chafla Zoe Ivanna": "154",
+    "Muñiz Medina Israel Roberto": "155",
+    "Muñoz Toasa Karla Sarahí": "156",
+    "Quispe Toasa Arlet Sarahi": "157",
+    "Ramos Chango Mathias Jair": "158",
+    "Revelo Pico Alessandro Salvatore": "159",
+    "Solis Ruiz Lenin Gabriel": "160",
+    "Toapanta Avalos Ariana Nicole": "161",
+    "Alvarado Chávez Mathias Josue": "162",
+    "Anilema Yuquilema Aylen Yuleisy": "163",
+    "Campaña Núñez Lucia Guadalupe": "164",
+    "Chávez Garcés Ángel David": "165",
+    "Cruz Sotomayor Cayetano Javier": "166",
+    "Gaibor Tipanluiza Nahomy Isabella": "167",
+    "Guamán Flores Mathías Leonel": "168",
+    "Herrera Martínez María Alejandra": "169",
+    "Maisanche Guaman Maykel Leonel": "170",
+    "Marfetán Salinas Andrea Belén": "171",
+    "Martínez López Wendy Sofía": "172",
+    "Muzo Espinoza Paúl Alejandro": "173",
+    "Nuñez Conteron Yanniz Charlotte": "174",
+    "Ortiz Arias Josué Alexander": "175",
+    "Paredes Crespo Josué Antonio": "176",
+    "Pérez Sánchez Isabella Sofía": "177",
+    "Ruiz Gavilanez Martín Emiliano": "178",
+    "Salazar Córdova Mathías Andrés": "179",
+    "Sánchez Chávez Ana Paula": "180",
+    "Yanez Rivera Maykel Isdrael": "181",
+    "Acosta Pazmiño Alejandra Victoria": "182",
+    "Aragón Peñafiel Didier Rubén": "183",
+    "Calderón Trujillo Rodrigo Alejandro": "184",
+    "Chaglla Villacres Darla Angelina": "185",
+    "Curay Barona Jaidy Kathleen": "186",
+    "Flores Acurio Doménica Carolina": "187",
+    "Flores Velastegui Maylin Ariana": "188",
+    "Guaman Chillo Ana Paula": "189",
+    "Guerrero Santana Martin Rafael": "190",
+    "Gutiérrez Ajila Mateo David": "191",
+    "Herrera Morocho Juan Diego": "192",
+    "Huayta Mundocorre Grace Anely": "193",
+    "Jimenez Paredes Daphne Victoria": "194",
+    "Masabanda Shambi Mateo Adrian": "195",
+    "Moposita Chango Daniela Abigail": "196",
+    "Naranjo Duque Génesis Ariana": "197",
+    "Paredes Toasa Julián Emanuel": "198",
+    "Rosero Zurita Martina Salome": "199",
+    "Santana Miranda Lesly Salome": "200",
+    "Villacís Sánchez Martín André": "201",
+    "Villalva Reinoso Mayte Isabella": "202",
+    "Yuquilema Anilema Abraham Ezequiel": "203",
+    "Coral Narváez Sara Emilia": "204",
+    "Acosta Guamán Lucas Benjamín": "205",
+    "Aguilar Moreta Dylan Abiel": "206",
+    "Caguana Yanchapanta Dulce Maria": "207",
+    "Cañar Machuca Christopher Ariel": "208",
+    "Coronel Cardenas Sol Maythe": "209",
+    "Cushpa Paredes Ángeles Daniela": "210",
+    "Hidalgo Escobar María Paz": "211",
+    "Iza mero Jesús Mathias": "212",
+    "Lopez Andaluz Martin Alexander": "213",
+    "Lozada Tituaña Samuel Benjamin": "214",
+    "Naranjo Meneses Scarlett Nahomi": "215",
+    "Olovacha Tubon José Andrés": "216",
+    "Pullutasig Moposita Mathias Jesús": "217",
+    "Punina Guaman Adonis Jared": "218",
+    "Quispe Ayuquina Lourdes Ayme": "219",
+    "Quispe Toasa Ian Gael": "157",
+    "Villacres Santiana Genesis Elizabeth": "222",
+    "Villalva Pinto Diogo Alexander": "223",
+    "Altamirano Castillo Arelys Macarena": "224",
+    "Amancha Montesdeoca Dylan Gael": "225",
+    "Anilema Yuquilema Mathias Grabriel": "226",
+    "Cevallos Gavilanes Santiago David": "227",
+    "Curillo Chipantiza Josue Aaron": "228",
+    "Ipiales Torres Marco Emilio": "229",
+    "Morocho Chuqui Paula Thais": "230",
+    "Nuñez Chávez Martin David": "231",
+    "Rios Simba Emiliana Hadasa": "232",
+    "Solis Jerez Jared Sebastián": "233",
+    "Tapia Barona Dana Sahyri": "234",
+    "Tipán Chalán Josué Benjamín": "235",
+    "Tipan Toalombo Alan Samuel": "236",
+    "Tustón Lucero Leandro Gael": "237",
+    "Valle Ortiz Ana Paula": "238",
+    "Andachi González Carlos Ariel": "239",
+    "Andaluz Coba Anton Jhosmar": "241",
+    "Cambo Cuji Keyla Lucíana": "242",
+    "Carvajal Aguaguiña Andrea Mayte": "243",
+    "Casa Martínez Adrián Alexander": "244",
+    "Chuqui Anilema Dante Zaed": "245",
+    "Gaibor Abril Ariana Polette": "246",
+    "Garcés Jerez Joseph William": "247",
+    "Gavilanes Pinto Erick Kalel": "248",
+    "Manya Santiago Eliel Armando": "249",
+    "Ochoa Lascano Fernando Ariel": "251",
+    "Paz Tamayo Marcus Evan": "252",
+    "Portero Escudero Violeta Franchezka": "253",
+    "Reinoso Proaño Danna Rafaela": "254",
+    "Sailema Villacres Adrián de Jesús": "255",
+    "Shyhua Ramos Yanua Jahel": "256",
+    "Supe Rojas Dayana Isabella": "257",
+    "Valencia Ashqui Santiago David": "258",
+    "Cortes Sanchez Kalebh Felipe": "259",
+    "Alulema Meza Kaely Valentina": "260",
+    "Bombón Montero": "418",
+    "Choco Nuñez": "262",
+    "Chulco Bimboza": "264",
+    "De La Cruz Guanoluisa": "265",
+    "León Villacrés": "267",
+    "Lindo Chillagana": "268",
+    "Martínez Pazmiño": "269",
+    "Mena Rampón": "270",
+    "Tipán alomaliza": "271",
+    "Tisalema Talahua": "272",
+    "Vallejo Larrea": "273",
+    "Vargas Masabanda": "274",
+    "Alvarado Chávez": "276",
+    "Arboleda Jiménez": "277",
+    "Córdova Clavijo": "279",
+    "Cristellot Garcés": "280",
+    "Gancino Guananga": "281",
+    "Moreta Hernández": "282",
+    "Núñez Caiza": "287",
+    "Pérez Moncayo": "288",
+    "Pérez Sánchez": "290",
+    "Reinoso Toscano": "291",
+    "Santiana Ortega": "292",
+    "Segovia Mero": "294",
+    "Solís Zanipatin": "295",
+    "Taco Lagos": "296",
+    "Yuquilema Anilema": "298",
+    "Aponte Ipiales": "299",
+    "Calucho Hurtado": "300",
+    "Chagmana Toapanta": "301",
+    "Chasi Zurita": "302",
+    "Espín Hurtado": "303",
+    "Garcés Espinoza": "304",
+    "Mera Hurtado": "305",
+    "Merino López": "306",
+    "Narvaez Borja": "307",
+    "Nuela Durán": "308",
+    "Núñez Morales": "309",
+    "Oñate Vargas": "310",
+    "Pérez Aveiga": "311",
+    "Poalasin Paucar": "312",
+    "Ramírez Castro": "313",
+    "Santamaría Pérez": "314",
+    "Urquizo Navarrete": "315",
+    "Yanez Rivera": "317",
+    "Romero Ortiz": "318",
+    "Bryanna Solange": "319",
+    "Joffre Gabriel": "320",
+    "Daisy Noemí": "321",
+    "Carlos Mateo": "323",
+    "Tamya Soledad": "324",
+    "Ángela Sofía": "325",
+    "Alejandra Elizabeth": "326",
+    "Allan Paul": "328",
+    "Juan Pablo": "329",
+    "Ángeles Daniela": "330",
+    "Mateo Sebastián": "331",
+    "Emilia Salomé": "332",
+    "Naomi Thais": "333",
+    "Alison Sarahi": "334",
+    "Matías Caleb": "335",
+    "Karla Analía": "336",
+    "Noa Micaela": "337",
+    "Santiago Jesús": "339",
+    "Gabriel Alejandro": "340",
+    "David Ismael": "341",
+    "Andrea Salome": "342",
+    "Martín Ignacio": "343",
+    "Verónica Kamila": "344",
+    "Hayden Joshua": "346",
+    "Helen Domenica": "347",
+    "Erick Alexander": "348",
+    "Daniel Isaac": "349",
+    "Bianca Grazziela": "351",
+    "Jesús Alexander": "352",
+    "María Paz": "353",
+    "David Sebastián": "354",
+    "Steven Adriel": "355",
+    "Alisson Evolet": "356",
+    "Danna Maite": "357",
+    "Daniel Maximiliano": "358",
+    "Juan David": "359",
+    "Thiago Josué": "360",
+    "Matías Joel": "361",
+    "Camila Alejandra": "362",
+    "Dorian Dimitri": "363",
+    "Mirza Zafiro": "364",
+    "Acurio Pérez": "365",
+    "Bastidas Choco": "366",
+    "Bonilla Calderón": "367",
+    "Checa Vivanco": "521",
+    "Chuqui Anilema": "370",
+    "Chuqui Caguano": "523",
+    "Duran Ordoñez": "372",
+    "Fernández Jaque": "373",
+    "Gaibor Tipanluiza": "374",
+    "Guamán Flores": "376",
+    "Guamán Zapata": "438",
+    "Guamanquispe Silva": "378",
+    "Guerrero Moya": "379",
+    "Olivo Urvina": "380",
+    "Perez Alvarez": "381",
+    "Quinapanta Romero": "382",
+    "Robalino Guerrero": "383",
+    "Rosales Jordán": "384",
+    "Sánchez Placencia": "385",
+    "Torres Tonato": "387",
+    "Amancha Moposita": "391",
+    "Caguana Paucar": "392",
+    "Chicaiza Chiluisa": "393",
+    "Fierro Amores": "394",
+    "Guachanbala Cunama": "397",
+    "Guaigua Verdezoto": "398",
+    "Hidalgo Guevara": "399",
+    "Huayta Mundocorre": "400",
+    "Moya Medina": "408",
+    "Paredes Proaño": "409",
+    "Pérez Jaya": "412",
+    "Rosero Villacrés": "413",
+    "Lopez Llanos": "415",
+    "Bagua Buenaño": "416",
+    "De la cruz Aucatoma": "420",
+    "Gavilema Caiza": "421",
+    "Lopez Andaluz": "423",
+    "López Lozada": "424",
+    "Poaquiza Ruiz": "425",
+    "Sánchez Gavilanes": "505",
+    "Tipan Alomaliza": "428",
+    "Toapanta Avalos": "430",
+    "Barrionuevo Mejia": "431",
+    "Castillo Romero": "432",
+    "Chérrez Rivadeneira": "434",
+    "Coronel Cárdenas": "436",
+    "Guanopatin Chicaiza": "439",
+    "Jara Casillas": "441",
+    "Jaramillo Yanchaliquin": "442",
+    "Méndez Torres": "443",
+    "Miranda Villacrés": "444",
+    "Paredes Armas": "446",
+    "Reyes Acosta": "447",
+    "Solis Vizuete": "448",
+    "Aragón Peñafiel": "449",
+    "Bastidas Mangui": "450",
+    "Guachambala Ramos": "452",
+    "López Pazmiño": "453",
+    "Matute Tunja": "454",
+    "Pinda Allaica": "455",
+    "Quile Quinaguano": "456",
+    "Rivera Chagmana": "457",
+    "Tenesaca Palate": "458",
+    "Usulla Quilligana": "459",
+    "Valencia Ashqui": "460",
+    "Veloz Rojas": "461",
+    "Chisag Guamán": "463",
+    "Navarro Chillagana": "465",
+    "Ojeda Villacres": "466",
+    "Ruiz Castillo": "467",
+    "Verdesoto Alarcón": "468",
+    "Bonilla Costales": "469",
+    "Chalán Jinde": "470",
+    "Cumbal Fonseca": "472",
+    "Espinoza de los Monteros Lema": "473",
+    "Gavilanes Pinto": "475",
+    "Manjarres Bonilla": "478",
+    "Moreta Chicaiza": "479",
+    "Pérez Carvajal": "482",
+    "Pérez Torres": "483",
+    "Quispe Castillo": "484",
+    "Quishpi Pulig": "485",
+    "Silva Camacho": "486",
+    "Villar Contreras": "488",
+    "Aguilar Calero": "491",
+    "Bayas Bayas": "492",
+    "Durán Noboa": "493",
+    "Guaigua Abril": "494",
+    "Guashpa Pucuna": "495",
+    "Lema Peñaloza": "496",
+    "Morales Núñez": "497",
+    "Muso Lasluisa": "498",
+    "Naranjo Noboa": "499",
+    "Palma Arciniega": "500",
+    "Rodríguez Bazurto": "501",
+    "Salazar Freire": "502",
+    "Tiviano Aucatoma": "506",
+    "Vega Ruiz": "508",
+    "Villaba Pazmiño": "510",
+    "Yancha Cunachi": "511",
+    "Cedeño Vanegas": "512",
+    "Coronel Cardenas": "513",
+    "Fonseca Pérez": "515",
+    "Parra Montiel": "516",
+    "Aldáz Sánchez": "517",
+    "Barreno Ocaña": "518",
+    "Cabezas Aveiga": "519",
+    "Fiallos Jácome": "524",
+    "Flores Freire": "525",
+    "Guaman Gavilanez": "526",
+    "Herrera Morocho": "528",
+    "Neira Ortiz": "529",
+    "Nuñez Recalde": "530",
+    "Poaquiza Cordova": "531",
+    "Romero Mora": "532",
+    "Solís Pérez": "533",
+    "Tapia Cando": "535",
+    "Tirado Freiré": "536",
+    "Túquerez Villacís": "537",
+    "Vallejo Insuasti": "539",
+    "Vela Altamirano": "540",
+    "Viera Lezano": "541"
+  },
+  "subject_name_to_info": {
+    "acompañamiento": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 71,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "acompañamiento para pianistas": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 45,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "agrupacion: orquesta, banda, ensamble de guitarra o coro": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 68,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "armonía": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 49,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "audioperceptiva": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 39,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "banda sinfónica edison chiluisa": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 14,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "capacitacion en música": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 48,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "capacitación en música": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 72,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "clarinete": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 24,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "complementario": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 25,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "conjunto instrumental": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 69,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "contrabajo": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 76,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "coro": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 37,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "coro (estudiantes de piano)": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 20,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "coro matutino": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 17,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "coro vespertino": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 15,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "creación y arreglos": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 73,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "educación rítmica audioperceptiva": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 65,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "ensamble de flautas traversas": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 21,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "ensamble de guitarras": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 16,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "ensamble de vientos (saxofón, clarinete, trompeta, trombón)": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 22,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "flauta traversa": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 26,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "formación y orientación": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 46,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "formación y orientación laboral": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 50,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "formas musical": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 53,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "formas musicales": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 74,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "guitarra": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 27,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "historia de la música": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 70,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "informática aplicada": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 47,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "instrumento": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 66,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "lenguaje musica": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 43,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "lenguaje musical": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 67,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "orquesta matutina": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 18,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "orquesta pedagógica": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 38,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "orquesta sinfónica bolívar": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 19,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "orquesta de cuerdas frotadas (violín, viola, violonchelo, contrabajo)": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 23,
+            "tipo_materia": "AGRUPACION"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "percusión": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 28,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "piano": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 29,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "producción artístico musical": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 54,
+            "tipo_materia": "TEORIA"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "saxofon": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 31,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "saxofón": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 30,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "trombón": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 32,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "trompeta": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 33,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "viola": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 34,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "violonchelo": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 35,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "violín": {
+      "id": {
+        "id": {
+          "id": {
+            "id": 36,
+            "tipo_materia": "INSTRUMENTO"
+          },
+          "tipo_materia": "OTRO"
+        },
+        "tipo_materia": "OTRO"
+      },
+      "tipo_materia": "OTRO"
+    },
+    "Viloncello": {
+      "id": "13",
+      "tipo_materia": "OTRO"
+    },
+    "Orquesta Sinfónica Bolívar": {
+      "id": "23",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Educación Rítmica Audioperceptiva": {
+      "id": "93",
+      "tipo_materia": "TEORIA"
+    },
+    "Conjunto Instrumental": {
+      "id": "97",
+      "tipo_materia": "TEORIA"
+    },
+    "Coro (estudiantes de Piano)": {
+      "id": "12",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Ensamble de Flautas Traversas": {
+      "id": "26",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Flauta Traversa": {
+      "id": "24",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Guitarra": {
+      "id": "20",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Violonchelo": {
+      "id": "95",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Formación y Orientación": {
+      "id": "80",
+      "tipo_materia": "TEORIA"
+    },
+    "Acompañamiento para Pianistas": {
+      "id": "83",
+      "tipo_materia": "TEORIA"
+    },
+    "Trompeta- Pecusión": {
+      "id": "25",
+      "tipo_materia": "OTRO"
+    },
+    "Trompeta": {
+      "id": "16",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Complementario": {
+      "id": "79",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Orquesta Matutina": {
+      "id": "14",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Lenguaje Musica": {
+      "id": "87",
+      "tipo_materia": "TEORIA"
+    },
+    "Armonía": {
+      "id": "76",
+      "tipo_materia": "TEORIA"
+    },
+    "Piano": {
+      "id": "17",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Audioperceptiva": {
+      "id": "86",
+      "tipo_materia": "TEORIA"
+    },
+    "Instrumento Que Estudia en el Conservatorio Bolívar": {
+      "id": "21",
+      "tipo_materia": "OTRO"
+    },
+    "Ensamble de Vientos (saxofón, Clarinete, Trompeta, Trombón)": {
+      "id": "7",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Formación y Orientación Laboral": {
+      "id": "99",
+      "tipo_materia": "TEORIA"
+    },
+    "Producción Artístico Musical": {
+      "id": "81",
+      "tipo_materia": "TEORIA"
+    },
+    "Saxofon": {
+      "id": "88",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Orquesta de Cuerdas Frotadas (violín, Viola, Violonchelo, Contrabajo)": {
+      "id": "4",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Ensamble de Guitarras": {
+      "id": "1",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Percusión": {
+      "id": "5",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Clarinete": {
+      "id": "18",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Capacitacion en Música": {
+      "id": "85",
+      "tipo_materia": "TEORIA"
+    },
+    "Piano-percusión": {
+      "id": "11",
+      "tipo_materia": "OTRO"
+    },
+    "Creación y Arreglos": {
+      "id": "77",
+      "tipo_materia": "TEORIA"
+    },
+    "Trombón": {
+      "id": "10",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Viola": {
+      "id": "19",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Agrupacion: Orquesta, Banda, Ensamble de Guitarra o Coro": {
+      "id": "92",
+      "tipo_materia": "TEORIA"
+    },
+    "Banda Sinfónica Edison Chiluisa": {
+      "id": "15",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Formas Musicales": {
+      "id": "98",
+      "tipo_materia": "TEORIA"
+    },
+    "Contrabajo": {
+      "id": "94",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Lenguaje Musical": {
+      "id": "90",
+      "tipo_materia": "TEORIA"
+    },
+    "Instrumento": {
+      "id": "96",
+      "tipo_materia": "TEORIA"
+    },
+    "Coro Vespertino": {
+      "id": "6",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Formas Musical": {
+      "id": "89",
+      "tipo_materia": "TEORIA"
+    },
+    "Informática Aplicada": {
+      "id": "78",
+      "tipo_materia": "TEORIA"
+    },
+    "Historia de la Música": {
+      "id": "84",
+      "tipo_materia": "TEORIA"
+    },
+    "Coro Matutino": {
+      "id": "9",
+      "tipo_materia": "AGRUPACION"
+    },
+    "Orquesta Pedagógica": {
+      "id": "75",
+      "tipo_materia": "TEORIA"
+    },
+    "Capacitación en Música": {
+      "id": "82",
+      "tipo_materia": "TEORIA"
+    },
+    "Coro": {
+      "id": "74",
+      "tipo_materia": "TEORIA"
+    },
+    "Coro (matutino)": {
+      "id": "22",
+      "tipo_materia": "OTRO"
+    },
+    "Violín": {
+      "id": "8",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Acompañamiento": {
+      "id": "91",
+      "tipo_materia": "TEORIA"
+    },
+    "Saxofón": {
+      "id": "2",
+      "tipo_materia": "INSTRUMENTO"
+    },
+    "Agrupación": {
+      "id": "3",
+      "tipo_materia": "OTRO"
+    }
+  },
+  "clase_name_to_id": {
+    "acompañamiento": 107,
+    "agrupacion: orquesta, banda, ensamble de guitarra o coro": 99,
+    "armonía": 116,
+    "audioperceptiva": 75,
+    "banda sinfónica edison chiluisa": 14,
+    "capacitación en música": 110,
+    "clarinete - guananga aizabucha javier santiago": 24,
+    "complementario": 92,
+    "complementario - amores valdivieso jenny natividad": 32,
+    "complementario - chicaiza cuenca rubén geovany": 36,
+    "complementario - chico espinoza edwin patricio": 27,
+    "complementario - cumbicos macas josé luis": 29,
+    "complementario - guananga aizabucha javier santiago": 35,
+    "complementario - jiménez vega mauricio marmonte": 31,
+    "complementario - larreátegui feijoó inés maría": 26,
+    "complementario - obando mayorga byron geovanny": 33,
+    "complementario - peña núñez andrea michelle": 30,
+    "complementario - pérez mayorga edwin israel": 25,
+    "complementario - sumbana quinapanta luis enrique": 28,
+    "complementario - zumbana quinapanta santiago maximiliano": 34,
+    "conjunto instrumental": 93,
+    "contrabajo - vásquez sánchez enrique david": 71,
+    "coro": 73,
+    "coro (estudiantes de piano)": 20,
+    "coro matutino": 17,
+    "coro vespertino": 15,
+    "creación y arreglos": 114,
+    "educación rítmica audioperceptiva": 81,
+    "ensamble de flautas traversas": 21,
+    "ensamble de guitarras": 16,
+    "ensamble de vientos (saxofón, clarinete, trompeta, trombón)": 22,
+    "flauta traversa - larreátegui feijoó inés maría": 37,
+    "flauta traversa - nuñez cunalata zoila delia": 38,
+    "formación y orientación": 108,
+    "formación y orientación laboral": 112,
+    "formas musicales": 115,
+    "guitarra - chicaiza cuenca rubén geovany": 39,
+    "guitarra - chico espinoza edwin patricio": 40,
+    "guitarra - cumbicos macas josé luis": 41,
+    "historia de la música": 106,
+    "informática aplicada": 109,
+    "instrumento": 100,
+    "lenguaje musical": 94,
+    "orquesta matutina": 18,
+    "orquesta pedagógica": 79,
+    "orquesta sinfónica bolívar": 19,
+    "orquesta de cuerdas frotadas (violín, viola, violonchelo, contrabajo)": 23,
+    "percusión - tapia garcía kevin paúl": 42,
+    "piano - acosta zagal karolina": 43,
+    "piano - caiza caiza roberto carlos": 44,
+    "piano - chicaiza orozco marcelo javier": 45,
+    "piano - chicaiza yánez jefferson alexander": 46,
+    "piano - de la cruz changalombo jorge ramiro": 47,
+    "piano - díaz loyola david descartes": 48,
+    "piano - erazo moreno carlos efrén": 49,
+    "piano - pérez toapanta diego armando": 50,
+    "piano - quinapanta tibán angel rodrigo": 51,
+    "piano - solís solís juan francisco": 52,
+    "producción artístico musical": 117,
+    "saxofon - arevalo catañeda angel jorge": 56,
+    "saxofón - arevalo catañeda angel jorge": 55,
+    "saxofón - guananga aizabucha javier santiago": 53,
+    "saxofón - toapanta arequipa danny alexander": 54,
+    "trombón - peralta aponte christian hernán": 57,
+    "trompeta - amancha hidalgo félix marcelo": 58,
+    "trompeta - pérez mayorga edwin israel": 59,
+    "viola - jiménez vega mauricio marmonte": 60,
+    "viola - sumbana quinapanta luis enrique": 61,
+    "violonchelo - peña núñez andrea michelle": 62,
+    "violín - amores valdivieso jenny natividad": 65,
+    "violín - gutama galan juan diego": 66,
+    "violín - jiménez vega mauricio marmonte": 63,
+    "violín - obando mayorga byron geovanny": 67,
+    "violín - sumbana quinapanta luis enrique": 64,
+    "violín - villena cárdenas maria isabel": 68,
+    "violín - zumbana quinapanta santiago maximiliano": 69
+  },
+  "clase_id_map": {
+    "Coro|74|2025-2026|NONE|2": "1",
+    "Orquesta Pedagógica|75|2025-2026|NONE|2": "2",
+    "Audioperceptiva|86|2025-2026|NONE|2": "3",
+    "Orquesta Pedagógica|75|2025-2026|NONE|1": "2",
+    "Coro|74|2025-2026|NONE|1": "1",
+    "Educación Rítmica Audioperceptiva|93|2025-2026|NONE|1": "4",
+    "Educación Rítmica Audioperceptiva|93|2025-2026|25|4": "4",
+    "Orquesta Pedagógica|75|2025-2026|NONE|4": "2",
+    "Coro|74|2025-2026|NONE|4": "1",
+    "Coro|74|2025-2026|NONE|6": "1",
+    "Audioperceptiva|86|2025-2026|NONE|6": "3",
+    "Orquesta Pedagógica|75|2025-2026|NONE|6": "2",
+    "Instrumento|96|2025-2026|NONE|6": "5",
+    "Coro|74|2025-2026|NONE|5": "1",
+    "Educación Rítmica Audioperceptiva|93|2025-2026|NONE|5": "4",
+    "Orquesta Pedagógica|75|2025-2026|NONE|5": "2",
+    "Instrumento|96|2025-2026|NONE|5": "5",
+    "Orquesta Pedagógica|75|2025-2026|NONE|3": "2",
+    "Coro|74|2025-2026|NONE|3": "1",
+    "Educación Rítmica Audioperceptiva|93|2025-2026|25|3": "4",
+    "Instrumento|96|2025-2026|NONE|3": "5",
+    "Lenguaje Musical|90|2025-2026|NONE|NONE": "6",
+    "Instrumento|96|2025-2026|NONE|NONE": "5",
+    "Lenguaje Musica|87|2025-2026|NONE|NONE": "10",
+    "Historia De La Música|84|2025-2026|6|NONE": "12",
+    "Acompañamiento Para Pianistas|83|2025-2026|11|NONE": "13",
+    "Acompañamiento Para Pianistas|83|2025-2026|NONE|NONE": "13",
+    "Informática Aplicada|78|2025-2026|NONE|NONE": "15",
+    "Capacitacion En Música|85|2025-2026|NONE|NONE": "16",
+    "Armonía|76|2025-2026|NONE|NONE": "17",
+    "Capacitación En Música|82|2025-2026|NONE|NONE": "19",
+    "Historia De La Música|84|2025-2026|NONE|NONE": "12",
+    "Formas Musicales|98|2025-2026|NONE|NONE": "21",
+    "Formas Musical|89|2025-2026|NONE|NONE": "23",
+    "Producción Artístico Musical|81|2025-2026|NONE|NONE": "24"
+  }
+}

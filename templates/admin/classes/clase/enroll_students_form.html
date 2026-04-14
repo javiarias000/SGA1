@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+{{ form.media }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-classes model-clase change-form{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label='classes' %}">{% trans 'Classes' %}</a>
+&rsaquo; <a href="{% url 'admin:classes_clase_changelist' %}">{% trans 'Clases' %}</a>
+&rsaquo; <a href="{% url 'admin:classes_clase_change' object_id=clase.pk %}">{{ clase.name|truncatewords:18 }}</a>
+&rsaquo; {% trans 'Inscribir Estudiantes' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {% if form.errors %}
+                <p class="errornote">
+                {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+                </p>
+                {{ form.non_field_errors }}
+            {% endif %}
+
+            <fieldset class="module aligned">
+                <h2>{{ title }}</h2>
+                <p>{{ subtitle }}</p>
+                
+                <div class="form-row">
+                    {{ form.grade_level.errors }}
+                    <label for="{{ form.grade_level.id_for_label }}">{{ form.grade_level.label }}:</label>
+                    {{ form.grade_level }}
+                    <p class="help">{{ form.grade_level.help_text }}</p>
+                </div>
+                
+                <div class="form-row">
+                    {{ form.individual_students.errors }}
+                    <label for="{{ form.individual_students.id_for_label }}">{{ form.individual_students.label }}:</label>
+                    {{ form.individual_students }}
+                    <p class="help">{{ form.individual_students.help_text }}</p>
+                </div>
+            </fieldset>
+
+            <div class="submit-row">
+                <input type="submit" value="{% trans 'Inscribir' %}" class="default">
+                <a href="{% url 'admin:classes_clase_change' object_id=clase.pk %}" class="button cancel-link">{% trans 'Cancelar' %}</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

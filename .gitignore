@@ -1,11 +1,9 @@
 # Python
 __pycache__/
 *.py[cod]
-*.sqlite3
-
-# Node
-node_modules/
-**/node_modules/
+*$py.class
+*.so
+.Python
 
 # Django
 staticfiles/
@@ -72,3 +70,9 @@ db.sqlite3
 db_access_instructions.txt
 inconsistencias_docentes.txt
 inconsistencias_nombres.txt
+
+# Archivos generados durante la ejecución
+assignment_error_report.csv
+student_creation_log.csv
+name_mapping_suggestions.csv
+postgres_data/

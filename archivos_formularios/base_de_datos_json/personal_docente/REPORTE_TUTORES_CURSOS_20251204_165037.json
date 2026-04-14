@@ -1,0 +1,254 @@
+[
+  {
+    "model": "academia.tutor",
+    "pk": 1,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "A",
+      "tutor": "Solis Solis Juan Francisco"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 2,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "B",
+      "tutor": "Guzñay Paca Inti Rafael"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 3,
+    "fields": {
+      "curso": "Cuarto",
+      "paralelo": "C",
+      "tutor": "Chico Analuisa Fabricio Renato"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 4,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "A",
+      "tutor": "Chicaiza Yanez Jeferson Alexander"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 5,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "B",
+      "tutor": "Edwin Patricio Chico Espinoza"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 6,
+    "fields": {
+      "curso": "Decimo Año (2O Bachillerato)",
+      "paralelo": "C",
+      "tutor": "Jiménez Vega Mauricio Marmonte"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 7,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "A",
+      "tutor": "Guananga Aysabucha Santiago Javier"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 8,
+    "fields": {
+      "curso": "Decimo Primer Año (3O Bachillerato)",
+      "paralelo": "B",
+      "tutor": "Tocto Villarreal Marco Antonio"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 9,
+    "fields": {
+      "curso": "Noveno Año (1O Bachillerato)",
+      "paralelo": "A",
+      "tutor": "Arévalo Castañeda Angel Jorge"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 10,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "A",
+      "tutor": "Quinapanta Tibán Angel Rodrigo"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 11,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "B",
+      "tutor": "Peralta Aponte Christian Hernan"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 12,
+    "fields": {
+      "curso": "Octavo",
+      "paralelo": "C",
+      "tutor": "Zumbana Quinapanta Santiago"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 13,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "A",
+      "tutor": "Larreátegui Feijoó Inés María"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 14,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "B",
+      "tutor": "Reyes Garcés Elizabeth Del Roció"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 15,
+    "fields": {
+      "curso": "Primero",
+      "paralelo": "C",
+      "tutor": "Teg. Paredes Santana Marco Antonio"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 16,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "A",
+      "tutor": "Solis Solis Juan Francisco"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 17,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "B",
+      "tutor": "De La Cruz Changalombo Jorge Ramiro"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 18,
+    "fields": {
+      "curso": "Quinto",
+      "paralelo": "C",
+      "tutor": "Pérez Mayorga Edwin Israel"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 19,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "A",
+      "tutor": "Laura Guaman Christian Daniel"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 20,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "B",
+      "tutor": "Amores Valdivieso Jenny Natividad"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 21,
+    "fields": {
+      "curso": "Segundo",
+      "paralelo": "C",
+      "tutor": "Nuñez Cunalata Delia"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 22,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "A",
+      "tutor": "Amancha Hidalgo Félix Marcelo"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 23,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "B",
+      "tutor": "Toapanta Arequipa Danny Alexander"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 24,
+    "fields": {
+      "curso": "Septimo",
+      "paralelo": "C",
+      "tutor": "Gutama Galán Juan Diego"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 25,
+    "fields": {
+      "curso": "Sexto",
+      "paralelo": "B",
+      "tutor": "Acosta Zagal Karolina De Los Angeles"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 26,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "A",
+      "tutor": "Túquerez Nuñez Diego Javier"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 27,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "B",
+      "tutor": "Peña Núñez Andrea Michelle"
+    }
+  },
+  {
+    "model": "academia.tutor",
+    "pk": 28,
+    "fields": {
+      "curso": "Tercero",
+      "paralelo": "C",
+      "tutor": "Fonseca Sandoval Walter Guillermo"
+    }
+  }
+]

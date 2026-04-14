@@ -52,10 +52,12 @@ def _smart_title(text: str) -> str:
 def _clean_person_name(raw: str) -> str:
     # Strip punctuation that commonly appears in datasets and remove known titles.
     s = (raw or '').strip()
-    s = s.replace('.', ' ')
-    s = re.sub(r"\s+", " ", s)
-    s = re.sub(r"^(mgs|lic|dr|ing)\s+", "", s, flags=re.IGNORECASE)
-    return s.strip()
+    # More aggressive removal of titles and dots
+    s = s.replace('Mgs.', '').replace('Lic.', '').replace('Dr.', '').replace('Ing.', '')
+    s = s.replace('Mgs', '').replace('Lic', '').replace('Dr', '').replace('Ing', '')
+    # Clean up extra spaces that might be left
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
 
 
 @dataclass(frozen=True)
@@ -123,11 +125,12 @@ def map_grade_level(curso_raw: Any, paralelo_raw: Any) -> GradeLevelParsed:
     return GradeLevelParsed(level=level, section=section)
 
 
-def load_aliases(base_dir: str) -> Tuple[Dict[str, str], Dict[str, str]]:
-    """Load subject/teacher alias maps from base_dir/etl_mappings/*.json (if present)."""
+def load_aliases(base_dir: str) -> Tuple[Dict[str, str], Dict[str, str], Dict[str, str]]:
+    """Load subject/teacher/student alias maps from base_dir/etl_mappings/*.json (if present)."""
     mappings_dir = os.path.join(base_dir, 'etl_mappings')
     subj_path = os.path.join(mappings_dir, 'subjects_aliases.json')
     teach_path = os.path.join(mappings_dir, 'teachers_aliases.json')
+    student_path = os.path.join(mappings_dir, 'students_aliases.json')
 
     def _load(path: str) -> Dict[str, str]:
         if not os.path.exists(path):
@@ -139,7 +142,7 @@ def load_aliases(base_dir: str) -> Tuple[Dict[str, str], Dict[str, str]]:
         # normalize keys for matching
         return {norm_key(k): str(v).strip() for k, v in data.items() if k and v}
 
-    return _load(subj_path), _load(teach_path)
+    return _load(subj_path), _load(teach_path), _load(student_path)
 
 
 def canonical_subject_name(raw: Any, subject_aliases: Optional[Dict[str, str]] = None) -> str:
@@ -164,6 +167,19 @@ def canonical_teacher_name(raw: Any, teacher_aliases: Optional[Dict[str, str]] =
     key = norm_key(s)
     if teacher_aliases and key in teacher_aliases:
         return teacher_aliases[key]
+
+    # Do not title-case aggressively: keep original accents/casing as much as possible but normalize spaces.
+    s = re.sub(r"\s+", " ", s)
+    return s.strip()
+
+def canonical_student_name(raw: Any, student_aliases: Optional[Dict[str, str]] = None) -> str:
+    s = _clean_person_name(str(raw) if raw is not None else '')
+    if not s:
+        return ''
+
+    key = norm_key(s)
+    if student_aliases and key in student_aliases:
+        return student_aliases[key]
 
     # Do not title-case aggressively: keep original accents/casing as much as possible but normalize spaces.
     s = re.sub(r"\s+", " ", s)

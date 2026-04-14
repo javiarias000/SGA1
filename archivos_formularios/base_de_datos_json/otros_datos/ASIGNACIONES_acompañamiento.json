@@ -5,7 +5,7 @@
     "fields": {
       "full_name": "Chisag Guamán Doménica Anahí",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "A (matutina)",
       "tipo_asignacion": "Acompañamiento",
@@ -19,7 +19,7 @@
     "fields": {
       "full_name": "Ojeda Villacres Angel Matias",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "A (matutina)",
       "tipo_asignacion": "Acompañamiento",
@@ -33,7 +33,7 @@
     "fields": {
       "full_name": "Cedeño Vanegas Karen Daniela",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "A (matutina)",
       "tipo_asignacion": "Acompañamiento",
@@ -47,7 +47,7 @@
     "fields": {
       "full_name": "Guananga Carrera Daniela Alexandra",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "10o (2o Bachillerato)",
       "paralelo": "A (matutina)",
       "tipo_asignacion": "Acompañamiento",
@@ -61,7 +61,7 @@
     "fields": {
       "full_name": "Albuja Cortes Sofia",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "10o (2o Bachillerato)",
       "paralelo": "A (matutina)",
       "tipo_asignacion": "Acompañamiento",
@@ -75,7 +75,7 @@
     "fields": {
       "full_name": "Cabezas Aveiga Paula Sarahí",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -89,7 +89,7 @@
     "fields": {
       "full_name": "Checa Vivanco Sarahí Escarlett",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -103,7 +103,7 @@
     "fields": {
       "full_name": "Chuqui Caguano Ailen Sarahi",
       "docente_nombre": "Violín",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -117,7 +117,7 @@
     "fields": {
       "full_name": "Vela Altamirano Alice Samara",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -131,7 +131,7 @@
     "fields": {
       "full_name": "Viera Lezano Marco Israel",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "9o (1o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -145,7 +145,7 @@
     "fields": {
       "full_name": "Castillo Romero Joshua",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "10o (2o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -159,7 +159,7 @@
     "fields": {
       "full_name": "Estrada Supe Saila Irais",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "10o (2o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -173,7 +173,7 @@
     "fields": {
       "full_name": "Pérez Criollo Daniela Abigail",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "10o (2o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -187,7 +187,7 @@
     "fields": {
       "full_name": "Mena Ramírez Cristian Iván",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "11o (3o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -201,7 +201,7 @@
     "fields": {
       "full_name": "Zamora López Keyla Paulina",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "11o (3o Bachillerato)",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -215,7 +215,7 @@
     "fields": {
       "full_name": "Espinoza De Los Monteros Lema Nahomi Salomé",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -229,7 +229,7 @@
     "fields": {
       "full_name": "Lucio Rojano Fernando Xavier",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -243,7 +243,7 @@
     "fields": {
       "full_name": "Manjarres Bonilla Alisson Mayreth",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -257,7 +257,7 @@
     "fields": {
       "full_name": "Moreta Chicaiza Alisson Domenica",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -271,7 +271,7 @@
     "fields": {
       "full_name": "Pérez Carvajal Mateo Gabriel",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -285,7 +285,7 @@
     "fields": {
       "full_name": "Quispe Castillo Ailin Escarleth",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -299,7 +299,7 @@
     "fields": {
       "full_name": "Villar Contreras Christian Andrés",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "B (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -313,7 +313,7 @@
     "fields": {
       "full_name": "Lema Peñaloza Paula Ivanova",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "C (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -327,7 +327,7 @@
     "fields": {
       "full_name": "Rodríguez Bazurto Bryan Ismael",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "C (vespertina)",
       "tipo_asignacion": "Acompañamiento",
@@ -341,7 +341,7 @@
     "fields": {
       "full_name": "Sánchez Gavilanes Samantha Sarahí",
       "docente_nombre": "Piano",
-      "clase": "Acompañamiento",
+      "asignatura_grupo": "Acompañamiento",
       "grado": "8o",
       "paralelo": "C (vespertina)",
       "tipo_asignacion": "Acompañamiento",

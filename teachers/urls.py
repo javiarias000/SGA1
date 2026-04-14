@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'teachers'
@@ -51,14 +51,13 @@ urlpatterns = [
     path('calificaciones/detalladas/', views.calificaciones_detalladas_view, name='calificaciones_detalladas'),
     path('api/guardar-calificacion/', views.guardar_calificacion_parcial, name='guardar_calificacion_parcial'),
     
-    # API
+    # API existentes (no DRF)
     path('api/estadisticas/', views.api_estadisticas, name='api_estadisticas'),
-    
-
-    
-    # API
     path('api/class-number/', views.get_class_number, name='get_class_number'),
     path('api/student-subjects/', views.get_student_subjects, name='get_student_subjects'),
+    
+    # API DRF
+    path('api/v1/', include('teachers.api.urls')),
     
     # AJAX endpoints
     path('calificaciones/estudiante/<int:student_id>/', 

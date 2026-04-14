@@ -1,0 +1,634 @@
+[
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1316",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1319",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1322",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1318",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1313",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1330",
+      "clase_id": "14",
+      "docente_usuario_id": "149"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1315",
+      "clase_id": "15",
+      "docente_usuario_id": "144"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1317",
+      "clase_id": "15",
+      "docente_usuario_id": "144"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1691",
+      "clase_id": "15",
+      "docente_usuario_id": "144"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1325",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1326",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1327",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1463",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1466",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1468",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1470",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1475",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1478",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1308",
+      "clase_id": "17",
+      "docente_usuario_id": "152"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1312",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1464",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1474",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1476",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1465",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1471",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1472",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1477",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1309",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1310",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1467",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1469",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1473",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1695",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1311",
+      "clase_id": "18",
+      "docente_usuario_id": "151"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1321",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1324",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1314",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1323",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1329",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1320",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1328",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1331",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1332",
+      "clase_id": "19",
+      "docente_usuario_id": "146"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1482",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1483",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1484",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1487",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1494",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1479",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1497",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1503",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1504",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1510",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1502",
+      "clase_id": "21",
+      "docente_usuario_id": "143"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1481",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1485",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1486",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1501",
+      "clase_id": "16",
+      "docente_usuario_id": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1489",
+      "clase_id": "22",
+      "docente_usuario_id": "139"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1697",
+      "clase_id": "22",
+      "docente_usuario_id": "139"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1696",
+      "clase_id": "22",
+      "docente_usuario_id": "139"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1498",
+      "clase_id": "22",
+      "docente_usuario_id": "139"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1490",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1493",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1500",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1499",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1508",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1480",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1488",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1491",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1492",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1495",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1496",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1505",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1506",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1507",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1509",
+      "clase_id": "23",
+      "docente_usuario_id": "159"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1511",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "student_usuario_id": "1512",
+      "clase_id": "20",
+      "docente_usuario_id": "137"
+    }
+  }
+]

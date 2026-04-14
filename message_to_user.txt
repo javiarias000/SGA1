@@ -1,0 +1,6 @@
+The Docker images have been rebuilt successfully, which includes the `django-cors-headers` package.
+
+You should now be able to run your Django application without the `ModuleNotFoundError`.
+
+To start your Dockerized application, you can use:
+`docker-compose up`

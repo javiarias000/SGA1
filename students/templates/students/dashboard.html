@@ -6,6 +6,9 @@
 <div class="container-narrow">
 <h1 class="mb-2">👋 ¡Hola, {{ student.name }}!</h1>
 <p class="text-muted mb-4">Bienvenido a tu portal de música</p>
+{% if docente_tutor %}
+<p class="text-muted mb-4"><strong>Tutor:</strong> {{ docente_tutor.nombre }}</p>
+{% endif %}
 
 <!-- ESTADÍSTICAS -->
 <div class="stats-grid">

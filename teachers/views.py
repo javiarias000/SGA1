@@ -30,6 +30,7 @@ from classes.models import (
     Enrollment,
     PromedioCache,
     TipoAporte,
+    GradeLevel, # Import GradeLevel
 )
 
 from students.forms import StudentForm
@@ -218,24 +219,37 @@ def teacher_dashboard(request):
     # CONTEXTO DEL DASHBOARD
     # ==========================================
     
-    # Estudiantes activos
-    estudiantes = teacher.students.filter(active=True).order_by('usuario__nombre')
+    # Estudiantes activos (lógica mejorada)
+    teacher_usuario = teacher.usuario
+    
+    # Estudiantes directamente asignados al docente
+    directly_assigned_student_ids = teacher.students.filter(active=True).values_list('id', flat=True)
+    
+    # Estudiantes inscritos en clases impartidas por el docente
+    enrolled_student_ids = Student.objects.filter(
+        usuario__enrollments_as_student__docente=teacher_usuario,
+        usuario__enrollments_as_student__estado='ACTIVO',
+        active=True
+    ).values_list('id', flat=True)
+    
+    # Combinar IDs y obtener un queryset único de estudiantes
+    all_student_ids = set(list(directly_assigned_student_ids)) | set(list(enrolled_student_ids))
+    estudiantes = Student.objects.filter(id__in=all_student_ids).select_related('usuario').order_by('usuario__nombre')
+    
     total_students = estudiantes.count()
     
-    # Actividades y clases
-    total_classes = Activity.objects.filter(student__teacher=teacher).count()
+    # Actividades y clases (corregido para usar la lista de estudiantes correcta)
+    total_classes = Activity.objects.filter(student__in=estudiantes).count()
     today = date.today()
     today_classes = Activity.objects.filter(
-        student__teacher=teacher, 
+        student__in=estudiantes, 
         date=today
     ).select_related('student')
     
-
-    
-    # Última semana
+    # Última semana (corregido)
     last_week = today - timedelta(days=7)
     recent_activities = Activity.objects.filter(
-        student__teacher=teacher,
+        student__in=estudiantes,
         date__gte=last_week
     ).select_related('student').order_by('-date')[:10]
     
@@ -245,9 +259,9 @@ def teacher_dashboard(request):
     # Materias disponibles (dinámicas)
     materias = teacher.subjects.all()
     
-    # Calificaciones recientes
+    # Calificaciones recientes (corregido)
     calificaciones_recientes = CalificacionParcial.objects.filter(
-        student__teacher=teacher
+        student__in=estudiantes
     ).select_related('student', 'tipo_aporte').order_by('-fecha_actualizacion')[:20]
     
     # Estadísticas de estudiantes con promedios
@@ -313,6 +327,9 @@ def teacher_dashboard(request):
     # Clases del docente
     teacher_clases = _teacher_clases_qs(teacher).select_related('subject').order_by('subject__name', 'name')
 
+    # Grados que tutela el docente
+    tutored_grades = GradeLevel.objects.filter(docente_tutor=teacher.usuario)
+
     context = {
         'teacher': teacher,
         'total_students': total_students,
@@ -333,6 +350,7 @@ def teacher_dashboard(request):
         'estudiantes_promedios': json.dumps(promedios),
         'colores_escalas': json.dumps(colores),
         'teacher_clases': teacher_clases,
+        'tutored_grades': tutored_grades,
     }
 
     return render(request, 'teachers/dashboard_unified.html', context)
@@ -836,7 +854,7 @@ def estudiantes_view(request):
 def student_detail_view(request, student_id):
     """Detalle de estudiante"""
     teacher = request.user.teacher_profile
-    student = get_object_or_404(Student, id=student_id, teacher=teacher)
+    student = get_object_or_404(Student, id=student_id) # Removed teacher filter to allow any teacher to view any student
     
     activities = student.activities.all().order_by('-date')
     grades = student.grades.all().order_by('-date')
@@ -859,7 +877,7 @@ def student_detail_view(request, student_id):
 def student_edit_view(request, student_id):
     """Editar estudiante"""
     teacher = request.user.teacher_profile
-    student = get_object_or_404(Student, id=student_id, teacher=teacher)
+    student = get_object_or_404(Student, id=student_id)
     
     if request.method == 'POST':
         form = StudentForm(request.POST, instance=student)
@@ -956,105 +974,31 @@ def _subject_type_list_context(request, subject_type_param, subject_type_display
     teacher = request.user.teacher_profile
     
     # Obtener todas las Clases del docente para este tipo de materia
-    clases = _teacher_clases_qs(teacher).filter(
+    clases_qs = _teacher_clases_qs(teacher).filter(
         subject__tipo_materia=subject_type_param
+    ).prefetch_related(
+        'enrollments__estudiante' # Prefetch para optimizar
     ).order_by('subject__name', 'name')
 
-    # Obtener todos los estudiantes únicos matriculados en estas clases
-    # y también los estudiantes asignados directamente al docente que tienen clases de este tipo
-    students_in_classes_usuario_ids = Enrollment.objects.filter(
-        clase__in=clases,
-        estado='ACTIVO'
-    ).values_list('estudiante_id', flat=True)
-    
-    # También considerar estudiantes directamente asociados al profesor que tienen alguna actividad en una materia de este tipo
-    students_with_activities_ids = Activity.objects.filter(
-        clase__in=clases,
-        student__teacher=teacher
-    ).values_list('student__id', flat=True)
-
-    students_in_classes_ids = Student.objects.filter(
-        usuario_id__in=students_in_classes_usuario_ids,
-        active=True
-    ).values_list('id', flat=True)
-
-    all_related_student_ids = list(set(list(students_in_classes_ids) + list(students_with_activities_ids)))
-    
-    estudiantes = Student.objects.filter(id__in=all_related_student_ids, active=True).select_related('usuario').order_by('usuario__nombre')
-
-    total_students_in_type = estudiantes.count()
-    total_classes_in_type = clases.count()
-
-    # Preparar estadísticas detalladas por estudiante
-    estudiantes_con_stats = []
-    for estudiante in estudiantes:
-        # Clases de este tipo que el estudiante ha tomado/está tomando
-        student_clases = clases.filter(enrollments__estudiante=estudiante.usuario, enrollments__estado='ACTIVO').distinct()
-        student_activities_count = Activity.objects.filter(
-            student=estudiante,
-            clase__in=clases
-        ).count()
-
-        # Promedio general de calificaciones para este tipo de materia
-        # Calcular de forma más granular, solo considerando las calificaciones de las materias de este tipo
-        calificaciones_tipo_materia = CalificacionParcial.objects.filter(
-            student=estudiante,
-            subject__tipo_materia=subject_type_param
-        )
-        
-        promedio_tipo = Decimal('0.00')
-        if calificaciones_tipo_materia.exists():
-            # Agrupar por materia para calcular promedio de cada materia y luego el general de ese tipo
-            subjects_in_type = calificaciones_tipo_materia.values_list('subject', flat=True).distinct()
-            promedios_materias_tipo = []
-            for sub_id in subjects_in_type:
-                sub_instance = get_object_or_404(Subject, id=sub_id)
-                prom_q1 = CalificacionParcial.calcular_promedio_quimestre(estudiante, sub_instance, 'Q1')
-                prom_q2 = CalificacionParcial.calcular_promedio_quimestre(estudiante, sub_instance, 'Q2')
-                
-                if prom_q1 > 0 and prom_q2 > 0:
-                    promedios_materias_tipo.append((float(prom_q1) + float(prom_q2)) / 2)
-                elif prom_q1 > 0:
-                    promedios_materias_tipo.append(float(prom_q1))
-                elif prom_q2 > 0:
-                    promedios_materias_tipo.append(float(prom_q2))
-            
-            if promedios_materias_tipo:
-                promedio_tipo = Decimal(str(round(sum(promedios_materias_tipo) / len(promedios_materias_tipo), 2)))
-        
-        # Últimas actividades en este tipo de materia
-        recent_activities = Activity.objects.filter(
-            student=estudiante,
-            clase__in=clases
-        ).order_by('-date')[:3] # Mostrar 3 últimas actividades
-
-
-        escala = {}
-        if promedio_tipo > 0:
-            temp_calif = CalificacionParcial(calificacion=Decimal(str(promedio_tipo)))
-            escala = temp_calif.get_escala_cualitativa()
-
-
-        estudiantes_con_stats.append({
-            'estudiante': estudiante,
-            'clases_tipo_count': student_activities_count,
-            'promedio_tipo': promedio_tipo,
-            'escala': escala,
-            'en_riesgo': promedio_tipo < 7 and promedio_tipo > 0,
-            'recent_activities': recent_activities,
+    clases_con_enrollments = []
+    for clase in clases_qs:
+        # Obtenemos solo las inscripciones activas para esta clase
+        active_enrollments = clase.enrollments.filter(estado='ACTIVO')
+        clases_con_enrollments.append({
+            'clase': clase,
+            'enrollments': active_enrollments
         })
-    
-    # Ordenar por promedio (descendente)
-    estudiantes_con_stats.sort(key=lambda x: x['promedio_tipo'], reverse=True)
+
+    total_classes_in_type = len(clases_con_enrollments)
+    total_students_in_type = Enrollment.objects.filter(clase__in=clases_qs, estado='ACTIVO').values('estudiante').distinct().count()
 
     context = {
         'teacher': teacher,
         'subject_type_display_name': subject_type_display_name,
-        'clases': clases,
-        'estudiantes_con_stats': estudiantes_con_stats,
+        'clases_con_enrollments': clases_con_enrollments,
         'total_students_in_type': total_students_in_type,
         'total_classes_in_type': total_classes_in_type,
-        'subject_type_param': subject_type_param, # Useful for dynamic links/forms
+        'subject_type_param': subject_type_param,
     }
     return render(request, template_name, context)
 

@@ -1,0 +1,1922 @@
+[
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1316",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1319",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1322",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1318",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1313",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1330",
+      "claseId": "14",
+      "docenteUsuarioId": "1295"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1315",
+      "claseId": "15",
+      "docenteUsuarioId": "1290"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1317",
+      "claseId": "15",
+      "docenteUsuarioId": "1290"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1691",
+      "claseId": "15",
+      "docenteUsuarioId": "1290"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1325",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1326",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1327",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1463",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1466",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1468",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1470",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1475",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1478",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1308",
+      "claseId": "17",
+      "docenteUsuarioId": "1298"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1312",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1464",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1474",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1476",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1465",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1471",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1472",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1477",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1309",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1310",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1467",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1469",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1473",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1695",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1311",
+      "claseId": "18",
+      "docenteUsuarioId": "1297"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1321",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1324",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1314",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1323",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1329",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1320",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1328",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1331",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1332",
+      "claseId": "19",
+      "docenteUsuarioId": "1292"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1482",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1483",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1484",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1487",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1494",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1479",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1497",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1503",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1504",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1510",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1502",
+      "claseId": "21",
+      "docenteUsuarioId": "1289"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1481",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1485",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1486",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1501",
+      "claseId": "16",
+      "docenteUsuarioId": null
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1489",
+      "claseId": "22",
+      "docenteUsuarioId": "1285"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1697",
+      "claseId": "22",
+      "docenteUsuarioId": "1285"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1696",
+      "claseId": "22",
+      "docenteUsuarioId": "1285"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1498",
+      "claseId": "22",
+      "docenteUsuarioId": "1285"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1490",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1493",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1500",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1499",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1508",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1480",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1488",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1491",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1492",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1495",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1496",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1505",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1506",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1507",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1509",
+      "claseId": "23",
+      "docenteUsuarioId": "1305"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1511",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "EnrollStudentInClass",
+    "variables": {
+      "studentUsuarioId": "1512",
+      "claseId": "20",
+      "docenteUsuarioId": "1283"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "75",
+      "docenteId": "1289"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "75",
+      "docenteId": "1289"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1268"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1268"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1291"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1291"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "75",
+      "docenteId": "1289"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "75",
+      "docenteId": "1289"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1771"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1268"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1741"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1771"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1268"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1741"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1741"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1771"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "79",
+      "docenteId": "1741"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "73",
+      "docenteId": "1771"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1291"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "81",
+      "docenteId": "1291"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1305"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1285"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1289"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1297"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1280"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1290"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1298"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1744"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1743"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1746"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1746"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1746"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1746"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1747"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1747"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1747"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1747"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1763"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1763"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1763"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1763"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1750"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1750"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1750"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1750"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1751"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1751"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1751"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1751"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1752"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1752"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1752"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1752"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1753"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1753"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1753"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1753"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1754"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1754"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1754"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1754"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1755"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1755"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1756"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1756"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1756"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1756"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1757"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1757"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1757"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1757"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1745"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "108",
+      "docenteId": "1758"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "109",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "110",
+      "docenteId": "1742"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1759"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "109",
+      "docenteId": "1760"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1761"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "112",
+      "docenteId": "1758"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "109",
+      "docenteId": "1760"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1761"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "110",
+      "docenteId": "1763"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1295"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1273"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1283"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1292"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1295"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1273"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1283"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1292"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1295"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1273"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1283"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1292"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1295"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1273"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1283"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "99",
+      "docenteId": "1292"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1759"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1765"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "115",
+      "docenteId": "1766"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "115",
+      "docenteId": "1767"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1761"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "115",
+      "docenteId": "1767"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1761"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1765"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1768"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1768"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "115",
+      "docenteId": "1769"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "115",
+      "docenteId": "1769"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1770"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "117",
+      "docenteId": "1293"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "107",
+      "docenteId": "1761"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "117",
+      "docenteId": "1771"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "106",
+      "docenteId": "1272"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "116",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "114",
+      "docenteId": "1277"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  },
+  {
+    "mutation_type": "AssignDocenteBaseToClase",
+    "variables": {
+      "claseId": "94",
+      "docenteId": "1306"
+    }
+  }
+]

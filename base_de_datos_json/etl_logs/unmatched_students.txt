@@ -9,7 +9,6 @@ Alvarado Chávez Dana Noemi
 Amancha Montesdeoca Allan Paul
 Amancha Moposita Juan Pablo
 Amancha Moposita Sol Isabel
-Andaluz Coba Anton Jhosmar
 Andaluz Coba Hayden Joshua
 Anja Cruz Ángeles Daniela
 Apellidos Del Estudiante Nombres Del Estudiante
@@ -30,7 +29,6 @@ Bombón Montero Jeremy Daniel
 Bonilla Calderón Camilo Sebastián
 Bonilla Costales Ismael Alejandro
 Cabezas Aveiga Paula Sarahí
-Cadena Chaglla Emilia Alejandra
 Caguana Condemaita Bryanna Solange
 Caguana Paucar Bryanna Solange
 Caguana Paucar Keyla Nicole
@@ -45,7 +43,6 @@ Checa Guerrero Emilia Salomé
 Checa Vivanco Jordy Gael
 Checa Vivanco Sarahí Escarlett
 Chicaiza Chiluisa Sarahi Fernanda
-Chillagana Coronel Edward Alexis
 Chisag Guamán Doménica Anahí
 Choco Nuñez Kamila Raquel
 Chulco Bimboza Solange Anahi
@@ -67,7 +64,6 @@ De La Cruz Aucatoma Edwin Alexander
 De La Cruz Guanoluisa Scarleth Monserrath
 Duran Ordoñez Adriana Valentina
 Durán Noboa Camila Alejandra
-Díaz Santana John Alex
 Erazo Gavilanes Naomi Thais
 Espinoza De Los Monteros Lema Nahomi Salomé
 Espín Hurtado Pablo Steffano
@@ -109,7 +105,6 @@ Huayta Mundocorre Evelyn Alina
 Iza Mero Carlos Mateo
 Jara Casillas Katherin Abigail
 Jaramillo Yanchaliquin Lenin Adrian
-Jerez Junta Rachell Zoe
 Jiménez Chicaiza Joseline Mayely
 Jiménez Chicaiza Willams Mateo
 Jiménez Proaño María Paz
@@ -132,7 +127,6 @@ López Pazmiño Aily De Jesús
 Manjarres Bonilla Alisson Mayreth
 Manzano Ramos Elias Israel
 Martínez Pazmiño Jhoselyn Karina
-Masabanda Barrera Carlos Alejandro
 Matute Tunja Damaris Renata
 Medina Alcívar Dorian Dimitri
 Mena Rampón Dante Mena
@@ -141,7 +135,6 @@ Mena Ramírez María Gracia
 Mera Hurtado Martin Ricardo
 Merino López Emily Monserrath
 Miranda Villacrés Zoe Nebraska
-Morales Garcés Edith Mirely
 Morales Núñez Camila Mayté
 Moreno Bermeo Angie Gabriela
 Moreta Chicaiza Alisson Domenica
@@ -154,7 +147,6 @@ Naranjo Noboa Mateo Sebastián
 Narvaez Borja Isabella Valentina
 Navarro Chillagana Britany Estefanía
 Neira Ortiz Naomi Abigail
-Noboa Barros Kevin Matias
 Nuela Durán Maikel Sebastian
 Nuñez Recalde Doménica Monserrate
 Núñez Caiza Adrián Mateo
@@ -162,7 +154,6 @@ Núñez Caiza Germán Alejandro
 Núñez Caiza María Emilia
 Núñez Morales Mateo Sebastián
 Ocaña Uriarte Gabriel Alejandro
-Ochoa Lascano Fernando Ariel
 Ojeda Villacres Angel Matias
 Olivo Urvina Leandro Esteban
 Oñate Vargas María José
@@ -185,7 +176,6 @@ Pérez Bermeo Samantha Berenice
 Pérez Bermeo Santiago Ismael
 Pérez Carvajal Andrea Salome
 Pérez Carvajal Mateo Gabriel
-Pérez Criollo Daniela Abigail
 Pérez Jaya Richard Alejandro
 Pérez Moncayo Bianca Emilia
 Pérez Sánchez Camila Sarahí
@@ -194,7 +184,6 @@ Quile Quinaguano Estefany Juliet
 Quinapanta Romero Leandro Javier
 Quishpi Pulig Saira Miley
 Quispe Castillo Ailin Escarleth
-Quispe Toasa Ian Gael
 Ramírez Castro Johan Gabriel
 Rea Arteaga Norma Carolina
 Reinoso Toscano Ariana Michelle

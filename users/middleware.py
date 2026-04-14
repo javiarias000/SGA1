@@ -32,6 +32,10 @@ class AttachUsuarioProfilesMiddleware:
                     if sp is not None:
                         setattr(user, 'student_profile', sp)
 
+                # Adjuntar propiedades de rol directamente al user de auth para compatibilidad
+                setattr(user, 'is_teacher', usuario.is_teacher)
+                setattr(user, 'is_student', usuario.is_student)
+
         return self.get_response(request)
 
 

@@ -1,0 +1,453 @@
+[
+  {
+    "model": "academia.docente",
+    "pk": 1,
+    "fields": {
+      "full_name": "Guananga Aizabucha Javier Santiago",
+      "email": "guananga.aizabucha.javier.santiago@conservatoriobolivar.edu.ec",
+      "username": "guananga.aizabucha.javier.santiago@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 2,
+    "fields": {
+      "full_name": "Maestro De Instrumento",
+      "email": "maestro.de.instrumento@conservatoriobolivar.edu.ec",
+      "username": "maestro.de.instrumento@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 3,
+    "fields": {
+      "full_name": "Toapanta Arequipa Danny Alexander",
+      "email": "toapanta.arequipa.danny.alexander@conservatoriobolivar.edu.ec",
+      "username": "toapanta.arequipa.danny.alexander@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 4,
+    "fields": {
+      "full_name": "Arevalo Catañeda Angel Jorge",
+      "email": "arevalo.cataneda.angel.jorge@conservatoriobolivar.edu.ec",
+      "username": "arevalo.cataneda.angel.jorge@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 5,
+    "fields": {
+      "full_name": "Larreátegui Feijoó Inés María",
+      "email": "larreategui.feijoo.ines.maria@conservatoriobolivar.edu.ec",
+      "username": "larreategui.feijoo.ines.maria@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 6,
+    "fields": {
+      "full_name": "Nuñez Cunalata Zoila Delia",
+      "email": "nunez.cunalata.zoila.delia@conservatoriobolivar.edu.ec",
+      "username": "nunez.cunalata.zoila.delia@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 7,
+    "fields": {
+      "full_name": "Reyes Garcés Elizabeth Del Rocío",
+      "email": "reyes.garces.elizabeth.del.rocio@conservatoriobolivar.edu.ec",
+      "username": "reyes.garces.elizabeth.del.rocio@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 8,
+    "fields": {
+      "full_name": "Tapia García Kevin Paúl",
+      "email": "tapia.garcia.kevin.paul@conservatoriobolivar.edu.ec",
+      "username": "tapia.garcia.kevin.paul@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 9,
+    "fields": {
+      "full_name": "Peralta Aponte Christian Hernán",
+      "email": "peralta.aponte.christian.hernan@conservatoriobolivar.edu.ec",
+      "username": "peralta.aponte.christian.hernan@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 10,
+    "fields": {
+      "full_name": "Amancha Hidalgo Félix Marcelo",
+      "email": "amancha.hidalgo.felix.marcelo@conservatoriobolivar.edu.ec",
+      "username": "amancha.hidalgo.felix.marcelo@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 11,
+    "fields": {
+      "full_name": "Pérez Mayorga Edwin Israel",
+      "email": "perez.mayorga.edwin.israel@conservatoriobolivar.edu.ec",
+      "username": "perez.mayorga.edwin.israel@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 12,
+    "fields": {
+      "full_name": "Arias Cuenca Jorge Javier",
+      "email": "arias.cuenca.jorge.javier@conservatoriobolivar.edu.ec",
+      "username": "arias.cuenca.jorge.javier@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 13,
+    "fields": {
+      "full_name": "Chicaiza Cuenca Rubén Geovany",
+      "email": "chicaiza.cuenca.ruben.geovany@conservatoriobolivar.edu.ec",
+      "username": "chicaiza.cuenca.ruben.geovany@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 14,
+    "fields": {
+      "full_name": "Chico Espinoza Edwin Patricio",
+      "email": "chico.espinoza.edwin.patricio@conservatoriobolivar.edu.ec",
+      "username": "chico.espinoza.edwin.patricio@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 15,
+    "fields": {
+      "full_name": "Cumbicos Macas José Luis",
+      "email": "cumbicos.macas.jose.luis@conservatoriobolivar.edu.ec",
+      "username": "cumbicos.macas.jose.luis@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 16,
+    "fields": {
+      "full_name": "Vasquez Sánchez David Hernán",
+      "email": "vasquez.sanchez.david.hernan@conservatoriobolivar.edu.ec",
+      "username": "vasquez.sanchez.david.hernan@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 17,
+    "fields": {
+      "full_name": "Peña Núñez Andrea Michelle",
+      "email": "pena.nunez.andrea.michelle@conservatoriobolivar.edu.ec",
+      "username": "pena.nunez.andrea.michelle@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 18,
+    "fields": {
+      "full_name": "Jiménez Vega Mauricio Marmonte",
+      "email": "jimenez.vega.mauricio.marmonte@conservatoriobolivar.edu.ec",
+      "username": "jimenez.vega.mauricio.marmonte@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 19,
+    "fields": {
+      "full_name": "Sumbana Quinapanta Luis Enrique",
+      "email": "sumbana.quinapanta.luis.enrique@conservatoriobolivar.edu.ec",
+      "username": "sumbana.quinapanta.luis.enrique@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 20,
+    "fields": {
+      "full_name": "Amores Valdivieso Jenny Natividad",
+      "email": "amores.valdivieso.jenny.natividad@conservatoriobolivar.edu.ec",
+      "username": "amores.valdivieso.jenny.natividad@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 21,
+    "fields": {
+      "full_name": "Gutama Galan Juan Diego",
+      "email": "gutama.galan.juan.diego@conservatoriobolivar.edu.ec",
+      "username": "gutama.galan.juan.diego@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 22,
+    "fields": {
+      "full_name": "Obando Mayorga Byron Geovanny",
+      "email": "obando.mayorga.byron.geovanny@conservatoriobolivar.edu.ec",
+      "username": "obando.mayorga.byron.geovanny@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 23,
+    "fields": {
+      "full_name": "Villena Cárdenas Maria Isabel",
+      "email": "villena.cardenas.maria.isabel@conservatoriobolivar.edu.ec",
+      "username": "villena.cardenas.maria.isabel@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 24,
+    "fields": {
+      "full_name": "Zumbana Quinapanta Santiago Maximiliano",
+      "email": "zumbana.quinapanta.santiago.maximiliano@conservatoriobolivar.edu.ec",
+      "username": "zumbana.quinapanta.santiago.maximiliano@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 25,
+    "fields": {
+      "full_name": "Acosta Zagal Karolina",
+      "email": "acosta.zagal.karolina@conservatoriobolivar.edu.ec",
+      "username": "acosta.zagal.karolina@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 26,
+    "fields": {
+      "full_name": "Caiza Caiza Roberto Carlos",
+      "email": "caiza.caiza.roberto.carlos@conservatoriobolivar.edu.ec",
+      "username": "caiza.caiza.roberto.carlos@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 27,
+    "fields": {
+      "full_name": "Chicaiza Orozco Marcelo Javier",
+      "email": "chicaiza.orozco.marcelo.javier@conservatoriobolivar.edu.ec",
+      "username": "chicaiza.orozco.marcelo.javier@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 28,
+    "fields": {
+      "full_name": "Chicaiza Yánez Jefferson Alexander",
+      "email": "chicaiza.yanez.jefferson.alexander@conservatoriobolivar.edu.ec",
+      "username": "chicaiza.yanez.jefferson.alexander@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 29,
+    "fields": {
+      "full_name": "De La Cruz Changalombo Jorge Ramiro",
+      "email": "de.la.cruz.changalombo.jorge.ramiro@conservatoriobolivar.edu.ec",
+      "username": "de.la.cruz.changalombo.jorge.ramiro@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 30,
+    "fields": {
+      "full_name": "Díaz Loyola David Descartes",
+      "email": "diaz.loyola.david.descartes@conservatoriobolivar.edu.ec",
+      "username": "diaz.loyola.david.descartes@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 31,
+    "fields": {
+      "full_name": "Erazo Moreno Carlos Efrén",
+      "email": "erazo.moreno.carlos.efren@conservatoriobolivar.edu.ec",
+      "username": "erazo.moreno.carlos.efren@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 32,
+    "fields": {
+      "full_name": "Pérez Toapanta Diego Armando",
+      "email": "perez.toapanta.diego.armando@conservatoriobolivar.edu.ec",
+      "username": "perez.toapanta.diego.armando@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 33,
+    "fields": {
+      "full_name": "Quinapanta Tibán Angel Rodrigo",
+      "email": "quinapanta.tiban.angel.rodrigo@conservatoriobolivar.edu.ec",
+      "username": "quinapanta.tiban.angel.rodrigo@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 34,
+    "fields": {
+      "full_name": "Solís Solís Juan Francisco",
+      "email": "solis.solis.juan.francisco@conservatoriobolivar.edu.ec",
+      "username": "solis.solis.juan.francisco@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 35,
+    "fields": {
+      "full_name": "Chico Analuisa Fabricio Renato",
+      "email": "chico.analuisa.fabricio.renato@conservatoriobolivar.edu.ec",
+      "username": "chico.analuisa.fabricio.renato@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 36,
+    "fields": {
+      "full_name": "Fonseca Sandoval Walter Guillermo",
+      "email": "fonseca.sandoval.walter.guillermo@conservatoriobolivar.edu.ec",
+      "username": "fonseca.sandoval.walter.guillermo@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 37,
+    "fields": {
+      "full_name": "Guzñay Paca Inti Rafael",
+      "email": "guznay.paca.inti.rafael@conservatoriobolivar.edu.ec",
+      "username": "guznay.paca.inti.rafael@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 38,
+    "fields": {
+      "full_name": "Laura Guamán Christian Daniel",
+      "email": "laura.guaman.christian.daniel@conservatoriobolivar.edu.ec",
+      "username": "laura.guaman.christian.daniel@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 39,
+    "fields": {
+      "full_name": "Paredes Santana Marco Antonio",
+      "email": "paredes.santana.marco.antonio@conservatoriobolivar.edu.ec",
+      "username": "paredes.santana.marco.antonio@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 40,
+    "fields": {
+      "full_name": "Tocto Villareal Marco Antonio",
+      "email": "tocto.villareal.marco.antonio@conservatoriobolivar.edu.ec",
+      "username": "tocto.villareal.marco.antonio@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  },
+  {
+    "model": "academia.docente",
+    "pk": 41,
+    "fields": {
+      "full_name": "Túquerez Núñez Diego Javier",
+      "email": "tuquerez.nunez.diego.javier@conservatoriobolivar.edu.ec",
+      "username": "tuquerez.nunez.diego.javier@conservatoriobolivar.edu.ec",
+      "password_plano": "Cb2025$",
+      "rol": "DOCENTE"
+    }
+  }
+]

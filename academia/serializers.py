@@ -20,4 +20,4 @@ class HorarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Horario
-        fields = '__all__' # Include all fields from the Horario model
+        fields = '__all__' 

@@ -14,9 +14,11 @@ from users.models import Usuario
 from teachers.models import Teacher
 from students.models import Student
 from classes.models import Clase, Enrollment, GradeLevel
+from academia.models import Horario # Import the Horario model
 from utils.etl_normalization import (
     canonical_subject_name,
     canonical_teacher_name,
+    canonical_student_name, # Import the new function
     load_aliases,
     map_grade_level,
 )
@@ -90,10 +92,11 @@ class ETLSummary:
     subjects: int = 0
     clases: int = 0
     enrollments: int = 0
+    horarios: int = 0 # Added for Horario model
 
 
 class Command(BaseCommand):
-    help = 'ETL idempotente: importa base_de_datos_json y normaliza Materias/Clases/Inscripciones (ciclo por defecto 2025-2026).'
+    help = 'ETL idempotente: importa base_de_datos_json y normaliza Materias/Clases/Inscripciones/Horarios (ciclo por defecto 2025-2026).'
 
     def add_arguments(self, parser):
         parser.add_argument('--ciclo', default='2025-2026')
@@ -110,13 +113,14 @@ class Command(BaseCommand):
         docentes_path = os.path.join(base_dir, 'personal_docente', 'DOCENTES.json')
         estudiantes_dir = os.path.join(base_dir, 'estudiantes_matriculados')
         agrup_docentes_path = os.path.join(base_dir, 'asignaciones_grupales', 'asignaciones_docentes.json')
-        agrup_asignaciones_path = os.path.join(base_dir, 'asignaciones_grupales', 'ASIGNACIONES_agrupaciones.json')
+        agrup_asignaciones_path = os.path.join(base_dir, 'asignaciones_grupales', 'asignaciones_con_horarios.json')
         instrumentos_dir = os.path.join(base_dir, 'Instrumento_Agrupaciones')
+        horarios_academicos_path = os.path.join(base_dir, 'horarios_academicos', 'REPORTE_DOCENTES_HORARIOS_0858.json') # Added path
 
         if not os.path.exists(base_dir):
             raise Exception(f"No existe base-dir: {base_dir}")
 
-        subj_aliases, teacher_aliases = load_aliases(base_dir)
+        subj_aliases, teacher_aliases, student_aliases = load_aliases(base_dir) # Unpack student_aliases
 
         summary = ETLSummary()
         unmatched_students: List[str] = []
@@ -214,8 +218,19 @@ class Command(BaseCommand):
 
                     for item in data:
                         fields = item.get('fields', {})
-                        apellidos = (fields.get('Apellidos') or '').strip()
-                        nombres = (fields.get('Nombres') or '').strip()
+                        # Handle multiple possible keys for 'Apellidos'
+                        apellidos = (
+                            fields.get('Apellidos') or
+                            fields.get('Apellidos estudiante') or
+                            ''
+                        ).strip()
+                        # Handle multiple possible keys for 'Nombres'
+                        nombres = (
+                            fields.get('Nombres') or
+                            fields.get('Nombres del Estudiante (Escribir la primera letra en Mayúsculas y las demás en minúsculas. Por ejemplo Juan José)') or
+                            fields.get('Nombre estudiante') or
+                            ''
+                        ).strip()
                         full_name = (f"{apellidos} {nombres}").strip() or (fields.get('nombre_completo') or '').strip()
                         if not full_name:
                             continue
@@ -297,25 +312,11 @@ class Command(BaseCommand):
                     return None
                 return candidates[0]
 
-            # 3) AGRUPACIONES: docentes asignados
+            # 3) DEPRECATED: AGRUPACIONES: docentes asignados
+            # This logic is now handled by the pre-merged asignaciones_completas.json
             agrupacion_to_docente: Dict[str, Usuario] = {}
-            if os.path.exists(agrup_docentes_path):
-                with open(agrup_docentes_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                for row in data:
-                    agrup_raw = (row.get('agrupacion') or '').strip()
-                    doc_raw = (row.get('docente_asignado') or '').strip()
-                    if not agrup_raw or not doc_raw:
-                        continue
-                    agrup = canonical_subject_name(agrup_raw, subj_aliases)
-                    doc = canonical_teacher_name(doc_raw, teacher_aliases)
-                    docente_u = find_teacher_usuario_by_name(doc)
-                    if not docente_u:
-                        unmatched_teachers.append(doc)
-                        continue
-                    agrupacion_to_docente[_norm_text(agrup)] = docente_u
 
-            # 4) Crear clases + inscripciones de AGRUPACIONES
+            # 4) Crear clases + inscripciones de AGRUPACIONES (usando el archivo pre-unido)
             if os.path.exists(agrup_asignaciones_path):
                 with open(agrup_asignaciones_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
@@ -323,22 +324,28 @@ class Command(BaseCommand):
                 for row in data:
                     # algunos JSON ya vienen como dict sin 'fields'
                     fields = row.get('fields') if isinstance(row, dict) and 'fields' in row else row
-                    student_name = (fields.get('nombre_completo') or '').strip()
+                    student_name_raw = (fields.get('nombre_completo') or '').strip()
+                    student_name = canonical_student_name(student_name_raw, student_aliases) # Apply alias
                     agrupacion_raw = (fields.get('agrupacion') or '').strip()
                     agrupacion = canonical_subject_name(agrupacion_raw, subj_aliases)
+                    
+                    # Get teacher name directly from the merged file
+                    docente_raw = (fields.get('docente_asignado') or '').strip()
+                    docente_name = canonical_teacher_name(docente_raw, teacher_aliases)
+
                     if not student_name or not agrupacion:
                         continue
 
                     estudiante_u = find_student_usuario_by_name(student_name)
                     if not estudiante_u:
-                        unmatched_students.append(student_name)
+                        unmatched_students.append(student_name_raw) # Log the original raw name
                         continue
                     
                     # Get the Student profile from the Usuario
                     student_profile = Student.objects.filter(usuario=estudiante_u).first()
                     if not student_profile:
                         self.stdout.write(self.style.WARNING(f"Skipping enrollment for {student_name}: Student profile not found for Usuario {estudiante_u.nombre}."))
-                        unmatched_students.append(student_name)
+                        unmatched_students.append(student_name_raw) # Log the original raw name
                         continue
 
                     subject, created_s = Subject.objects.get_or_create(
@@ -348,11 +355,12 @@ class Command(BaseCommand):
                     if created_s:
                         summary.subjects += 1
 
-                    docente_u = agrupacion_to_docente.get(_norm_text(agrupacion))
-                    if not docente_u:
-                        # puede existir agrupación sin docente asignado
-                        docente_u = None
-
+                    docente_u = None
+                    if docente_name:
+                        docente_u = find_teacher_usuario_by_name(docente_name)
+                        if not docente_u:
+                            unmatched_teachers.append(docente_raw)
+                    
                     clase, created_c = Clase.objects.get_or_create(
                         subject=subject,
                         ciclo_lectivo=ciclo,
@@ -401,7 +409,8 @@ class Command(BaseCommand):
 
                     for row in data:
                         fields = row.get('fields', {})
-                        student_name = (fields.get('full_name') or '').strip()
+                        student_name_raw = (fields.get('full_name') or '').strip()
+                        student_name = canonical_student_name(student_name_raw, student_aliases) # Apply alias
                         teacher_name_raw = (fields.get('docente_nombre') or '').strip()
                         subject_name_raw = (fields.get('clase') or '').strip()
                         teacher_name = canonical_teacher_name(teacher_name_raw, teacher_aliases)
@@ -411,19 +420,19 @@ class Command(BaseCommand):
 
                         estudiante_u = find_student_usuario_by_name(student_name)
                         if not estudiante_u:
-                            unmatched_students.append(student_name)
+                            unmatched_students.append(student_name_raw) # Log the original raw name
                             continue
 
                         # Get the Student profile from the Usuario
                         student_profile = Student.objects.filter(usuario=estudiante_u).first()
                         if not student_profile:
                             self.stdout.write(self.style.WARNING(f"Skipping enrollment for {student_name}: Student profile not found for Usuario {estudiante_u.nombre}."))
-                            unmatched_students.append(student_name)
+                            unmatched_students.append(student_name_raw) # Log the original raw name
                             continue
 
                         docente_u = find_teacher_usuario_by_name(teacher_name)
                         if not docente_u:
-                            unmatched_teachers.append(teacher_name)
+                            unmatched_teachers.append(teacher_name_raw) # Log the original raw name
                             continue
 
                         subject, created_s = Subject.objects.get_or_create(
@@ -447,27 +456,84 @@ class Command(BaseCommand):
                         if created_c:
                             summary.clases += 1
 
-                    enrollment, created_e = Enrollment.objects.get_or_create(
-                        estudiante=estudiante_u, # Pass the Usuario instance here
-                        clase=clase,
+                        enrollment, created_e = Enrollment.objects.get_or_create(
+                            estudiante=estudiante_u, # Pass the Usuario instance here
+                            clase=clase,
+                            defaults={
+                                'docente': docente_u,
+                                'estado': 'ACTIVO',
+                            }
+                        )
+                        if not created_e:
+                            # update docente si faltaba
+                            if docente_u and enrollment.docente_id != docente_u.id:
+                                enrollment.docente = docente_u
+                                enrollment.estado = 'ACTIVO'
+                                enrollment.save(update_fields=['docente', 'estado'])
+                        else:
+                            summary.enrollments += 1
+
+                            # Compatibilidad legacy: mantener Student.teacher (si existe perfil)
+                            teacher_profile = Teacher.objects.filter(usuario=docente_u).first()
+                            if teacher_profile:
+                                Student.objects.filter(usuario=estudiante_u).update(teacher=teacher_profile)
+
+
+            # 6) HORARIOS ACADEMICOS
+            if os.path.exists(horarios_academicos_path):
+                with open(horarios_academicos_path, 'r', encoding='utf-8') as f:
+                    horarios_data = json.load(f)
+
+                for item in horarios_data:
+                    fields = item.get('fields', {})
+                    curso_raw = (fields.get('curso') or '').strip()
+                    paralelo_raw = (fields.get('paralelo') or '').strip()
+                    dia = (fields.get('dia') or '').strip()
+                    hora = (fields.get('hora') or '').strip()
+                    clase_raw = (fields.get('clase') or '').strip()
+                    docente_raw = (fields.get('docente') or '').strip()
+                    aula = (fields.get('aula') or '').strip()
+
+                    if not (curso_raw and dia and hora and clase_raw and docente_raw):
+                        continue # Skip entries with missing critical data
+
+                    # Map GradeLevel
+                    parsed_gl = map_grade_level(curso_raw, paralelo_raw)
+                    grade_level = None
+                    if parsed_gl.level and parsed_gl.section:
+                        grade_level, _ = GradeLevel.objects.get_or_create(level=parsed_gl.level, section=parsed_gl.section)
+
+                    # Map Subject
+                    subject_name = canonical_subject_name(clase_raw, subj_aliases)
+                    subject, created_s = Subject.objects.get_or_create(
+                        name=subject_name,
+                        defaults={'tipo_materia': 'TEORIA'} # Default to TEORIA, can be refined if needed
+                    )
+                    if created_s:
+                        summary.subjects += 1
+
+                    # Map Docente (Usuario)
+                    docente_name = canonical_teacher_name(docente_raw, teacher_aliases) # Apply alias
+                    docente_u = find_teacher_usuario_by_name(docente_name)
+                    if not docente_u:
+                        unmatched_teachers.append(docente_raw) # Log the original raw name
+                        self.stdout.write(self.style.WARNING(f"Docente '{docente_raw}' not found for Horario. Skipping."))
+                        continue
+                    
+                    horario, created_h = Horario.objects.update_or_create(
+                        curso=grade_level,
+                        dia=dia,
+                        hora=hora,
+                        clase=subject,
+                        docente=docente_u,
+                        aula=aula,
                         defaults={
-                            'docente': docente_u,
-                            'estado': 'ACTIVO',
+                            # No other fields to update for Horario beyond the lookup keys
                         }
                     )
-                    if not created_e:
-                        # update docente si faltaba
-                        if docente_u and enrollment.docente_id != docente_u.id:
-                            enrollment.docente = docente_u
-                            enrollment.estado = 'ACTIVO'
-                            enrollment.save(update_fields=['docente', 'estado'])
-                    else:
-                        summary.enrollments += 1
+                    if created_h:
+                        summary.horarios += 1
 
-                        # Compatibilidad legacy: mantener Student.teacher (si existe perfil)
-                        teacher_profile = Teacher.objects.filter(usuario=docente_u).first()
-                        if teacher_profile:
-                            Student.objects.filter(usuario=estudiante_u).update(teacher=teacher_profile)
 
             if dry:
                 # Mantener transacción (para poder rollback) y reportar resumen.
@@ -488,5 +554,5 @@ class Command(BaseCommand):
         _write_list(os.path.join(logs_dir, 'unmatched_teachers.txt'), unmatched_teachers)
 
         self.stdout.write(self.style.SUCCESS(
-            f"ETL OK (ciclo={ciclo}). Usuarios docentes nuevos={summary.usuarios_docentes}, estudiantes nuevos={summary.usuarios_estudiantes}, subjects nuevos={summary.subjects}, clases nuevas={summary.clases}, inscripciones nuevas={summary.enrollments}. "
+            f"ETL OK (ciclo={ciclo}). Usuarios docentes nuevos={summary.usuarios_docentes}, estudiantes nuevos={summary.usuarios_estudiantes}, subjects nuevos={summary.subjects}, clases nuevas={summary.clases}, inscripciones nuevas={summary.enrollments}, horarios nuevos={summary.horarios}. "
             f"Unmatched estudiantes={len(set(unmatched_students))}, docentes={len(set(unmatched_teachers))}."))

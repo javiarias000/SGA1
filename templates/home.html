@@ -79,6 +79,18 @@
                     <a href="#oferta" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Oferta Académica</a>
                     <a href="#nosotros" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Nosotros</a>
                     
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'users:dashboard' %}" class="flex items-center gap-3 bg-cb-blue-800 text-white px-6 py-3 rounded shadow hover:bg-cb-blue-900 transition group border border-cb-blue-900">
+                        <div class="flex flex-col text-right leading-tight">
+                            <span class="text-[10px] text-cb-gold-400 font-bold uppercase tracking-wider">Ir al</span>
+                            <span class="font-bold text-sm">Panel de Usuario</span>
+                        </div>
+                        <svg class="h-5 w-5 text-white group-hover:text-cb-gold-400 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </a>
+                    <a href="{% url 'users:logout' %}" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Logout</a>
+                    {% else %}
                     <a href="{% url 'users:login' %}" class="flex items-center gap-3 bg-cb-blue-800 text-white px-6 py-3 rounded shadow hover:bg-cb-blue-900 transition group border border-cb-blue-900">
                         <div class="flex flex-col text-right leading-tight">
                             <span class="text-[10px] text-cb-gold-400 font-bold uppercase tracking-wider">Login</span>
@@ -88,6 +100,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
                     </a>
+                    {% endif %}
                 </div>
 
                 <div class="lg:hidden">
@@ -106,9 +119,18 @@
                 <a href="#oferta" class="block px-4 py-3 text-cb-blue-800 font-bold border-l-4 border-transparent hover:border-cb-gold-400 hover:bg-gray-50">Oferta Académica</a>
                 <a href="#nosotros" class="block px-4 py-3 text-cb-blue-800 font-bold border-l-4 border-transparent hover:border-cb-gold-400 hover:bg-gray-50">Nosotros</a>
                 <hr class="border-gray-200 my-2">
+                {% if user.is_authenticated %}
+                <a href="{% url 'users:dashboard' %}" class="block w-full bg-cb-blue-800 text-white px-4 py-3 rounded text-center font-bold shadow-md">
+                    Ir al Panel
+                </a>
+                <a href="{% url 'users:logout' %}" class="block w-full bg-gray-200 text-gray-800 px-4 py-3 rounded text-center font-bold shadow-md mt-2">
+                    Cerrar Sesión
+                </a>
+                {% else %}
                 <a href="{% url 'users:login' %}" class="block w-full bg-cb-blue-800 text-white px-4 py-3 rounded text-center font-bold shadow-md">
                     Ingresar al Sistema Académico
                 </a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -165,10 +187,17 @@
                         <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
                             El proceso de matriculación para el nuevo ciclo académico ya está disponible en el sistema.
                         </p>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'users:dashboard' %}" class="bg-cb-blue-800 border-2 border-cb-gold-500 text-white px-8 py-3 rounded font-bold hover:bg-cb-blue-900 transition uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            Ir al Panel
+                        </a>
+                        {% else %}
                         <a href="{% url 'users:login' %}" class="bg-cb-blue-800 border-2 border-cb-gold-500 text-white px-8 py-3 rounded font-bold hover:bg-cb-blue-900 transition uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
                             Acceder al Sistema
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -342,9 +371,18 @@
                 <div>
                     <h4 class="font-bold text-white mb-6 uppercase text-sm tracking-wider border-b border-gray-700 pb-2 inline-block">Intranet</h4>
                     <p class="text-gray-500 text-xs mb-4">Acceso exclusivo para docentes y estudiantes.</p>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'users:dashboard' %}" class="inline-block bg-cb-blue-800 text-white px-4 py-2 rounded text-sm font-bold hover:bg-cb-blue-700 transition w-full text-center border border-cb-blue-700">
+                        Ir al Panel
+                    </a>
+                     <a href="{% url 'users:logout' %}" class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded text-sm font-bold hover:bg-gray-300 transition w-full text-center mt-2">
+                        Cerrar Sesión
+                    </a>
+                    {% else %}
                     <a href="{% url 'users:login' %}" class="inline-block bg-cb-blue-800 text-white px-4 py-2 rounded text-sm font-bold hover:bg-cb-blue-700 transition w-full text-center border border-cb-blue-700">
                         Ir al Sistema Académico
                     </a>
+                    {% endif %}
                 </div>
             </div>
             

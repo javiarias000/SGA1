@@ -1,0 +1,9 @@
+It seems that even after building, the running container might still be using an older state or cache. To ensure the new image with `django-cors-headers` is fully applied and the container is recreated with the updated environment, please try running the following command:
+
+`docker-compose up --build --force-recreate`
+
+This command will:
+1.  `--build`: Force a rebuild of your service images, ensuring any changes in `requirements.txt` (like the addition of `django-cors-headers`) are picked up.
+2.  `--force-recreate`: Stop and recreate all services, guaranteeing that they use the newly built images and their fresh environments.
+
+After running this, your Django application should start without the `ModuleNotFoundError`.

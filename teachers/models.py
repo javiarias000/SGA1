@@ -18,7 +18,6 @@ class TeacherSubject(models.Model):
 
 class Teacher(models.Model):
     """Perfil extendido del docente (compatibilidad UI).
-
     El usuario académico unificado es `users.Usuario`.
     """
 

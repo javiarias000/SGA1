@@ -34,12 +34,15 @@ def student_dashboard_view(request):
 
     # Clases disponibles para el grado del estudiante en el ciclo lectivo actual
     clases_disponibles = []
+    docente_tutor = None
     if estudiante.grade_level:
         clases_disponibles = Clase.objects.filter(
             active=True,
             grade_level=estudiante.grade_level,
             ciclo_lectivo='2025-2026' # Asumiendo ciclo lectivo actual
         ).exclude(id__in=mis_clases_ids)
+        if estudiante.grade_level.docente_tutor:
+            docente_tutor = estudiante.grade_level.docente_tutor
 
     # Últimas actividades y calificaciones
     mis_actividades = Activity.objects.filter(student=estudiante).order_by('-date')[:5]
@@ -52,6 +55,7 @@ def student_dashboard_view(request):
 
     context = {
         'student': estudiante,
+        'docente_tutor': docente_tutor,
         'recent_activities': mis_actividades,
         'recent_grades': mis_calificaciones,
         'promedio': round(promedio, 2),

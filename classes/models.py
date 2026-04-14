@@ -48,7 +48,7 @@ class Clase(models.Model):
     """Instancia académica de una materia."""
     name = models.CharField(max_length=200, verbose_name="Nombre de la clase")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='clases', verbose_name="Materia", null=True)
-    ciclo_lectivo = models.CharField(max_length=20, default='2025-2026', verbose_name='Ciclo lectivo')
+    ciclo_lectivo = models.CharField(max_length=100, default='2025-2026', verbose_name='Ciclo lectivo')
     paralelo = models.CharField(max_length=100, blank=True, default='', verbose_name='Paralelo')
 
     # Se agrega limit_choices_to para mostrar solo docentes
@@ -934,36 +934,3 @@ class DeberEntrega(models.Model):
         if self.estado == 'entregado' and self.esta_tarde():
             self.estado = 'tarde'
         super().save(*args, **kwargs)
-
-# ============================================
-# SISTEMA NUEVO (Enrollment-based)
-# ============================================
-
-class Calificacion(models.Model):
-    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='calificaciones')
-    descripcion = models.CharField(max_length=200)
-    nota = models.DecimalField(max_digits=5, decimal_places=2)
-    fecha = models.DateField()
-    class Meta:
-        verbose_name = 'Calificación'
-        verbose_name_plural = 'Calificaciones'
-        ordering = ['-fecha', 'id']
-    def __str__(self):
-        return f"{self.inscripcion.estudiante.nombre} - {self.descripcion}: {self.nota}"
-
-class Asistencia(models.Model):
-    class Estado(models.TextChoices):
-        PRESENTE = 'Presente', 'Presente'
-        AUSENTE = 'Ausente', 'Ausente'
-        JUSTIFICADO = 'Justificado', 'Justificado'
-    inscripcion = models.ForeignKey(Enrollment, on_delete=models.CASCADE, related_name='asistencias')
-    fecha = models.DateField()
-    estado = models.CharField(max_length=20, choices=Estado.choices)
-    observacion = models.TextField(blank=True)
-    class Meta:
-        verbose_name = 'Asistencia'
-        verbose_name_plural = 'Asistencias'
-        ordering = ['-fecha', 'id']
-        unique_together = [('inscripcion', 'fecha')]
-    def __str__(self):
-        return f"{self.inscripcion.estudiante.nombre} - {self.fecha} - {self.estado}"
