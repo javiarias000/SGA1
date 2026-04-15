@@ -1,55 +1,98 @@
-version: '3.8'
-
 services:
-  # Servicio de la aplicación Django
+  # Django API Server
   web:
     build:
       context: .
-      dockerfile: Dockerfile
-    # Reemplaza 'music_registry' con el nombre de tu carpeta de proyecto principal si es diferente
-    command: sh -c "./wait-for-db.sh db 5432 && sh -c \"python manage.py collectstatic --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000\""
+      dockerfile: dockerfile
+    restart: always
+    command: gunicorn music_registry.wsgi:application --bind 0.0.0.0:8000 --workers 3
     volumes:
-      - .:/usr/src/app
-      - ./archivos_formularios:/usr/src/archivos_formularios:ro
-      - ./base_de_datos_json:/usr/src/base_de_datos_json:rw
+      - static_volume:/usr/src/app/static
+      - media_volume:/usr/src/app/media
     ports:
       - "8000:8000"
     env_file:
       - .env
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
-  # Servicio de la Base de Datos PostgreSQL
-  db:
-    image: postgres:16-alpine
+  # Celery Worker
+  worker:
+    build:
+      context: .
+      dockerfile: dockerfile
+    restart: always
+    command: celery -A music_registry worker -l info
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      # Las variables de entorno de PostgreSQL se pueden definir aquí o en el archivo .env
-      POSTGRES_DB: music_registry_db
-      POSTGRES_USER: music_user
-      POSTGRES_PASSWORD: music_password
-    # Expone el puerto 5432 (opcional, para conectarse desde fuera del contenedor)
-    # ports:
-    #   - "5432:5432"
+      - static_volume:/usr/src/app/static
+      - media_volume:/usr/src/app/media
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
-  # Servicio de Redis (para Celery)
-  redis:
-    image: redis:7-alpine
-    expose:
-      - 6379
+  # Celery Beat (Scheduler)
+  beat:
+    build:
+      context: .
+      dockerfile: dockerfile
+    restart: always
+    command: celery -A music_registry beat -l info
+    volumes:
+      - static_volume:/usr/src/app/static
+      - media_volume:/usr/src/app/media
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
-  # Servicio de Desarrollo Flutter
-  flutter_dev:
+  # Flutter Web App (Served via Nginx)
+  flutter_web:
     build:
       context: .
       dockerfile: flutter.Dockerfile
-    volumes:
-      - .:/app
-    # El comando 'tail -f /dev/null' mantiene el contenedor corriendo
-    command: tail -f /dev/null
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 
-# Volúmenes para persistir los datos de la base de datos
+  # Database
+  db:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${DB_NAME:-music_registry_db}
+      POSTGRES_USER: ${DB_USER:-music_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-music_password}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-music_user} -d ${DB_NAME:-music_registry_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Broker
+  redis:
+    image: redis:7-alpine
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:

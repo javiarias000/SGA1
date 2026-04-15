@@ -185,3 +185,8 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Guayaquil'
+
+#Evolution Api WhatsApp
+EVOLUTION_API_URL = os.environ.get('EVOLUTION_API_URL', '')
+EVOLUTION_API_KEY = os.environ.get('EVOLUTION_API_KEY', '')
+EVOLUTION_INSTANCE_NAME = os.environ.get('EVOLUTION_INSTANCE_NAME', 'default')

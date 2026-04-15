@@ -1,44 +1,36 @@
-# Use a stable base image
-FROM ubuntu:22.04
+# Build stage
+FROM ubuntu:22.04 as builder
 
-# Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
-    bash \
-    curl \
-    git \
-    unzip \
-    wget \
-    xz-utils \
+    bash curl git unzip wget xz-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up a working directory for Flutter SDK installation
 WORKDIR /usr/local
 
-# Download and install Flutter SDK as root
+# Install Flutter SDK
 ENV FLUTTER_SDK_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.38.7-stable.tar.xz"
 RUN wget -qO flutter-sdk.tar.xz "${FLUTTER_SDK_URL}" && \
     tar -xf flutter-sdk.tar.xz && \
     rm flutter-sdk.tar.xz
 
-# Add Flutter to the PATH globally (for any user)
 ENV PATH="/usr/local/flutter/bin:${PATH}"
 
-# Create a non-root user
-RUN useradd -ms /bin/bash -u 1000 user
+# Fix git ownership for Flutter SDK
+RUN git config --global --add safe.directory /usr/local/flutter
 
-# Change ownership of the Flutter SDK to the non-root user
-RUN chown -R user:user /usr/local/flutter
+# Copy app source and build
+WORKDIR /app
+COPY mobile_app .
+RUN flutter build web
 
-# Switch to the non-root user for subsequent commands
-USER user
-WORKDIR /app # Set the working directory for the user
+# Production stage
+FROM nginx:alpine
 
-# Run flutter commands as the non-root user
-RUN flutter precache
-RUN flutter doctor
+# Copy built Flutter web artifacts to Nginx html directory
+COPY --from=builder /app/build/web /usr/share/nginx/html
 
-# Keep the container running
-CMD ["tail", "-f", "/dev/null"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
