@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'classes',      
     'users', 
     'subjects',
+    'academia',
 
     'django.contrib.admin',
     'django.contrib.auth',
