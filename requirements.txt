@@ -13,3 +13,4 @@ cron_descriptor
 psycopg2-binary
 gunicorn
 graphene-django
+djangorestframework
