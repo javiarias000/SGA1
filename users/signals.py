@@ -84,13 +84,13 @@ def create_or_update_role_profile(sender, instance, created, **kwargs):
     Creates or updates Teacher or Student profile based on Usuario's rol.
     Also handles deletion of old role profiles if rol changes.
     """
-    # To safely get the original rol, fetch from DB if not created
-    original_rol = None
-    if not created:
+    # Use _original_rol stored in __init__ to avoid querying DB post-save
+    original_rol = getattr(instance, '_original_rol', None)
+    if not created and original_rol is None:
         try:
             original_rol = Usuario.objects.get(pk=instance.pk).rol
         except Usuario.DoesNotExist:
-            pass # Should not happen if not created
+            pass
 
     rol_changed = created or (original_rol is not None and original_rol != instance.rol)
 

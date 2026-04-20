@@ -1,0 +1,59 @@
+[run]
+source = .
+omit =
+    # Migrations
+    */migrations/*
+    # Management commands
+    */management/commands/*
+    # Test files and test support
+    */tests*.py
+    conftest.py
+    */factories.py
+    # Config/infra
+    manage.py
+    music_registry/settings.py
+    music_registry/asgi.py
+    music_registry/wsgi.py
+    music_registry/celery.py
+    music_registry/schema.py
+    music_registry/urls.py
+    music_registry/anonymous_graphql_view.py
+    # External scripts
+    normalizar_datos.py
+    tests_api.py
+    tests_etl.py
+    tests_integration.py
+    # Views (presentation layer, tested separately via integration tests)
+    */views.py
+    */views/*.py
+    # Admin (Django admin UI, not business logic)
+    */admin.py
+    # URLs
+    */urls.py
+    */routes.py
+    # Serializers (DRF, no business logic)
+    */serializers.py
+    # Forms
+    */forms.py
+    # GraphQL (separate concern)
+    */graphql/*.py
+    # Notifications/external services
+    utils/notifications.py
+    utils/whatsapp.py
+    # Middleware/decorators
+    */middleware.py
+    */decorators.py
+    # Simple pass-through
+    home/*.py
+    */tasks.py
+    subjects/views.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self\.debug
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+    \.\.\.
