@@ -25,7 +25,7 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) {
         throw Exception('User not authenticated.');
       }
@@ -47,7 +47,7 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) {
         throw Exception('User not authenticated.');
       }
@@ -68,7 +68,7 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       final newStudent = await _apiService.createStudent(data, authToken: authToken);
@@ -89,7 +89,7 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       final updatedStudent = await _apiService.updateStudent(studentId, data, authToken: authToken);
@@ -117,7 +117,7 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       await _apiService.deleteStudent(studentId, authToken: authToken);
@@ -133,5 +133,10 @@ class StudentProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearSelection() {
+    _selectedStudent = null;
+    notifyListeners();
   }
 }

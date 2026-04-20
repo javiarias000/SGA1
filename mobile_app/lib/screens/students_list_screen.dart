@@ -58,13 +58,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                             margin: const EdgeInsets.all(8.0),
                             child: ListTile(
                               title: Text(
-                                'Name: ${student.name ?? student.usuario.nombre}',
+                                'Name: ${student.name ?? student.usuario?.nombre ?? "N/A"}',
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Email: ${student.usuario.email}'),
+                                  Text('Email: ${student.usuario?.email ?? "N/A"}'),
                                   Text('Grade: ${student.gradeLevelName ?? "N/A"}'),
                                   Text('Teacher: ${student.teacherFullName ?? "N/A"}'),
                                 ],

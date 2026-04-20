@@ -23,7 +23,7 @@ class GradeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
       _currentGrades = await _apiService.fetchStudentGrades(
         studentId,
@@ -54,7 +54,7 @@ class GradeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
       await _apiService.saveGrade(
         studentId: studentId,

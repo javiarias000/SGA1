@@ -21,9 +21,9 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.student?.nombre ?? '');
-    _emailController = TextEditingController(text: widget.student?.email ?? '');
-    _phoneController = TextEditingController(text: widget.student?.telefono ?? '');
+    _nameController = TextEditingController(text: widget.student?.usuario?.nombre ?? '');
+    _emailController = TextEditingController(text: widget.student?.usuario?.email ?? '');
+    _phoneController = TextEditingController(text: widget.student?.usuario?.phone ?? '');
   }
 
   @override

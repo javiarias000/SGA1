@@ -23,7 +23,7 @@ class ClaseProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) {
         throw Exception('User not authenticated.');
       }

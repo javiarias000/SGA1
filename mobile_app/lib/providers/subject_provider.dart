@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/models/subject.dart';
 import 'package:mobile_app/providers/clase_provider.dart';
 import 'package:mobile_app/models/clase.dart';
-import 'package:mobile_app/models/teacher.dart';
+import 'package:mobile_app/models/user.dart';
 import 'package:mobile_app/api/api_service.dart';
 import 'package:mobile_app/providers/auth_provider.dart';
 import 'package:mobile_app/api/api_exceptions.dart';
@@ -16,7 +16,7 @@ class SubjectProvider extends ChangeNotifier {
   String _errorMessage = '';
 
   Subject? _selectedSubject;
-  List<Teacher> _associatedTeachers = [];
+  List<User> _associatedTeachers = [];
 
   SubjectProvider(this._claseProvider, this._apiService, this._authProvider) {
     _claseProvider.addListener(_onClasesUpdated);
@@ -27,7 +27,7 @@ class SubjectProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   Subject? get selectedSubject => _selectedSubject;
-  List<Teacher> get associatedTeachers => _associatedTeachers;
+  List<User> get associatedTeachers => _associatedTeachers;
 
   void _onClasesUpdated() {
     _isLoading = _claseProvider.isLoading;
@@ -57,14 +57,14 @@ class SubjectProvider extends ChangeNotifier {
       _selectedSubject = _subjects.firstWhere((s) => s.id == subjectId);
 
       final Set<int> seenTeacherIds = {};
-      final List<Teacher> teachers = [];
+      final List<User> teachers = [];
 
       final relevantClases = _claseProvider.clases.where((c) => c.subject?.id == subjectId);
 
       for (var clase in relevantClases) {
-        if (clase.teacher != null && !seenTeacherIds.contains(clase.teacher!.id)) {
-          teachers.add(clase.teacher!);
-          seenTeacherIds.add(clase.teacher!.id);
+        if (clase.docenteBase != null && !seenTeacherIds.contains(clase.docenteBase!.id)) {
+          teachers.add(clase.docenteBase!);
+          seenTeacherIds.add(clase.docenteBase!.id);
         }
       }
       _associatedTeachers = teachers;
@@ -87,7 +87,7 @@ class SubjectProvider extends ChangeNotifier {
     _errorMessage = '';
     notifyListeners();
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
       final newSubject = await _apiService.createSubject(data, authToken: authToken);
       _subjects.add(newSubject);
@@ -106,7 +106,7 @@ class SubjectProvider extends ChangeNotifier {
     _errorMessage = '';
     notifyListeners();
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
       final updatedSubject = await _apiService.updateSubject(subjectId, data, authToken: authToken);
       final index = _subjects.indexWhere((s) => s.id == subjectId);
@@ -127,7 +127,7 @@ class SubjectProvider extends ChangeNotifier {
     _errorMessage = '';
     notifyListeners();
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
       await _apiService.deleteSubject(subjectId, authToken: authToken);
       _subjects.removeWhere((s) => s.id == subjectId);

@@ -6,9 +6,6 @@ class Teacher {
   final String? specialization;
   final String? photo;
   final String? fullName; // Derived field
-  final String? nombre; // For form consistency
-  final String? email;
-  final String? telefono;
 
   Teacher({
     required this.id,

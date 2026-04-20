@@ -93,13 +93,9 @@ class _SubjectDetailScreenState extends State<SubjectDetailScreen> {
                             final teacher = provider.associatedTeachers[index];
                             return Card(
                               child: ListTile(
-                                leading: teacher.photo != null
-                                    ? CircleAvatar(
-                                        backgroundImage: NetworkImage(teacher.photo!),
-                                      )
-                                    : CircleAvatar(child: Icon(Icons.person)),
-                                title: Text(teacher.fullName ?? 'No Name'),
-                                subtitle: Text(teacher.specialization ?? 'No Specialization'),
+                                leading: const CircleAvatar(child: Icon(Icons.person)),
+                                title: Text(teacher.nombre),
+                                subtitle: Text(teacher.email),
                               ),
                             );
                           },

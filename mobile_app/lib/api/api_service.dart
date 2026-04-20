@@ -42,13 +42,20 @@ class ApiService {
       headers['Authorization'] = 'Token $authToken';
     }
 
-    final response = await http.send(
-      http.Request(method, Uri.parse('$_baseUrl/$endpoint'))
-        ..headers.addAll(headers)
-        ..body = jsonEncode(data),
-    );
+    final uri = Uri.parse('$_baseUrl/$endpoint');
+    final body = jsonEncode(data);
 
-    final responseBody = await response.stream.bytesToString();
+    http.Response response;
+    if (method == 'POST') {
+      response = await http.post(uri, headers: headers, body: body);
+    } else if (method == 'PUT') {
+      response = await http.put(uri, headers: headers, body: body);
+    } else if (method == 'PATCH') {
+      response = await http.patch(uri, headers: headers, body: body);
+    } else {
+      throw Exception('Unsupported HTTP method: $method');
+    }
+
     final statusCode = response.statusCode;
 
     if (statusCode >= 200 && statusCode < 300) {
@@ -56,7 +63,7 @@ class ApiService {
     } else if (statusCode == 401) {
       throw UnauthorizedException('Session expired or token is invalid.');
     } else {
-      throw Exception('Failed to $method data to $endpoint. Status: $statusCode, Body: $responseBody');
+      throw Exception('Failed to $method data to $endpoint. Status: $statusCode, Body: ${response.body}');
     }
   }
 
@@ -226,9 +233,9 @@ class ApiService {
 
   // --- Grading Operations ---
 
-  Future<dynamic> fetchStudentGrades(int studentId, {String subject, String parcial, String quimestre, String? authToken}) async {
+  Future<dynamic> fetchStudentGrades(int studentId, {String? subject, String? parcial, String? quimestre, String? authToken}) async {
     String endpoint = 'teachers/obtener_calificaciones_estudiante/$studentId/';
-    String query = '?subject=$subject&parcial=$parcial&quimestre=$quimestre';
+    String query = '?subject=${subject ?? ""}&parcial=${parcial ?? ""}&quimestre=${quimestre ?? ""}';
     return await _performGetRequest(endpoint + query, authToken: authToken);
   }
 
@@ -252,5 +259,15 @@ class ApiService {
 
   Future<List<dynamic>> fetchAttendance(int studentId, {String? authToken}) async {
     return await _performGetRequest('api/attendance/?student=$studentId', authToken: authToken);
+  }
+
+  // --- Enrollment Operations ---
+
+  Future<List<dynamic>> fetchEnrollments(int studentId, {String? authToken}) async {
+    return await _performGetRequest('classes/api/v1/enrollments/?student=$studentId', authToken: authToken);
+  }
+
+  Future<dynamic> createEnrollment(Map<String, dynamic> data, {String? authToken}) async {
+    return await _performWriteRequest('POST', 'classes/api/v1/enrollments/', data, authToken: authToken);
   }
 }

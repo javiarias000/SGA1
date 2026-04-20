@@ -11,6 +11,9 @@ import 'package:mobile_app/providers/student_provider.dart';
 import 'package:mobile_app/providers/teacher_provider.dart';
 import 'package:mobile_app/providers/clase_provider.dart';
 import 'package:mobile_app/providers/subject_provider.dart';
+import 'package:mobile_app/providers/enrollment_provider.dart';
+import 'package:mobile_app/providers/grade_provider.dart';
+import 'package:mobile_app/providers/attendance_provider.dart';
 
 void main() {
   final ApiService apiService = ApiService();

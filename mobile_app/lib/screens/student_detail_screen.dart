@@ -5,6 +5,7 @@ import 'package:mobile_app/models/student.dart';
 import 'package:mobile_app/screens/student_form_screen.dart';
 import 'package:mobile_app/screens/enrollment_screen.dart';
 import 'package:mobile_app/screens/grade_entry_screen.dart';
+import 'package:mobile_app/screens/attendance_screen.dart';
 
 class StudentDetailScreen extends StatefulWidget {
   final int studentId;
@@ -101,14 +102,14 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Name: ${student.name ?? student.usuario.nombre}',
+            'Name: ${student.name ?? student.usuario?.nombre ?? "N/A"}',
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          Text('Email: ${student.usuario.email}', style: const TextStyle(fontSize: 16)),
-          Text('Phone: ${student.usuario.phone ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Cedula: ${student.usuario.cedula ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Role: ${student.usuario.rol}', style: const TextStyle(fontSize: 16)),
+          Text('Email: ${student.usuario?.email ?? "N/A"}', style: const TextStyle(fontSize: 16)),
+          Text('Phone: ${student.usuario?.phone ?? "N/A"}', style: const TextStyle(fontSize: 16)),
+          Text('Cedula: ${student.usuario?.cedula ?? "N/A"}', style: const TextStyle(fontSize: 16)),
+          Text('Role: ${student.usuario?.rol ?? "N/A"}', style: const TextStyle(fontSize: 16)),
           const Divider(),
           Text('Parent Name: ${student.parentName ?? "N/A"}', style: const TextStyle(fontSize: 16)),
           Text('Parent Email: ${student.parentEmail ?? "N/A"}', style: const TextStyle(fontSize: 16)),

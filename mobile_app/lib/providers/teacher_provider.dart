@@ -25,7 +25,7 @@ class TeacherProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) {
         throw Exception('User not authenticated.');
       }
@@ -47,7 +47,7 @@ class TeacherProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) {
         throw Exception('User not authenticated.');
       }
@@ -68,7 +68,7 @@ class TeacherProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       final newTeacher = await _apiService.createTeacher(data, authToken: authToken);
@@ -89,7 +89,7 @@ class TeacherProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       final updatedTeacher = await _apiService.updateTeacher(teacherId, data, authToken: authToken);
@@ -117,7 +117,7 @@ class TeacherProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final authToken = await _authProvider.getAuthToken();
+      final authToken = _authProvider.authToken;
       if (authToken == null) throw Exception('User not authenticated.');
 
       await _apiService.deleteTeacher(teacherId, authToken: authToken);
