@@ -1,98 +1,192 @@
+version: '3.8'
+
 services:
-  # Django API Server
-  web:
-    build:
-      context: .
-      dockerfile: dockerfile
-    restart: always
-    command: gunicorn music_registry.wsgi:application --bind 0.0.0.0:8000 --workers 3
-    volumes:
-      - static_volume:/usr/src/app/static
-      - media_volume:/usr/src/app/media
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  # Celery Worker
-  worker:
-    build:
-      context: .
-      dockerfile: dockerfile
-    restart: always
-    command: celery -A music_registry worker -l info
-    volumes:
-      - static_volume:/usr/src/app/static
-      - media_volume:/usr/src/app/media
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  # Celery Beat (Scheduler)
-  beat:
-    build:
-      context: .
-      dockerfile: dockerfile
-    restart: always
-    command: celery -A music_registry beat -l info
-    volumes:
-      - static_volume:/usr/src/app/static
-      - media_volume:/usr/src/app/media
-    env_file:
-      - .env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  # Flutter Web App (Served via Nginx)
-  flutter_web:
-    build:
-      context: .
-      dockerfile: flutter.Dockerfile
-    restart: always
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-
-  # Database
+  # PostgreSQL Database
   db:
-    image: postgres:16-alpine
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    build:
+      context: .
+      dockerfile: Dockerfile.database
+    container_name: sga1_db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-music_registry_db}
       POSTGRES_USER: ${DB_USER:-music_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-music_password}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    ports:
+      - "${DB_PORT:-5432}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-music_user} -d ${DB_NAME:-music_registry_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    networks:
+      - sga1_network
 
   # Redis Broker
   redis:
     image: redis:7-alpine
-    restart: always
+    container_name: sga1_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    networks:
+      - sga1_network
+
+  # Django Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sga1_backend
+    restart: unless-stopped
+    command: |
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn music_registry.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2 --access-logfile - --error-logfile -"
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      - DB_NAME=${DB_NAME:-music_registry_db}
+      - DB_USER=${DB_USER:-music_user}
+      - DB_PASSWORD=${DB_PASSWORD:-music_password}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+    volumes:
+      - ./:/usr/src/app
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/media
+      - logs_volume:/usr/src/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sga1_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Celery Worker
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sga1_celery_worker
+    restart: unless-stopped
+    command: celery -A music_registry worker -l info --concurrency=4
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      - DB_NAME=${DB_NAME:-music_registry_db}
+      - DB_USER=${DB_USER:-music_user}
+      - DB_PASSWORD=${DB_PASSWORD:-music_password}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+    volumes:
+      - ./:/usr/src/app
+      - logs_volume:/usr/src/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sga1_network
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sga1_celery_beat
+    restart: unless-stopped
+    command: celery -A music_registry beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      - DB_NAME=${DB_NAME:-music_registry_db}
+      - DB_USER=${DB_USER:-music_user}
+      - DB_PASSWORD=${DB_PASSWORD:-music_password}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+    volumes:
+      - ./:/usr/src/app
+      - logs_volume:/usr/src/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sga1_network
+
+  # Flutter Web Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sga1_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+    networks:
+      - sga1_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
+    driver: local
   static_volume:
+    driver: local
   media_volume:
+    driver: local
+  logs_volume:
+    driver: local
+
+networks:
+  sga1_network:
+    driver: bridge
