@@ -1,0 +1,37 @@
+<div class="border-2 border-dashed border-gray-200 rounded-xl p-5 hover:border-cb-blue-300 transition" id="drop_{{ field_name }}">
+    <div class="flex items-start gap-4">
+        <span class="text-3xl mt-1">{{ icon }}</span>
+        <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+                <p class="font-bold text-gray-800 text-sm">{{ titulo }}</p>
+                {% if requerido %}
+                <span class="text-xs bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded">Requerido</span>
+                {% else %}
+                <span class="text-xs bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded">Opcional</span>
+                {% endif %}
+            </div>
+            <p class="text-xs text-gray-400 mb-3">{{ descripcion }}</p>
+            <label class="cursor-pointer inline-flex items-center gap-2 bg-cb-blue-50 hover:bg-cb-blue-100 border border-cb-blue-200 text-cb-blue-800 text-sm font-bold px-4 py-2 rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Seleccionar archivo
+                <input type="file" name="{{ field_name }}" class="hidden" onchange="mostrarNombre(this, '{{ field_name }}')"
+                    accept=".pdf,.jpg,.jpeg,.png{% if field_name == 'foto_carnet_doc' %}{% else %}{% endif %}">
+            </label>
+            <p id="nombre_{{ field_name }}" class="text-xs text-gray-500 mt-2 italic">Ningún archivo seleccionado</p>
+        </div>
+    </div>
+</div>
+
+<script>
+function mostrarNombre(input, fieldName) {
+    const p = document.getElementById('nombre_' + fieldName);
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+        p.textContent = '✓ ' + file.name + ' (' + sizeMB + ' MB)';
+        p.className = 'text-xs text-green-600 mt-2 font-semibold';
+        document.getElementById('drop_' + fieldName).classList.add('border-green-400', 'bg-green-50');
+        document.getElementById('drop_' + fieldName).classList.remove('border-gray-200');
+    }
+}
+</script>

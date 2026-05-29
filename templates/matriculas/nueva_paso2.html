@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Documentos — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                colors: {
+                    'cb-blue': { 900:'#00204a', 800:'#002e6d', 700:'#004299', 50:'#f0f5ff' },
+                    'cb-gold': { 400:'#fccb00', 500:'#e0ac00', 600:'#b38600' }
+                }
+            }}
+        }
+    </script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen">
+
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto object-contain" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="{% url 'home' %}" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Inicio</a>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 py-10">
+
+        <div class="text-center mb-8">
+            <span class="inline-block bg-cb-blue-800 text-cb-gold-400 text-xs font-bold px-4 py-1 rounded uppercase tracking-widest mb-3">Matrículas en Línea</span>
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">Subir Documentos</h1>
+            <p class="text-gray-500 mt-2">Sube los documentos requeridos. Serán analizados automáticamente.</p>
+        </div>
+
+        <!-- Indicador de pasos -->
+        <div class="flex items-center justify-center gap-0 mb-10">
+            <div class="flex items-center gap-2 opacity-50">
+                <div class="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm shadow">✓</div>
+                <span class="text-gray-500 font-bold text-sm">Datos Personales</span>
+            </div>
+            <div class="w-16 h-px bg-cb-blue-800 mx-2"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-full bg-cb-blue-800 text-white flex items-center justify-center font-bold text-sm shadow">2</div>
+                <span class="text-cb-blue-800 font-bold text-sm">Documentos</span>
+            </div>
+        </div>
+
+        <!-- Resumen datos -->
+        <div class="bg-white rounded-xl border border-cb-blue-100 p-4 mb-6 flex flex-wrap gap-4">
+            <div class="text-sm"><span class="text-gray-400">Estudiante:</span> <strong class="text-cb-blue-900">{{ datos.nombre_completo }}</strong></div>
+            <div class="text-sm"><span class="text-gray-400">Cédula:</span> <strong>{{ datos.cedula }}</strong></div>
+            <div class="text-sm"><span class="text-gray-400">Año:</span> <strong>{{ datos.anio_solicitado }}°</strong></div>
+            <div class="text-sm"><span class="text-gray-400">Ciclo:</span> <strong>{{ datos.ciclo_lectivo }}</strong></div>
+        </div>
+
+        <!-- Card de documentos -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-cb-blue-800 px-8 py-5">
+                <h2 class="text-white font-serif font-bold text-xl">Paso 2: Documentos Requeridos</h2>
+                <p class="text-cb-blue-50 text-sm mt-1">Formatos aceptados: PDF, JPG, PNG. Máximo 5 MB por archivo.</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="p-8 space-y-5">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p class="text-red-700 font-bold text-sm mb-1">Corrige los siguientes errores:</p>
+                    {% for field in form %}{% for error in field.errors %}
+                    <p class="text-red-600 text-sm">• {{ field.label }}: {{ error }}</p>
+                    {% endfor %}{% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Documento 1 -->
+                {% include "matriculas/_doc_upload.html" with field_name="cedula_doc" icon="🪪" titulo="Copia de Cédula / Acta de Nacimiento" requerido=True descripcion="Documento de identidad vigente del estudiante. Si es menor de edad, puede presentar el acta de nacimiento." %}
+
+                <!-- Documento 2 -->
+                {% include "matriculas/_doc_upload.html" with field_name="cert_educacion_doc" icon="🏫" titulo="Certificado de Educación Regular" requerido=True descripcion="Certificado de aprobación del año lectivo anterior en escuela o colegio regular." %}
+
+                <!-- Documento 3 -->
+                {% include "matriculas/_doc_upload.html" with field_name="cert_conservatorio_doc" icon="🎼" titulo="Certificado del Conservatorio (año anterior)" requerido=False descripcion="Requerido para 2° año en adelante. Certificado del año aprobado en este u otro conservatorio." %}
+
+                <!-- Documento 4 -->
+                {% include "matriculas/_doc_upload.html" with field_name="foto_carnet_doc" icon="📷" titulo="Foto Carnet" requerido=True descripcion="Foto reciente del estudiante, fondo blanco, tamaño carnet. Solo JPG o PNG." %}
+
+                <!-- Aviso IA -->
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+                    <span class="text-2xl">🤖</span>
+                    <div>
+                        <p class="text-amber-800 font-bold text-sm">Revisión automática con Inteligencia Artificial</p>
+                        <p class="text-amber-700 text-xs mt-1">Tus documentos serán analizados automáticamente para verificar su legibilidad y validez. La secretaría revisará los casos que presenten novedades.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" name="volver"
+                        class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition border border-gray-200">
+                        ← Volver al Paso 1
+                    </button>
+                    <button type="submit"
+                        class="flex-[2] bg-cb-gold-500 hover:bg-cb-gold-600 text-cb-blue-900 font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Enviar Solicitud de Matrícula
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

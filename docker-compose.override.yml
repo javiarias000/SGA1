@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  redis:
+    command: redis-server --appendonly yes
+
+  backend:
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn music_registry.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2 --access-logfile - --error-logfile -"
+
+  celery_worker:
+    command: celery -A music_registry worker -l info --concurrency=2
+
+  celery_beat:
+    command: celery -A music_registry beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler

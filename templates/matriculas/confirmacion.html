@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud Recibida — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Lato','sans-serif'],serif:['Playfair Display','serif']},colors:{'cb-blue':{900:'#00204a',800:'#002e6d',700:'#004299',50:'#f0f5ff'},'cb-gold':{400:'#fccb00',500:'#e0ac00',600:'#b38600'}}}}}</script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen">
+
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto object-contain" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="{% url 'home' %}" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Inicio</a>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto px-4 py-12">
+
+        <!-- Ícono de éxito -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">¡Solicitud Enviada!</h1>
+            <p class="text-gray-500 mt-2">Tu solicitud de matrícula ha sido recibida y está siendo procesada.</p>
+        </div>
+
+        <!-- Código de seguimiento -->
+        <div class="bg-cb-blue-800 rounded-2xl p-6 text-center mb-6 shadow-xl">
+            <p class="text-cb-blue-50 text-sm font-bold uppercase tracking-widest mb-2">Código de Seguimiento</p>
+            <p class="text-cb-gold-400 font-mono text-lg font-bold break-all select-all">{{ solicitud.codigo_seguimiento }}</p>
+            <p class="text-cb-blue-200 text-xs mt-3">Guarda este código. Te permite consultar el estado de tu solicitud en cualquier momento.</p>
+            <button onclick="copiarCodigo()" class="mt-3 bg-cb-gold-500 hover:bg-cb-gold-400 text-cb-blue-900 font-bold px-4 py-2 rounded-lg text-sm transition">
+                📋 Copiar código
+            </button>
+        </div>
+
+        <!-- Datos del solicitante -->
+        <div class="bg-white rounded-2xl shadow border border-gray-100 p-6 mb-6">
+            <h2 class="font-serif font-bold text-cb-blue-800 text-lg mb-4 border-b border-gray-100 pb-2">Resumen de la Solicitud</h2>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <div><span class="text-gray-400">Estudiante:</span><br><strong>{{ solicitud.nombre_completo }}</strong></div>
+                <div><span class="text-gray-400">Cédula:</span><br><strong>{{ solicitud.cedula }}</strong></div>
+                <div><span class="text-gray-400">Año solicitado:</span><br><strong>{{ solicitud.anio_solicitado }}° Año</strong></div>
+                <div><span class="text-gray-400">Ciclo lectivo:</span><br><strong>{{ solicitud.ciclo_lectivo }}</strong></div>
+                <div><span class="text-gray-400">Estado:</span><br>
+                    <span class="inline-block bg-yellow-100 text-yellow-700 font-bold px-2 py-0.5 rounded text-xs">{{ solicitud.get_estado_display }}</span>
+                </div>
+                <div><span class="text-gray-400">Tipo:</span><br><strong>{{ solicitud.get_tipo_display }}</strong></div>
+            </div>
+        </div>
+
+        <!-- Materias asignadas -->
+        {% if materias %}
+        <div class="bg-white rounded-2xl shadow border border-gray-100 p-6 mb-6">
+            <h2 class="font-serif font-bold text-cb-blue-800 text-lg mb-1">Materias del {{ solicitud.anio_solicitado }}° Año</h2>
+            <p class="text-xs text-gray-400 mb-4">Estas son las materias que se asignarán al aprobar tu matrícula:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {% for materia in materias %}
+                <div class="flex items-center justify-between bg-cb-blue-50 rounded-lg px-3 py-2 border border-cb-blue-100">
+                    <span class="text-sm text-cb-blue-900 font-medium">{{ materia.nombre }}</span>
+                    <span class="text-xs text-cb-gold-600 font-bold">{{ materia.horas_semanales }}h/sem</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Próximos pasos -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+            <h3 class="font-bold text-amber-800 mb-3">¿Qué sigue?</h3>
+            <ol class="space-y-2 text-sm text-amber-700">
+                <li class="flex gap-2"><span class="font-bold text-amber-500 shrink-0">1.</span> Nuestro sistema analizará tus documentos automáticamente con IA.</li>
+                <li class="flex gap-2"><span class="font-bold text-amber-500 shrink-0">2.</span> La secretaría revisará tu solicitud (1–3 días hábiles).</li>
+                <li class="flex gap-2"><span class="font-bold text-amber-500 shrink-0">3.</span> Si hay alguna novedad con tus documentos, te contactaremos al correo <strong>{{ solicitud.email_representante }}</strong>.</li>
+                <li class="flex gap-2"><span class="font-bold text-amber-500 shrink-0">4.</span> Una vez aprobada, tus materias serán registradas automáticamente en el sistema.</li>
+            </ol>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="{% url 'matriculas:seguimiento' %}"
+               class="flex-1 bg-white border-2 border-cb-blue-800 text-cb-blue-800 font-bold py-3 rounded-xl text-center hover:bg-cb-blue-50 transition text-sm">
+                Consultar Estado
+            </a>
+            <a href="{% url 'home' %}"
+               class="flex-1 bg-cb-blue-800 text-white font-bold py-3 rounded-xl text-center hover:bg-cb-blue-900 transition text-sm">
+                Volver al Inicio
+            </a>
+        </div>
+    </div>
+
+    <script>
+    function copiarCodigo() {
+        navigator.clipboard.writeText('{{ solicitud.codigo_seguimiento }}').then(() => {
+            const btn = event.target;
+            btn.textContent = '✓ Copiado';
+            setTimeout(() => btn.textContent = '📋 Copiar código', 2000);
+        });
+    }
+    </script>
+</body>
+</html>

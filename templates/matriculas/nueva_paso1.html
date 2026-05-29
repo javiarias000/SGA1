@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción en Línea — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                colors: {
+                    'cb-blue': { 900:'#00204a', 800:'#002e6d', 700:'#004299', 50:'#f0f5ff' },
+                    'cb-gold': { 400:'#fccb00', 500:'#e0ac00', 600:'#b38600' }
+                }
+            }}
+        }
+    </script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto object-contain" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="{% url 'home' %}" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Volver al inicio</a>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 py-10">
+
+        <!-- Encabezado -->
+        <div class="text-center mb-8">
+            <span class="inline-block bg-cb-blue-800 text-cb-gold-400 text-xs font-bold px-4 py-1 rounded uppercase tracking-widest mb-3">Matrículas {{ ciclo_actual }}</span>
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">Inscripción en Línea</h1>
+            <p class="text-gray-500 mt-2">Completa el formulario para solicitar tu matrícula. Tu solicitud será revisada por la secretaría.</p>
+        </div>
+
+        <!-- Indicador de pasos -->
+        <div class="flex items-center justify-center gap-0 mb-10">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-full bg-cb-blue-800 text-white flex items-center justify-center font-bold text-sm shadow">1</div>
+                <span class="text-cb-blue-800 font-bold text-sm">Datos Personales</span>
+            </div>
+            <div class="w-16 h-px bg-gray-300 mx-2"></div>
+            <div class="flex items-center gap-2 opacity-40">
+                <div class="w-9 h-9 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold text-sm">2</div>
+                <span class="text-gray-500 font-bold text-sm">Documentos</span>
+            </div>
+        </div>
+
+        <!-- Card del formulario -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-cb-blue-800 px-8 py-5">
+                <h2 class="text-white font-serif font-bold text-xl">Paso 1: Datos del Estudiante y Representante</h2>
+                <p class="text-cb-blue-50 text-sm mt-1">Todos los campos marcados con * son obligatorios.</p>
+            </div>
+
+            <form method="post" class="p-8 space-y-6">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p class="text-red-700 font-bold text-sm mb-1">Por favor corrige los siguientes errores:</p>
+                    {% for field in form %}{% for error in field.errors %}
+                    <p class="text-red-600 text-sm">• {{ field.label }}: {{ error }}</p>
+                    {% endfor %}{% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <p class="text-red-600 text-sm">• {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Sección: Estudiante -->
+                <div>
+                    <h3 class="font-bold text-cb-blue-800 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-cb-gold-400 text-cb-blue-900 flex items-center justify-center text-xs font-bold">A</span>
+                        Datos del Estudiante
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre completo *</label>
+                            <input type="text" name="nombre_completo" value="{{ form.nombre_completo.value|default:'' }}"
+                                placeholder="Ej: Juan Carlos Pérez López"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 focus:border-transparent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Cédula / Documento *</label>
+                            <input type="text" name="cedula" value="{{ form.cedula.value|default:'' }}"
+                                placeholder="1234567890"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha de nacimiento *</label>
+                            <input type="date" name="fecha_nacimiento" value="{{ form.fecha_nacimiento.value|default:'' }}"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Representante -->
+                <div class="border-t border-gray-100 pt-6">
+                    <h3 class="font-bold text-cb-blue-800 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-cb-gold-400 text-cb-blue-900 flex items-center justify-center text-xs font-bold">B</span>
+                        Datos del Representante Legal
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre del representante *</label>
+                            <input type="text" name="nombre_representante" value="{{ form.nombre_representante.value|default:'' }}"
+                                placeholder="Padre, madre o tutor legal"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Correo electrónico *</label>
+                            <input type="email" name="email_representante" value="{{ form.email_representante.value|default:'' }}"
+                                placeholder="correo@ejemplo.com"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Teléfono *</label>
+                            <input type="text" name="phone_representante" value="{{ form.phone_representante.value|default:'' }}"
+                                placeholder="0999123456"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Dirección</label>
+                            <input type="text" name="direccion" value="{{ form.direccion.value|default:'' }}"
+                                placeholder="Calle y número, barrio"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Ciudad</label>
+                            <input type="text" name="ciudad" value="{{ form.ciudad.value|default:'Ambato' }}"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección: Matrícula -->
+                <div class="border-t border-gray-100 pt-6">
+                    <h3 class="font-bold text-cb-blue-800 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-cb-gold-400 text-cb-blue-900 flex items-center justify-center text-xs font-bold">C</span>
+                        Datos de Matrícula
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Año al que ingresa *</label>
+                            <select name="anio_solicitado" id="anio_select"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition bg-white">
+                                {% for val, label in form.fields.anio_solicitado.choices %}
+                                <option value="{{ val }}" {% if form.anio_solicitado.value == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Ciclo lectivo *</label>
+                            <input type="text" name="ciclo_lectivo" value="{{ form.ciclo_lectivo.value|default:'' }}"
+                                placeholder="2025-2026"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div class="md:col-span-2" id="instrumento_field">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                Instrumento principal
+                                <span class="text-cb-gold-600 font-normal">(obligatorio para 1° año)</span>
+                            </label>
+                            <select name="instrumento_elegido"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition bg-white">
+                                <option value="">— Selecciona un instrumento —</option>
+                                {% for inst in instrumentos %}
+                                <option value="{{ inst }}" {% if form.instrumento_elegido.value == inst %}selected{% endif %}>{{ inst }}</option>
+                                {% endfor %}
+                            </select>
+                            <p class="text-xs text-gray-400 mt-1">Para 2° año en adelante, el instrumento es asignado por la secretaría.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materias preview -->
+                <div id="materias_preview" class="border border-cb-blue-200 rounded-xl p-4 bg-cb-blue-50 hidden">
+                    <p class="text-cb-blue-800 font-bold text-sm mb-2">Materias que corresponden a este año:</p>
+                    <div id="materias_lista" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-6">
+                    <button type="submit" name="siguiente"
+                        class="w-full bg-cb-blue-800 hover:bg-cb-blue-900 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+                        Continuar al Paso 2 — Subir Documentos
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <p class="text-center text-xs text-gray-400 mt-3">
+                        ¿Ya tienes una solicitud? <a href="{% url 'matriculas:seguimiento' %}" class="text-cb-blue-700 hover:underline">Consulta su estado aquí</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    const MALLA = {{ malla_json|safe }};
+    const anioSelect = document.getElementById('anio_select');
+    const instrField = document.getElementById('instrumento_field');
+    const preview = document.getElementById('materias_preview');
+    const lista = document.getElementById('materias_lista');
+
+    function actualizarMaterias() {
+        const anio = parseInt(anioSelect.value);
+        instrField.style.opacity = anio === 1 ? '1' : '0.5';
+        const materias = MALLA[anio] || [];
+        if (materias.length) {
+            lista.innerHTML = materias.map(m =>
+                `<span class="bg-white border border-cb-blue-200 text-cb-blue-800 text-xs px-3 py-1 rounded-full font-medium">${m.nombre} (${m.horas_semanales}h)</span>`
+            ).join('');
+            preview.classList.remove('hidden');
+        } else {
+            preview.classList.add('hidden');
+        }
+    }
+    anioSelect.addEventListener('change', actualizarMaterias);
+    actualizarMaterias();
+    </script>
+</body>
+</html>

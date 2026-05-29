@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renovación de Matrícula — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Lato','sans-serif'],serif:['Playfair Display','serif']},colors:{'cb-blue':{900:'#00204a',800:'#002e6d',700:'#004299',50:'#f0f5ff'},'cb-gold':{400:'#fccb00',500:'#e0ac00',600:'#b38600'}}}}}</script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen">
+
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="{% url 'users:dashboard' %}" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Mi Panel</a>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 py-10">
+
+        <div class="text-center mb-8">
+            <span class="inline-block bg-cb-blue-800 text-cb-gold-400 text-xs font-bold px-4 py-1 rounded uppercase tracking-widest mb-3">Ciclo {{ ciclo }}</span>
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">Renovación de Matrícula</h1>
+            <p class="text-gray-500 mt-2">Tu año asignado para este ciclo es <strong>{{ anio_siguiente }}°</strong>. Solo necesitas subir los documentos actualizados.</p>
+        </div>
+
+        <!-- Materias del año siguiente -->
+        <div class="bg-white rounded-2xl shadow border border-gray-100 p-6 mb-6">
+            <h2 class="font-serif font-bold text-cb-blue-800 text-lg mb-1">Materias del {{ anio_siguiente }}° Año</h2>
+            <p class="text-xs text-gray-400 mb-4">Se asignarán automáticamente al aprobar tu matrícula.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {% for materia in materias %}
+                <div class="flex items-center justify-between bg-cb-blue-50 rounded-lg px-3 py-2 border border-cb-blue-100">
+                    <span class="text-sm text-cb-blue-900 font-medium">{{ materia.nombre }}</span>
+                    <span class="text-xs text-cb-gold-600 font-bold">{{ materia.horas_semanales }}h/sem</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Formulario documentos -->
+        <div class="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
+            <div class="bg-cb-blue-800 px-8 py-5">
+                <h2 class="text-white font-serif font-bold text-xl">Documentos Requeridos</h2>
+                <p class="text-cb-blue-50 text-sm mt-1">Sube los documentos actualizados para este ciclo lectivo.</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="p-8 space-y-5">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    {% for field in form %}{% for error in field.errors %}
+                    <p class="text-red-600 text-sm">• {{ field.label }}: {{ error }}</p>
+                    {% endfor %}{% endfor %}
+                </div>
+                {% endif %}
+
+                {% include "matriculas/_doc_upload.html" with field_name="cedula_doc" icon="🪪" titulo="Copia de Cédula" requerido=True descripcion="Documento de identidad vigente del estudiante." %}
+                {% include "matriculas/_doc_upload.html" with field_name="cert_educacion_doc" icon="🏫" titulo="Certificado de Educación Regular" requerido=True descripcion="Aprobación del año lectivo anterior en colegio regular." %}
+                {% include "matriculas/_doc_upload.html" with field_name="cert_conservatorio_doc" icon="🎼" titulo="Certificado del Conservatorio" requerido=True descripcion="Certificado de aprobación del año anterior en el conservatorio." %}
+                {% include "matriculas/_doc_upload.html" with field_name="foto_carnet_doc" icon="📷" titulo="Foto Carnet" requerido=True descripcion="Foto reciente, fondo blanco, tamaño carnet." %}
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+                    <span class="text-2xl">🤖</span>
+                    <p class="text-amber-700 text-sm">Tus documentos serán analizados automáticamente con IA. La secretaría recibirá una alerta si se detecta alguna novedad.</p>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-cb-gold-500 hover:bg-cb-gold-600 text-cb-blue-900 font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Enviar Renovación de Matrícula
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

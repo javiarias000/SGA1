@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de Matrícula — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Lato','sans-serif'],serif:['Playfair Display','serif']},colors:{'cb-blue':{900:'#00204a',800:'#002e6d',700:'#004299',50:'#f0f5ff'},'cb-gold':{400:'#fccb00',500:'#e0ac00',600:'#b38600'}}}}}</script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen">
+
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="{% url 'users:dashboard' %}" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Mi Panel</a>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto px-4 py-12">
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">Tu Solicitud de Matrícula</h1>
+            <p class="text-gray-500 mt-2">Ya tienes una solicitud activa para este ciclo lectivo.</p>
+        </div>
+
+        {% with estado=solicitud.estado %}
+        <div class="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden mb-6">
+            <div class="px-6 py-5
+                {% if estado == 'APROBADA' %}bg-green-600
+                {% elif estado == 'RECHAZADA' %}bg-red-600
+                {% elif estado == 'NOVEDAD' %}bg-amber-500
+                {% elif estado == 'EN_REVISION' %}bg-cb-blue-700
+                {% else %}bg-gray-500{% endif %}">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-white text-xs font-bold uppercase tracking-wider opacity-80">Estado actual</p>
+                        <p class="text-white font-serif font-bold text-2xl mt-1">{{ solicitud.get_estado_display }}</p>
+                    </div>
+                    <span class="text-5xl opacity-80">
+                        {% if estado == 'APROBADA' %}✅{% elif estado == 'RECHAZADA' %}❌{% elif estado == 'NOVEDAD' %}⚠️{% elif estado == 'EN_REVISION' %}🔍{% else %}⏳{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div><span class="text-gray-400 text-xs uppercase font-bold">Año solicitado</span><br><strong>{{ solicitud.anio_solicitado }}° — {{ solicitud.ciclo_lectivo }}</strong></div>
+                    <div><span class="text-gray-400 text-xs uppercase font-bold">Enviado</span><br><strong>{{ solicitud.created_at|date:"d/m/Y" }}</strong></div>
+                </div>
+
+                {% if solicitud.revision_ia_completada %}
+                <div class="border border-gray-100 rounded-xl p-4 bg-gray-50">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">🤖 Análisis de documentos</p>
+                    <pre class="text-sm text-gray-700 whitespace-pre-wrap font-sans">{{ solicitud.resumen_ia }}</pre>
+                </div>
+                {% endif %}
+
+                {% if solicitud.notas_secretaria %}
+                <div class="border border-cb-blue-200 rounded-xl p-4 bg-cb-blue-50">
+                    <p class="text-xs font-bold text-cb-blue-700 uppercase tracking-wider mb-2">📋 Notas de Secretaría</p>
+                    <p class="text-sm text-cb-blue-900">{{ solicitud.notas_secretaria }}</p>
+                </div>
+                {% endif %}
+
+                {% if materias %}
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Materias del {{ solicitud.anio_solicitado }}° año</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {% for m in materias %}
+                        <div class="flex items-center justify-between bg-cb-blue-50 rounded-lg px-3 py-2 border border-cb-blue-100">
+                            <span class="text-xs text-cb-blue-900">{{ m.nombre }}</span>
+                            <span class="text-xs text-cb-gold-600 font-bold">{{ m.horas_semanales }}h</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="pt-2">
+                    <p class="text-xs text-gray-400 mb-2">Código de seguimiento:</p>
+                    <p class="font-mono text-sm text-cb-blue-800 bg-cb-blue-50 rounded-lg px-3 py-2 border border-cb-blue-100 select-all break-all">{{ solicitud.codigo_seguimiento }}</p>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+
+        <a href="{% url 'users:dashboard' %}" class="block w-full bg-cb-blue-800 text-white font-bold py-3 rounded-xl text-center hover:bg-cb-blue-900 transition">
+            Volver a Mi Panel
+        </a>
+    </div>
+</body>
+</html>

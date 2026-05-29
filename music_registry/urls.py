@@ -26,6 +26,7 @@ urlpatterns = [
     path('students/', include(("students.urls", "students"), namespace='students')),
     path('teachers/', include(("teachers.urls", "teachers"), namespace='teachers')),
     path('classes/', include(("classes.urls", "classes"), namespace='classes')),
-    path('academia/', include(("academia.urls", "academia"), namespace='academia')), # Include academia app URLs
+    path('academia/', include(("academia.urls", "academia"), namespace='academia')),
+    path('matriculas/', include(("matriculas.urls", "matriculas"), namespace='matriculas')),
     
 ] + (static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG else [])

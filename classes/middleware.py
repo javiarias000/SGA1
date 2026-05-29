@@ -24,13 +24,16 @@ class RoleBasedAccessMiddleware:
         # Evitar ejecutar lógica para peticiones de archivos estáticos u cosas sin path
         path = request.path or "/"
 
-        # Permitir admin, estáticos, media, API REST, GraphQL y reseteo de contraseña
+        # Permitir admin, estáticos, media, API REST, GraphQL, reseteo de contraseña y matrículas públicas
         if (path.startswith('/admin/') or
             path.startswith('/static/') or
             path.startswith('/media/') or
             path.startswith('/reset/') or
             path.startswith('/graphql/') or
-            path.startswith('/api/')):
+            path.startswith('/api/') or
+            path.startswith('/matriculas/nueva') or
+            path.startswith('/matriculas/seguimiento') or
+            path.startswith('/matriculas/confirmacion')):
             return self.get_response(request)
 
         # URLs públicas

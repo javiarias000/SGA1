@@ -1,14 +1,15 @@
-{% load static %}
+{% load static %}{% load string_extras %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conservatorio Bolívar</title>
+    <title>Conservatorio de Música "Bolívar" — Ambato</title>
+    <meta name="description" content="Formación musical profesional y gratuita en Ambato. 11 años de estudio, 19 instrumentos, título de Bachillerato Artístico en Música.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="{% static 'img/logoCB.ico' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    
+    <link rel="icon" href="{% static 'img/LogoCB.ico' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -18,426 +19,852 @@
                         serif: ['Playfair Display', 'serif'],
                     },
                     colors: {
-                        // Paleta extraída del Logo CB
-                        'cb-blue': {
-                            900: '#00204a', // Azul muy oscuro (fondo)
-                            800: '#002e6d', // Azul Escudo (Principal)
-                            700: '#004299', // Azul brillante (Hover)
-                            50: '#f0f5ff',  // Fondo suave
+                        'cb': {
+                            950: '#000d1f',
+                            900: '#00204a',
+                            800: '#002e6d',
+                            700: '#004299',
+                            600: '#0056cc',
+                            50:  '#f0f5ff',
+                            25:  '#f8faff',
                         },
-                        'cb-gold': {
-                            400: '#fccb00', // Amarillo Logo brillante
-                            500: '#e0ac00', // Dorado Botones
-                            600: '#b38600', // Dorado oscuro
+                        'gold': {
+                            300: '#ffe066',
+                            400: '#fccb00',
+                            500: '#e0ac00',
+                            600: '#b38600',
+                            700: '#8a6500',
                         }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.7s ease both',
+                        'fade-in': 'fadeIn 1s ease both',
+                    },
+                    keyframes: {
+                        fadeUp: { '0%': { opacity: 0, transform: 'translateY(24px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+                        fadeIn: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
                     }
                 }
             }
         }
     </script>
+
     <style>
-        /* Transiciones suaves para el carrusel */
-        .carousel-slide {
-            transition: opacity 1000ms ease-in-out;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            z-index: 0;
-        }
-        .carousel-slide.active {
-            opacity: 1;
-            z-index: 10;
-        }
-        /* Gradiente para mejorar lectura de texto sobre fotos */
-        .text-overlay {
-            background: linear-gradient(to top, rgba(0,32,74,0.9) 0%, rgba(0,32,74,0.4) 50%, rgba(0,0,0,0) 100%);
-        }
+        /* Smooth nav transition */
+        #navbar { transition: background 0.3s, box-shadow 0.3s, padding 0.3s; }
+        #navbar.scrolled { background: rgba(0,32,74,0.97); box-shadow: 0 4px 24px rgba(0,0,0,0.3); backdrop-filter: blur(8px); }
+
+        /* Hero slides */
+        .hero-slide { transition: opacity 1.2s ease; position: absolute; inset: 0; opacity: 0; }
+        .hero-slide.active { opacity: 1; z-index: 1; }
+
+        /* Section reveal */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Malla table */
+        .malla-cell { min-width: 40px; text-align: center; padding: 6px 4px; font-size: 11px; border: 1px solid #e5e7eb; }
+        .malla-cell.active-year { background: #fccb00; color: #00204a; font-weight: 700; border-color: #e0ac00; }
+        .malla-cell.header { background: #002e6d; color: white; font-weight: 700; }
+        .malla-cell.section-header { background: #f0f5ff; color: #002e6d; font-weight: 700; text-align: left; min-width: 200px; padding-left: 12px; }
+
+        /* Instrument card hover */
+        .instrument-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .instrument-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,32,74,0.15); }
+
+        /* Nav link underline */
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #fccb00; transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Scroll indicator */
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+        .scroll-bounce { animation: bounce 2s infinite; }
+
+        /* Tab active */
+        .tab-btn.active { background: #002e6d; color: white; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <nav class="bg-white shadow-md sticky top-0 z-50 border-b-4 border-cb-gold-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-24">
-                <div class="flex items-center gap-4">
-                   <img src="{% static 'img/LogoCB.jpg' %}" class="h-16 w-auto object-contain">
-                    <div class="hidden md:flex flex-col">
-                        <span class="text-2xl font-serif font-bold text-cb-blue-800 leading-none tracking-wide">CONSERVATORIO</span>
-                        <span class="text-xl font-serif font-bold text-cb-blue-800 leading-none tracking-wide">"BOLÍVAR"</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="h-px w-8 bg-cb-gold-500"></span>
-                            <span class="text-xs text-gray-500 font-bold tracking-[0.2em] uppercase">Ambato</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="hidden lg:flex items-center space-x-8">
-                    <a href="#inicio" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Inicio</a>
-                    <a href="#oferta" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Oferta Académica</a>
-                    <a href="#nosotros" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Nosotros</a>
-                    
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'users:dashboard' %}" class="flex items-center gap-3 bg-cb-blue-800 text-white px-6 py-3 rounded shadow hover:bg-cb-blue-900 transition group border border-cb-blue-900">
-                        <div class="flex flex-col text-right leading-tight">
-                            <span class="text-[10px] text-cb-gold-400 font-bold uppercase tracking-wider">Ir al</span>
-                            <span class="font-bold text-sm">Panel de Usuario</span>
-                        </div>
-                        <svg class="h-5 w-5 text-white group-hover:text-cb-gold-400 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </a>
-                    <a href="{% url 'users:logout' %}" class="text-gray-700 hover:text-cb-blue-800 font-medium transition uppercase text-sm tracking-wide">Logout</a>
-                    {% else %}
-                    <a href="{% url 'users:login' %}" class="flex items-center gap-3 bg-cb-blue-800 text-white px-6 py-3 rounded shadow hover:bg-cb-blue-900 transition group border border-cb-blue-900">
-                        <div class="flex flex-col text-right leading-tight">
-                            <span class="text-[10px] text-cb-gold-400 font-bold uppercase tracking-wider">Login</span>
-                            <span class="font-bold text-sm">Sistema Académico</span>
-                        </div>
-                        <svg class="h-5 w-5 text-white group-hover:text-cb-gold-400 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                        </svg>
-                    </a>
-                    {% endif %}
-                </div>
+<body class="font-sans text-gray-800 bg-white">
 
-                <div class="lg:hidden">
-                    <button onclick="toggleMenu()" class="text-cb-blue-800 p-2">
-                        <svg id="menu-icon" class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+<!-- ═══════════════════════════════════════════════
+     NAVBAR — sticky, translúcido en hero, sólido al scroll
+═══════════════════════════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="#inicio" class="flex items-center gap-3 group">
+            <img src="{% static 'img/LogoCB.jpg' %}" alt="Logo CB" class="h-12 w-auto object-contain rounded shadow-sm">
+            <div class="hidden md:block">
+                <p class="font-serif font-bold text-white text-base leading-none tracking-wide drop-shadow">CONSERVATORIO</p>
+                <p class="font-serif font-bold text-white text-base leading-none tracking-wide drop-shadow">"BOLÍVAR"</p>
+                <div class="flex items-center gap-1 mt-0.5">
+                    <span class="h-px w-6 bg-gold-400"></span>
+                    <span class="text-gold-400 text-[10px] font-bold tracking-[0.2em] uppercase">Ambato</span>
                 </div>
             </div>
+        </a>
+
+        <!-- Links desktop -->
+        <div class="hidden lg:flex items-center gap-8">
+            <a href="#inicio" class="nav-link text-white text-sm font-bold uppercase tracking-wider opacity-90 hover:opacity-100">Inicio</a>
+            <a href="#nosotros" class="nav-link text-white text-sm font-bold uppercase tracking-wider opacity-90 hover:opacity-100">Nosotros</a>
+            <a href="#malla" class="nav-link text-white text-sm font-bold uppercase tracking-wider opacity-90 hover:opacity-100">Malla Curricular</a>
+            <a href="#instrumentos" class="nav-link text-white text-sm font-bold uppercase tracking-wider opacity-90 hover:opacity-100">Instrumentos</a>
+            <a href="#proceso" class="nav-link text-white text-sm font-bold uppercase tracking-wider opacity-90 hover:opacity-100">Admisiones</a>
         </div>
 
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-xl absolute w-full z-50">
-            <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="#inicio" class="block px-4 py-3 text-cb-blue-800 font-bold border-l-4 border-transparent hover:border-cb-gold-400 hover:bg-gray-50">Inicio</a>
-                <a href="#oferta" class="block px-4 py-3 text-cb-blue-800 font-bold border-l-4 border-transparent hover:border-cb-gold-400 hover:bg-gray-50">Oferta Académica</a>
-                <a href="#nosotros" class="block px-4 py-3 text-cb-blue-800 font-bold border-l-4 border-transparent hover:border-cb-gold-400 hover:bg-gray-50">Nosotros</a>
-                <hr class="border-gray-200 my-2">
+        <!-- CTAs -->
+        <div class="hidden lg:flex items-center gap-3">
+            {% if user.is_authenticated %}
+            <a href="{% url 'users:dashboard' %}" class="bg-white/10 border border-white/30 text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-white/20 transition backdrop-blur-sm">
+                Mi Panel
+            </a>
+            {% else %}
+            <a href="{% url 'users:login' %}" class="text-white text-sm font-bold opacity-80 hover:opacity-100 transition">Ingresar</a>
+            {% endif %}
+            <a href="{% url 'matriculas:nueva' %}" class="bg-gold-400 hover:bg-gold-300 text-cb-900 px-6 py-2 rounded-lg text-sm font-bold shadow-lg transition">
+                Matricularme
+            </a>
+        </div>
+
+        <!-- Hamburger -->
+        <button id="menu-btn" class="lg:hidden text-white p-2">
+            <svg id="icon-menu" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <svg id="icon-close" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-cb-900/97 border-t border-white/10 mt-4">
+        <div class="max-w-7xl mx-auto px-4 py-4 space-y-1">
+            <a href="#inicio" class="block px-4 py-3 text-white font-bold text-sm rounded-lg hover:bg-white/10">Inicio</a>
+            <a href="#nosotros" class="block px-4 py-3 text-white font-bold text-sm rounded-lg hover:bg-white/10">Nosotros</a>
+            <a href="#malla" class="block px-4 py-3 text-white font-bold text-sm rounded-lg hover:bg-white/10">Malla Curricular</a>
+            <a href="#instrumentos" class="block px-4 py-3 text-white font-bold text-sm rounded-lg hover:bg-white/10">Instrumentos</a>
+            <a href="#proceso" class="block px-4 py-3 text-white font-bold text-sm rounded-lg hover:bg-white/10">Admisiones</a>
+            <div class="pt-3 pb-1 flex flex-col gap-2">
+                <a href="{% url 'matriculas:nueva' %}" class="block w-full bg-gold-400 text-cb-900 px-4 py-3 rounded-lg text-center font-bold">Matricularme Ahora</a>
                 {% if user.is_authenticated %}
-                <a href="{% url 'users:dashboard' %}" class="block w-full bg-cb-blue-800 text-white px-4 py-3 rounded text-center font-bold shadow-md">
-                    Ir al Panel
-                </a>
-                <a href="{% url 'users:logout' %}" class="block w-full bg-gray-200 text-gray-800 px-4 py-3 rounded text-center font-bold shadow-md mt-2">
-                    Cerrar Sesión
-                </a>
+                <a href="{% url 'users:dashboard' %}" class="block w-full bg-white/10 text-white px-4 py-3 rounded-lg text-center font-bold">Mi Panel</a>
                 {% else %}
-                <a href="{% url 'users:login' %}" class="block w-full bg-cb-blue-800 text-white px-4 py-3 rounded text-center font-bold shadow-md">
-                    Ingresar al Sistema Académico
-                </a>
+                <a href="{% url 'users:login' %}" class="block w-full bg-white/10 text-white px-4 py-3 rounded-lg text-center font-bold">Ingresar al Sistema</a>
                 {% endif %}
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <section id="inicio" class="relative w-full h-[600px] md:h-[700px] bg-cb-blue-900 overflow-hidden">
-        
-        <div id="carousel-container" class="relative w-full h-full">
-            
-            <div class="carousel-slide active">
-                <img src="{% static 'img/Banda_Sinfonica.jpg' %}" alt="Orquesta Sinfónica" class="w-full h-full object-cover">
-                <div class="absolute inset-0 text-overlay flex items-end justify-center pb-20 px-4">
-                    <div class="max-w-5xl text-center text-white">
-                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-cb-gold-500 text-cb-blue-900 rounded mb-6 font-bold">
-                            <span>★ 2015 - 2025</span>
-                            <span class="h-4 w-px bg-cb-blue-900/30"></span>
-                            <span class="uppercase text-xs tracking-wider">10 Años de Creación</span>
-                        </div>
-                        <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4 drop-shadow-lg">Gran Concierto de Aniversario</h1>
-                        <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto font-light">
-                            Invitamos a la comunidad ambateña a celebrar nuestra primera década de música y excelencia.
-                        </p>
-                        <div class="flex gap-4 justify-center">
-                             <button class="bg-cb-gold-500 text-cb-blue-900 px-8 py-3 rounded font-bold hover:bg-cb-gold-400 transition uppercase tracking-wider shadow-lg">
-                                Ver Agenda Cultural
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="carousel-slide">
-                <img src="{% static 'img/Guitarra.jpg' %}" alt="Estudiante Piano" class="w-full h-full object-cover">
-                <div class="absolute inset-0 text-overlay flex items-end justify-center pb-20 px-4">
-                    <div class="max-w-5xl text-center text-white">
-                        <span class="bg-cb-blue-800 border border-cb-gold-400 text-cb-gold-400 text-xs font-bold px-3 py-1 uppercase tracking-widest rounded mb-4 inline-block">
-                            Admisiones Abiertas
-                        </span>
-                        <h2 class="text-4xl md:text-6xl font-serif font-bold mb-4 drop-shadow-lg">Tu futuro musical comienza aquí</h2>
-                        <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-                            Únete al Conservatorio Bolívar. Formación gratuita y de calidad para instrumentistas.
-                        </p>
-                        <a href="{% url 'users:register' %}" class="bg-white text-cb-blue-900 px-8 py-3 rounded font-bold hover:bg-gray-100 transition uppercase tracking-wider shadow-lg">
-                            Inscribirse Ahora
-                        </a>
-                    </div>
-                </div>
-            </div>
+<!-- ═══════════════════════════════════════════════
+     HERO — fullscreen con carrusel de imágenes
+═══════════════════════════════════════════════ -->
+<section id="inicio" class="relative w-full h-screen min-h-[600px] bg-cb-950 overflow-hidden">
 
-            <div class="carousel-slide">
-                <img src="{% static 'img/Coro.jpg' %}" alt="Aula de Música" class="w-full h-full object-cover">
-                <div class="absolute inset-0 text-overlay flex items-end justify-center pb-20 px-4">
-                    <div class="max-w-5xl text-center text-white">
-                        <h2 class="text-4xl md:text-6xl font-serif font-bold mb-4 drop-shadow-lg">Estudiantes Regulares</h2>
-                        <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-                            El proceso de matriculación para el nuevo ciclo académico ya está disponible en el sistema.
-                        </p>
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'users:dashboard' %}" class="bg-cb-blue-800 border-2 border-cb-gold-500 text-white px-8 py-3 rounded font-bold hover:bg-cb-blue-900 transition uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto">
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                            Ir al Panel
-                        </a>
-                        {% else %}
-                        <a href="{% url 'users:login' %}" class="bg-cb-blue-800 border-2 border-cb-gold-500 text-white px-8 py-3 rounded font-bold hover:bg-cb-blue-900 transition uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
-                            Acceder al Sistema
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            
-            <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-cb-blue-800/80 text-white p-3 rounded-full transition backdrop-blur-sm z-20">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-cb-blue-800/80 text-white p-3 rounded-full transition backdrop-blur-sm z-20">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-            
-            <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
-                <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition indicator active:bg-cb-gold-500"></button>
-                <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition indicator active:bg-cb-gold-500"></button>
-                <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition indicator active:bg-cb-gold-500"></button>
-            </div>
+    <!-- Slides -->
+    <div id="hero-slides" class="relative w-full h-full">
 
+        <div class="hero-slide active">
+            <img src="{% static 'img/Banda_Sinfonica.jpg' %}" alt="Banda Sinfónica" class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-cb-950 via-cb-900/50 to-transparent"></div>
         </div>
-    </section>
+        <div class="hero-slide">
+            <img src="{% static 'img/Guitarra.jpg' %}" alt="Clase de Guitarra" class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-cb-950 via-cb-900/50 to-transparent"></div>
+        </div>
+        <div class="hero-slide">
+            <img src="{% static 'img/Orquesta_Sinfonica.jpg' %}" alt="Orquesta Sinfónica" class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-cb-950 via-cb-900/50 to-transparent"></div>
+        </div>
+        <div class="hero-slide">
+            <img src="{% static 'img/Niños.jpg' %}" alt="Estudiantes" class="w-full h-full object-cover object-top">
+            <div class="absolute inset-0 bg-gradient-to-t from-cb-950 via-cb-900/50 to-transparent"></div>
+        </div>
+        <div class="hero-slide">
+            <img src="{% static 'img/Coro.jpg' %}" alt="Coro" class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-cb-950 via-cb-900/50 to-transparent"></div>
+        </div>
+    </div>
 
-    <div class="bg-cb-blue-800 text-white py-12 relative z-20 shadow-xl border-t border-cb-gold-600">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-cb-blue-700">
-                <div class="p-4">
-                    <div class="flex flex-col items-center">
-                        <span class="text-cb-gold-400 font-bold text-5xl font-serif mb-2">10</span>
-                        <span class="text-sm uppercase tracking-widest font-bold">Años de Historia</span>
-                        <p class="text-gray-300 text-sm mt-2">Formando artistas desde 2015</p>
+    <!-- Hero content -->
+    <div class="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 px-4 text-center">
+
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 bg-gold-400/20 border border-gold-400/40 text-gold-300 text-xs font-bold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase backdrop-blur-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse"></span>
+                Matrículas Abiertas {{ ciclo_actual|default:"2025-2026" }}
+            </div>
+
+            <h1 class="font-serif font-bold text-white text-5xl md:text-7xl leading-tight mb-6 drop-shadow-2xl">
+                Tu Vocación Musical<br>
+                <span class="text-gold-400 italic">Comienza Aquí</span>
+            </h1>
+
+            <p class="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                Formación musical profesional y <strong class="text-white font-bold">100% gratuita</strong>.
+                11 años de estudio, 19 instrumentos, título de Bachillerato Artístico en Música.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="{% url 'matriculas:nueva' %}"
+                   class="bg-gold-400 hover:bg-gold-300 text-cb-900 px-8 py-4 rounded-xl font-bold text-base shadow-2xl hover:shadow-gold-400/30 transition flex items-center gap-2 uppercase tracking-wider">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    Solicitar Matrícula
+                </a>
+                <a href="#malla"
+                   class="border-2 border-white/40 hover:border-white text-white px-8 py-4 rounded-xl font-bold text-base transition backdrop-blur-sm flex items-center gap-2 uppercase tracking-wider">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13"/></svg>
+                    Ver Malla Curricular
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-bounce">
+            <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+    </div>
+
+    <!-- Slide indicators -->
+    <div class="absolute bottom-8 right-8 z-20 flex gap-2">
+        <button onclick="goSlide(0)" class="slide-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition" data-index="0"></button>
+        <button onclick="goSlide(1)" class="slide-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition" data-index="1"></button>
+        <button onclick="goSlide(2)" class="slide-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition" data-index="2"></button>
+        <button onclick="goSlide(3)" class="slide-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition" data-index="3"></button>
+        <button onclick="goSlide(4)" class="slide-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition" data-index="4"></button>
+    </div>
+
+    <!-- Prev/Next -->
+    <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/20 hover:bg-cb-800/80 text-white flex items-center justify-center transition backdrop-blur-sm border border-white/10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/20 hover:bg-cb-800/80 text-white flex items-center justify-center transition backdrop-blur-sm border border-white/10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     STATS BAR
+═══════════════════════════════════════════════ -->
+<div class="bg-cb-800 border-y border-cb-700">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-cb-700">
+            <div class="py-8 px-6 text-center reveal">
+                <p class="font-serif font-bold text-gold-400 text-4xl">10</p>
+                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1">Años de Excelencia</p>
+                <p class="text-cb-50/60 text-xs mt-1">Fundado en 2015</p>
+            </div>
+            <div class="py-8 px-6 text-center reveal">
+                <p class="font-serif font-bold text-gold-400 text-4xl">{{ total_students|default:"300" }}+</p>
+                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1">Estudiantes Activos</p>
+                <p class="text-cb-50/60 text-xs mt-1">Ciclo 2025-2026</p>
+            </div>
+            <div class="py-8 px-6 text-center reveal">
+                <p class="font-serif font-bold text-gold-400 text-4xl">19</p>
+                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1">Instrumentos</p>
+                <p class="text-cb-50/60 text-xs mt-1">Vientos, cuerdas, percusión</p>
+            </div>
+            <div class="py-8 px-6 text-center reveal">
+                <p class="font-serif font-bold text-gold-400 text-4xl">100%</p>
+                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1">Gratuidad Total</p>
+                <p class="text-cb-50/60 text-xs mt-1">Institución fiscal</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     NOSOTROS
+═══════════════════════════════════════════════ -->
+<section id="nosotros" class="py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <!-- Imagen con overlay -->
+            <div class="relative reveal">
+                <div class="absolute -top-4 -left-4 w-full h-full rounded-2xl border-2 border-gold-400/30"></div>
+                <img src="{% static 'img/Orquesta_Sinfonica.jpg' %}" alt="Orquesta Sinfónica"
+                     class="relative rounded-2xl shadow-2xl w-full object-cover aspect-[4/3]">
+                <div class="absolute bottom-6 left-6 right-6 bg-cb-900/90 backdrop-blur-sm rounded-xl p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gold-400 flex items-center justify-center shrink-0 shadow">
+                        <svg class="w-6 h-6 text-cb-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">Título oficial reconocido</p>
+                        <p class="text-cb-50/70 text-xs">Bachiller en Artes, especialidad Música — Ministerio de Educación</p>
                     </div>
                 </div>
-                <div class="p-4">
-                    <div class="flex flex-col items-center">
-                        <span class="text-cb-gold-400 font-bold text-5xl font-serif mb-2">{{ total_students }}+</span>
-                        <span class="text-sm uppercase tracking-widest font-bold">Estudiantes</span>
-                        <p class="text-gray-300 text-sm mt-2">Instrumentistas en formación</p>
-                    </div>
+            </div>
+
+            <!-- Texto -->
+            <div class="reveal">
+                <div class="inline-flex items-center gap-2 text-gold-600 font-bold text-xs uppercase tracking-widest mb-4">
+                    <span class="w-8 h-px bg-gold-500"></span>
+                    Quiénes somos
                 </div>
-                <div class="p-4">
-                    <div class="flex flex-col items-center">
-                        <span class="text-cb-gold-400 font-bold text-5xl font-serif mb-2">100%</span>
-                        <span class="text-sm uppercase tracking-widest font-bold">Gratuidad</span>
-                        <p class="text-gray-300 text-sm mt-2">Institución Fiscal de Calidad</p>
+                <h2 class="font-serif font-bold text-cb-900 text-4xl md:text-5xl leading-tight mb-6">
+                    Una Institución de<br>
+                    <span class="text-cb-700 italic">Tradición Musical</span>
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                    El Conservatorio de Música <strong>"Bolívar"</strong> es una institución educativa fiscal ubicada en el corazón de Ambato, Ecuador. Desde 2015, formamos instrumentistas competentes con sólida base técnica y humanista.
+                </p>
+                <p class="text-gray-600 leading-relaxed mb-8">
+                    Nuestra formación de <strong>11 años</strong> culmina con el título de <em>Bachiller en Artes, especialidad Música</em>, habilitando a los egresados para integrarse en agrupaciones musicales profesionales y contribuir al desarrollo cultural del Ecuador.
+                </p>
+
+                <div class="space-y-3 mb-8">
+                    {% for item in "Formación gratuita y de calidad|Cuerpo docente especializado|Infraestructura adecuada para la práctica|Participación en eventos culturales nacionales"|split:"|" %}
+                    <div class="flex items-center gap-3 text-gray-700">
+                        <div class="w-5 h-5 rounded-full bg-gold-400/20 border border-gold-500 flex items-center justify-center shrink-0">
+                            <svg class="w-3 h-3 text-gold-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="text-sm font-medium">{{ item }}</span>
                     </div>
+                    {% endfor %}
+                </div>
+
+                <div class="flex gap-4">
+                    <a href="{% url 'matriculas:nueva' %}"
+                       class="bg-cb-800 hover:bg-cb-900 text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow-lg">
+                        Solicitar Matrícula
+                    </a>
+                    <a href="#proceso"
+                       class="border-2 border-cb-700 text-cb-800 hover:bg-cb-50 px-6 py-3 rounded-xl font-bold text-sm transition">
+                        Ver Proceso de Admisión
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <section id="oferta" class="bg-white py-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-serif font-bold text-cb-blue-800 mb-4">Nuestra Oferta Académica</h2>
-                <div class="w-24 h-1 bg-cb-gold-500 mx-auto rounded-full mb-6"></div>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Brindamos formación especializada para instrumentistas en una amplia variedad de instrumentos sinfónicos y populares.
-                </p>
+
+<!-- ═══════════════════════════════════════════════
+     MALLA CURRICULAR
+═══════════════════════════════════════════════ -->
+<section id="malla" class="py-28 bg-cb-25">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Encabezado -->
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 text-gold-600 font-bold text-xs uppercase tracking-widest mb-4">
+                <span class="w-8 h-px bg-gold-500"></span>
+                Plan de Estudios
+                <span class="w-8 h-px bg-gold-500"></span>
             </div>
+            <h2 class="font-serif font-bold text-cb-900 text-4xl md:text-5xl mb-4">Malla Curricular</h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                11 años de formación musical estructurada, desde los 7 años de edad, según normativa del Ministerio de Educación del Ecuador.
+            </p>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="group bg-cb-blue-50 p-8 rounded-xl border border-gray-100 hover:border-cb-gold-400 hover:shadow-xl transition duration-300">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow text-cb-blue-800 group-hover:bg-cb-blue-800 group-hover:text-cb-gold-400 transition">
-                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                        </svg>
+        <!-- Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8 reveal">
+            <button class="tab-btn active px-5 py-2.5 rounded-xl text-sm font-bold border-2 border-cb-800 text-cb-800 transition" onclick="switchTab('comunes', this)">Asignaturas Comunes</button>
+            <button class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold border-2 border-cb-800 text-cb-800 transition" onclick="switchTab('modulos', this)">Módulos Formativos</button>
+            <button class="tab-btn px-5 py-2.5 rounded-xl text-sm font-bold border-2 border-cb-800 text-cb-800 transition" onclick="switchTab('complementarias', this)">Asignaturas Complementarias</button>
+        </div>
+
+        <!-- TAB: Asignaturas Comunes -->
+        <div id="tab-comunes" class="tab-panel active reveal">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="bg-cb-800 px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-white font-bold text-lg">Asignaturas Comunes</h3>
+                        <p class="text-cb-50/70 text-sm">Materias obligatorias para todos los estudiantes según su año de estudio</p>
                     </div>
-                    <h3 class="text-2xl font-serif font-bold text-cb-blue-800 mb-3">Cuerdas y Piano</h3>
-                    <p class="text-gray-600">Violín, Viola, Violonchelo, Contrabajo, Guitarra y Piano. Desarrollo técnico y repertorio clásico y universal.</p>
+                    <div class="text-cb-50/50 text-xs text-right hidden md:block">
+                        <p>Números = horas semanales</p>
+                        <p>— = no se dicta ese año</p>
+                    </div>
                 </div>
-
-                <div class="group bg-cb-blue-50 p-8 rounded-xl border border-gray-100 hover:border-cb-gold-400 hover:shadow-xl transition duration-300">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow text-cb-blue-800 group-hover:bg-cb-blue-800 group-hover:text-cb-gold-400 transition">
-                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-serif font-bold text-cb-blue-800 mb-3">Vientos y Percusión</h3>
-                    <p class="text-gray-600">Flauta, Clarinete, Trompeta, Trombón, Saxofón y Percusión Sinfónica. Formación para banda y orquesta.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th class="malla-cell header text-left pl-4" style="min-width:220px">Asignatura</th>
+                                {% for y in "1°,2°,3°,4°,5°,6°,7°,8°,9°,10°,11°"|split:"," %}
+                                <th class="malla-cell header">{{ y }}<br><span class="font-normal text-xs opacity-70">{{ forloop.counter|add:6 }}a</span></th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in malla_comunes %}
+                            <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
+                                <td class="malla-cell section-header border-l-4 border-l-cb-700">{{ row.nombre }}</td>
+                                {% for h in row.horas %}
+                                <td class="malla-cell {% if h > 0 %}active-year{% endif %}">
+                                    {% if h > 0 %}{{ h }}{% else %}<span class="text-gray-300">—</span>{% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            <tr class="bg-cb-900 text-white font-bold">
+                                <td class="malla-cell text-left pl-4 text-white font-bold" style="min-width:220px">TOTAL horas/semana</td>
+                                {% for t in totales_comunes %}<td class="malla-cell text-white font-bold text-center">{{ t }}</td>{% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="group bg-cb-blue-50 p-8 rounded-xl border border-gray-100 hover:border-cb-gold-400 hover:shadow-xl transition duration-300">
-                    <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow text-cb-blue-800 group-hover:bg-cb-blue-800 group-hover:text-cb-gold-400 transition">
-                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
+            </div>
+            <!-- Info cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-cb-800 flex items-center justify-center shrink-0 text-gold-400">🎸</div>
+                    <div>
+                        <p class="font-bold text-cb-900 text-sm">Instrumento Principal</p>
+                        <p class="text-gray-500 text-xs mt-1">2 horas semanales durante los 11 años. El instrumento se elige en 1° año y se asigna formalmente en 2°.</p>
                     </div>
-                    <h3 class="text-2xl font-serif font-bold text-cb-blue-800 mb-3">Lenguaje Musical</h3>
-                    <p class="text-gray-600">Materias teóricas complementarias indispensables para la lectura, escritura y comprensión profunda de la música.</p>
+                </div>
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-cb-800 flex items-center justify-center shrink-0 text-gold-400">🎼</div>
+                    <div>
+                        <p class="font-bold text-cb-900 text-sm">Teoría y Lenguaje Musical</p>
+                        <p class="text-gray-500 text-xs mt-1">Base teórica desde el 3° año: Lenguaje Musical, Armonía, Formas Musicales, Historia de la Música.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-cb-800 flex items-center justify-center shrink-0 text-gold-400">🎭</div>
+                    <div>
+                        <p class="font-bold text-cb-900 text-sm">Agrupaciones Musicales</p>
+                        <p class="text-gray-500 text-xs mt-1">Coro, Orquesta Pedagógica y Orquesta Sinfónica para práctica musical colectiva desde el primer año.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section id="nosotros" class="py-24 bg-cb-blue-900 relative overflow-hidden">
-         <div class="absolute -left-20 -top-20 w-96 h-96 bg-cb-blue-800 rounded-full opacity-30 blur-3xl"></div>
-        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-cb-gold-600 rounded-full opacity-10 blur-3xl"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                
+        <!-- TAB: Módulos Formativos -->
+        <div id="tab-modulos" class="tab-panel reveal">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="bg-cb-800 px-6 py-4">
+                    <h3 class="text-white font-bold text-lg">Módulos Formativos</h3>
+                    <p class="text-cb-50/70 text-sm">Formación profesional orientada al trabajo musical (9° al 11° año)</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th class="malla-cell header text-left pl-4" style="min-width:240px">Módulo</th>
+                                {% for y in "1°,2°,3°,4°,5°,6°,7°,8°,9°,10°,11°"|split:"," %}
+                                <th class="malla-cell header">{{ y }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in malla_modulos %}
+                            <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
+                                <td class="malla-cell section-header border-l-4 border-l-gold-500">{{ row.nombre }}</td>
+                                {% for h in row.horas %}
+                                <td class="malla-cell {% if h > 0 %}active-year{% endif %}">
+                                    {% if h > 0 %}{{ h }}{% else %}<span class="text-gray-300">—</span>{% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 flex gap-4">
+                <span class="text-2xl shrink-0">💡</span>
                 <div>
-                    <h2 class="text-4xl font-serif font-bold text-white mb-6">Identidad Institucional</h2>
-                    <p class="text-gray-300 mb-6 text-lg leading-relaxed">
-                        El Conservatorio de Música "Bolívar" es una institución fiscal con <strong class="text-cb-gold-400">10 años de trayectoria</strong> en la ciudad de Ambato. 
-                    </p>
-                    <p class="text-gray-300 mb-8 text-lg leading-relaxed">
-                        Nuestra misión es formar instrumentistas competentes, con una sólida base técnica y humanista, capaces de integrar agrupaciones musicales y contribuir al desarrollo cultural del Ecuador.
-                    </p>
-                    
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center text-white">
-                            <span class="w-2 h-2 bg-cb-gold-400 rounded-full mr-3"></span>
-                            Formación integral en todos los instrumentos.
-                        </li>
-                        <li class="flex items-center text-white">
-                            <span class="w-2 h-2 bg-cb-gold-400 rounded-full mr-3"></span>
-                            Cuerpo docente especializado.
-                        </li>
-                        <li class="flex items-center text-white">
-                            <span class="w-2 h-2 bg-cb-gold-400 rounded-full mr-3"></span>
-                            Infraestructura adecuada para la práctica musical.
-                        </li>
-                    </ul>
-
-                    <a href="#" class="inline-block bg-transparent border border-cb-gold-400 text-cb-gold-400 px-6 py-3 rounded hover:bg-cb-gold-400 hover:text-cb-blue-900 transition font-bold">
-                        Conocer Historia
-                    </a>
+                    <p class="font-bold text-amber-800">Orientación al Perfil Profesional</p>
+                    <p class="text-amber-700 text-sm mt-1">Los módulos formativos de los últimos años preparan al estudiante para el mercado laboral musical: producción, arreglos y orientación laboral en el sector artístico.</p>
                 </div>
-
-                <div class="relative">
-                     <img src="{% static 'img/Orquesta_Sinfonica.jpg' %}" alt="Auditorio Conservatorio" class="rounded-lg shadow-2xl border-4 border-cb-blue-800">
-                </div>
-
             </div>
         </div>
-    </section>
 
-    <footer class="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div class="col-span-1 md:col-span-1">
-                    <span class="text-xl font-serif font-bold text-white mb-2 block">CONSERVATORIO "BOLÍVAR"</span>
-                    <p class="text-cb-gold-500 text-sm font-bold uppercase tracking-wider mb-4">Ambato - Ecuador</p>
-                    <p class="text-gray-500 text-sm leading-relaxed">
-                        Institución educativa dedicada a la enseñanza musical profesional.
+        <!-- TAB: Asignaturas Complementarias -->
+        <div id="tab-complementarias" class="tab-panel reveal">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="bg-cb-800 px-6 py-4">
+                    <h3 class="text-white font-bold text-lg">Asignaturas Complementarias</h3>
+                    <p class="text-cb-50/70 text-sm">Materias especializadas para perfiles vocales e instrumentales específicos</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th class="malla-cell header text-left pl-4" style="min-width:240px">Asignatura</th>
+                                {% for y in "1°,2°,3°,4°,5°,6°,7°,8°,9°,10°,11°"|split:"," %}
+                                <th class="malla-cell header">{{ y }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in malla_complementarias %}
+                            <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
+                                <td class="malla-cell section-header border-l-4 border-l-green-500">{{ row.nombre }}</td>
+                                {% for h in row.horas %}
+                                <td class="malla-cell {% if h > 0 %}active-year{% endif %}">
+                                    {% if h > 0 %}{{ h }}{% else %}<span class="text-gray-300">—</span>{% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                    <span class="text-2xl shrink-0">🎤</span>
+                    <div>
+                        <p class="font-bold text-cb-900 text-sm">Para estudiantes de Canto</p>
+                        <p class="text-gray-500 text-xs mt-1">Teatro para Cantantes, Fonética y Repertorio especializado en los últimos años de la carrera.</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                    <span class="text-2xl shrink-0">🎹</span>
+                    <div>
+                        <p class="font-bold text-cb-900 text-sm">Para estudiantes de Piano</p>
+                        <p class="text-gray-500 text-xs mt-1">Acompañamiento para Pianistas, habilidad clave para el trabajo musical profesional.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nota legal -->
+        <p class="text-center text-xs text-gray-400 mt-8 reveal">
+            Malla curricular según Acuerdo Ministerial — Bachillerato Complementario Artístico, Músico. Ministerio de Educación del Ecuador.
+        </p>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     INSTRUMENTOS
+═══════════════════════════════════════════════ -->
+<section id="instrumentos" class="py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 text-gold-600 font-bold text-xs uppercase tracking-widest mb-4">
+                <span class="w-8 h-px bg-gold-500"></span>
+                Especialidades
+                <span class="w-8 h-px bg-gold-500"></span>
+            </div>
+            <h2 class="font-serif font-bold text-cb-900 text-4xl md:text-5xl mb-4">19 Instrumentos</h2>
+            <p class="text-gray-500 text-lg max-w-xl mx-auto">Elige tu instrumento principal al ingresar. Los nuevos estudiantes realizan un proceso de selección en 1° año.</p>
+        </div>
+
+        <!-- Grid de instrumentos -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 reveal">
+            {% for inst in instrumentos_lista %}
+            <div class="instrument-card bg-cb-25 border border-gray-100 rounded-xl p-4 text-center cursor-default">
+                <div class="w-10 h-10 rounded-full bg-cb-800 text-gold-400 flex items-center justify-center mx-auto mb-2 text-lg shadow-sm">
+                    {% if "Flauta" in inst %}🎷
+                    {% elif "Piano" in inst or "Acordeón" in inst %}🎹
+                    {% elif "Guitarra" in inst or "Arpa" in inst %}🎸
+                    {% elif "Violín" in inst or "Viola" in inst or "Violonchelo" in inst or "Contrabajo" in inst %}🎻
+                    {% elif "Trompeta" in inst or "Tuba" in inst or "Trombón" in inst or "Corno" in inst %}🎺
+                    {% elif "Percusión" in inst %}🥁
+                    {% elif "Canto" in inst %}🎤
+                    {% else %}🎵{% endif %}
+                </div>
+                <p class="text-cb-900 font-bold text-xs leading-tight">{{ inst }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Familias -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 reveal">
+            <div class="text-center">
+                <div class="w-14 h-14 rounded-2xl bg-cb-800 flex items-center justify-center mx-auto mb-3 shadow-lg text-2xl">🎻</div>
+                <p class="font-bold text-cb-900 text-sm">Cuerdas</p>
+                <p class="text-gray-400 text-xs mt-1">Violín, Viola, Violonchelo, Contrabajo, Guitarra, Arpa</p>
+            </div>
+            <div class="text-center">
+                <div class="w-14 h-14 rounded-2xl bg-cb-800 flex items-center justify-center mx-auto mb-3 shadow-lg text-2xl">🎺</div>
+                <p class="font-bold text-cb-900 text-sm">Vientos Metal</p>
+                <p class="text-gray-400 text-xs mt-1">Trompeta, Trombón, Tuba, Corno Francés</p>
+            </div>
+            <div class="text-center">
+                <div class="w-14 h-14 rounded-2xl bg-cb-800 flex items-center justify-center mx-auto mb-3 shadow-lg text-2xl">🎷</div>
+                <p class="font-bold text-cb-900 text-sm">Vientos Madera</p>
+                <p class="text-gray-400 text-xs mt-1">Flauta, Oboe, Clarinete, Saxofón, Fagot</p>
+            </div>
+            <div class="text-center">
+                <div class="w-14 h-14 rounded-2xl bg-cb-800 flex items-center justify-center mx-auto mb-3 shadow-lg text-2xl">🥁</div>
+                <p class="font-bold text-cb-900 text-sm">Teclado y Percusión</p>
+                <p class="text-gray-400 text-xs mt-1">Piano, Acordeón, Percusión, Canto</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PROCESO DE ADMISIÓN
+═══════════════════════════════════════════════ -->
+<section id="proceso" class="py-28 bg-cb-900 relative overflow-hidden">
+    <!-- Decoración de fondo -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gold-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-cb-700/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <div class="text-center mb-16 reveal">
+            <div class="inline-flex items-center gap-2 text-gold-400 font-bold text-xs uppercase tracking-widest mb-4">
+                <span class="w-8 h-px bg-gold-500"></span>
+                Matrículas Abiertas
+                <span class="w-8 h-px bg-gold-500"></span>
+            </div>
+            <h2 class="font-serif font-bold text-white text-4xl md:text-5xl mb-4">Proceso de Admisión</h2>
+            <p class="text-cb-50/70 text-lg max-w-xl mx-auto">Regístrate en línea en minutos. Solo necesitas los documentos básicos y ¡listo!</p>
+        </div>
+
+        <!-- Pasos -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16 reveal">
+            {% for step in "Formulario en Línea|Subir Documentos|Revisión Automática|Matrícula Aprobada"|split:"|" %}
+            <div class="relative">
+                {% if not forloop.last %}
+                <div class="hidden md:block absolute top-8 left-1/2 w-full h-px bg-gold-400/20"></div>
+                {% endif %}
+                <div class="relative z-10 text-center">
+                    <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center font-serif font-bold text-2xl shadow-xl
+                        {% if forloop.first %}bg-gold-400 text-cb-900
+                        {% else %}bg-cb-800 text-white border border-cb-700{% endif %}">
+                        {{ forloop.counter }}
+                    </div>
+                    <p class="text-white font-bold text-sm mb-1">{{ step }}</p>
+                    <p class="text-cb-50/50 text-xs">
+                        {% if forloop.counter == 1 %}Ingresa tus datos personales y elige tu año
+                        {% elif forloop.counter == 2 %}Cédula, certificados y foto carnet
+                        {% elif forloop.counter == 3 %}IA verifica tus documentos automáticamente
+                        {% else %}Secretaría aprueba y asigna tus materias{% endif %}
                     </p>
                 </div>
-                
-                <div>
-                    <h4 class="font-bold text-white mb-6 uppercase text-sm tracking-wider border-b border-gray-700 pb-2 inline-block">Enlaces</h4>
-                    <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="#inicio" class="hover:text-cb-gold-400 transition">Inicio</a></li>
-                        <li><a href="#oferta" class="hover:text-cb-gold-400 transition">Oferta Académica</a></li>
-                        <li><a href="{% url 'users:register' %}" class="hover:text-cb-gold-400 transition">Inscripciones</a></li>
-                    </ul>
-                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-                <div>
-                    <h4 class="font-bold text-white mb-6 uppercase text-sm tracking-wider border-b border-gray-700 pb-2 inline-block">Contacto</h4>
-                    <ul class="space-y-3 text-gray-400 text-sm">
-                        <li class="flex items-start gap-2">
-                            <svg class="w-5 h-5 text-cb-gold-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>Calle Joaquín Lalama y Bolívar (Centro)</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-cb-gold-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>info@conservatoriobolivar.edu.ec</span>
-                        </li>
-                    </ul>
+        <!-- Documentos requeridos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 reveal">
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-7">
+                <h3 class="text-white font-bold text-lg mb-5 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-gold-400 text-cb-900 flex items-center justify-center text-sm font-bold">📄</span>
+                    Documentos Requeridos
+                </h3>
+                <ul class="space-y-3">
+                    {% for doc in "Copia de cédula de identidad o acta de nacimiento|Certificado de aprobación de educación regular (año anterior)|Certificado del conservatorio (para 2° año en adelante)|Foto carnet reciente (fondo blanco)"|split:"|" %}
+                    <li class="flex items-start gap-3 text-cb-50/80 text-sm">
+                        <span class="w-5 h-5 rounded-full border border-gold-400/50 text-gold-400 flex items-center justify-center text-xs shrink-0 mt-0.5">✓</span>
+                        {{ doc }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-7">
+                <h3 class="text-white font-bold text-lg mb-5 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-gold-400 text-cb-900 flex items-center justify-center text-sm font-bold">ℹ</span>
+                    Requisitos de Edad
+                </h3>
+                <div class="space-y-2">
+                    {% for req in "1° año: mínimo 7 años de edad|2° año: mínimo 8 años de edad|3° año: mínimo 9 años de edad|4° - 11°: según progresión (hasta 17 años)"|split:"|" %}
+                    <div class="flex items-center gap-3 text-cb-50/80 text-sm">
+                        <span class="text-gold-400 text-xs font-bold shrink-0">▸</span>
+                        {{ req }}
+                    </div>
+                    {% endfor %}
                 </div>
-                
-                <div>
-                    <h4 class="font-bold text-white mb-6 uppercase text-sm tracking-wider border-b border-gray-700 pb-2 inline-block">Intranet</h4>
-                    <p class="text-gray-500 text-xs mb-4">Acceso exclusivo para docentes y estudiantes.</p>
+                <div class="mt-5 bg-gold-400/10 border border-gold-400/30 rounded-xl p-3">
+                    <p class="text-gold-300 text-xs font-bold">Institución 100% gratuita</p>
+                    <p class="text-cb-50/60 text-xs mt-0.5">No se cobra ningún valor por matrícula, pensión ni materiales.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA principal -->
+        <div class="text-center reveal">
+            <a href="{% url 'matriculas:nueva' %}"
+               class="inline-flex items-center gap-3 bg-gold-400 hover:bg-gold-300 text-cb-900 px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl transition uppercase tracking-wider">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Iniciar mi Matrícula en Línea
+            </a>
+            <p class="text-cb-50/40 text-sm mt-4">
+                ¿Ya tienes solicitud? <a href="{% url 'matriculas:seguimiento' %}" class="text-gold-400 hover:underline">Consulta su estado aquí</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     GALERÍA — imágenes del conservatorio
+═══════════════════════════════════════════════ -->
+<section class="py-0">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-0">
+        <div class="overflow-hidden group aspect-square">
+            <img src="{% static 'img/Banda_Sinfonica.jpg' %}" alt="Banda" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+        </div>
+        <div class="overflow-hidden group aspect-square">
+            <img src="{% static 'img/Coro.jpg' %}" alt="Coro" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+        </div>
+        <div class="overflow-hidden group aspect-square">
+            <img src="{% static 'img/Guitarra.jpg' %}" alt="Guitarra" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+        </div>
+        <div class="overflow-hidden group aspect-square">
+            <img src="{% static 'img/Orquesta_Sinfonica.jpg' %}" alt="Orquesta" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer class="bg-cb-950 text-white pt-20 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+
+            <!-- Marca -->
+            <div class="md:col-span-1">
+                <img src="{% static 'img/LogoCB.jpg' %}" alt="Logo CB" class="h-16 w-auto mb-4 rounded">
+                <p class="font-serif font-bold text-xl text-white leading-tight mb-1">CONSERVATORIO<br>"BOLÍVAR"</p>
+                <p class="text-gold-500 text-xs font-bold uppercase tracking-widest mb-4">Ambato, Ecuador</p>
+                <p class="text-gray-500 text-sm leading-relaxed">Institución educativa fiscal dedicada a la formación musical profesional.</p>
+            </div>
+
+            <!-- Links -->
+            <div>
+                <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-5 pb-2 border-b border-white/10">Institución</h4>
+                <ul class="space-y-2.5 text-gray-400 text-sm">
+                    <li><a href="#nosotros" class="hover:text-gold-400 transition">Quiénes somos</a></li>
+                    <li><a href="#malla" class="hover:text-gold-400 transition">Malla Curricular</a></li>
+                    <li><a href="#instrumentos" class="hover:text-gold-400 transition">Instrumentos</a></li>
+                    <li><a href="#proceso" class="hover:text-gold-400 transition">Proceso de Admisión</a></li>
+                </ul>
+            </div>
+
+            <!-- Trámites -->
+            <div>
+                <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-5 pb-2 border-b border-white/10">Trámites en Línea</h4>
+                <ul class="space-y-2.5 text-gray-400 text-sm">
+                    <li><a href="{% url 'matriculas:nueva' %}" class="hover:text-gold-400 transition flex items-center gap-1.5"><span class="text-gold-500 text-xs">▸</span> Nueva Matrícula</a></li>
+                    <li><a href="{% url 'matriculas:seguimiento' %}" class="hover:text-gold-400 transition flex items-center gap-1.5"><span class="text-gold-500 text-xs">▸</span> Estado de Solicitud</a></li>
                     {% if user.is_authenticated %}
-                    <a href="{% url 'users:dashboard' %}" class="inline-block bg-cb-blue-800 text-white px-4 py-2 rounded text-sm font-bold hover:bg-cb-blue-700 transition w-full text-center border border-cb-blue-700">
-                        Ir al Panel
-                    </a>
-                     <a href="{% url 'users:logout' %}" class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded text-sm font-bold hover:bg-gray-300 transition w-full text-center mt-2">
-                        Cerrar Sesión
-                    </a>
+                    <li><a href="{% url 'matriculas:renovacion' %}" class="hover:text-gold-400 transition flex items-center gap-1.5"><span class="text-gold-500 text-xs">▸</span> Renovar Matrícula</a></li>
+                    <li><a href="{% url 'users:dashboard' %}" class="hover:text-gold-400 transition flex items-center gap-1.5"><span class="text-gold-500 text-xs">▸</span> Mi Panel</a></li>
                     {% else %}
-                    <a href="{% url 'users:login' %}" class="inline-block bg-cb-blue-800 text-white px-4 py-2 rounded text-sm font-bold hover:bg-cb-blue-700 transition w-full text-center border border-cb-blue-700">
-                        Ir al Sistema Académico
-                    </a>
+                    <li><a href="{% url 'users:login' %}" class="hover:text-gold-400 transition flex items-center gap-1.5"><span class="text-gold-500 text-xs">▸</span> Ingresar al Sistema</a></li>
                     {% endif %}
-                </div>
+                </ul>
             </div>
-            
-            <div class="text-center text-gray-600 text-xs pt-8 border-t border-gray-800">
-                <p>&copy; 2025 Conservatorio de Música Bolívar. Todos los derechos reservados.</p>
+
+            <!-- Contacto -->
+            <div>
+                <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-5 pb-2 border-b border-white/10">Contacto</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-4 h-4 text-gold-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>Calle Joaquín Lalama y Bolívar, Centro Histórico, Ambato</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-gold-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <span>info@conservatoriobolivar.edu.ec</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="w-4 h-4 text-gold-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Lunes a Viernes: 8:00 - 17:00</span>
+                    </li>
+                </ul>
             </div>
         </div>
-    </footer>
 
-    <script>
-        // Menu Móvil
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
+        <!-- Bottom bar -->
+        <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-gray-600 text-xs">© 2025 Conservatorio de Música "Bolívar". Todos los derechos reservados.</p>
+            <div class="flex items-center gap-4 text-xs text-gray-600">
+                <a href="{% url 'matriculas:nueva' %}" class="hover:text-gold-400 transition">Matrícula en Línea</a>
+                <span class="text-gray-700">·</span>
+                <a href="{% url 'matriculas:seguimiento' %}" class="hover:text-gold-400 transition">Seguimiento</a>
+                <span class="text-gray-700">·</span>
+                <a href="{% url 'users:login' %}" class="hover:text-gold-400 transition">Sistema Académico</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
-        // Carousel Logic
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const totalSlides = slides.length;
 
-        function showSlide(index) {
-            // Remove active class from all
-            slides.forEach(slide => slide.classList.remove('active'));
-            
-            // Handle index bounds
-            if (index >= totalSlides) currentSlide = 0;
-            else if (index < 0) currentSlide = totalSlides - 1;
-            else currentSlide = index;
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+// ─── Navbar scroll effect ────────────────────────
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+});
 
-            // Add active class to current
-            slides[currentSlide].classList.add('active');
-        }
+// ─── Mobile menu ────────────────────────────────
+document.getElementById('menu-btn').addEventListener('click', () => {
+    const menu = document.getElementById('mobile-menu');
+    const iconMenu = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+    menu.classList.toggle('hidden');
+    iconMenu.classList.toggle('hidden');
+    iconClose.classList.toggle('hidden');
+});
 
-        function moveSlide(direction) {
-            showSlide(currentSlide + direction);
-            resetInterval(); // Reset timer when manually interacted
-        }
+// Close mobile menu on link click
+document.querySelectorAll('#mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.add('hidden');
+        document.getElementById('icon-menu').classList.remove('hidden');
+        document.getElementById('icon-close').classList.add('hidden');
+    });
+});
 
-        function goToSlide(index) {
-            showSlide(index);
-            resetInterval();
-        }
+// ─── Hero Carousel ──────────────────────────────
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.slide-dot');
 
-        // Auto Advance
-        let slideInterval = setInterval(() => {
-            moveSlide(1);
-        }, 5000); // Change every 5 seconds
+function updateDots() {
+    dots.forEach((d, i) => {
+        d.style.background = i === currentSlide ? '#fccb00' : 'rgba(255,255,255,0.3)';
+        d.style.transform = i === currentSlide ? 'scale(1.4)' : 'scale(1)';
+    });
+}
 
-        function resetInterval() {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                moveSlide(1);
-            }, 5000);
-        }
-    </script>
+function showSlide(idx) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = ((idx % slides.length) + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    updateDots();
+}
+
+function moveSlide(dir) { showSlide(currentSlide + dir); resetTimer(); }
+function goSlide(idx) { showSlide(idx); resetTimer(); }
+
+let timer = setInterval(() => moveSlide(1), 6000);
+function resetTimer() { clearInterval(timer); timer = setInterval(() => moveSlide(1), 6000); }
+updateDots();
+
+// ─── Scroll reveal ──────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── Malla curricular tabs ───────────────────────
+function switchTab(name, btn) {
+    // Panels
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    // Buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+</script>
+
 </body>
 </html>

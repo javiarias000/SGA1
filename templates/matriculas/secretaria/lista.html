@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Matrículas — Secretaría</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Lato','sans-serif'],serif:['Playfair Display','serif']},colors:{'cb-blue':{900:'#00204a',800:'#002e6d',700:'#004299',50:'#f0f5ff'},'cb-gold':{400:'#fccb00',500:'#e0ac00',600:'#b38600'}}}}}</script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+    <!-- Sidebar + Layout -->
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-cb-blue-900 text-white flex flex-col shrink-0">
+            <div class="px-6 py-6 border-b border-cb-blue-800">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-10 w-auto mb-3" onerror="this.style.display='none'">
+                <p class="font-serif font-bold text-lg leading-tight">CONSERVATORIO<br>"BOLÍVAR"</p>
+                <p class="text-cb-gold-400 text-xs font-bold uppercase tracking-wider mt-1">Secretaría</p>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-1">
+                <a href="{% url 'matriculas:secretaria_lista' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-cb-blue-800 text-white font-bold text-sm">
+                    <span>📋</span> Matrículas
+                </a>
+                <a href="{% url 'teachers:teacher_dashboard' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-cb-blue-800 text-cb-blue-100 text-sm transition">
+                    <span>📊</span> Dashboard Docente
+                </a>
+                <a href="{% url 'teachers:estudiantes' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-cb-blue-800 text-cb-blue-100 text-sm transition">
+                    <span>👥</span> Estudiantes
+                </a>
+                <div class="border-t border-cb-blue-800 my-3"></div>
+                <a href="{% url 'users:logout' %}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-cb-blue-800 text-cb-blue-100 text-sm transition">
+                    <span>🚪</span> Cerrar Sesión
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="flex-1 overflow-auto">
+
+            <!-- Topbar -->
+            <div class="bg-white shadow-sm px-8 py-4 flex items-center justify-between border-b border-gray-200">
+                <div>
+                    <h1 class="font-serif font-bold text-cb-blue-900 text-2xl">Gestión de Matrículas</h1>
+                    <p class="text-sm text-gray-500">Panel de revisión y aprobación de solicitudes</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-500">{{ request.user.username }}</span>
+                    {% if stats.novedades > 0 %}
+                    <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                        {{ stats.novedades }} novedades
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="p-8">
+
+                <!-- Stats cards -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                    <a href="?estado=" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 text-center hover:border-cb-blue-300 transition">
+                        <p class="text-3xl font-bold text-cb-blue-900">{{ stats.total }}</p>
+                        <p class="text-xs text-gray-500 uppercase font-bold mt-1">Total</p>
+                    </a>
+                    <a href="?estado=PENDIENTE" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 text-center hover:border-gray-400 transition">
+                        <p class="text-3xl font-bold text-gray-500">{{ stats.pendientes }}</p>
+                        <p class="text-xs text-gray-500 uppercase font-bold mt-1">Pendientes</p>
+                    </a>
+                    <a href="?estado=NOVEDAD" class="bg-white rounded-xl shadow-sm border {% if stats.novedades > 0 %}border-amber-400 bg-amber-50{% else %}border-gray-200{% endif %} p-4 text-center hover:border-amber-400 transition">
+                        <p class="text-3xl font-bold text-amber-500">{{ stats.novedades }}</p>
+                        <p class="text-xs text-amber-600 uppercase font-bold mt-1">⚠ Novedades IA</p>
+                    </a>
+                    <a href="?estado=EN_REVISION" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 text-center hover:border-cb-blue-300 transition">
+                        <p class="text-3xl font-bold text-cb-blue-700">{{ stats.en_revision }}</p>
+                        <p class="text-xs text-gray-500 uppercase font-bold mt-1">En Revisión</p>
+                    </a>
+                    <a href="?estado=APROBADA" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 text-center hover:border-green-300 transition">
+                        <p class="text-3xl font-bold text-green-600">{{ stats.aprobadas }}</p>
+                        <p class="text-xs text-gray-500 uppercase font-bold mt-1">Aprobadas</p>
+                    </a>
+                </div>
+
+                <!-- Filtros y búsqueda -->
+                <form method="get" class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 flex flex-wrap gap-3 items-end">
+                    <div class="flex-1 min-w-48">
+                        <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Buscar</label>
+                        <input type="text" name="q" value="{{ busqueda }}" placeholder="Nombre o cédula..."
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1 uppercase">Estado</label>
+                        <select name="estado" class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-cb-blue-700">
+                            <option value="">Todos</option>
+                            {% for val, label in estados %}
+                            <option value="{{ val }}" {% if estado_filtro == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-cb-blue-800 text-white font-bold px-5 py-2 rounded-lg text-sm hover:bg-cb-blue-900 transition">
+                        Filtrar
+                    </button>
+                    {% if estado_filtro or busqueda %}
+                    <a href="?" class="text-sm text-gray-400 hover:text-gray-700 py-2">✕ Limpiar</a>
+                    {% endif %}
+                </form>
+
+                <!-- Tabla de solicitudes -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Estudiante</th>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Año / Ciclo</th>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Tipo</th>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">IA</th>
+                                <th class="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha</th>
+                                <th class="px-4 py-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {% for sol in solicitudes %}
+                            <tr class="hover:bg-gray-50 transition {% if sol.tiene_novedades_ia and sol.estado == 'NOVEDAD' %}bg-amber-50{% endif %}">
+                                <td class="px-4 py-3">
+                                    <p class="font-bold text-gray-900">{{ sol.nombre_completo }}</p>
+                                    <p class="text-xs text-gray-400">{{ sol.cedula }}</p>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="font-bold text-cb-blue-800">{{ sol.anio_solicitado }}°</span>
+                                    <span class="text-gray-400 text-xs ml-1">{{ sol.ciclo_lectivo }}</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs px-2 py-0.5 rounded font-bold
+                                        {% if sol.tipo == 'NUEVA' %}bg-cb-blue-100 text-cb-blue-800
+                                        {% else %}bg-purple-100 text-purple-700{% endif %}">
+                                        {{ sol.get_tipo_display }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="text-xs px-2 py-1 rounded-full font-bold
+                                        {% if sol.estado == 'APROBADA' %}bg-green-100 text-green-700
+                                        {% elif sol.estado == 'RECHAZADA' %}bg-red-100 text-red-700
+                                        {% elif sol.estado == 'NOVEDAD' %}bg-amber-100 text-amber-700
+                                        {% elif sol.estado == 'EN_REVISION' %}bg-blue-100 text-blue-700
+                                        {% else %}bg-gray-100 text-gray-600{% endif %}">
+                                        {{ sol.get_estado_display }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {% if sol.tiene_novedades_ia %}
+                                        <span title="IA detectó novedades" class="text-lg">⚠️</span>
+                                    {% elif sol.revision_ia_completada %}
+                                        <span title="IA: documentos válidos" class="text-lg">✅</span>
+                                    {% else %}
+                                        <span title="Análisis IA pendiente" class="text-lg">⏳</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3 text-xs text-gray-400">{{ sol.created_at|date:"d/m/Y" }}</td>
+                                <td class="px-4 py-3">
+                                    <a href="{% url 'matriculas:secretaria_detalle' sol.pk %}"
+                                       class="bg-cb-blue-800 hover:bg-cb-blue-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                                        Revisar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="px-4 py-12 text-center text-gray-400">
+                                    <p class="text-4xl mb-2">📭</p>
+                                    <p class="font-bold">No hay solicitudes</p>
+                                    <p class="text-xs mt-1">{% if estado_filtro or busqueda %}Prueba con otros filtros{% else %}Las solicitudes aparecerán aquí{% endif %}</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>

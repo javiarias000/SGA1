@@ -33,10 +33,10 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(','
 
 INSTALLED_APPS = [
     # Apps propias
-    'teachers',     
-    'students',      
-    'classes',      
-    'users', 
+    'teachers',
+    'students',
+    'classes',
+    'users',
     'subjects',
     'academia',
 
@@ -46,7 +46,28 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'matriculas',
+
+    # Third-party
+    'rest_framework',
+    'rest_framework.authtoken',
+    'graphene_django',
+    'django_celery_beat',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'music_registry.schema.schema',
+}
+
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
