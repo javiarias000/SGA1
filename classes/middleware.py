@@ -33,7 +33,8 @@ class RoleBasedAccessMiddleware:
             path.startswith('/api/') or
             path.startswith('/matriculas/nueva') or
             path.startswith('/matriculas/seguimiento') or
-            path.startswith('/matriculas/confirmacion')):
+            path.startswith('/matriculas/confirmacion') or
+            path.startswith('/agente/')):
             return self.get_response(request)
 
         # URLs públicas

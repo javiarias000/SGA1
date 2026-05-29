@@ -1,0 +1,16 @@
+{% with colors="blue:bg-blue-50 text-blue-700 border-blue-100,red:bg-red-50 text-red-700 border-red-100,amber:bg-amber-50 text-amber-700 border-amber-100,green:bg-green-50 text-green-700 border-green-100" %}
+<div class="rounded-xl border p-4
+  {% if color == 'blue' %}bg-blue-50 border-blue-100{% endif %}
+  {% if color == 'red' %}bg-red-50 border-red-100{% endif %}
+  {% if color == 'amber' %}bg-amber-50 border-amber-100{% endif %}
+  {% if color == 'green' %}bg-green-50 border-green-100{% endif %}
+">
+  <p class="text-2xl font-bold
+    {% if color == 'blue' %}text-blue-700{% endif %}
+    {% if color == 'red' %}text-red-700{% endif %}
+    {% if color == 'amber' %}text-amber-700{% endif %}
+    {% if color == 'green' %}text-green-700{% endif %}
+  ">{{ value }}</p>
+  <p class="text-xs font-medium text-gray-500 mt-1">{{ label }}</p>
+</div>
+{% endwith %}

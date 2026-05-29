@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Configuración del Agente IA{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+
+  <nav class="text-sm text-gray-400 mb-6">
+    <a href="{% url 'agente:panel_alertas' %}" class="hover:text-indigo-600">← Panel de Alertas</a>
+  </nav>
+
+  <h1 class="text-2xl font-bold text-gray-900 mb-2">⚙️ Configuración del Agente</h1>
+  <p class="text-gray-500 text-sm mb-8">Controla cuándo y cómo actúa el agente IA académico</p>
+
+  {% if messages %}
+    {% for msg in messages %}
+    <div class="mb-4 px-4 py-3 rounded-xl text-sm
+      {% if msg.tags == 'success' %}bg-green-50 text-green-700 border border-green-200
+      {% else %}bg-red-50 text-red-700 border border-red-200{% endif %}">
+      {{ msg }}
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" class="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100">
+    {% csrf_token %}
+
+    <div class="p-6">
+      <h2 class="font-semibold text-gray-800 mb-4">Estado del agente</h2>
+      <label class="flex items-center gap-3 cursor-pointer">
+        <input type="checkbox" name="analisis_activo" {% if config.analisis_activo %}checked{% endif %}
+               class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-400">
+        <span class="text-sm font-medium text-gray-700">Análisis automático activo</span>
+      </label>
+      <p class="text-xs text-gray-400 mt-1 ml-8">Si está desactivado, no se generarán nuevas alertas automáticas</p>
+    </div>
+
+    <div class="p-6">
+      <h2 class="font-semibold text-gray-800 mb-4">Umbrales de alerta</h2>
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Nota mínima antes de alertar
+          </label>
+          <input type="number" name="umbral_nota_alerta" value="{{ config.umbral_nota_alerta }}"
+                 min="0" max="10" step="0.1"
+                 class="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+          <p class="text-xs text-gray-400 mt-1">Estudiantes con promedio por debajo de este valor serán alertados (ej: 6.00)</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            % inasistencia máximo
+          </label>
+          <input type="number" name="umbral_inasistencia_pct" value="{{ config.umbral_inasistencia_pct }}"
+                 min="0" max="100" step="1"
+                 class="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+          <p class="text-xs text-gray-400 mt-1">Porcentaje de ausencias a partir del cual se genera alerta (ej: 20)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <h2 class="font-semibold text-gray-800 mb-4">Notificaciones por email</h2>
+      <div class="space-y-3">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" name="notificar_docentes" {% if config.notificar_docentes %}checked{% endif %}
+                 class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-400">
+          <span class="text-sm text-gray-700">Enviar email al <strong>docente</strong> cuando se detecte una alerta</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" name="notificar_representantes" {% if config.notificar_representantes %}checked{% endif %}
+                 class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-400">
+          <span class="text-sm text-gray-700">Enviar email al <strong>representante</strong> del estudiante</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <h2 class="font-semibold text-gray-800 mb-4">Ciclo lectivo activo</h2>
+      <input type="text" name="ciclo_lectivo_activo" value="{{ config.ciclo_lectivo_activo }}"
+             placeholder="ej: 2025-2026"
+             class="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+      <p class="text-xs text-gray-400 mt-1">Deja en blanco para detectar automáticamente por fecha</p>
+    </div>
+
+    <div class="p-6 flex justify-end">
+      <button type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl transition">
+        Guardar configuración
+      </button>
+    </div>
+  </form>
+
+  <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mt-6 text-sm text-amber-800">
+    <p class="font-semibold mb-1">📌 Programación automática</p>
+    <p>El análisis completo corre <strong>cada lunes a las 07:00</strong> via Celery Beat.
+       Las notificaciones se envían <strong>diariamente a las 08:00</strong>.
+       Puedes lanzarlo manualmente desde el panel de alertas.</p>
+  </div>
+
+</div>
+{% endblock %}

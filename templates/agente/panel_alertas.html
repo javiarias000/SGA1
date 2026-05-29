@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Panel de Alertas — Agente IA{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+
+  <!-- Cabecera -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <span class="text-2xl">🤖</span> Agente IA — Panel de Alertas
+      </h1>
+      <p class="text-gray-500 text-sm mt-1">Seguimiento automático del rendimiento estudiantil</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="{% url 'agente:asistente_informe' %}"
+         class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+        ✍️ Mejorar Informe
+      </a>
+      {% if request.user.is_staff %}
+      <form method="post" action="{% url 'agente:lanzar_analisis' %}">
+        {% csrf_token %}
+        <button type="submit"
+                class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+                onclick="return confirm('¿Lanzar análisis completo de todos los estudiantes?')">
+          ⚡ Lanzar Análisis
+        </button>
+      </form>
+      <a href="{% url 'agente:configuracion' %}"
+         class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition">
+        ⚙️ Configurar
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+    {% include "agente/_stat_card.html" with label="Total alertas" value=stats.total color="blue" %}
+    {% include "agente/_stat_card.html" with label="Críticas" value=stats.criticas color="red" %}
+    {% include "agente/_stat_card.html" with label="Sin revisar" value=stats.nuevas color="amber" %}
+    {% include "agente/_stat_card.html" with label="Resueltas" value=stats.resueltas color="green" %}
+  </div>
+
+  <!-- Filtros -->
+  <form method="get" class="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex flex-wrap gap-3 items-end">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Buscar estudiante</label>
+      <input name="q" value="{{ filtros.q }}" placeholder="Nombre..."
+             class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm w-48 focus:ring-2 focus:ring-indigo-400 outline-none">
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Severidad</label>
+      <select name="severidad" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+        <option value="">Todas</option>
+        {% for val, label in severidades %}
+          <option value="{{ val }}" {% if filtros.severidad == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Tipo</label>
+      <select name="tipo" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+        <option value="">Todos</option>
+        {% for val, label in tipos %}
+          <option value="{{ val }}" {% if filtros.tipo == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Estado</label>
+      <select name="estado" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-400 outline-none">
+        <option value="">Todos</option>
+        {% for val, label in estados %}
+          <option value="{{ val }}" {% if filtros.estado == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg transition">
+      Filtrar
+    </button>
+    <a href="{% url 'agente:panel_alertas' %}" class="text-sm text-gray-500 hover:text-gray-700 py-2">Limpiar</a>
+  </form>
+
+  <!-- Tabla de alertas -->
+  {% if alertas %}
+  <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <tr>
+          <th class="px-4 py-3 text-left">Estudiante</th>
+          <th class="px-4 py-3 text-left">Tipo</th>
+          <th class="px-4 py-3 text-left">Materia</th>
+          <th class="px-4 py-3 text-center">Severidad</th>
+          <th class="px-4 py-3 text-center">Estado</th>
+          <th class="px-4 py-3 text-left">Fecha</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {% for alerta in alertas %}
+        <tr class="hover:bg-gray-50 transition {% if alerta.estado == 'NUEVA' %}bg-amber-50{% endif %}">
+          <td class="px-4 py-3 font-medium text-gray-900">
+            {{ alerta.estudiante.usuario.nombre }}
+            {% if alerta.estado == 'NUEVA' %}
+              <span class="ml-1 inline-block w-2 h-2 bg-amber-400 rounded-full"></span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-gray-600">{{ alerta.get_tipo_display }}</td>
+          <td class="px-4 py-3 text-gray-500">{{ alerta.materia.name|default:"—" }}</td>
+          <td class="px-4 py-3 text-center">
+            {% include "agente/_badge_severidad.html" with severidad=alerta.severidad %}
+          </td>
+          <td class="px-4 py-3 text-center">
+            {% include "agente/_badge_estado.html" with estado=alerta.estado %}
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-xs">{{ alerta.created_at|date:"d/m/Y H:i" }}</td>
+          <td class="px-4 py-3 text-right">
+            <a href="{% url 'agente:detalle_alerta' alerta.pk %}"
+               class="text-indigo-600 hover:text-indigo-800 font-medium text-xs">Ver →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="bg-white rounded-xl border border-gray-200 py-16 text-center text-gray-400">
+    <div class="text-4xl mb-3">✅</div>
+    <p class="font-medium">No hay alertas con los filtros seleccionados</p>
+    <p class="text-sm mt-1">El agente analizará automáticamente a los estudiantes cada semana</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

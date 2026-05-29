@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Asistente de Informes — IA{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        ✍️ Asistente de Informes
+      </h1>
+      <p class="text-gray-500 text-sm mt-1">El agente mejora la redacción de tus informes de clase manteniendo tu contenido intacto</p>
+    </div>
+    <a href="{% url 'agente:panel_alertas' %}" class="text-sm text-gray-400 hover:text-indigo-600">← Volver a alertas</a>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-6">
+
+    <!-- Formulario -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <h2 class="font-semibold text-gray-800 mb-4">Tu informe original</h2>
+      <form method="post" id="form-informe">
+        {% csrf_token %}
+        <input type="hidden" name="activity_id" id="activity_id_input">
+        <textarea name="texto_original" id="texto_original" rows="12"
+          placeholder="Escribe aquí el informe de la clase: temas trabajados, rendimiento del estudiante, observaciones, tareas asignadas..."
+          class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm resize-none focus:ring-2 focus:ring-indigo-400 outline-none leading-relaxed"
+        >{% if informe_mejorado %}{{ informe_mejorado.texto_original }}{% endif %}</textarea>
+
+        <div class="flex items-center justify-between mt-4">
+          <p class="text-xs text-gray-400" id="char-count">0 caracteres</p>
+          <button type="submit" id="btn-mejorar"
+                  class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl transition disabled:opacity-50">
+            <span id="btn-icon">🤖</span>
+            <span id="btn-label">Mejorar con IA</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Resultado -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col">
+      <h2 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        ✨ Versión mejorada
+        {% if informe_mejorado %}
+          <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-normal">Listo</span>
+        {% endif %}
+      </h2>
+
+      {% if informe_mejorado %}
+        <!-- Texto mejorado -->
+        <div id="texto-mejorado-box"
+             class="flex-1 bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-line mb-4 overflow-y-auto">{{ informe_mejorado.texto_mejorado }}</div>
+
+        {% if informe_mejorado.sugerencias_ia %}
+        <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 text-xs text-gray-600 mb-4">
+          <p class="font-semibold text-gray-700 mb-1">💬 Cambios realizados:</p>
+          <p class="whitespace-pre-line">{{ informe_mejorado.sugerencias_ia }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Acciones -->
+        <div class="flex gap-2">
+          <button onclick="copiarTexto()"
+                  class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 rounded-xl transition">
+            📋 Copiar texto
+          </button>
+          {% if informe_mejorado.activity %}
+          <button onclick="aceptarInforme({{ informe_mejorado.pk }})"
+                  class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium py-2 rounded-xl transition">
+            ✅ Aplicar al registro
+          </button>
+          {% endif %}
+          <button onclick="rechazarInforme({{ informe_mejorado.pk }})"
+                  class="px-4 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium py-2 rounded-xl transition">
+            ✕
+          </button>
+        </div>
+
+      {% else %}
+        <div class="flex-1 flex items-center justify-center text-gray-300 flex-col gap-3">
+          <div class="text-5xl">🤖</div>
+          <p class="text-sm text-center">Escribe tu informe a la izquierda<br>y pulsa <strong>Mejorar con IA</strong></p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Historial -->
+  {% if historial %}
+  <div class="bg-white rounded-2xl border border-gray-200 p-6 mt-6">
+    <h2 class="font-semibold text-gray-800 mb-4">Historial reciente</h2>
+    <div class="space-y-3">
+      {% for h in historial %}
+      <div class="flex items-start gap-4 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm text-gray-700 truncate">{{ h.texto_original|truncatechars:120 }}</p>
+          <p class="text-xs text-gray-400 mt-0.5">{{ h.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+        <span class="text-xs px-2 py-0.5 rounded-full
+          {% if h.estado == 'ACEPTADO' %}bg-green-100 text-green-700
+          {% elif h.estado == 'RECHAZADO' %}bg-red-100 text-red-600
+          {% else %}bg-gray-100 text-gray-500{% endif %}
+        ">{{ h.get_estado_display }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+  const textarea = document.getElementById('texto_original');
+  const charCount = document.getElementById('char-count');
+  const btnMejorar = document.getElementById('btn-mejorar');
+  const btnLabel = document.getElementById('btn-label');
+  const btnIcon = document.getElementById('btn-icon');
+
+  textarea.addEventListener('input', () => {
+    charCount.textContent = textarea.value.length + ' caracteres';
+  });
+  charCount.textContent = textarea.value.length + ' caracteres';
+
+  document.getElementById('form-informe').addEventListener('submit', () => {
+    btnIcon.textContent = '⏳';
+    btnLabel.textContent = 'Procesando...';
+    btnMejorar.disabled = true;
+  });
+
+  function copiarTexto() {
+    const box = document.getElementById('texto-mejorado-box');
+    navigator.clipboard.writeText(box.innerText).then(() => {
+      const btn = event.target;
+      btn.textContent = '✅ Copiado';
+      setTimeout(() => btn.textContent = '📋 Copiar texto', 2000);
+    });
+  }
+
+  async function aceptarInforme(pk) {
+    const res = await fetch(`/agente/informes/${pk}/aceptar/`, {
+      method: 'POST',
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      body: new URLSearchParams({accion: 'aceptar'}),
+    });
+    const data = await res.json();
+    alert(data.mensaje || data.error);
+    if (data.ok) window.location.reload();
+  }
+
+  async function rechazarInforme(pk) {
+    if (!confirm('¿Descartar esta versión mejorada?')) return;
+    const res = await fetch(`/agente/informes/${pk}/aceptar/`, {
+      method: 'POST',
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      body: new URLSearchParams({accion: 'rechazar'}),
+    });
+    const data = await res.json();
+    if (data.ok) window.location.href = "{% url 'agente:asistente_informe' %}";
+  }
+</script>
+{% endblock %}
