@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile_app/providers/student_provider.dart';
-import 'package:mobile_app/models/student.dart';
-import 'package:mobile_app/screens/student_form_screen.dart';
-import 'package:mobile_app/screens/enrollment_screen.dart';
-import 'package:mobile_app/screens/grade_entry_screen.dart';
-import 'package:mobile_app/screens/attendance_screen.dart';
+import '../core/theme.dart';
+import '../providers/auth_provider.dart';
+import '../providers/student_provider.dart';
+import '../models/student.dart';
+import 'student_form_screen.dart';
 
 class StudentDetailScreen extends StatefulWidget {
   final int studentId;
@@ -20,161 +20,178 @@ class _StudentDetailScreenState extends State<StudentDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StudentProvider>(context, listen: false).fetchStudentDetail(widget.studentId);
+      context.read<StudentProvider>().fetchStudentDetail(widget.studentId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final studentProvider = Provider.of<StudentProvider>(context);
+    final prov = context.watch<StudentProvider>();
+    final auth = context.watch<AuthProvider>();
+    final isDocente = auth.userRole == 'DOCENTE' || auth.isStaff;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Details'),
+        title: const Text('Detalle Estudiante'),
         actions: [
-          if (studentProvider.selectedStudent != null)
+          if (prov.selectedStudent != null && isDocente)
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StudentFormScreen(student: studentProvider.selectedStudent),
-                  ),
-                );
-              },
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => StudentFormScreen(student: prov.selectedStudent))),
             ),
-          if (studentProvider.selectedStudent != null)
+          if (prov.selectedStudent != null && isDocente)
             IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _confirmDelete(studentProvider),
+              icon: const Icon(Icons.delete_outline),
+              onPressed: () => _confirmDelete(prov),
             ),
         ],
       ),
-      body: Center(
-        child: studentProvider.isLoading
-            ? const CircularProgressIndicator()
-            : studentProvider.errorMessage.isNotEmpty
-                ? Text(
-                    studentProvider.errorMessage,
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  )
-                : studentProvider.selectedStudent == null
-                    ? const Text('Student not found.')
-                    : _buildStudentDetails(studentProvider.selectedStudent!),
+      body: prov.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : prov.errorMessage.isNotEmpty
+              ? Center(child: Text(prov.errorMessage, style: const TextStyle(color: Colors.red)))
+              : prov.selectedStudent == null
+                  ? const Center(child: Text('Estudiante no encontrado.'))
+                  : _buildDetail(prov.selectedStudent!, isDocente),
+    );
+  }
+
+  Widget _buildDetail(Student s, bool isDocente) {
+    final nombre = s.name ?? s.usuario?.nombre ?? 'Sin nombre';
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        // Header card
+        Card(
+          color: AppColors.primary,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(children: [
+              CircleAvatar(
+                radius: 28, backgroundColor: Colors.white24,
+                child: Text(nombre[0].toUpperCase(),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(nombre, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                if (s.gradeLevelName != null)
+                  Text(s.gradeLevelName!, style: const TextStyle(color: Colors.white70, fontSize: 13)),
+              ])),
+            ]),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        _section('Datos personales', [
+          _row(Icons.email, 'Email', s.usuario?.email ?? '—'),
+          _row(Icons.phone, 'Teléfono', s.usuario?.phone ?? '—'),
+          _row(Icons.badge, 'Cédula', s.usuario?.cedula ?? '—'),
+        ]),
+
+        _section('Representante', [
+          _row(Icons.person, 'Nombre', s.parentName ?? '—'),
+          _row(Icons.email_outlined, 'Email', s.parentEmail ?? '—'),
+          _row(Icons.phone_outlined, 'Teléfono', s.parentPhone ?? '—'),
+        ]),
+
+        _section('Académico', [
+          _row(Icons.school, 'Docente', s.teacherFullName ?? '—'),
+          _row(Icons.grade, 'Código', s.registrationCode ?? '—'),
+        ]),
+
+        const SizedBox(height: 16),
+        if (isDocente) ...[
+          const Divider(),
+          const Text('Acciones rápidas',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textMuted)),
+          const SizedBox(height: 12),
+          _actionBtn(Icons.grade, 'Ingresar Calificación', AppColors.aar, () {
+            context.push('/grades/entry/${s.id}?name=${Uri.encodeComponent(nombre)}');
+          }),
+          const SizedBox(height: 8),
+          _actionBtn(Icons.book, 'Ver Libreta', AppColors.primary, () {
+            context.push('/libreta/${s.id}?name=${Uri.encodeComponent(nombre)}');
+          }),
+          const SizedBox(height: 8),
+          _actionBtn(Icons.smart_toy_outlined, 'Analizar con IA', AppColors.warning, () async {
+            // trigger análisis IA
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Iniciando análisis IA...')),
+            );
+          }),
+        ],
+      ]),
+    );
+  }
+
+  Widget _section(String title, List<Widget> rows) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textMuted)),
+      ),
+      Card(
+        child: Column(children: rows),
+      ),
+      const SizedBox(height: 8),
+    ]);
+  }
+
+  Widget _row(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(children: [
+        Icon(icon, size: 18, color: AppColors.primary),
+        const SizedBox(width: 10),
+        Text('$label: ', style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+        Expanded(
+          child: Text(value,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis),
+        ),
+      ]),
+    );
+  }
+
+  Widget _actionBtn(IconData icon, String label, Color color, VoidCallback onTap) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, color: color, size: 18),
+        label: Text(label, style: TextStyle(color: color)),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: color.withOpacity(0.4)),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
       ),
     );
   }
 
-  void _confirmDelete(StudentProvider provider) {
+  void _confirmDelete(StudentProvider prov) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Student'),
-        content: const Text('Are you sure you want to delete this student?'),
+      builder: (_) => AlertDialog(
+        title: const Text('Eliminar estudiante'),
+        content: const Text('¿Seguro que deseas eliminar este estudiante?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          TextButton(
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          ElevatedButton(
             onPressed: () async {
-              await provider.deleteStudent(provider.selectedStudent!.id);
+              await prov.deleteStudent(prov.selectedStudent!.id);
               if (mounted) {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Student deleted successfully')),
-                );
-                // Go back to list since student is gone
-                Provider.of<StudentProvider>(context, listen: false).clearSelection();
                 Navigator.pop(context);
               }
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: const Text('Eliminar'),
           ),
         ],
       ),
     );
-  }
-
-  Widget _buildStudentDetails(Student student) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Name: ${student.name ?? student.usuario?.nombre ?? "N/A"}',
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Text('Email: ${student.usuario?.email ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Phone: ${student.usuario?.phone ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Cedula: ${student.usuario?.cedula ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Role: ${student.usuario?.rol ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          const Divider(),
-          Text('Parent Name: ${student.parentName ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Parent Email: ${student.parentEmail ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Parent Phone: ${student.parentPhone ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          const Divider(),
-          Text('Grade Level: ${student.gradeLevelName ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Teacher: ${student.teacherFullName ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          const Divider(),
-          Text('Active: ${student.active ? "Yes" : "No"}', style: const TextStyle(fontSize: 16)),
-          Text('Registration Code: ${student.registrationCode ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          Text('Created At: ${student.createdAt.toLocal().toShortDateString()}', style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 10),
-          Text('Notes: ${student.notes ?? "N/A"}', style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EnrollmentScreen(studentId: student.id),
-                ),
-              );
-            },
-            icon: const Icon(Icons.school),
-            label: const Text('Enroll in Class'),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GradeEntryScreen(
-                    studentId: student.id,
-                    subject: 'Matemáticas', // Fixed for now, usually selected from enrollments
-                    parcial: '1P',
-                    quimestre: 'Q1',
-                  ),
-                ),
-              );
-            },
-            icon: const Icon(Icons.grade),
-            label: const Text('Enter Grades'),
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AttendanceScreen(studentId: student.id),
-                ),
-              );
-            },
-            icon: const Icon(Icons.calendar_today),
-            label: const Text('View Attendance'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-extension on DateTime {
-  String toShortDateString() {
-    return '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
   }
 }

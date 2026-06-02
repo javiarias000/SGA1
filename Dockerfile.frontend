@@ -1,40 +1,27 @@
-# Build args (passed by orchestrator, not all used)
-ARG ALLOWED_HOSTS
-ARG DB_NAME
-ARG DB_USER
-ARG DB_PASSWORD
-ARG DB_HOST
-ARG DB_PORT
-ARG SECRET_KEY
-ARG REDIS_HOST
-ARG REDIS_PORT
-ARG EVOLUTION_API_URL
-ARG EVOLUTION_API_KEY
-ARG EVOLUTION_INSTANCE_NAME
-ARG GIT_SHA
-
-# Build stage - use official Flutter image with latest Dart
-FROM ghcr.io/cirruslabs/flutter:latest as builder
+# ─── Build stage ──────────────────────────────────────────────────────────────
+FROM ghcr.io/cirruslabs/flutter:latest AS builder
 
 WORKDIR /app
+COPY mobile_app/pubspec.yaml mobile_app/pubspec.lock ./
+RUN flutter pub get
+
 COPY mobile_app .
 
-# Build web app
-RUN flutter pub get && \
-    flutter build web --release
+# API_URL vacío = llama al mismo origen (nginx proxy hace el resto)
+ARG API_URL=http://localhost
+RUN flutter build web \
+    --dart-define=API_URL=${API_URL} \
+    --release
 
-# Production stage
+# ─── Production stage ─────────────────────────────────────────────────────────
 FROM nginx:alpine
 
-# Copy nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy built Flutter web artifacts
 COPY --from=builder /app/build/web /usr/share/nginx/html
 
-EXPOSE 80 443
+EXPOSE 80
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --quiet --tries=1 --spider http://localhost:80/ || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

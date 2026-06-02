@@ -28,6 +28,13 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Orígenes de confianza para CSRF — incluye todos los puertos de desarrollo local
+_csrf_origins = os.environ.get(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://localhost,http://localhost:80,http://localhost:8000,http://localhost:8001,http://127.0.0.1,http://127.0.0.1:8000,http://127.0.0.1:8001',
+)
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+
 
 # Application definition
 

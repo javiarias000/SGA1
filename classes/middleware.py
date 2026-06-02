@@ -31,6 +31,12 @@ class RoleBasedAccessMiddleware:
             path.startswith('/reset/') or
             path.startswith('/graphql/') or
             path.startswith('/api/') or
+            # DRF endpoints de apps — llevan token en header, no sesión
+            path.startswith('/classes/api/') or
+            path.startswith('/students/api/') or
+            path.startswith('/teachers/api/') or
+            path.startswith('/academia/api/') or
+            path.startswith('/matriculas/api/') or
             path.startswith('/matriculas/nueva') or
             path.startswith('/matriculas/seguimiento') or
             path.startswith('/matriculas/confirmacion') or
