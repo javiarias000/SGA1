@@ -1,0 +1,183 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Malla Curricular — {{ site_title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .malla-container { max-width: 1200px; }
+  .ciclo-section { margin-bottom: 36px; }
+  .ciclo-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; border-radius: 8px; margin-bottom: 12px;
+    color: white; font-weight: 700; font-size: 16px;
+  }
+  .ciclo-basica      { background: linear-gradient(90deg,#059669,#10B981); }
+  .ciclo-media       { background: linear-gradient(90deg,#1D4ED8,#3B82F6); }
+  .ciclo-superior    { background: linear-gradient(90deg,#6D28D9,#8B5CF6); }
+  .ciclo-bachillerato{ background: linear-gradient(90deg,#B45309,#F59E0B); }
+
+  .niveles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .nivel-card {
+    background: white; border: 1px solid #E5E7EB;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .nivel-card-header {
+    padding: 10px 14px; background: #F9FAFB;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nivel-card-header h4 { margin: 0; font-size: 14px; color: #111827; }
+  .nivel-card-header .badge {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE;
+  }
+  .materias-list { padding: 8px 14px; }
+  .materia-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0; border-bottom: 1px solid #F3F4F6; font-size: 13px;
+  }
+  .materia-row:last-child { border-bottom: none; }
+  .tipo-badge {
+    font-size: 9px; padding: 1px 5px; border-radius: 3px;
+    font-weight: 600; white-space: nowrap;
+  }
+  .tipo-INSTRUMENTO { background:#FEF9C3; color:#854D0E; }
+  .tipo-TEORIA      { background:#EFF6FF; color:#1D4ED8; }
+  .tipo-AGRUPACION  { background:#F0FDF4; color:#166534; }
+  .tipo-OTRO        { background:#F3F4F6; color:#374151; }
+  .obligatoria-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .dot-obl  { background:#10B981; }
+  .dot-opt  { background:#D1D5DB; }
+
+  .nivel-card-footer {
+    padding: 8px 14px; background: #F9FAFB;
+    border-top: 1px solid #E5E7EB;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn-aplicar {
+    font-size: 11px; padding: 4px 10px; border-radius: 5px;
+    background: #3B82F6; color: white; text-decoration: none;
+    border: none; cursor: pointer;
+  }
+  .btn-aplicar:hover { background: #1D4ED8; color: white; }
+  .btn-editar {
+    font-size: 11px; padding: 4px 10px; border-radius: 5px;
+    background: white; color: #6B7280; text-decoration: none;
+    border: 1px solid #D1D5DB; cursor: pointer;
+  }
+  .btn-editar:hover { color: #111827; }
+
+  .legend { display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:12px; color:#6B7280; }
+
+  .empty-card {
+    border: 2px dashed #E5E7EB; background: #FAFAFA;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; min-height: 120px; padding: 20px;
+    text-align: center; color: #9CA3AF; font-size: 13px; border-radius: 10px;
+  }
+  .page-actions { margin-bottom: 20px; display:flex; gap:10px; flex-wrap:wrap; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="malla-container">
+
+  <div class="page-actions">
+    <a href="{% url 'admin:classes_gradelevel_changelist' %}" class="btn-editar" style="padding:8px 16px;font-size:13px;">
+      ✏️ Editar Niveles
+    </a>
+    <a href="{% url 'admin:classes_mallacurricular_changelist' %}" class="btn-editar" style="padding:8px 16px;font-size:13px;">
+      📋 Ver tabla completa de malla
+    </a>
+    <a href="{% url 'admin:subjects_subject_changelist' %}" class="btn-editar" style="padding:8px 16px;font-size:13px;">
+      📚 Gestionar Materias
+    </a>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="obligatoria-dot dot-obl"></span> Materia obligatoria</div>
+    <div class="legend-item"><span class="obligatoria-dot dot-opt"></span> Materia opcional</div>
+    <div class="legend-item"><span class="tipo-badge tipo-INSTRUMENTO">INST</span> Instrumento</div>
+    <div class="legend-item"><span class="tipo-badge tipo-TEORIA">TEOR</span> Teoría</div>
+    <div class="legend-item"><span class="tipo-badge tipo-AGRUPACION">AGRU</span> Agrupación</div>
+  </div>
+
+  {% for ciclo_label, niveles in ciclos.items %}
+  {% with ciclo_key=niveles.first.ciclo %}
+  <div class="ciclo-section">
+    <div class="ciclo-header ciclo-{{ ciclo_key|lower }}">
+      <span>
+        {% if ciclo_key == 'BASICA' %}🌱
+        {% elif ciclo_key == 'MEDIA' %}📘
+        {% elif ciclo_key == 'SUPERIOR' %}🎓
+        {% else %}🏆{% endif %}
+      </span>
+      <span>Ciclo {{ ciclo_label }}</span>
+      <span style="font-size:12px;font-weight:400;opacity:.8;">
+        {{ niveles|length }} nivel{{ niveles|length|pluralize:"es" }}
+      </span>
+    </div>
+
+    <div class="niveles-grid">
+      {% for nivel in niveles %}
+      <div class="nivel-card">
+        <div class="nivel-card-header">
+          <h4>{{ nivel.get_level_display }} — Paralelo {{ nivel.section }}</h4>
+          <span class="badge">{{ nivel.students.count }} alumnos</span>
+        </div>
+
+        <div class="materias-list">
+          {% for entry in nivel.malla_curricular.all %}
+          <div class="materia-row">
+            <span class="obligatoria-dot {% if entry.obligatoria %}dot-obl{% else %}dot-opt{% endif %}"
+                  title="{% if entry.obligatoria %}Obligatoria{% else %}Opcional{% endif %}"></span>
+            <span class="tipo-badge tipo-{{ entry.subject.tipo_materia }}">
+              {{ entry.subject.tipo_materia|slice:":4" }}
+            </span>
+            <span style="flex:1;">{{ entry.subject.name }}</span>
+          </div>
+          {% empty %}
+          <p style="color:#9CA3AF;font-size:12px;padding:8px 0;margin:0;">Sin materias asignadas</p>
+          {% endfor %}
+        </div>
+
+        <div class="nivel-card-footer">
+          <span style="font-size:11px;color:#6B7280;">
+            {{ nivel.malla_curricular.count }} materia{{ nivel.malla_curricular.count|pluralize:"s" }}
+          </span>
+          <div style="display:flex;gap:6px;">
+            <a href="{% url 'admin:classes_gradelevel_aplicar_malla' nivel.pk %}"
+               class="btn-aplicar"
+               onclick="return confirm('¿Aplicar malla por defecto a {{ nivel.get_level_display }}? Se añadirán las materias faltantes.')">
+              ✨ Malla defecto
+            </a>
+            <a href="{% url 'admin:classes_gradelevel_change' nivel.pk %}" class="btn-editar">
+              ✏️ Editar
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endwith %}
+  {% empty %}
+  <div class="empty-card" style="max-width:400px;">
+    <p style="font-size:32px;margin:0;">📚</p>
+    <p>No hay niveles configurados.</p>
+    <a href="{% url 'admin:classes_gradelevel_add' %}" class="btn-aplicar" style="margin-top:8px;padding:8px 16px;">
+      + Crear primer nivel
+    </a>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}

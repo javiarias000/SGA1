@@ -9,17 +9,23 @@ class TeacherInline(admin.TabularInline):
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'tipo_materia', 'get_teacher_count', 'get_assigned_teachers', 'description')
+    list_display = ('name', 'tipo_materia', 'get_niveles_malla', 'get_teacher_count')
     list_filter = ('tipo_materia',)
     search_fields = ('name', 'description')
-    inlines = [TeacherInline]  
+    inlines = [TeacherInline]
+    ordering = ['tipo_materia', 'name']
+
+    def get_niveles_malla(self, obj):
+        entries = obj.malla_entries.select_related('nivel').order_by('nivel__level')
+        if not entries.exists():
+            return '—'
+        niveles = ', '.join(e.nivel.get_level_display() for e in entries[:5])
+        if entries.count() > 5:
+            niveles += f' (+{entries.count() - 5} más)'
+        return niveles
+    get_niveles_malla.short_description = 'En niveles'
 
     def get_teacher_count(self, obj):
-        return obj.teachers.count()
-    get_teacher_count.short_description = 'Número de Docentes'
-
-    def get_assigned_teachers(self, obj):
-        # Fetch all teachers assigned to the subject
-        teachers = obj.teachers.all()
-        return ", ".join([teacher.full_name for teacher in teachers]) if teachers else "Sin docentes asignados"
-    get_assigned_teachers.short_description = 'Docentes Asignados'
+        count = obj.teachers.count()
+        return f'{count} docente{"s" if count != 1 else ""}'
+    get_teacher_count.short_description = 'Docentes'

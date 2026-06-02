@@ -15,14 +15,38 @@ from users.models import Usuario
 from teachers.models import Teacher # Import Teacher model
 
 class GradeLevel(models.Model):
-    """Modelo para Grado y Paralelo"""
-    LEVEL_CHOICES = [
-        ('1', 'Primero'), ('2', 'Segundo'), ('3', 'Tercero'), ('4', 'Cuarto'),
-        ('5', 'Quinto'), ('6', 'Sexto'), ('7', 'Séptimo'), ('8', 'Octavo'),
-        ('9', 'Noveno'), ('10', 'Décimo'), ('11', 'Onceavo'),
+    """Nivel educativo del conservatorio (Básica/Media/Superior/Bachillerato)."""
+
+    CICLO_CHOICES = [
+        ('BASICA',        'Básica'),
+        ('MEDIA',         'Media'),
+        ('SUPERIOR',      'Superior'),
+        ('BACHILLERATO',  'Bachillerato'),
     ]
 
+    LEVEL_CHOICES = [
+        ('1',  'Básica 1'),       ('2',  'Básica 2'),
+        ('3',  'Media 3'),        ('4',  'Media 4'),        ('5',  'Media 5'),
+        ('6',  'Superior 6'),     ('7',  'Superior 7'),     ('8',  'Superior 8'),
+        ('9',  'Bachillerato 9'), ('10', 'Bachillerato 10'),('11', 'Bachillerato 11'),
+    ]
+
+    # Mapa automático nivel → ciclo
+    _NIVEL_CICLO = {
+        '1': 'BASICA', '2': 'BASICA',
+        '3': 'MEDIA',  '4': 'MEDIA',  '5': 'MEDIA',
+        '6': 'SUPERIOR', '7': 'SUPERIOR', '8': 'SUPERIOR',
+        '9': 'BACHILLERATO', '10': 'BACHILLERATO', '11': 'BACHILLERATO',
+    }
+
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES, verbose_name="Nivel")
+    ciclo = models.CharField(
+        max_length=20,
+        choices=CICLO_CHOICES,
+        blank=True,
+        verbose_name="Ciclo",
+        help_text="Se calcula automáticamente del nivel si se deja en blanco.",
+    )
     section = models.CharField(max_length=100, verbose_name="Paralelo/Sección")
     docente_tutor = models.ForeignKey(
         Usuario,
@@ -31,14 +55,24 @@ class GradeLevel(models.Model):
         blank=True,
         limit_choices_to={'rol': 'DOCENTE'},
         related_name='tutored_grade_levels',
-        verbose_name='Docente Tutor'
+        verbose_name='Docente Tutor',
     )
 
     class Meta:
         unique_together = ('level', 'section')
-        verbose_name = "Grado"
-        verbose_name_plural = "Grados"
+        verbose_name = "Nivel / Paralelo"
+        verbose_name_plural = "Niveles / Paralelos"
         ordering = ['level', 'section']
+
+    def save(self, *args, **kwargs):
+        # Derivar ciclo del nivel si no se especificó
+        if not self.ciclo and self.level:
+            self.ciclo = self._NIVEL_CICLO.get(self.level, '')
+        super().save(*args, **kwargs)
+
+    @property
+    def nombre_completo(self):
+        return f"{self.get_level_display()} — {self.section}"
 
     def __str__(self):
         return f"{self.get_level_display()} '{self.section}'"
@@ -934,3 +968,45 @@ class DeberEntrega(models.Model):
         if self.estado == 'entregado' and self.esta_tarde():
             self.estado = 'tarde'
         super().save(*args, **kwargs)
+
+
+# ============================================
+# MALLA CURRICULAR
+# ============================================
+
+class MallaCurricular(models.Model):
+    """
+    Define qué materias pertenecen a cada nivel educativo.
+    Es la plantilla base para la matrícula automática.
+    """
+    nivel = models.ForeignKey(
+        GradeLevel,
+        on_delete=models.CASCADE,
+        related_name='malla_curricular',
+        verbose_name='Nivel',
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name='malla_entries',
+        verbose_name='Materia',
+    )
+    obligatoria = models.BooleanField(
+        default=True,
+        verbose_name='Obligatoria',
+        help_text='Si es obligatoria se inscribe automáticamente al asignar el nivel.',
+    )
+    orden = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name='Orden',
+        help_text='Orden de visualización dentro del nivel.',
+    )
+
+    class Meta:
+        unique_together = ('nivel', 'subject')
+        verbose_name = 'Entrada de Malla Curricular'
+        verbose_name_plural = 'Malla Curricular'
+        ordering = ['nivel__level', 'orden', 'subject__name']
+
+    def __str__(self):
+        return f"{self.nivel} — {self.subject.name}"

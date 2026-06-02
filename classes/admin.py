@@ -1,41 +1,175 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from django.urls import reverse # Import reverse
-from django.http import HttpResponseRedirect # Import HttpResponseRedirect
+from django.urls import reverse, path
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.contrib import messages
+from django.db import transaction
 
 from .models import (
-    Activity,
-    Asistencia,
-    Calificacion,
-    CalificacionParcial,
-    Clase,
-    Enrollment,
-    GradeLevel,
-    Horario,
-    PromedioCache,
-    TipoAporte,
+    Activity, Asistencia, Calificacion, CalificacionParcial,
+    Clase, Enrollment, GradeLevel, Horario, PromedioCache,
+    TipoAporte, MallaCurricular,
 )
+from subjects.models import Subject
 from students.models import Student
+
+
+# ─── Inline: Malla Curricular dentro de GradeLevel ───────────────────────────
+
+class MallaCurricularInline(admin.TabularInline):
+    model = MallaCurricular
+    extra = 1
+    fields = ('subject', 'obligatoria', 'orden')
+    autocomplete_fields = ['subject']
+    ordering = ('orden', 'subject__name')
+    verbose_name = 'Materia en la malla'
+    verbose_name_plural = 'Materias de este nivel'
+
+
+# ─── GradeLevel Admin ─────────────────────────────────────────────────────────
 
 class StudentInline(admin.TabularInline):
     model = Student
-    extra = 1
-    fields = ('usuario', 'active',)
+    extra = 0
+    fields = ('usuario', 'active')
     autocomplete_fields = ['usuario']
     show_change_link = True
 
+
 @admin.register(GradeLevel)
 class GradeLevelAdmin(admin.ModelAdmin):
-    list_display = ['level', 'section', 'docente_tutor', 'get_tutor_name'] # Add docente_tutor to list_display
-    list_filter = ['level', 'section', 'docente_tutor'] # Add docente_tutor to list_filter
-    search_fields = ['level', 'section', 'docente_tutor__nombre'] # Add docente_tutor__nombre to search_fields
-    autocomplete_fields = ['docente_tutor'] # Add autocomplete for docente_tutor
-    inlines = [StudentInline]
-    
-    def get_tutor_name(self, obj):
-        # Manejo de error si docente_tutor no existe en tu modelo actual
-        return obj.docente_tutor.nombre if obj.docente_tutor else 'N/A' # Corrected to reference the field
-    get_tutor_name.short_description = 'Docente Tutor' # Corrected short_description
+    list_display = ['get_nombre_nivel', 'ciclo', 'section', 'get_docente_tutor',
+                    'get_materias_count', 'get_estudiantes_count']
+    list_filter = ['ciclo', 'level']
+    search_fields = ['level', 'section', 'docente_tutor__nombre']
+    autocomplete_fields = ['docente_tutor']
+    inlines = [MallaCurricularInline, StudentInline]
+    ordering = ['level', 'section']
+    list_per_page = 20
+
+    fieldsets = (
+        ('Identificación', {
+            'fields': ('level', 'ciclo', 'section'),
+            'description': 'El ciclo se calcula automáticamente del nivel si se deja en blanco.',
+        }),
+        ('Docente responsable', {
+            'fields': ('docente_tutor',),
+        }),
+    )
+
+    def get_nombre_nivel(self, obj):
+        return obj.get_level_display()
+    get_nombre_nivel.short_description = 'Nivel'
+    get_nombre_nivel.admin_order_field = 'level'
+
+    def get_docente_tutor(self, obj):
+        return obj.docente_tutor.nombre if obj.docente_tutor else '—'
+    get_docente_tutor.short_description = 'Docente Tutor'
+
+    def get_materias_count(self, obj):
+        count = obj.malla_curricular.count()
+        if count:
+            url = reverse('admin:classes_mallacurricular_changelist') + f'?nivel__id__exact={obj.pk}'
+            return format_html('<a href="{}">{} materia{}</a>', url, count, 's' if count != 1 else '')
+        return '0 materias'
+    get_materias_count.short_description = 'Malla'
+
+    def get_estudiantes_count(self, obj):
+        count = obj.students.count()
+        return f'{count} estudiante{"s" if count != 1 else ""}'
+    get_estudiantes_count.short_description = 'Estudiantes'
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path('malla-curricular/', self.admin_site.admin_view(self.malla_view),
+                 name='classes_gradelevel_malla'),
+            path('<int:nivel_id>/aplicar-malla-defecto/', self.admin_site.admin_view(self.aplicar_malla_defecto),
+                 name='classes_gradelevel_aplicar_malla'),
+        ]
+        return custom + urls
+
+    def malla_view(self, request):
+        """Vista resumen de toda la malla curricular, agrupada por ciclo."""
+        from django.db.models import Prefetch
+        ciclos = {}
+        for ciclo_key, ciclo_label in GradeLevel.CICLO_CHOICES:
+            niveles = GradeLevel.objects.filter(ciclo=ciclo_key).prefetch_related(
+                Prefetch('malla_curricular', queryset=MallaCurricular.objects.select_related('subject').order_by('orden', 'subject__name'))
+            ).order_by('level')
+            if niveles.exists():
+                ciclos[ciclo_label] = niveles
+
+        todas_materias = Subject.objects.all().order_by('tipo_materia', 'name')
+        context = {
+            **self.admin_site.each_context(request),
+            'title': 'Malla Curricular',
+            'ciclos': ciclos,
+            'todas_materias': todas_materias,
+            'opts': self.model._meta,
+        }
+        return render(request, 'admin/classes/malla_curricular.html', context)
+
+    def aplicar_malla_defecto(self, request, nivel_id):
+        """Aplica la malla curricular por defecto al nivel indicado."""
+        from classes.management.commands.cargar_malla_default import MALLA_POR_CICLO
+        try:
+            nivel = GradeLevel.objects.get(pk=nivel_id)
+        except GradeLevel.DoesNotExist:
+            messages.error(request, 'Nivel no encontrado.')
+            return HttpResponseRedirect(reverse('admin:classes_gradelevel_malla'))
+
+        materias_ciclo = MALLA_POR_CICLO.get(nivel.ciclo, [])
+        creadas = 0
+        with transaction.atomic():
+            for nombre, obligatoria, orden in materias_ciclo:
+                try:
+                    subj = Subject.objects.get(name=nombre)
+                except Subject.DoesNotExist:
+                    continue
+                _, created = MallaCurricular.objects.get_or_create(
+                    nivel=nivel, subject=subj,
+                    defaults={'obligatoria': obligatoria, 'orden': orden},
+                )
+                if created:
+                    creadas += 1
+
+        messages.success(request, f'Malla aplicada a {nivel}: {creadas} materias nuevas añadidas.')
+        return HttpResponseRedirect(reverse('admin:classes_gradelevel_malla'))
+
+
+# ─── MallaCurricular Admin ────────────────────────────────────────────────────
+
+@admin.register(MallaCurricular)
+class MallaCurricularAdmin(admin.ModelAdmin):
+    list_display = ['nivel', 'get_ciclo', 'subject', 'get_tipo', 'obligatoria', 'orden']
+    list_filter = ['nivel__ciclo', 'obligatoria', 'subject__tipo_materia']
+    search_fields = ['nivel__level', 'nivel__section', 'subject__name']
+    autocomplete_fields = ['nivel', 'subject']
+    list_editable = ['obligatoria', 'orden']
+    ordering = ['nivel__level', 'orden', 'subject__name']
+    list_per_page = 30
+
+    def get_ciclo(self, obj):
+        ciclo_colors = {
+            'BASICA': '#10B981', 'MEDIA': '#3B82F6',
+            'SUPERIOR': '#8B5CF6', 'BACHILLERATO': '#F59E0B',
+        }
+        color = ciclo_colors.get(obj.nivel.ciclo, '#6B7280')
+        return format_html(
+            '<span style="background:{};color:white;padding:2px 8px;border-radius:4px;font-size:11px">{}</span>',
+            color, obj.nivel.get_ciclo_display(),
+        )
+    get_ciclo.short_description = 'Ciclo'
+    get_ciclo.admin_order_field = 'nivel__ciclo'
+
+    def get_tipo(self, obj):
+        tipo_icons = {'INSTRUMENTO': '🎸', 'TEORIA': '📖', 'AGRUPACION': '🎵', 'OTRO': '📝'}
+        icon = tipo_icons.get(obj.subject.tipo_materia, '📝')
+        return f'{icon} {obj.subject.get_tipo_materia_display()}'
+    get_tipo.short_description = 'Tipo'
+
 
 @admin.register(Clase)
 class ClaseAdmin(admin.ModelAdmin):
