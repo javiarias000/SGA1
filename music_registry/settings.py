@@ -71,9 +71,14 @@ GRAPHENE = {
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 
 REST_FRAMEWORK = {
+    # Solo TokenAuthentication en los defaults para evitar que SessionAuthentication
+    # fuerce validación CSRF en requests de browser con cookie de sesión existente.
+    # Las vistas Django web usan session auth directamente (fuera de DRF).
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 

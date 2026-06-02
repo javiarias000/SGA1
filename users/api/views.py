@@ -1,5 +1,7 @@
-from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
@@ -13,7 +15,6 @@ def _get_user_profile(user):
     student_id = None
 
     try:
-        # OneToOne reverse: Usuario.auth_user → user.usuario
         usuario = user.usuario
         rol = usuario.rol or rol
         nombre = usuario.nombre or nombre
@@ -26,17 +27,18 @@ def _get_user_profile(user):
     except Exception:
         pass
 
-    # is_staff overrides rol to ADMIN
     if user.is_staff or user.is_superuser:
         rol = 'ADMIN'
 
     return rol, nombre, email, student_id
 
 
+@csrf_exempt                        # bypass CsrfViewMiddleware antes de que DRF lo vea
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@authentication_classes([])         # sin SessionAuthentication → sin CSRF check de DRF
 def login_with_profile(request):
-    """Login extendido: devuelve token + datos del perfil para la app móvil."""
+    """Login extendido — devuelve token + datos del perfil para la app móvil."""
     username = request.data.get('username', '')
     password = request.data.get('password', '')
 
@@ -59,6 +61,7 @@ def login_with_profile(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
 def me_view(request):
     """Datos del usuario autenticado actual."""
     user = request.user
