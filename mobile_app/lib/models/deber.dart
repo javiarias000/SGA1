@@ -1,3 +1,6 @@
+int _i(dynamic v, [int def = 0]) => v == null ? def : (v as num).toInt();
+int? _iN(dynamic v) => v == null ? null : (v as num).toInt();
+
 class Deber {
   final int id;
   final String titulo;
@@ -28,16 +31,16 @@ class Deber {
   bool get estaVencido => DateTime.now().isAfter(fechaEntrega);
 
   factory Deber.fromJson(Map<String, dynamic> j) => Deber(
-        id: j['id'] as int,
+        id: _i(j['id']),
         titulo: j['titulo']?.toString() ?? '',
         descripcion: j['descripcion']?.toString() ?? '',
         fechaAsignacion: DateTime.tryParse(j['fecha_asignacion']?.toString() ?? '') ?? DateTime.now(),
         fechaEntrega: DateTime.tryParse(j['fecha_entrega']?.toString() ?? '') ?? DateTime.now(),
-        teacherId: j['teacher'] as int?,
-        claseId: j['clase'] as int?,
+        teacherId: _iN(j['teacher']),
+        claseId: _iN(j['clase']),
         puntosTotales: (j['puntos_totales'] as num?)?.toDouble() ?? 10.0,
         estado: j['estado']?.toString() ?? 'activo',
-        entregasCompletadas: (j['entregas_completadas'] as int?) ?? 0,
+        entregasCompletadas: _i(j['entregas_completadas']),
         porcentajeEntrega: (j['porcentaje_entrega'] as num?)?.toDouble() ?? 0.0,
       );
 }
@@ -68,10 +71,10 @@ class DeberEntrega {
   });
 
   factory DeberEntrega.fromJson(Map<String, dynamic> j) => DeberEntrega(
-        id: j['id'] as int,
-        deberId: j['deber'] as int? ?? 0,
+        id: _i(j['id']),
+        deberId: _i(j['deber']),
         deberTitulo: j['deber_titulo']?.toString() ?? '',
-        estudianteId: j['estudiante'] as int? ?? 0,
+        estudianteId: _i(j['estudiante']),
         estudianteNombre: j['estudiante_nombre']?.toString() ?? '',
         fechaEntrega: DateTime.tryParse(j['fecha_entrega']?.toString() ?? '') ?? DateTime.now(),
         comentario: j['comentario']?.toString() ?? '',
@@ -79,4 +82,17 @@ class DeberEntrega {
         retroalimentacion: j['retroalimentacion']?.toString() ?? '',
         estado: j['estado']?.toString() ?? 'pendiente',
       );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'deber': deberId,
+        'deber_titulo': deberTitulo,
+        'estudiante': estudianteId,
+        'estudiante_nombre': estudianteNombre,
+        'fecha_entrega': fechaEntrega.toIso8601String(),
+        'comentario': comentario,
+        'calificacion': calificacion,
+        'retroalimentacion': retroalimentacion,
+        'estado': estado,
+      };
 }

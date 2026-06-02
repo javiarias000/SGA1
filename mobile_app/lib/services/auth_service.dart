@@ -14,26 +14,23 @@ class AuthService {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('authToken', token);
+      await prefs.setString('userRole', data['rol']?.toString() ?? 'ESTUDIANTE');
+      await prefs.setString('userName', data['nombre']?.toString() ?? '');
+      await prefs.setString('userEmail', data['email']?.toString() ?? '');
+      await prefs.setBool('isStaff', data['is_staff'] == true);
 
-      // Guardar datos del usuario si el backend los retorna junto al token
-      if (data.containsKey('rol')) {
-        await prefs.setString('userRole', data['rol']?.toString() ?? 'ESTUDIANTE');
-      }
-      if (data.containsKey('nombre')) {
-        await prefs.setString('userName', data['nombre']?.toString() ?? '');
-      }
-      if (data.containsKey('email')) {
-        await prefs.setString('userEmail', data['email']?.toString() ?? '');
-      }
-      if (data.containsKey('is_staff')) {
-        await prefs.setBool('isStaff', data['is_staff'] == true);
-      }
-      if (data.containsKey('student_id') && data['student_id'] != null) {
-        await prefs.setInt('studentId', data['student_id'] as int);
+      // student_id viene como num en Flutter web (JS) — usar toInt() para ser seguro
+      final rawId = data['student_id'];
+      if (rawId != null) {
+        await prefs.setInt('studentId', (rawId as num).toInt());
+      } else {
+        await prefs.remove('studentId');
       }
 
       return true;
-    } catch (e) {
+    } catch (e, st) {
+      // ignore: avoid_print
+      print('[AuthService.login] ERROR: $e\n$st');
       return false;
     }
   }

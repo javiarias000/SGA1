@@ -18,12 +18,12 @@ class TipoAporte {
   });
 
   factory TipoAporte.fromJson(Map<String, dynamic> j) => TipoAporte(
-        id: j['id'] as int,
+        id: (j['id'] as num).toInt(),
         nombre: j['nombre']?.toString() ?? '',
         codigo: j['codigo']?.toString() ?? '',
         descripcion: j['descripcion']?.toString() ?? '',
         peso: (j['peso'] as num?)?.toDouble() ?? 1.0,
-        orden: (j['orden'] as int?) ?? 0,
+        orden: (j['orden'] as num?)?.toInt() ?? 0,
         activo: j['activo'] as bool? ?? true,
       );
 }

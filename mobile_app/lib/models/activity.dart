@@ -1,3 +1,6 @@
+int _i(dynamic v, [int def = 0]) => v == null ? def : (v as num).toInt();
+int? _iN(dynamic v) => v == null ? null : (v as num).toInt();
+
 class Activity {
   final int id;
   final int studentId;
@@ -36,12 +39,12 @@ class Activity {
   });
 
   factory Activity.fromJson(Map<String, dynamic> j) => Activity(
-        id: j['id'] as int,
-        studentId: j['student'] as int? ?? 0,
-        claseId: j['clase'] as int? ?? 0,
-        subjectId: j['subject'] as int?,
+        id: _i(j['id']),
+        studentId: _i(j['student']),
+        claseId: _i(j['clase']),
+        subjectId: _iN(j['subject']),
         subjectNombre: j['subject_nombre']?.toString() ?? '',
-        classNumber: (j['class_number'] as int?) ?? 0,
+        classNumber: _i(j['class_number']),
         date: DateTime.tryParse(j['date']?.toString() ?? '') ?? DateTime.now(),
         topicsWorked: j['topics_worked']?.toString() ?? '',
         techniques: j['techniques']?.toString() ?? '',
@@ -50,7 +53,7 @@ class Activity {
         strengths: j['strengths']?.toString() ?? '',
         areasToImprove: j['areas_to_improve']?.toString() ?? '',
         homework: j['homework']?.toString() ?? '',
-        practiceTime: (j['practice_time'] as int?) ?? 30,
+        practiceTime: _i(j['practice_time'], 30),
         observations: j['observations']?.toString() ?? '',
       );
 

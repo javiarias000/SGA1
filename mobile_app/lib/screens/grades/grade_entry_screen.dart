@@ -112,7 +112,7 @@ class _GradeEntryScreenState extends State<GradeEntryScreen> {
               ),
               items: subjects
                   .map((s) => DropdownMenuItem<int>(
-                      value: s['id'] as int, child: Text(s['name'].toString())))
+                      value: (s['id'] as num).toInt(), child: Text(s['name'].toString())))
                   .toList(),
               onChanged: (v) => setState(() => _subjectId = v),
               hint: const Text('Selecciona materia'),
