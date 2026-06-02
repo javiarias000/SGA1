@@ -36,6 +36,12 @@ _csrf_origins = os.environ.get(
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
 
 
+# ─── Admin personalizado ──────────────────────────────────────────────────────
+from django.contrib import admin as _admin_site
+_admin_site.AdminSite.site_header  = 'Conservatorio Bolívar — Administración'
+_admin_site.AdminSite.site_title   = 'SGA — Conservatorio'
+_admin_site.AdminSite.index_title  = 'Panel de Administración Académica'
+
 # Application definition
 
 INSTALLED_APPS = [
