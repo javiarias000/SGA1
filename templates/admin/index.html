@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_stats %}
+
+{% block title %}Panel Principal | Conservatorio Bolívar{% endblock %}
+
+{% block content %}
+{% get_dashboard_stats as stats %}
+
+<!-- ── Stats ── -->
+<p class="cb-section-title">Resumen académico</p>
+<div class="cb-stats-row">
+  <a class="cb-stat-card accent" href="{% url 'admin:students_student_changelist' %}">
+    <span class="cb-stat-icon">🎓</span>
+    <span class="cb-stat-value">{{ stats.total_estudiantes }}</span>
+    <span class="cb-stat-label">Estudiantes</span>
+  </a>
+  <a class="cb-stat-card info" href="{% url 'admin:teachers_teacher_changelist' %}">
+    <span class="cb-stat-icon">👩‍🏫</span>
+    <span class="cb-stat-value">{{ stats.total_docentes }}</span>
+    <span class="cb-stat-label">Docentes</span>
+  </a>
+  <a class="cb-stat-card success" href="{% url 'admin:classes_clase_changelist' %}">
+    <span class="cb-stat-icon">📚</span>
+    <span class="cb-stat-value">{{ stats.clases_activas }}</span>
+    <span class="cb-stat-label">Clases activas</span>
+  </a>
+  <a class="cb-stat-card" href="{% url 'admin:classes_enrollment_changelist' %}">
+    <span class="cb-stat-icon">📋</span>
+    <span class="cb-stat-value">{{ stats.inscripciones_activas }}</span>
+    <span class="cb-stat-label">Inscripciones</span>
+  </a>
+  <a class="cb-stat-card warning" href="{% url 'admin:matriculas_solicitudmatricula_changelist' %}?estado__exact=PENDIENTE">
+    <span class="cb-stat-icon">⏳</span>
+    <span class="cb-stat-value">{{ stats.solicitudes_pendientes }}</span>
+    <span class="cb-stat-label">Matrículas pendientes</span>
+  </a>
+  <a class="cb-stat-card danger" href="{% url 'admin:matriculas_solicitudmatricula_changelist' %}?estado__exact=EN_REVISION">
+    <span class="cb-stat-icon">🔍</span>
+    <span class="cb-stat-value">{{ stats.solicitudes_revision }}</span>
+    <span class="cb-stat-label">En revisión</span>
+  </a>
+</div>
+
+<!-- ── Acciones rápidas ── -->
+<p class="cb-section-title">Acciones rápidas</p>
+<div class="cb-quick-actions">
+  <a class="cb-quick-action" href="/classes/planificacion/">🗂️ Planificación de cursos</a>
+  <a class="cb-quick-action" href="{% url 'admin:classes_gradelevel_malla' %}">📚 Malla curricular</a>
+  <a class="cb-quick-action" href="{% url 'admin:classes_enrollment_add' %}">➕ Nueva inscripción</a>
+  <a class="cb-quick-action" href="{% url 'admin:matriculas_solicitudmatricula_changelist' %}">📝 Solicitudes matrícula</a>
+  <a class="cb-quick-action" href="{% url 'admin:agente_alertaestudiante_changelist' %}">🚨 Alertas IA</a>
+  <a class="cb-quick-action" href="{% url 'admin:classes_calificacionparcial_changelist' %}">🎯 Calificaciones</a>
+  <a class="cb-quick-action" href="{% url 'admin:classes_asistencia_changelist' %}">✅ Asistencia</a>
+  <a class="cb-quick-action" href="{% url 'admin:subjects_subject_changelist' %}">🎵 Materias</a>
+</div>
+
+<!-- ── Módulos del sistema ── -->
+<p class="cb-section-title">Módulos del sistema</p>
+{% for app in app_list %}
+<div class="module" id="app-{{ app.app_label }}">
+  <table>
+    <caption>
+      <a href="{{ app.app_url }}" class="section" title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">
+        {{ app.name }}
+      </a>
+    </caption>
+    {% for model in app.models %}
+    <tr class="model-{{ model.object_name|lower }}">
+      {% if model.admin_url %}
+      <th scope="row">
+        <a href="{{ model.admin_url }}">{{ model.name }}</a>
+      </th>
+      {% else %}
+      <th scope="row">{{ model.name }}</th>
+      {% endif %}
+      <td>
+        {% if model.add_url %}
+        <a href="{{ model.add_url }}" class="addlink">{% trans "Add" %}</a>
+        {% endif %}
+      </td>
+      <td>
+        {% if model.admin_url %}
+        <a href="{{ model.admin_url }}" class="changelink">{% trans "View" %}</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% empty %}
+<p>{% trans "You don't have permission to view or edit anything." %}</p>
+{% endfor %}
+
+{% endblock %}

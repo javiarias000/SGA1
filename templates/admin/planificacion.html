@@ -1,0 +1,448 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Planificación de Cursos{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+/* ── Layout principal ── */
+.plan-wrapper {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 1rem 0;
+}
+.plan-board {
+  flex: 1;
+  min-width: 0;
+}
+.plan-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 60px;
+}
+
+/* ── Filtro ciclo ── */
+.ciclo-bar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.ciclo-bar label { font-weight: 600; }
+.ciclo-bar input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: .9rem;
+}
+.ciclo-bar button {
+  background: #417690;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+/* ── Tarjeta de nivel ── */
+.nivel-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+.nivel-header {
+  background: #417690;
+  color: #fff;
+  padding: .55rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 600;
+  font-size: .95rem;
+}
+.nivel-header .badge-ciclo {
+  background: rgba(255,255,255,.2);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: .78rem;
+}
+.materias-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  padding: .85rem 1rem;
+}
+
+/* ── Tarjeta de materia (drop target) ── */
+.materia-card {
+  width: 160px;
+  min-height: 100px;
+  border: 2px dashed #c5d0da;
+  border-radius: 8px;
+  padding: .6rem .7rem;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  transition: border-color .15s, background .15s;
+  position: relative;
+}
+.materia-card.drag-over {
+  border-color: #417690;
+  background: #e8f4fb;
+}
+.materia-card.tiene-docente {
+  border-style: solid;
+  border-color: #5aac7e;
+  background: #f0faf5;
+}
+.materia-nombre {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
+.materia-tipo {
+  font-size: .7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+.materia-docente {
+  margin-top: auto;
+  font-size: .78rem;
+  color: #1a6e40;
+  background: #d4edda;
+  border-radius: 4px;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.materia-docente .quitar-docente {
+  margin-left: auto;
+  cursor: pointer;
+  color: #c00;
+  font-weight: bold;
+  font-size: .85rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.materia-sin-docente {
+  font-size: .75rem;
+  color: #aaa;
+  font-style: italic;
+  margin-top: auto;
+}
+.materia-alumnos {
+  font-size: .7rem;
+  color: #666;
+}
+.badge-obligatoria {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f0ad4e;
+  title: "Obligatoria";
+}
+
+/* ── Tipos de materia colores ── */
+.tipo-INSTRUMENTO { border-left: 3px solid #9b59b6; }
+.tipo-TEORIA      { border-left: 3px solid #3498db; }
+.tipo-AGRUPACION  { border-left: 3px solid #e67e22; }
+
+/* ── Sidebar docentes ── */
+.sidebar-title {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #417690;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: .5rem;
+}
+.sidebar-search {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: .85rem;
+  margin-bottom: .6rem;
+  box-sizing: border-box;
+}
+.docentes-list {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.docente-chip {
+  background: #417690;
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: .82rem;
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background .12s;
+}
+.docente-chip:hover { background: #2c5f77; }
+.docente-chip.dragging { opacity: .5; }
+
+/* ── Toast ── */
+#toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: .7rem 1.2rem;
+  border-radius: 6px;
+  color: #fff;
+  font-size: .88rem;
+  z-index: 9999;
+  display: none;
+  box-shadow: 0 3px 10px rgba(0,0,0,.2);
+}
+#toast.ok  { background: #28a745; }
+#toast.err { background: #dc3545; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+  <!-- Filtro de ciclo lectivo -->
+  <div class="ciclo-bar">
+    <label for="ciclo-input">Ciclo lectivo:</label>
+    <input id="ciclo-input" type="text" value="{{ ciclo_lectivo }}" placeholder="2025-2026">
+    <button onclick="cambiarCiclo()">Cargar</button>
+    <span style="font-size:.82rem;color:#666;">
+      Arrastra un docente desde el panel derecho hacia una materia para asignarlo.
+    </span>
+  </div>
+
+  <div class="plan-wrapper">
+
+    <!-- ── TABLERO ── -->
+    <div class="plan-board">
+      {% for fila in tablero %}
+      <div class="nivel-card">
+        <div class="nivel-header">
+          {{ fila.nivel.nombre_completo }}
+          <span class="badge-ciclo">{{ fila.nivel.get_ciclo_display }}</span>
+          {% if fila.nivel.docente_tutor %}
+            <span style="font-size:.78rem;opacity:.85;margin-left:auto;">
+              Tutor: {{ fila.nivel.docente_tutor.nombre }}
+            </span>
+          {% endif %}
+        </div>
+        <div class="materias-grid">
+          {% for t in fila.tarjetas %}
+          <div class="materia-card tipo-{{ t.tipo }}{% if t.docente_id %} tiene-docente{% endif %}"
+               data-nivel-id="{{ fila.nivel.id }}"
+               data-subject-id="{{ t.subject_id }}"
+               data-docente-id="{{ t.docente_id|default:'' }}"
+               ondragover="onDragOver(event)"
+               ondragleave="onDragLeave(event)"
+               ondrop="onDrop(event)">
+
+            {% if t.obligatoria %}<span class="badge-obligatoria" title="Obligatoria"></span>{% endif %}
+
+            <div class="materia-nombre">{{ t.subject_name }}</div>
+            <div class="materia-tipo">{{ t.tipo }}</div>
+
+            {% if t.num_estudiantes %}
+            <div class="materia-alumnos">👥 {{ t.num_estudiantes }} alumno{{ t.num_estudiantes|pluralize }}</div>
+            {% endif %}
+
+            {% if t.docente_nombre %}
+            <div class="materia-docente">
+              <span>{{ t.docente_nombre }}</span>
+              <button class="quitar-docente" title="Quitar docente"
+                      onclick="quitarDocente(event, this)"
+                      data-nivel-id="{{ fila.nivel.id }}"
+                      data-subject-id="{{ t.subject_id }}">✕</button>
+            </div>
+            {% else %}
+            <div class="materia-sin-docente">Sin docente</div>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p style="color:#aaa;font-style:italic;padding:.5rem;">
+            No hay materias en la malla curricular de este nivel.
+          </p>
+          {% endfor %}
+        </div>
+      </div>
+      {% empty %}
+      <p>No hay niveles/paralelos configurados todavía.</p>
+      {% endfor %}
+    </div>
+
+    <!-- ── SIDEBAR DOCENTES ── -->
+    <div class="plan-sidebar">
+      <div class="sidebar-title">Docentes</div>
+      <input class="sidebar-search" type="text" placeholder="Buscar..." oninput="filtrarDocentes(this.value)">
+      <div class="docentes-list" id="docentes-list">
+        {% for doc in docentes %}
+        <div class="docente-chip"
+             draggable="true"
+             data-docente-id="{{ doc.id }}"
+             data-docente-nombre="{{ doc.nombre }}"
+             ondragstart="onDragStart(event)"
+             ondragend="onDragEnd(event)">
+          {{ doc.nombre }}
+        </div>
+        {% empty %}
+        <p style="color:#aaa;font-size:.82rem;">No hay docentes registrados.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div><!-- .plan-wrapper -->
+
+</div><!-- #content-main -->
+
+<div id="toast"></div>
+
+<script>
+const CICLO_LECTIVO = "{{ ciclo_lectivo }}";
+const API_URL = "{% url 'classes:api_asignar_docente' %}";
+const CSRF = "{{ csrf_token }}";
+
+let dragData = null; // {docenteId, docenteNombre}
+
+// ── Drag desde sidebar ──
+function onDragStart(e) {
+  dragData = {
+    docenteId: e.target.dataset.docenteId,
+    docenteNombre: e.target.dataset.docenteNombre,
+  };
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragEnd(e) {
+  e.target.classList.remove('dragging');
+}
+
+// ── Drop sobre materia ──
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  const card = e.currentTarget;
+  card.classList.remove('drag-over');
+  if (!dragData) return;
+  asignar(card, dragData.docenteId, dragData.docenteNombre);
+}
+
+// ── Quitar docente ──
+function quitarDocente(e, btn) {
+  e.stopPropagation();
+  const card = btn.closest('.materia-card');
+  asignar(card, null, null);
+}
+
+// ── Llamada AJAX ──
+async function asignar(card, docenteId, docenteNombre) {
+  const nivelId = card.dataset.nivelId;
+  const subjectId = card.dataset.subjectId;
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF,
+      },
+      body: JSON.stringify({
+        nivel_id: nivelId,
+        subject_id: subjectId,
+        docente_id: docenteId || null,
+        ciclo: CICLO_LECTIVO,
+      }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      actualizarCard(card, docenteId, docenteNombre);
+      toast('Guardado ✓', 'ok');
+    } else {
+      toast('Error: ' + data.error, 'err');
+    }
+  } catch (err) {
+    toast('Error de red', 'err');
+  }
+}
+
+// ── Actualizar tarjeta en el DOM ──
+function actualizarCard(card, docenteId, docenteNombre) {
+  card.dataset.docenteId = docenteId || '';
+
+  // Quitar bloque anterior
+  const prev = card.querySelector('.materia-docente, .materia-sin-docente');
+  if (prev) prev.remove();
+
+  if (docenteNombre) {
+    card.classList.add('tiene-docente');
+    const div = document.createElement('div');
+    div.className = 'materia-docente';
+    div.innerHTML = `<span>${docenteNombre}</span>
+      <button class="quitar-docente" title="Quitar docente"
+        onclick="quitarDocente(event, this)"
+        data-nivel-id="${card.dataset.nivelId}"
+        data-subject-id="${card.dataset.subjectId}">✕</button>`;
+    card.appendChild(div);
+  } else {
+    card.classList.remove('tiene-docente');
+    const div = document.createElement('div');
+    div.className = 'materia-sin-docente';
+    div.textContent = 'Sin docente';
+    card.appendChild(div);
+  }
+}
+
+// ── Búsqueda de docentes ──
+function filtrarDocentes(q) {
+  const chips = document.querySelectorAll('#docentes-list .docente-chip');
+  const lower = q.toLowerCase();
+  chips.forEach(c => {
+    c.style.display = c.dataset.docenteNombre.toLowerCase().includes(lower) ? '' : 'none';
+  });
+}
+
+// ── Cambiar ciclo ──
+function cambiarCiclo() {
+  const ciclo = document.getElementById('ciclo-input').value.trim();
+  if (ciclo) window.location.href = '?ciclo=' + encodeURIComponent(ciclo);
+}
+
+// ── Toast ──
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = type;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 2500);
+}
+</script>
+{% endblock %}

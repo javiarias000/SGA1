@@ -198,6 +198,12 @@ class GradeLevelAdmin(admin.ModelAdmin):
         ]
         return custom + urls
 
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['planificacion_url'] = '/classes/planificacion/'
+        extra_context['malla_url'] = reverse('admin:classes_gradelevel_malla')
+        return super().changelist_view(request, extra_context=extra_context)
+
     def malla_view(self, request):
         from django.db.models import Prefetch
         ciclos = {}
