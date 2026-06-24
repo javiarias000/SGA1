@@ -1,96 +1,80 @@
-.PHONY: help setup install migrate test test-coverage clean db-create db-drop db-reset db-full
+.PHONY: help up down build migrate shell test etl-dry etl wa-logs api-logs
 
 .DEFAULT_GOAL := help
 
+API     = docker compose exec api
+MANAGE  = $(API) python manage.py
+
 help:
-	@echo "SGA1 - Sistema de Gestión Académica"
+	@echo "SGA1 — Sistema de Gestión Académica"
 	@echo "===================================="
 	@echo ""
-	@echo "Setup & Installation:"
-	@echo "  make setup       - Install dependencies and setup environment"
-	@echo "  make install     - Install Python dependencies"
-	@echo "  make venv        - Create virtual environment"
+	@echo "Servicios:"
+	@echo "  make up            - Levantar todos los servicios"
+	@echo "  make down          - Detener todos los servicios"
+	@echo "  make build         - Reconstruir imágenes"
+	@echo "  make ps            - Estado de contenedores"
 	@echo ""
-	@echo "Database:"
-	@echo "  make db-create   - Create PostgreSQL database"
-	@echo "  make db-drop     - Drop PostgreSQL database"
-	@echo "  make db-reset    - Reset database (drop & recreate)"
-	@echo "  make migrate     - Run Django migrations"
+	@echo "Django (API):"
+	@echo "  make migrate       - Correr migraciones"
+	@echo "  make shell         - Django shell"
+	@echo "  make check         - Verificar configuración"
+	@echo "  make test          - Correr tests"
 	@echo ""
-	@echo "Testing:"
-	@echo "  make test        - Run test suite"
-	@echo "  make test-quick  - Run tests (fast, no coverage)"
-	@echo "  make test-coverage - Run tests with coverage report"
+	@echo "ETL:"
+	@echo "  make etl-dry       - ETL conservatorio.db (dry-run)"
+	@echo "  make etl           - ETL conservatorio.db (real)"
 	@echo ""
-	@echo "Development:"
-	@echo "  make runserver   - Start Django dev server"
-	@echo "  make shell       - Start Django shell"
-	@echo "  make clean       - Clean temporary files"
-	@echo ""
+	@echo "Logs:"
+	@echo "  make api-logs      - Logs del servicio API"
+	@echo "  make wa-logs       - Logs del servicio WhatsApp"
 
-venv:
-	python3 -m venv .venv
-	. .venv/bin/activate && pip install --upgrade pip
+# ── Docker ──────────────────────────────────────────────────────────────────
+up:
+	docker compose up -d
 
-install:
-	pip install -r requirements.txt
+down:
+	docker compose down
 
-setup: venv install
-	cp .env.example .env
-	@echo "Setup complete. Edit .env file as needed."
+build:
+	docker compose build
 
-db-create:
-	bash manage_db.sh create
+ps:
+	docker compose ps
 
-db-drop:
-	bash manage_db.sh drop
-
-db-reset:
-	bash manage_db.sh reset
-
+# ── Django API ───────────────────────────────────────────────────────────────
 migrate:
-	python manage.py migrate
+	$(MANAGE) migrate
 
-db-full:
-	bash manage_db.sh full
-
-test:
-	python -m pytest -v
-
-test-quick:
-	python -m pytest -v --tb=short
-
-test-coverage:
-	python -m pytest --cov=. --cov-report=html --cov-report=term-missing
-
-runserver:
-	python manage.py runserver
+makemigrations:
+	$(MANAGE) makemigrations
 
 shell:
-	python manage.py shell
+	$(MANAGE) shell
+
+check:
+	$(MANAGE) check
+
+test:
+	$(API) python -m pytest -v
+
+collectstatic:
+	$(MANAGE) collectstatic --noinput
+
+# ── ETL ──────────────────────────────────────────────────────────────────────
+etl-dry:
+	$(MANAGE) import_from_conservatorio_db --db /whatsapp/conservatorio.db --dry-run
+
+etl:
+	$(MANAGE) import_from_conservatorio_db --db /whatsapp/conservatorio.db
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+api-logs:
+	docker compose logs -f api
+
+wa-logs:
+	docker compose logs -f whatsapp
 
 clean:
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -delete
-	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
-	find . -type d -name ".coverage" -delete
-	rm -rf htmlcov/
-	rm -rf dist/
-	rm -rf build/
-	rm -rf *.egg-info
-
-check:
-	python manage.py check
-
-lint:
-	flake8 . --exclude=.venv,migrations,tests --max-line-length=120
-
-format:
-	black . --exclude=.venv,migrations,tests
-
-all: setup db-create migrate test
-
-docs-build:
-	@echo "Generating test coverage report..."
-	python -m pytest --cov=. --cov-report=html
-	@echo "Coverage report generated in htmlcov/index.html"

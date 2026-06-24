@@ -1,240 +1,285 @@
-# SGA1 - Sistema de Gestión Académica
-## Production-Ready Django Application
+# SGA1 — Sistema de Gestión Académica
 
-**Status:** ✅ Production Ready | **Last Updated:** 2026-04-20
+Sistema integral de gestión académica para el **Conservatorio Bolívar de Ambato**. Monorepo con arquitectura de microservicios que centraliza estudiantes, docentes, calificaciones, asistencia, matrículas y notificaciones por WhatsApp.
 
 ---
 
-## 🚀 Quick Start
+## Servicios
 
-### Development
-```bash
-docker compose up -d
-docker compose exec web python manage.py migrate
-curl http://localhost:8000/
+| Servicio | Tecnología | Puerto | Descripción |
+|----------|-----------|--------|-------------|
+| `api` | Django 5.2 + DRF + GraphQL | 8000 | API principal: dominio académico + informes WhatsApp |
+| `whatsapp` | Node.js + Express | 3001 | Google Sheets, proxy `/api/informes/*` → Django |
+| `mobile` | Flutter Web + nginx | 80 | App móvil web |
+| `django_web` | nginx → Django | 8001 | Panel web (admin, templates) |
+| `db` | PostgreSQL 15 | 5432 | Base de datos principal |
+| `redis` | Redis 7 | 6379 | Broker Celery |
+
+---
+
+## Estructura del Repositorio
+
 ```
-
-### Production
-See [PHASE3_DEPLOYMENT_GUIDE.md](PHASE3_DEPLOYMENT_GUIDE.md) for complete deployment instructions.
-
----
-
-## 📚 Documentation
-
-### Audit & Planning
-- **[AUDIT_PRODUCTION_READY.md](AUDIT_PRODUCTION_READY.md)** - Phase 1: Infrastructure audit findings
-- **[PHASE2_SECURITY_HARDENING.md](PHASE2_SECURITY_HARDENING.md)** - Phase 2: Security hardening details
-- **[AUDIT_FINAL_SUMMARY.md](AUDIT_FINAL_SUMMARY.md)** - Overall production readiness status
-- **[PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)** - Full production checklist
-
-### Deployment & Operations
-- **[PHASE3_DEPLOYMENT_GUIDE.md](PHASE3_DEPLOYMENT_GUIDE.md)** - Step-by-step deployment guide
-- **[OPERATIONS_MANUAL.md](OPERATIONS_MANUAL.md)** - Daily operations & troubleshooting
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Detailed deployment procedures
-- **[README.TESTING.md](README.TESTING.md)** - Testing guide
-
-### Configuration
-- **[.env.example](.env.example)** - Environment variables template (commiteable)
-- **[.env.prod](.env.prod)** - Production config template (DO NOT commit)
-- **[docker-compose.yml](docker-compose.yml)** - Docker services definition
-
----
-
-## ✅ Features
-
-### Core
-- Django 5.2 REST API + GraphQL
-- PostgreSQL 16 with migrations
-- Redis for caching & Celery
-- Gunicorn + Nginx (production)
-- Docker containerization
-
-### Security
-- HTTPS/SSL ready
-- CSRF protection
-- XSS protection  
-- SQL injection prevention (ORM)
-- Secure session/CSRF cookies
-- HSTS headers
-- Strong secret key rotation
-
-### Data Management
-- Student/Teacher enrollment system
-- Subject & class management
-- Grades & attendance tracking
-- ETL data import pipeline
-- Database backups
-
-### Monitoring
-- Health check endpoints
-- Sentry error tracking (optional)
-- Docker logging
-- Database monitoring
-
----
-
-## 📊 Project Status
-
-| Component | Status | Details |
-|-----------|--------|---------|
-| Application | ✅ Ready | Gunicorn + Django 5.2 |
-| Database | ✅ Ready | PostgreSQL 16, migraciones OK |
-| Tests | ✅ Ready | 4/4 tests passing |
-| Security | ✅ Ready | 3 warnings (expected in dev mode, 0 in prod) |
-| Docker | ✅ Ready | db, redis, web services healthy |
-| Documentation | ✅ Complete | 8 guides + checklists |
-| API | ✅ Ready | REST + GraphQL endpoints |
-| Email | ✅ Ready | SMTP configured, console for dev |
-
----
-
-## 🚀 Deployment Readiness
-
-**Phase 1: Infrastructure** ✅ Complete  
-- Docker setup fixed (DB_HOST=db)
-- Teachers factories created
-- Tests passing
-
-**Phase 2: Security** ✅ Complete
-- SECRET_KEY regenerated (54 chars, strong)
-- Email SMTP configured
-- Security warnings reduced from 6 to 3
-- All changes committed
-
-**Phase 3: Production** 📋 Ready to Deploy
-- Follow [PHASE3_DEPLOYMENT_GUIDE.md](PHASE3_DEPLOYMENT_GUIDE.md)
-- Requires: Domain, SSL certificate, Linux server with Docker
-
----
-
-## 🔐 Security Checklist
-
-✅ Implemented:
-- SECURE_HSTS_SECONDS = 31536000
-- SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-- SESSION_COOKIE_HTTPONLY = True
-- CSRF_COOKIE_HTTPONLY = True
-- Password hashing (PBKDF2)
-- Django security middleware
-
-⚠️ Requires HTTPS in Production:
-- SECURE_SSL_REDIRECT
-- SESSION_COOKIE_SECURE
-- CSRF_COOKIE_SECURE
-
----
-
-## 📋 Git Commits
-
-Phase 1-3 completed with 5 commits:
-```
-7fb37f8 Phase 3: deployment guide and operations manual
-23e7cd0 Phase 2: security hardening - regenerate SECRET_KEY
-b0ab9ff Phase 1: complete audit - add teachers factories
-adcd04f teachers/factories.py, fix DB config, complete audit
-df91f24 update include academia to settings
+SGA1/
+├── services/
+│   ├── api/                    ← Django backend (fuente de verdad)
+│   │   ├── users/              ← Usuario central, auth, GraphQL
+│   │   ├── students/           ← Perfil de estudiante
+│   │   ├── teachers/           ← Perfil de docente
+│   │   ├── subjects/           ← Materias (instrumento / teoría / agrupación)
+│   │   ├── classes/            ← Clases, matrículas, calificaciones, asistencia
+│   │   ├── academia/           ← REST API views y serializers
+│   │   ├── agente/             ← Agente IA
+│   │   ├── informes/           ← Informes WhatsApp (WA send, forms, submissions)
+│   │   ├── matriculas/         ← Gestión de matrículas
+│   │   ├── home/               ← Landing y vistas base
+│   │   └── config/             ← Configuración Django (settings, urls, celery, wsgi)
+│   ├── whatsapp/               ← Servicio Node.js
+│   │   ├── public/             ← Frontend (index.html, app.js, calificaciones.html)
+│   │   ├── server.js           ← Express: Google Sheets + proxy a Django
+│   │   └── Dockerfile
+│   └── mobile/                 ← App Flutter
+├── infra/
+│   ├── Dockerfile.api          ← Imagen Django
+│   ├── Dockerfile.db           ← Imagen PostgreSQL
+│   ├── Dockerfile.frontend     ← Imagen Flutter Web
+│   ├── nginx/                  ← nginx.conf, nginx_django.conf
+│   └── scripts/                ← init-db.sh, wait-for-db.sh, manage_db.sh
+├── data/
+│   ├── archivos_formularios/   ← Scripts ETL y archivos raw
+│   ├── base_de_datos_json/     ← JSON fuente (matrícula, estudiantes, docentes)
+│   └── backups/                ← Backups PostgreSQL
+├── tools/                      ← Scripts one-off, migraciones GraphQL
+├── docs/                       ← Toda la documentación
+├── docker-compose.yml          ← Orquestación de todos los servicios
+├── Makefile                    ← Comandos simplificados
+└── .env                        ← Variables de entorno
 ```
 
 ---
 
-## 🎯 Key Endpoints
+## Inicio Rápido
 
-| Endpoint | Purpose | Auth |
-|----------|---------|------|
-| `/` | Home page | None |
-| `/admin/` | Django admin | Required |
-| `/api/token/auth/` | Token authentication | None |
-| `/graphql/` | GraphQL API | None (temp - enable auth in prod) |
-| `/users/login/` | Login form | None |
-| `/students/` | Student panel | Required |
-| `/teachers/` | Teacher panel | Required |
-| `/classes/` | Class management | Required |
-| `/academia/api/v1/` | REST API | Token |
+### Prerrequisitos
 
----
+- Docker + Docker Compose
+- Git
 
-## 📞 Quick Commands
+### 1. Clonar y configurar
 
 ```bash
-# Start services
+git clone https://github.com/javiarias000/SGA1.git
+cd SGA1
+cp .env.backend.example .env
+# Editar .env con tus credenciales
+```
+
+### 2. Levantar todos los servicios
+
+```bash
+make up
+# o directamente:
 docker compose up -d
+```
 
-# Migrate database
-docker compose exec web python manage.py migrate
+### 3. Verificar
 
-# Create admin user
-docker compose exec web python manage.py createsuperuser
-
-# Run tests
-docker compose exec web python manage.py test
-
-# View logs
-docker compose logs -f web
-
-# Import data (ETL)
-docker compose exec web python manage.py etl_import_json --base-dir base_de_datos_json --ciclo 2025-2026
-
-# Backup database
-docker compose exec -T db pg_dump -U music_user music_registry_db | gzip > backup.sql.gz
-
-# Stop services
-docker compose down
+```bash
+make ps                    # estado de contenedores
+curl http://localhost:8000/api/informes/docentes/   # API Django
+# http://localhost:3001    # WhatsApp/Sheets frontend
+# http://localhost:8001    # Panel web Django
 ```
 
 ---
 
-## 🤝 Support & Issues
+## Comandos Makefile
 
-For deployment issues, see:
-1. [PHASE3_DEPLOYMENT_GUIDE.md](PHASE3_DEPLOYMENT_GUIDE.md) - Deployment steps
-2. [OPERATIONS_MANUAL.md](OPERATIONS_MANUAL.md) - Troubleshooting
+```bash
+make up            # Levantar todos los servicios
+make down          # Detener
+make build         # Reconstruir imágenes
+make ps            # Estado de contenedores
 
-For development:
-- See [README.TESTING.md](README.TESTING.md)
-- See [DEPLOYMENT.md](DEPLOYMENT.md)
+make migrate       # Correr migraciones Django
+make shell         # Django shell interactivo
+make check         # Verificar configuración Django
+make test          # Correr suite de tests
 
----
+make etl-dry       # Preview ETL conservatorio.db → PostgreSQL
+make etl           # ETL real
 
-## 📅 Maintenance
-
-**Daily:**
-- Monitor app health: `curl https://tu-dominio.com/`
-- Check Docker: `docker compose ps`
-- Review logs: `docker compose logs web | grep -i error`
-
-**Weekly:**
-- Database backup verification
-- SSL certificate check (expires in 80+ days)
-
-**Monthly:**
-- Dependency updates
-- Performance analysis
-- Security patches
-
----
-
-## 🏆 Architecture
-
-```
-SGA1 (Django 5.2)
-├── Web Service (Gunicorn)
-├── PostgreSQL 16 (Database)
-├── Redis 7 (Cache & Celery)
-├── Celery Worker
-├── Celery Beat (Scheduler)
-└── Nginx (Reverse Proxy, HTTPS)
+make api-logs      # Logs del servicio API
+make wa-logs       # Logs del servicio WhatsApp
 ```
 
 ---
 
-## 📄 License & Credits
+## ETL — Importar datos del conservatorio
 
-Sistema de Gestión Académica para Conservatorio Bolívar.
+El comando `import_from_conservatorio_db` migra docentes, cursos y tutores desde el SQLite histórico (`conservatorio.db`) a PostgreSQL:
+
+```bash
+# Preview (sin cambios)
+make etl-dry
+
+# Importar
+make etl
+```
+
+Importa:
+- **Docentes** → `Usuario(rol=DOCENTE)` + `Teacher`
+- **Cursos** → `GradeLevel`
+- **Asignaciones tutor-curso** → `GradeLevel.docente_tutor`
 
 ---
 
-**Version:** 3.0 (Production Ready)  
-**Last Audit:** 2026-04-20  
-**Next Review:** 2026-07-20 (quarterly)
+## App Django — Módulo `informes`
 
-For detailed deployment, see [PHASE3_DEPLOYMENT_GUIDE.md](PHASE3_DEPLOYMENT_GUIDE.md) ✅
+### Endpoints WhatsApp (`/api/informes/`)
+
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `docentes/` | GET | Listado de docentes con aliases frontend |
+| `docentes/upsert/` | POST | Crear o actualizar docente |
+| `tutores-cursos/` | GET | Asignaciones tutor-curso (incluye `tutoresCursos` camelCase) |
+| `grade-levels/` | GET | Listado de cursos |
+| `subjects/` | GET | Listado de materias |
+| `grades/` | GET | Calificaciones por curso/materia/período |
+| `wa/instance/` | POST | Crear instancia Evolution API |
+| `wa/status/<name>/` | GET | Estado de instancia WhatsApp |
+| `wa/send/` | POST | Enviar mensaje individual |
+| `wa/send-grades/` | POST | Envío masivo de informes a representantes |
+| `wa/historial/` | GET | Historial de envíos WA |
+| `forms/submit/` | POST | Enviar formulario(s) a Google Forms |
+| `submissions/` | GET | Historial de submissions |
+| `submissions/<pk>/resend/` | POST | Reenviar formulario |
+| `submissions/<pk>/mark-wa-sent/` | POST | Marcar como enviado por WA |
+| `sesiones/clase/<id>/` | GET | Sesiones de una clase |
+| `sesiones/upsert/` | POST | Crear/actualizar sesión |
+| `recomendaciones/upsert/` | POST | Crear/actualizar recomendación |
+
+### Arquitectura del módulo `informes`
+
+```
+services/api/informes/
+├── models.py           ← ConfiguracionWhatsapp, SesionClase, SubmisionFormulario,
+│                          RegistroEnvioWhatsapp, RecomendacionEstudiante
+├── views.py            ← 18 endpoints REST
+├── urls.py             ← Rutas bajo /api/informes/
+├── whatsapp.py         ← normalize_phone(), send_text(), build_parent_message()
+├── grades.py           ← get_grades(), cálculo parciales/quimestres/anual
+├── forms_submitter.py  ← submit_form() a Google Forms
+└── management/commands/
+    └── import_from_conservatorio_db.py  ← ETL SQLite → PostgreSQL
+```
+
+---
+
+## Servicio WhatsApp (Node.js)
+
+El servicio Node.js en `services/whatsapp/` actúa como:
+
+1. **Servidor del frontend** — sirve `public/index.html` con la interfaz de informes
+2. **Proxy a Django** — redirige `/api/informes/*` al backend Django (`SGA1_BASE`)
+3. **Google Sheets** — operaciones de lectura/escritura de calificaciones
+4. **Evolution API** — cliente WhatsApp (instancia directa sin proxy)
+
+### Variables de entorno (`services/whatsapp/.env`)
+
+```env
+EVOLUTION_API_URL=https://tu-evolution-api.host
+EVOLUTION_API_KEY=tu-api-key
+EVOLUTION_INSTANCE=NombreInstancia
+OPENAI_API_KEY=sk-...
+SGA1_BASE=http://api:8000      # En Docker usa el nombre del servicio
+```
+
+---
+
+## Variables de Entorno (`.env` raíz)
+
+```env
+# Base de datos
+DB_NAME=music_registry_db
+DB_USER=music_user
+DB_PASSWORD=music_password
+DB_HOST=db
+DB_PORT=5432
+
+# Django
+SECRET_KEY=django-insecure-cambia-esto-en-produccion
+DEBUG=False
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Redis
+REDIS_URL=redis://redis:6379/0
+REDIS_PASSWORD=
+
+# Evolution API (WhatsApp)
+EVOLUTION_API_URL=https://tu-evolution-api.host
+EVOLUTION_API_KEY=tu-api-key
+EVOLUTION_INSTANCE_NAME=NombreInstancia
+
+# OpenAI
+OPENAI_API_KEY=sk-...
+```
+
+---
+
+## Modelo de Datos Principal
+
+```
+Usuario (identidad central)
+  ├── Student  →  Enrollment  →  Clase  →  Subject
+  │                               └── CalificacionParcial
+  │                               └── Asistencia
+  └── Teacher
+       └── GradeLevel.docente_tutor
+
+informes app:
+  ├── ConfiguracionWhatsapp   (instancias Evolution API)
+  ├── RegistroEnvioWhatsapp   (historial mensajes WA a representantes)
+  ├── SubmisionFormulario     (historial envíos Google Forms)
+  ├── SesionClase             (sesiones de clase con Google Sheets)
+  └── RecomendacionEstudiante (recomendaciones por sesión)
+```
+
+---
+
+## API GraphQL
+
+Endpoint: `http://localhost:8000/graphql/`  
+GraphiQL disponible en modo DEBUG.  
+Schema: `services/api/config/schema.py`
+
+---
+
+## Desarrollo Local
+
+### Correr manage.py directamente (sin rebuild)
+
+```bash
+docker run --rm --network sga1_sga1_network \
+  -v $(pwd)/services/api:/usr/src/app \
+  -w /usr/src/app \
+  -e DB_HOST=sga1_db -e DB_PORT=5432 \
+  -e DB_NAME=music_registry_db -e DB_USER=music_user -e DB_PASSWORD=music_password \
+  -e SECRET_KEY=django-insecure-dev -e DEBUG=True \
+  sga1-backend:latest \
+  python manage.py <comando>
+```
+
+### App Flutter
+
+```bash
+# Desarrollo Flutter (requiere Flutter SDK)
+cd services/mobile
+flutter run -d chrome
+```
+
+---
+
+## Licencia
+
+Uso interno — Conservatorio Bolívar de Ambato.

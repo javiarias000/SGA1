@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calificaciones — Selector de Columnas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans text-sm">
+<div class="max-w-5xl mx-auto p-5 space-y-5">
+
+  <!-- Header -->
+  <div class="bg-white rounded-2xl shadow p-5 flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-bold text-gray-800">📊 Calificaciones — Selector de Columnas</h1>
+      <p id="institutionName" class="text-gray-400 mt-1 text-xs"></p>
+    </div>
+    <a href="/" class="text-xs text-indigo-500 hover:underline">← Volver</a>
+  </div>
+
+  <!-- Sheet tabs -->
+  <div class="bg-white rounded-2xl shadow p-4">
+    <div id="sheetTabs" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="sheetContent"></div>
+  </div>
+
+  <!-- Preview table -->
+  <div id="previewSection" class="hidden bg-white rounded-2xl shadow p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-semibold text-gray-700">👁 Vista previa</h2>
+      <span id="previewMeta" class="text-xs text-gray-400"></span>
+    </div>
+    <div class="overflow-x-auto">
+      <table id="previewTable" class="w-full text-xs border-collapse"></table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API = (() => {
+  const p = location.pathname;
+  return p.endsWith('/') ? p : p.slice(0, p.lastIndexOf('/') + 1);
+})();
+
+let sheetsData = [];
+let activeSheet = null;
+let selectedCols = {};   // sheetId → Set of column names selected
+
+async function init() {
+  const res = await fetch(API + 'api/cal/sheets');
+  const json = await res.json();
+  sheetsData = json.sheets;
+  document.getElementById('institutionName').textContent = json.institution || '';
+
+  const tabs = document.getElementById('sheetTabs');
+  tabs.innerHTML = '';
+
+  for (const s of sheetsData) {
+    const btn = document.createElement('button');
+    btn.id = `tab-${s.id}`;
+    btn.textContent = s.label || s.id;
+    btn.className = 'px-4 py-2 rounded-xl text-xs font-medium transition ' +
+      (s.mapped ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200');
+    btn.onclick = () => openSheet(s.id);
+    tabs.appendChild(btn);
+
+    if (s.mapped && !selectedCols[s.id]) {
+      selectedCols[s.id] = new Set(s.columns.map(c => c.name));
+    }
+  }
+
+  if (sheetsData.length > 0) openSheet(sheetsData[0].id);
+}
+
+async function openSheet(id) {
+  activeSheet = id;
+
+  // Update tab styles
+  for (const s of sheetsData) {
+    const btn = document.getElementById(`tab-${s.id}`);
+    if (!btn) continue;
+    const isMapped = s.mapped;
+    btn.className = 'px-4 py-2 rounded-xl text-xs font-medium transition ' +
+      (s.id === id
+        ? 'bg-blue-600 text-white'
+        : isMapped ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200');
+  }
+
+  const sheet = sheetsData.find(s => s.id === id);
+  const content = document.getElementById('sheetContent');
+
+  if (!sheet.mapped) {
+    content.innerHTML = `
+      <div class="text-center py-8 text-gray-400">
+        <p class="text-2xl mb-2">🗂</p>
+        <p>Esta hoja aún no tiene columnas mapeadas.</p>
+        <p class="text-xs mt-1">Continúa el proceso de mapeo en Claude Code.</p>
+      </div>`;
+    document.getElementById('previewSection').classList.add('hidden');
+    return;
+  }
+
+  // Column picker
+  if (!selectedCols[id]) {
+    selectedCols[id] = new Set(sheet.columns.map(c => c.name));
+  }
+
+  renderColumnPicker(sheet);
+  await loadPreview(id);
+}
+
+function renderColumnPicker(sheet) {
+  const content = document.getElementById('sheetContent');
+  const sel = selectedCols[sheet.id];
+
+  content.innerHTML = `
+    <div>
+      <p class="text-xs text-gray-500 mb-3 font-medium">Selecciona las columnas a mostrar:</p>
+      <div class="flex flex-wrap gap-2" id="colPicker"></div>
+    </div>`;
+
+  const picker = document.getElementById('colPicker');
+  for (const col of sheet.columns) {
+    const isOn = sel.has(col.name);
+    const chip = document.createElement('button');
+    chip.id = `col-${sheet.id}-${col.index}`;
+    chip.textContent = col.name;
+    chip.className = chipClass(isOn);
+    chip.onclick = () => toggleCol(sheet, col.name, chip);
+    picker.appendChild(chip);
+  }
+}
+
+function chipClass(on) {
+  return 'px-3 py-1.5 rounded-full text-xs font-medium border transition ' +
+    (on
+      ? 'bg-indigo-600 text-white border-indigo-600'
+      : 'bg-white text-gray-500 border-gray-300 hover:border-indigo-400');
+}
+
+function toggleCol(sheet, colName, chip) {
+  const sel = selectedCols[sheet.id];
+  if (sel.has(colName)) { sel.delete(colName); chip.className = chipClass(false); }
+  else                   { sel.add(colName);    chip.className = chipClass(true);  }
+  loadPreview(sheet.id);
+}
+
+async function loadPreview(id) {
+  const res = await fetch(API + `api/cal/data/${id}`);
+  if (!res.ok) return;
+  const json = await res.json();
+
+  const sel = selectedCols[id] || new Set(json.columns);
+  const visibleCols = json.columns.filter(c => sel.has(c));
+
+  const section = document.getElementById('previewSection');
+  section.classList.remove('hidden');
+
+  document.getElementById('previewMeta').textContent =
+    `${json.data.length} estudiantes · ${visibleCols.length} columnas visibles`;
+
+  const table = document.getElementById('previewTable');
+  const thead = `<thead class="bg-gray-50"><tr>${
+    visibleCols.map(c => `<th class="border border-gray-200 px-3 py-2 text-left font-semibold text-gray-600 whitespace-nowrap">${c}</th>`).join('')
+  }</tr></thead>`;
+
+  const rows = json.data.map((row, i) => `
+    <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+      ${visibleCols.map(c => `<td class="border border-gray-200 px-3 py-1.5 text-gray-700">${row[c] ?? ''}</td>`).join('')}
+    </tr>`).join('');
+
+  table.innerHTML = thead + `<tbody>${rows}</tbody>`;
+}
+
+init();
+</script>
+</body>
+</html>

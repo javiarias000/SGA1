@@ -1,101 +1,144 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview
 
-SGA1 (Sistema de Gestión Académica) — Django backend for a music conservatory. Manages students, teachers, subjects, enrollments, grades, and attendance. Has a Flutter mobile app (`mobile_app/`) and a GraphQL API (`/graphql/`). Django project name is `music_registry`.
+SGA1 (Sistema de Gestión Académica) — Monorepo for the Conservatorio Bolívar de Ambato. Manages students, teachers, subjects, enrollments, grades, attendance, and WhatsApp notifications. Django project name is `config` (was `music_registry`).
+
+## Repository Layout
+
+```
+SGA1/
+├── services/
+│   ├── api/          ← Django REST + GraphQL backend
+│   ├── whatsapp/     ← Node.js / Google Sheets / Evolution API
+│   └── mobile/       ← Flutter mobile app
+├── infra/
+│   ├── Dockerfile.api / Dockerfile.db / Dockerfile.frontend
+│   ├── nginx/        ← nginx.conf, nginx_django.conf
+│   └── scripts/      ← init-db.sh, wait-for-db.sh, manage_db.sh
+├── data/
+│   ├── archivos_formularios/   ← ETL scripts and raw data
+│   ├── base_de_datos_json/     ← JSON source files
+│   └── backups/
+├── tools/            ← one-off migration scripts, import scripts
+├── docs/             ← all .md documentation
+├── docker-compose.yml
+├── Makefile
+└── .env
+```
 
 ## Commands
 
-All commands run inside Docker unless specified.
+All Django commands run inside Docker against `services/api/`.
 
 ```bash
-# Start services
-docker compose up --build
+# Start all services
+make up           # docker compose up -d
+make down         # docker compose down
+make build        # rebuild images
 
-# Django management (standard workflow)
-docker compose exec web python manage.py migrate
-docker compose exec web python manage.py check
-docker compose exec web python manage.py createsuperuser
+# Django management
+make migrate      # python manage.py migrate
+make shell        # python manage.py shell
+make check        # python manage.py check
 
-# ETL — main data import (idempotent, always prefer this over individual import scripts)
-docker compose exec web python manage.py etl_import_json --base-dir base_de_datos_json --ciclo 2025-2026
-docker compose exec web python manage.py etl_import_json --base-dir base_de_datos_json --ciclo 2025-2026 --dry-run
-docker compose exec web python manage.py etl_import_json --base-dir base_de_datos_json --ciclo 2025-2026 --create-student-users
+# ETL — import conservatorio.db data
+make etl-dry      # dry-run (preview only)
+make etl          # apply to PostgreSQL
 
-# Dedup subjects (run after ETL if needed)
-docker compose exec web python manage.py dedupe_subjects --apply
-
-# Legacy data migration (only if legacy Grade/Attendance rows exist)
-docker compose exec web python manage.py migrate_legacy_grades
-docker compose exec web python manage.py migrate_legacy_attendance
-
-# Run tests
-docker compose exec web python manage.py test
-
-# Run a single test
-docker compose exec web python manage.py test academia.tests.MyTestCase
+# Logs
+make api-logs
+make wa-logs
 ```
+
+Manual docker run (when port conflicts exist — see below):
+```bash
+docker run --rm --network sga1_sga1_network \
+  -v /home/javlabs/n8nauto/SGA1/services/api:/usr/src/app \
+  -w /usr/src/app \
+  -e DB_HOST=sga1_db -e DB_PORT=5432 \
+  -e DB_NAME=music_registry_db -e DB_USER=music_user -e DB_PASSWORD=music_password \
+  -e 'SECRET_KEY=django-insecure-sga1-key' -e DEBUG=True \
+  sga1-backend:latest \
+  python manage.py <comando>
+```
+
+## Port Conflicts on This Machine
+
+- **Port 8000**: occupied by `Appointment-Booking-Automator` — do NOT kill
+- **Port 5432**: occupied by `elated_hamilton` container — do NOT kill
+- Use `DB_PORT=5434` in `.env` for host mapping; use `DB_PORT=5432` in `docker run` commands (internal network)
+- Development backend runs on port **8002**
 
 ## Architecture
 
-### Django Apps
+### Services
+
+| Service | Tech | Port | Role |
+|---------|------|------|------|
+| `api` | Django 5.2 + DRF + GraphQL | 8000 | Core domain: students, grades, teachers, WA |
+| `whatsapp` | Node.js + Express | 3001 | Google Sheets, proxies `/api/informes/*` → Django |
+| `mobile` | Flutter Web | 80 | Mobile app (via nginx) |
+| `django_web` | nginx → Django | 8001 | Django templates, admin |
+| `db` | PostgreSQL 15 | 5432 | Primary database |
+| `redis` | Redis 7 | 6379 | Celery broker |
+
+### Django Apps (`services/api/`)
 
 | App | Role |
 |-----|------|
-| `users` | Central domain model (`Usuario`), auth backend, GraphQL queries/schema, login views |
+| `users` | Central domain model (`Usuario`), auth backend, GraphQL, login views |
 | `students` | `Student` profile extending `Usuario` |
 | `teachers` | `Teacher` profile extending `Usuario` |
-| `subjects` | `Subject` model (`INSTRUMENTO`, `TEORIA`, `AGRUPACION`) |
-| `classes` | `GradeLevel`, `Clase`, `Enrollment`, grading (`CalificacionParcial`), attendance (`Asistencia`), homework (`Deber`/`DeberEntrega`) |
+| `subjects` | `Subject` model (INSTRUMENTO / TEORIA / AGRUPACION) |
+| `classes` | `GradeLevel`, `Clase`, `Enrollment`, `CalificacionParcial`, `Asistencia` |
 | `academia` | REST API views and serializers |
+| `agente` | AI agent functionality |
+| `informes` | WhatsApp reports: WA send, forms, submissions, docentes, ETL |
+| `matriculas` | Enrollment/registration management |
+| `home` | Basic landing views |
+
+### Django Project Config (`services/api/config/`)
+
+Was `music_registry/`. Contains `settings.py`, `urls.py`, `celery.py`, `wsgi.py`, `asgi.py`, `schema.py`.
 
 ### Key Design: Unified `users.Usuario`
 
-`Usuario` is the single domain identity — not Django's `auth.User`. Django's `User` links to it optionally via `Usuario.auth_user` (OneToOne). All person data (nombre, email, cedula, phone) lives in `Usuario`. `Student` and `Teacher` are profiles that extend it with OneToOne.
+`Usuario` is the single domain identity. Django's `User` links to it optionally via `Usuario.auth_user` (OneToOne). All person data (nombre, email, cedula, phone) lives in `Usuario`. `Student` and `Teacher` are profiles that extend it with OneToOne.
 
-Role-based access: `Usuario.rol` is `DOCENTE`, `ESTUDIANTE`, or `PENDIENTE`.
+### WhatsApp Service (`services/whatsapp/`)
 
-### Two Middleware (currently disabled for GraphQL migration)
-
-`AttachUsuarioProfilesMiddleware` and `ForcePasswordChangeMiddleware` are commented out in `settings.py`. Re-enable when GraphQL migration is complete.
+Node.js + Express. Proxies `/api/informes/*` → Django API via `SGA1_BASE` env var. Google Sheets operations (auth-status, smart-load, tab-data) stay on Node.js. Evolution API URL: configured via `.env`.
 
 ### GraphQL
 
-Endpoint: `/graphql/` (uses `AnonymousGraphQLView` — no auth required during migration phase).  
-Schema: `music_registry/schema.py` composes queries from `users/graphql/queries.py` and mutations inline.  
-GraphiQL available in DEBUG mode.
+Endpoint: `/graphql/` (uses `AnonymousGraphQLView` — no auth during migration phase).
+Schema: `config/schema.py` composes queries from `users/graphql/`.
 
 ### REST API
 
-Token + Session auth via DRF. Endpoints under `/api/` (routed from `users/api/urls.py`) and `/academia/`.
+Token + Session auth via DRF. Endpoints under `/api/` (users), `/academia/`, `/api/informes/`.
 
 ### Data Model (key relationships)
 
 ```
 Usuario (1) ─── (1) Student ── (N) Enrollment ── (1) Clase ── (1) Subject
         (1) ─── (1) Teacher
-Enrollment also carries: docente (Usuario FK) — critical for instrument classes
-CalificacionParcial links Student + Subject + TipoAporte + quimestre/parcial fields
+Enrollment also carries: docente (Usuario FK)
+CalificacionParcial links Student + Subject + TipoAporte + quimestre/parcial
 ```
 
 ### ETL Pipeline
 
-Source data: Excel files → JSON in `archivos_formularios/base_de_datos_json/` → DB via `etl_import_json` management command.
-
-Individual legacy import scripts (`import_subjects`, `import_teachers`, `import_students`) now just delegate to `etl_import_json`. Do not use them directly.
-
-GraphQL-based migration scripts live in `migraciones/` (e.g., `graphql_migrate.py`).
-
-### In-Progress: Legacy → New Model Migration
-
-`Grade` and `Attendance` (legacy models in `classes/models.py`) coexist with the new `Enrollment`/`Asistencia`/`CalificacionParcial` system. Some views in `teachers/views.py` and `students/views.py` still use legacy field names (`Clase.teacher`, `Enrollment.student`, `Student.name`). Do not remove legacy models until all views are migrated.
+Source: Excel/CSV → JSON in `data/base_de_datos_json/` → DB via `etl_import_json`.
+WhatsApp ETL: `conservatorio.db` (SQLite from `services/whatsapp/`) → PostgreSQL via `import_from_conservatorio_db`.
 
 ### Database
 
-PostgreSQL in Docker (`music_registry_db`). Configured via env vars: `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`. Defaults match `docker-compose.yml` service names.
+PostgreSQL in Docker (`music_registry_db`). Env vars: `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`.
 
 ### Flutter Mobile App
 
-Located in `mobile_app/`. Communicates with the Django backend. Developed via the `flutter_dev` Docker service.
+Located in `services/mobile/`. Communicates with Django backend.

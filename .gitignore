@@ -76,3 +76,11 @@ assignment_error_report.csv
 student_creation_log.csv
 name_mapping_suggestions.csv
 postgres_data/
+
+# Credenciales OAuth Google (nunca en el repo)
+services/whatsapp/credentials.json
+services/whatsapp/token.json
+services/whatsapp/.env
+# Env files sensibles
+*.env
+!.env.*.example

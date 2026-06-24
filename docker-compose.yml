@@ -1,11 +1,25 @@
 version: '3.8'
 
+# ══════════════════════════════════════════════════════════════════════════════
+# SGA1 — Sistema de Gestión Académica · Conservatorio Bolívar de Ambato
+#
+# Servicios:
+#   api        → Django REST + GraphQL  (puerto 8000)
+#   whatsapp   → Node.js / Google Sheets / Evolution API  (puerto 3001)
+#   mobile     → Flutter web (puerto 80, vía nginx)
+#   django_web → Panel web Django (puerto 8001, vía nginx)
+#   db         → PostgreSQL
+#   redis      → Broker Celery
+# ══════════════════════════════════════════════════════════════════════════════
+
 services:
-  # PostgreSQL Database
+
+  # ── Infraestructura ─────────────────────────────────────────────────────────
+
   db:
     build:
       context: .
-      dockerfile: Dockerfile.database
+      dockerfile: infra/Dockerfile.db
     container_name: sga1_db
     restart: unless-stopped
     environment:
@@ -15,7 +29,7 @@ services:
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backups:/backups
+      - ./data/backups:/backups
     ports:
       - "${DB_PORT:-5432}:5432"
     healthcheck:
@@ -27,7 +41,6 @@ services:
     networks:
       - sga1_network
 
-  # Redis Broker
   redis:
     image: redis:7-alpine
     container_name: sga1_redis
@@ -49,35 +62,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
     networks:
       - sga1_network
 
-  # Django Backend API
-  backend:
+  # ── Servicio API (Django) ────────────────────────────────────────────────────
+
+  api:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: sga1_backend
+      context: ./services/api
+      dockerfile: ../../infra/Dockerfile.api
+    container_name: sga1_api
     restart: unless-stopped
-    command: |
+    command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             gunicorn music_registry.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2 --access-logfile - --error-logfile -"
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2 --access-logfile - --error-logfile -"
+    env_file:
+      - .env
     environment:
-      - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,backend,sga1_flutter,sga1_django_web}
-      - DB_NAME=${DB_NAME:-music_registry_db}
-      - DB_USER=${DB_USER:-music_user}
-      - DB_PASSWORD=${DB_PASSWORD:-music_password}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,api,sga1_api}
       - DB_HOST=${DB_HOST:-db}
-      - DB_PORT=${DB_PORT:-5432}
-      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+      - DB_PORT=5432
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
     volumes:
-      - ./:/usr/src/app
+      - ./services/api:/usr/src/app
       - static_volume:/usr/src/app/staticfiles
       - media_volume:/usr/src/app/media
       - logs_volume:/usr/src/app/logs
@@ -97,28 +105,46 @@ services:
       retries: 3
       start_period: 30s
 
-  # Celery Worker
+  # ── Servicio WhatsApp (Node.js) ──────────────────────────────────────────────
+
+  whatsapp:
+    build:
+      context: ./services/whatsapp
+      dockerfile: Dockerfile
+    container_name: sga1_whatsapp
+    restart: unless-stopped
+    env_file:
+      - ./services/whatsapp/.env
+    environment:
+      - SGA1_BASE=http://api:8000
+    volumes:
+      - ./services/whatsapp:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - sga1_network
+
+  # ── Workers Celery ───────────────────────────────────────────────────────────
+
   celery_worker:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./services/api
+      dockerfile: ../../infra/Dockerfile.api
     container_name: sga1_celery_worker
     restart: unless-stopped
-    command: celery -A music_registry worker -l info --concurrency=4
+    command: celery -A config worker -l info --concurrency=4
+    env_file:
+      - .env
     environment:
-      - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      - DB_NAME=${DB_NAME:-music_registry_db}
-      - DB_USER=${DB_USER:-music_user}
-      - DB_PASSWORD=${DB_PASSWORD:-music_password}
       - DB_HOST=${DB_HOST:-db}
-      - DB_PORT=${DB_PORT:-5432}
-      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+      - DB_PORT=5432
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
     volumes:
-      - ./:/usr/src/app
+      - ./services/api:/usr/src/app
       - logs_volume:/usr/src/app/logs
     depends_on:
       db:
@@ -128,28 +154,21 @@ services:
     networks:
       - sga1_network
 
-  # Celery Beat (Scheduler)
   celery_beat:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./services/api
+      dockerfile: ../../infra/Dockerfile.api
     container_name: sga1_celery_beat
     restart: unless-stopped
-    command: celery -A music_registry beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file:
+      - .env
     environment:
-      - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      - DB_NAME=${DB_NAME:-music_registry_db}
-      - DB_USER=${DB_USER:-music_user}
-      - DB_PASSWORD=${DB_PASSWORD:-music_password}
       - DB_HOST=${DB_HOST:-db}
-      - DB_PORT=${DB_PORT:-5432}
-      - REDIS_URL=${REDIS_URL:-redis://default:@redis:6379/0}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://default:@redis:6379/0}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://default:@redis:6379/0}
+      - DB_PORT=5432
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
     volumes:
-      - ./:/usr/src/app
+      - ./services/api:/usr/src/app
       - logs_volume:/usr/src/app/logs
     depends_on:
       db:
@@ -159,33 +178,23 @@ services:
     networks:
       - sga1_network
 
-  # ── App Móvil Flutter Web (puerto 80) ──────────────────────────────────────
-  # Acceso: http://localhost/
-  # La API se llama al mismo origen; nginx hace proxy a backend:8000
-  flutter_app:
+  # ── Frontends ───────────────────────────────────────────────────────────────
+
+  mobile:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./services/api
+      dockerfile: ../../infra/Dockerfile.frontend
       args:
         API_URL: http://localhost
-    container_name: sga1_flutter
+    container_name: sga1_mobile
     restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
-      - backend
+      - api
     networks:
       - sga1_network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 90s
 
-  # ── Web Django (puerto 8001) ─────────────────────────────────────────────────
-  # Acceso: http://localhost:8001/
-  # Sirve las vistas web de Django (templates, admin, panel docente, etc.)
   django_web:
     image: nginx:alpine
     container_name: sga1_django_web
@@ -193,29 +202,18 @@ services:
     ports:
       - "8001:80"
     volumes:
-      - ./nginx_django.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/nginx/nginx_django.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - backend
+      - api
     networks:
       - sga1_network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
 volumes:
   postgres_data:
-    driver: local
   redis_data:
-    driver: local
   static_volume:
-    driver: local
   media_volume:
-    driver: local
   logs_volume:
-    driver: local
 
 networks:
   sga1_network:
