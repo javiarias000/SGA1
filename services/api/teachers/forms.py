@@ -8,11 +8,10 @@ from users.models import Usuario
 
 class TeacherProfileForm(forms.ModelForm):
     """Formulario para que el docente edite su perfil."""
-    nombre   = forms.CharField(max_length=100, label='Nombre')
-    apellido = forms.CharField(max_length=100, label='Apellido')
-    email    = forms.EmailField(label='Correo electrónico')
-    telefono = forms.CharField(max_length=20, required=False, label='Teléfono')
-    cedula   = forms.CharField(max_length=20, required=False, label='Cédula')
+    nombre = forms.CharField(max_length=255, label='Nombre completo')
+    email  = forms.EmailField(required=False, label='Correo electrónico')
+    phone  = forms.CharField(max_length=30, required=False, label='Teléfono / WhatsApp')
+    cedula = forms.CharField(max_length=20, required=False, label='Cédula')
 
     class Meta:
         model = Teacher
@@ -26,11 +25,10 @@ class TeacherProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.usuario:
             u = self.instance.usuario
-            self.fields['nombre'].initial   = u.nombre
-            self.fields['apellido'].initial = u.apellido
-            self.fields['email'].initial    = u.email
-            self.fields['telefono'].initial = u.telefono
-            self.fields['cedula'].initial   = u.cedula
+            self.fields['nombre'].initial = u.nombre
+            self.fields['email'].initial  = u.email or ''
+            self.fields['phone'].initial  = u.phone or ''
+            self.fields['cedula'].initial = u.cedula or ''
         for field in self.fields.values():
             field.widget.attrs.setdefault('class', 'form-control')
 
@@ -38,11 +36,10 @@ class TeacherProfileForm(forms.ModelForm):
         teacher = super().save(commit=False)
         if teacher.usuario:
             u = teacher.usuario
-            u.nombre   = self.cleaned_data['nombre']
-            u.apellido = self.cleaned_data['apellido']
-            u.email    = self.cleaned_data['email']
-            u.telefono = self.cleaned_data.get('telefono', '')
-            u.cedula   = self.cleaned_data.get('cedula', '')
+            u.nombre = self.cleaned_data['nombre']
+            u.email  = self.cleaned_data.get('email') or None
+            u.phone  = self.cleaned_data.get('phone', '')
+            u.cedula = self.cleaned_data.get('cedula') or None
             u.save()
         if commit:
             teacher.save()
