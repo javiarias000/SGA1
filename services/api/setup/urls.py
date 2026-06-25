@@ -14,6 +14,10 @@ urlpatterns = [
     path('estudiantes/', views.step_estudiantes, name='estudiantes'),
     path('matriculas/', views.step_matriculas, name='matriculas'),
     path('whatsapp/', views.step_whatsapp, name='whatsapp'),
+    # Pensum — materias por nivel
+    path('pensum/', views.pensum_home, name='pensum_home'),
+    path('pensum/nivel/<str:nivel>/', views.pensum_nivel, name='pensum_nivel'),
+    path('pensum/importar/', views.pensum_importar, name='pensum_importar'),
     # Acciones inline
     path('materias/<int:pk>/eliminar/', views.delete_materia, name='delete_materia'),
     path('tipos-aporte/<int:pk>/eliminar/', views.delete_tipo_aporte, name='delete_tipo_aporte'),

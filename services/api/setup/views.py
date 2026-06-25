@@ -1,4 +1,7 @@
+import io
+import csv
 import json
+import urllib.request
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
@@ -8,11 +11,19 @@ from django.db import transaction
 
 from .models import ConfiguracionInstitucion
 from subjects.models import Subject
-from classes.models import GradeLevel, Clase, Enrollment, TipoAporte
+from classes.models import GradeLevel, Clase, Enrollment, TipoAporte, MallaCurricular
 from users.models import Usuario
 from teachers.models import Teacher
 from students.models import Student
 from informes.models import ConfiguracionWhatsapp
+
+# Todos los niveles del conservatorio en orden
+NIVELES_CHOICES = GradeLevel.LEVEL_CHOICES  # lista de (value, label)
+TIPO_LABELS = {
+    'INSTRUMENTO': '🎹 Instrumento',
+    'TEORIA':      '📖 Teoría',
+    'AGRUPACION':  '🎶 Agrupación',
+}
 
 is_staff = lambda u: u.is_staff or u.is_superuser
 
@@ -395,3 +406,279 @@ def step_whatsapp(request):
     return render(request, 'setup/wizard.html', {
         **_ctx('whatsapp'), 'wa': wa, 'api_url': api_url, 'api_key': api_key
     })
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# WIZARD DE PENSUM — Materias por nivel
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _pensum_progress():
+    """Cuántos de los 11 niveles tienen al menos una materia asignada."""
+    niveles_con_malla = (
+        MallaCurricular.objects
+        .values_list('nivel__level', flat=True)
+        .distinct()
+    )
+    return set(niveles_con_malla)
+
+
+def _get_or_create_grade(level_value):
+    """Obtiene o crea el GradeLevel base (sección 'Único') para un nivel."""
+    gl, _ = GradeLevel.objects.get_or_create(
+        level=level_value,
+        section='Único',
+    )
+    return gl
+
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def pensum_home(request):
+    """Vista resumen: grid completo de materias por nivel."""
+    niveles = [(v, l) for v, l in NIVELES_CHOICES]
+    subjects = Subject.objects.all().order_by('tipo_materia', 'name')
+
+    # Construir grid: nivel_value → set(subject_pk)
+    grid = {}
+    for entry in MallaCurricular.objects.select_related('nivel', 'subject').all():
+        key = entry.nivel.level
+        grid.setdefault(key, set()).add(entry.subject_id)
+
+    niveles_completos = _pensum_progress()
+    total_niveles = len(NIVELES_CHOICES)
+    configurados = len(niveles_completos)
+
+    return render(request, 'setup/pensum.html', {
+        'section': 'home',
+        'niveles': niveles,
+        'subjects': subjects,
+        'grid': {k: list(v) for k, v in grid.items()},
+        'niveles_completos': niveles_completos,
+        'total_niveles': total_niveles,
+        'configurados': configurados,
+        'pct': int(configurados / total_niveles * 100),
+        'tipo_labels': TIPO_LABELS,
+    })
+
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def pensum_nivel(request, nivel):
+    """Wizard paso a paso: configura las materias de un nivel específico."""
+    # Validar que el nivel existe en LEVEL_CHOICES
+    level_labels = dict(NIVELES_CHOICES)
+    if nivel not in level_labels:
+        messages.error(request, f'Nivel "{nivel}" no válido.')
+        return redirect('setup:pensum_home')
+
+    label = level_labels[nivel]
+    nivel_idx = list(level_labels.keys()).index(nivel)
+    prev_nivel = list(level_labels.keys())[nivel_idx - 1] if nivel_idx > 0 else None
+    next_nivel = list(level_labels.keys())[nivel_idx + 1] if nivel_idx < len(level_labels) - 1 else None
+
+    grade = _get_or_create_grade(nivel)
+    subjects = Subject.objects.all().order_by('tipo_materia', 'name')
+
+    # Materias ya asignadas a este nivel
+    asignadas = set(
+        MallaCurricular.objects.filter(nivel=grade).values_list('subject_id', flat=True)
+    )
+    obligatorias = set(
+        MallaCurricular.objects.filter(nivel=grade, obligatoria=True).values_list('subject_id', flat=True)
+    )
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'save')
+        if action == 'save':
+            seleccionadas = set(int(pk) for pk in request.POST.getlist('subjects'))
+            obligatorias_nuevas = set(int(pk) for pk in request.POST.getlist('obligatorias'))
+            with transaction.atomic():
+                # Eliminar las que ya no están seleccionadas
+                MallaCurricular.objects.filter(nivel=grade).exclude(
+                    subject_id__in=seleccionadas
+                ).delete()
+                # Crear/actualizar las seleccionadas
+                for subj_pk in seleccionadas:
+                    MallaCurricular.objects.update_or_create(
+                        nivel=grade,
+                        subject_id=subj_pk,
+                        defaults={'obligatoria': subj_pk in obligatorias_nuevas}
+                    )
+            messages.success(request, f'✓ Materias del {label} guardadas ({len(seleccionadas)} asignadas).')
+            if next_nivel and action != 'save_stay':
+                return redirect('setup:pensum_nivel', nivel=next_nivel)
+            return redirect('setup:pensum_nivel', nivel=nivel)
+
+        elif action == 'copiar_nivel':
+            # Copiar pensum de otro nivel
+            nivel_origen = request.POST.get('nivel_origen', '')
+            if nivel_origen and nivel_origen in level_labels:
+                grade_origen = GradeLevel.objects.filter(level=nivel_origen, section='Único').first()
+                if grade_origen:
+                    with transaction.atomic():
+                        MallaCurricular.objects.filter(nivel=grade).delete()
+                        for entry in MallaCurricular.objects.filter(nivel=grade_origen):
+                            MallaCurricular.objects.create(
+                                nivel=grade,
+                                subject=entry.subject,
+                                obligatoria=entry.obligatoria,
+                            )
+                    messages.success(request, f'Pensum copiado desde {level_labels[nivel_origen]}.')
+            return redirect('setup:pensum_nivel', nivel=nivel)
+
+    # Agrupar materias por tipo como lista de (tipo_key, tipo_label, [subjects])
+    por_tipo_list = []
+    for tipo_key, tipo_label in TIPO_LABELS.items():
+        subs = [s for s in subjects if s.tipo_materia == tipo_key]
+        por_tipo_list.append((tipo_key, tipo_label, subs))
+
+    return render(request, 'setup/pensum.html', {
+        'section': 'nivel',
+        'nivel': nivel,
+        'label': label,
+        'grade': grade,
+        'por_tipo_list': por_tipo_list,
+        'asignadas': list(asignadas),
+        'obligatorias': list(obligatorias),
+        'prev_nivel': prev_nivel,
+        'next_nivel': next_nivel,
+        'nivel_idx': nivel_idx + 1,
+        'total_niveles': len(NIVELES_CHOICES),
+        'level_labels': level_labels,
+        'tipo_labels': TIPO_LABELS,
+        'niveles_completos': list(_pensum_progress()),
+        'all_niveles': list(level_labels.items()),
+    })
+
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def pensum_importar(request):
+    """Importar pensum desde CSV o Google Sheets público."""
+    preview = None
+    errors = []
+
+    if request.method == 'POST':
+        action = request.POST.get('action', '')
+
+        # ── Obtener datos CSV ──────────────────────────────────────────────
+        csv_text = ''
+        if action == 'preview_csv':
+            f = request.FILES.get('archivo_csv')
+            if f:
+                csv_text = f.read().decode('utf-8-sig', errors='replace')
+            else:
+                errors.append('Selecciona un archivo CSV.')
+
+        elif action == 'preview_sheets':
+            url = request.POST.get('sheets_url', '').strip()
+            if url:
+                # Convertir URL de Google Sheets a exportación CSV
+                if 'spreadsheets/d/' in url:
+                    parts = url.split('spreadsheets/d/')[1].split('/')
+                    sheet_id = parts[0]
+                    gid = '0'
+                    if 'gid=' in url:
+                        gid = url.split('gid=')[1].split('&')[0].split('#')[0]
+                    csv_url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}'
+                    try:
+                        with urllib.request.urlopen(csv_url, timeout=10) as r:
+                            csv_text = r.read().decode('utf-8-sig', errors='replace')
+                    except Exception as e:
+                        errors.append(f'No se pudo descargar el sheet: {e}. Asegúrate de que sea público.')
+                else:
+                    errors.append('URL de Google Sheets no válida. Debe contener "spreadsheets/d/".')
+            else:
+                errors.append('Ingresa la URL del Google Sheet.')
+
+        elif action == 'confirmar':
+            csv_text = request.POST.get('csv_data', '')
+
+        # ── Parsear CSV ────────────────────────────────────────────────────
+        if csv_text and action in ('preview_csv', 'preview_sheets'):
+            rows, parse_errors = _parse_pensum_csv(csv_text)
+            preview = {'rows': rows, 'errors': parse_errors, 'csv_data': csv_text}
+
+        elif action == 'confirmar' and csv_text:
+            rows, parse_errors = _parse_pensum_csv(csv_text)
+            if parse_errors:
+                errors.extend(parse_errors)
+            else:
+                saved, skipped = _apply_pensum_rows(rows)
+                messages.success(request, f'✓ Importación completada: {saved} materias asignadas, {skipped} ignoradas.')
+                return redirect('setup:pensum_home')
+
+    return render(request, 'setup/pensum.html', {
+        'section': 'importar',
+        'preview': preview,
+        'errors': errors,
+        'total_niveles': len(NIVELES_CHOICES),
+        'niveles_completos': _pensum_progress(),
+    })
+
+
+def _parse_pensum_csv(csv_text):
+    """Parsea el CSV del pensum. Devuelve (rows, errors)."""
+    rows = []
+    errors = []
+    level_labels = dict(NIVELES_CHOICES)
+    tipos_validos = {'INSTRUMENTO', 'TEORIA', 'AGRUPACION'}
+    reader = csv.DictReader(io.StringIO(csv_text))
+
+    # Normalizar headers
+    if not reader.fieldnames:
+        return [], ['El archivo no tiene encabezados.']
+
+    headers = [h.strip().lower() for h in reader.fieldnames]
+
+    for i, raw_row in enumerate(reader, start=2):
+        row = {k.strip().lower(): (v or '').strip() for k, v in raw_row.items()}
+
+        nivel_val = row.get('nivel', row.get('año', row.get('year', ''))).strip()
+        materia = row.get('materia', row.get('subject', row.get('nombre', ''))).strip()
+        categoria = row.get('categoria', row.get('tipo', row.get('category', ''))).strip().upper()
+        obligatoria = row.get('obligatoria', row.get('required', 'SI')).strip().upper()
+
+        if not nivel_val or not materia:
+            continue  # fila vacía
+
+        if nivel_val not in level_labels:
+            errors.append(f'Fila {i}: nivel "{nivel_val}" no válido (use 1-11).')
+            continue
+        if categoria and categoria not in tipos_validos:
+            errors.append(f'Fila {i}: categoría "{categoria}" no válida (use INSTRUMENTO/TEORIA/AGRUPACION).')
+            continue
+
+        rows.append({
+            'nivel': nivel_val,
+            'nivel_label': level_labels[nivel_val],
+            'materia': materia,
+            'categoria': categoria or 'TEORIA',
+            'obligatoria': obligatoria not in ('NO', 'FALSE', '0', 'N'),
+        })
+
+    return rows, errors
+
+
+def _apply_pensum_rows(rows):
+    """Aplica filas parseadas a la BD. Devuelve (saved, skipped)."""
+    saved = 0
+    skipped = 0
+    with transaction.atomic():
+        for row in rows:
+            grade = _get_or_create_grade(row['nivel'])
+            # Buscar o crear materia
+            subject, _ = Subject.objects.get_or_create(
+                name=row['materia'],
+                defaults={'tipo_materia': row['categoria']}
+            )
+            _, created = MallaCurricular.objects.get_or_create(
+                nivel=grade,
+                subject=subject,
+                defaults={'obligatoria': row['obligatoria']}
+            )
+            if created:
+                saved += 1
+            else:
+                skipped += 1
+    return saved, skipped
