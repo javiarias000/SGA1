@@ -47,6 +47,19 @@ p { margin-bottom: var(--space-3); }
 .sidebar .nav-item { margin-bottom: var(--space-2); }
 .sidebar .nav-divider { margin: var(--space-4) 0; }
 
+/* Sidebar section labels */
+.nav-section-title {
+  display: block;
+  padding: 6px 20px 2px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  margin-top: 10px;
+}
+.nav-section-title:first-child { margin-top: 0; }
+
 /* Tables */
 .table, table { border-radius: var(--radius); overflow: hidden; background: #fff; }
 .table thead th { background: #f5f6f8; }

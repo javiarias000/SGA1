@@ -30,60 +30,69 @@
             </div>
             
             <nav class="sidebar-nav">
+
+                <!-- Principal -->
+                <span class="nav-section-title">Principal</span>
                 <a href="{% url 'teachers:teacher_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">
                     <span class="icon">📊</span>
                     <span>Dashboard</span>
                 </a>
-                
-                <a href="{% url 'teachers:estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
-                    <span class="icon">👥</span>
-                    <span>Estudiantes</span>
-                </a>
-                
-                <a href="{% url 'teachers:informes' %}" class="nav-item {% if request.resolver_match.url_name == 'informes' %}active{% endif %}">
-                    <span class="icon">📋</span>
-                    <span>Informes</span>
-                </a>
 
+                <!-- Alumnos -->
+                <span class="nav-section-title">Alumnos</span>
                 <a href="{% url 'teachers:clases_dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'clases_dashboard' %}active{% endif %}">
                     <span class="icon">🏫</span>
                     <span>Clases</span>
                 </a>
-
-                <a href="{% url 'teachers:lista_deberes_profesor' %}" class="nav-item {% if 'deberes' in request.path %}active{% endif %}">
-                    <span class="icon">📝</span>
-                    <span>Deberes</span>
+                <a href="{% url 'teachers:estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
+                    <span class="icon">👥</span>
+                    <span>Estudiantes</span>
                 </a>
 
-                <a href="{% url 'teachers:carpetas' %}" class="nav-item {% if request.resolver_match.url_name == 'carpetas' %}active{% endif %}">
-                    <span class="icon">📁</span>
-                    <span>Carpetas</span>
-                </a>
-                
+                <!-- Calificaciones -->
+                <span class="nav-section-title">Calificaciones</span>
                 <a href="{% url 'teachers:calificaciones_detalladas' %}" class="nav-item {% if request.resolver_match.url_name == 'calificaciones_detalladas' %}active{% endif %}">
-                    <span class="icon">📝</span>
-                    <span>Calificaciones</span>
+                    <span class="icon">📋</span>
+                    <span>Ver Calificaciones</span>
                 </a>
-
                 <a href="{% url 'teachers:wizard_notas' %}?paso=1" class="nav-item {% if request.resolver_match.url_name == 'wizard_notas' %}active{% endif %}">
-                    <span class="icon">📊</span>
+                    <span class="icon">✏️</span>
                     <span>Pasar Notas</span>
                 </a>
-
                 <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="nav-item {% if request.resolver_match.url_name == 'wizard_aporte' %}active{% endif %}">
                     <span class="icon">➕</span>
                     <span>Nuevo Aporte</span>
                 </a>
 
+                <!-- Tareas -->
+                <span class="nav-section-title">Tareas</span>
+                <a href="{% url 'teachers:lista_deberes_profesor' %}" class="nav-item {% if 'deberes' in request.path %}active{% endif %}">
+                    <span class="icon">📝</span>
+                    <span>Deberes</span>
+                </a>
+                <a href="{% url 'teachers:carpetas' %}" class="nav-item {% if request.resolver_match.url_name == 'carpetas' %}active{% endif %}">
+                    <span class="icon">📁</span>
+                    <span>Carpetas</span>
+                </a>
+
+                <!-- Comunicación -->
+                <span class="nav-section-title">Comunicación</span>
+                <a href="{% url 'teachers:informes' %}" class="nav-item {% if request.resolver_match.url_name == 'informes' %}active{% endif %}">
+                    <span class="icon">💬</span>
+                    <span>Informes WhatsApp</span>
+                </a>
+
+                <!-- Cuenta -->
+                <div class="nav-divider"></div>
                 <a href="{% url 'teachers:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                     <span class="icon">👤</span>
                     <span>Mi Perfil</span>
                 </a>
-
-<a href="{% url 'users:logout' %}" class="nav-item">
+                <a href="{% url 'users:logout' %}" class="nav-item">
                     <span class="icon">🚪</span>
                     <span>Cerrar Sesión</span>
                 </a>
+
             </nav>
         </aside>
         
