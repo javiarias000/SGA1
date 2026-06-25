@@ -54,9 +54,22 @@
   <a class="cb-quick-action" href="{% url 'admin:subjects_subject_changelist' %}">🎵 Materias</a>
 </div>
 
-<!-- ── Módulos del sistema ── -->
-<p class="cb-section-title">Módulos del sistema</p>
+<!-- ── Acceso al wizard ── -->
+<div style="margin:1.5rem 0 .5rem;display:flex;align-items:center;justify-content:space-between;">
+  <p class="cb-section-title" style="margin:0">Módulos del sistema</p>
+  <a href="/setup/" style="display:inline-flex;align-items:center;gap:6px;background:#6366f1;color:#fff;
+     padding:7px 18px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">
+    ⚙️ Wizard de Configuración
+  </a>
+</div>
+
 {% for app in app_list %}
+{% ifchanged app.section_label %}
+<p style="margin:1.5rem 0 .5rem .25rem;font-size:.7rem;font-weight:700;letter-spacing:.07em;
+          color:#6b7280;text-transform:uppercase;">
+  {{ app.section_label|default:app.name }}
+</p>
+{% endifchanged %}
 <div class="module" id="app-{{ app.app_label }}">
   <table>
     <caption>
@@ -67,22 +80,12 @@
     {% for model in app.models %}
     <tr class="model-{{ model.object_name|lower }}">
       {% if model.admin_url %}
-      <th scope="row">
-        <a href="{{ model.admin_url }}">{{ model.name }}</a>
-      </th>
+      <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
       {% else %}
       <th scope="row">{{ model.name }}</th>
       {% endif %}
-      <td>
-        {% if model.add_url %}
-        <a href="{{ model.add_url }}" class="addlink">{% trans "Add" %}</a>
-        {% endif %}
-      </td>
-      <td>
-        {% if model.admin_url %}
-        <a href="{{ model.admin_url }}" class="changelink">{% trans "View" %}</a>
-        {% endif %}
-      </td>
+      <td>{% if model.add_url %}<a href="{{ model.add_url }}" class="addlink">{% trans "Add" %}</a>{% endif %}</td>
+      <td>{% if model.admin_url %}<a href="{{ model.admin_url }}" class="changelink">{% trans "View" %}</a>{% endif %}</td>
     </tr>
     {% endfor %}
   </table>

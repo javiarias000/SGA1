@@ -3,6 +3,47 @@ from django.db import models
 from django.conf import settings
 
 
+class SolicitudDocente(models.Model):
+    """Formulario público de auto-registro para docentes/personal."""
+
+    class Estado(models.TextChoices):
+        PENDIENTE  = 'PENDIENTE',  'Pendiente de revisión'
+        APROBADO   = 'APROBADO',   'Aprobado — cuenta creada'
+        RECHAZADO  = 'RECHAZADO',  'Rechazado'
+
+    codigo_seguimiento = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    estado = models.CharField(max_length=10, choices=Estado.choices, default=Estado.PENDIENTE)
+
+    # Datos personales
+    nombre_completo    = models.CharField(max_length=150)
+    cedula             = models.CharField(max_length=20, blank=True)
+    email              = models.EmailField(unique=True)
+    telefono           = models.CharField(max_length=20, blank=True)
+    especialidad       = models.CharField(max_length=120, blank=True)
+    titulo_academico   = models.CharField(max_length=200, blank=True)
+    experiencia_anios  = models.PositiveSmallIntegerField(null=True, blank=True,
+                            verbose_name='Años de experiencia')
+    mensaje            = models.TextField(blank=True,
+                            verbose_name='Carta de presentación / mensaje adicional')
+
+    # Admin
+    notas_admin        = models.TextField(blank=True, verbose_name='Notas del administrador')
+    username_generado  = models.CharField(max_length=60, blank=True, editable=False)
+    password_temporal  = models.CharField(max_length=60, blank=True, editable=False,
+                            help_text='Contraseña visible sólo justo después de aprobar.')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Solicitud de Registro — Docente'
+        verbose_name_plural = 'Solicitudes de Registro — Docentes'
+
+    def __str__(self):
+        return f"{self.nombre_completo} ({self.email}) [{self.get_estado_display()}]"
+
+
 class SolicitudMatricula(models.Model):
     class Estado(models.TextChoices):
         PENDIENTE = 'PENDIENTE', 'Pendiente de revisión'

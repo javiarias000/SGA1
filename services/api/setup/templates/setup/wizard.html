@@ -42,6 +42,19 @@
       font-size:0.78rem; font-weight:500; border:none; cursor:pointer; transition:background .2s;
     }
     .btn-danger:hover { background:#fecaca; }
+    .btn-import {
+      background:#4f46e5; color:#fff; padding:.45rem 1rem; border-radius:.5rem;
+      font-size:.8rem; font-weight:600; border:none; cursor:pointer; white-space:nowrap;
+      transition:background .15s;
+    }
+    .btn-import:hover { background:#3730a3; }
+    /* Modal */
+    #import-modal { background:rgba(0,0,0,.55); backdrop-filter:blur(3px); }
+    .tab-active   { background:#6366f1; color:#fff; border-radius:.4rem; }
+    .tab-inactive { color:#6b7280; }
+    .preview-table th { background:#f3f4f6; font-size:.72rem; font-weight:600; color:#6b7280; padding:.4rem .75rem; text-align:left; }
+    .preview-table td { font-size:.78rem; padding:.35rem .75rem; border-bottom:1px solid #f3f4f6; }
+    .preview-table tr:last-child td { border-bottom:none; }
     .card { background:#fff; border-radius:0.875rem; box-shadow:0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05); }
     .info-box { background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%); border:1px solid #c7d2fe; border-radius:0.75rem; padding:1rem 1.25rem; }
     .tag-instrumento { background:#dbeafe; color:#1e40af; }
@@ -55,7 +68,7 @@
 <body class="bg-gray-50 flex h-screen overflow-hidden">
 
 <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
-<aside class="w-72 flex-shrink-0 flex flex-col h-screen overflow-y-auto" style="background:linear-gradient(180deg,#1e1b4b 0%,#312e81 100%);">
+<aside class="w-72 flex-shrink-0 flex flex-col overflow-y-auto" style="background:linear-gradient(180deg,#1e1b4b 0%,#312e81 100%);">
 
   <!-- Logo / Header -->
   <div class="px-6 pt-7 pb-5 border-b border-indigo-800">
@@ -116,6 +129,11 @@
 
   <!-- Bottom links -->
   <div class="px-4 py-4 border-t border-indigo-800 space-y-1">
+    <a href="/setup/links/" class="flex items-center gap-2 px-3 py-2 rounded-lg
+       {% if current_step_id == 'links' %}bg-indigo-700 text-white{% else %}text-indigo-300 hover:text-white hover:bg-indigo-800{% endif %} transition text-sm">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      🔗 Links de Registro
+    </a>
     <a href="/setup/pensum/" class="flex items-center gap-2 px-3 py-2 rounded-lg text-indigo-300 hover:text-white hover:bg-indigo-800 transition text-sm">
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
       Pensum por Nivel
@@ -132,7 +150,7 @@
 </aside>
 
 <!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
-<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<main class="flex-1 flex flex-col min-h-0 overflow-hidden">
 
   <!-- Top bar -->
   <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between flex-shrink-0">
@@ -173,7 +191,7 @@
   {% endif %}
 
   <!-- Scrollable content -->
-  <div class="flex-1 overflow-y-auto px-8 py-6">
+  <div class="flex-1 overflow-y-auto min-h-0 px-8 py-6 pb-16">
 
     <!-- ═══ PASO 1: INSTITUCIÓN ═══ -->
     {% if current_step_id == 'institucion' %}
@@ -235,8 +253,9 @@
 
     <!-- ═══ PASO 2: MATERIAS ═══ -->
     {% if current_step_id == 'materias' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">🎵 Define las materias que se imparten. Puedes tener <strong>Instrumento</strong> (piano, guitarra…), <strong>Teoría</strong> (solfeo, armonía…) y <strong>Agrupación</strong> (orquesta, coro…).</p>
+      <button type="button" onclick="abrirImport('materias','Materias','nombre,tipo,descripcion')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-4xl">
       <!-- Lista existente -->
@@ -302,8 +321,9 @@
 
     <!-- ═══ PASO 3: TIPOS DE APORTE ═══ -->
     {% if current_step_id == 'tipos_aporte' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">📋 Los tipos de aporte definen cómo se califica cada materia. Ejemplos: <strong>Trabajo en clase</strong>, <strong>Exposición</strong>, <strong>Transcripción</strong>. El peso determina su importancia relativa en el promedio.</p>
+      <button type="button" onclick="abrirImport('tipos_aporte','Tipos de Aporte','nombre,codigo,peso,orden')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-4xl">
       <div class="card p-5">
@@ -375,8 +395,9 @@
 
     <!-- ═══ PASO 4: NIVELES ═══ -->
     {% if current_step_id == 'niveles' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">🎓 Crea los niveles y paralelos de tu institución. Ej: <strong>Básica 1 — Paralelo A</strong>. El ciclo se asigna automáticamente según el nivel.</p>
+      <button type="button" onclick="abrirImport('niveles','Niveles','nivel,paralelo')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-4xl">
       <div class="card p-5">
@@ -429,8 +450,9 @@
 
     <!-- ═══ PASO 4: DOCENTES ═══ -->
     {% if current_step_id == 'docentes' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">👨‍🏫 Registra los docentes. Se crea automáticamente un usuario de acceso. Contraseña por defecto: <code class="bg-indigo-100 px-1 rounded">Docente2025!</code></p>
+      <button type="button" onclick="abrirImport('docentes','Docentes','nombre,cedula,email,telefono,especialidad')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-4xl">
       <div class="card p-5">
@@ -498,8 +520,9 @@
 
     <!-- ═══ PASO 5: CLASES ═══ -->
     {% if current_step_id == 'clases' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">🎵 Cada clase conecta una materia con un docente y un nivel. Ej: <strong>Piano I — Prof. García — Básica 1 A</strong>.</p>
+      <button type="button" onclick="abrirImport('clases','Clases','nombre,materia,docente,nivel,paralelo,ciclo')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-5xl">
       <div class="card p-5">
@@ -546,7 +569,11 @@
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nivel / Paralelo</label>
             <select name="grade_level" class="form-select">
               <option value="">— Sin nivel asignado —</option>
-              {% for n in niveles %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+              {% for grupo in niveles_agrupados %}
+              <optgroup label="{{ grupo.label }}">
+                {% for n in grupo.items %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+              </optgroup>
+              {% endfor %}
             </select>
           </div>
           <div>
@@ -572,8 +599,9 @@
 
     <!-- ═══ PASO 6: ESTUDIANTES ═══ -->
     {% if current_step_id == 'estudiantes' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">👨‍🎓 Registra los estudiantes. El teléfono del representante se usará para las notificaciones por WhatsApp. Contraseña por defecto: <code class="bg-indigo-100 px-1 rounded">Alumno2025!</code></p>
+      <button type="button" onclick="abrirImport('estudiantes','Estudiantes','nombre,cedula,email,nivel,paralelo,representante,telefono_representante')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-5xl">
       <div class="card p-5">
@@ -625,7 +653,11 @@
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nivel</label>
             <select name="grade_level" class="form-select">
               <option value="">— Sin nivel —</option>
-              {% for n in niveles %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+              {% for grupo in niveles_agrupados %}
+              <optgroup label="{{ grupo.label }}">
+                {% for n in grupo.items %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+              </optgroup>
+              {% endfor %}
             </select>
           </div>
           <div class="border-t pt-3">
@@ -645,8 +677,9 @@
 
     <!-- ═══ PASO 7: MATRÍCULAS ═══ -->
     {% if current_step_id == 'matriculas' %}
-    <div class="info-box mb-6">
+    <div class="info-box mb-4 flex items-center justify-between gap-4">
       <p class="text-indigo-800 text-sm font-medium">📝 Matricula a cada estudiante en las clases que le corresponden. Un estudiante puede estar en múltiples clases.</p>
+      <button type="button" onclick="abrirImport('matriculas','Matrículas','cedula_estudiante,nombre_clase')" class="btn-import flex-shrink-0">📥 Importar</button>
     </div>
     <div class="grid grid-cols-2 gap-6 max-w-5xl">
       <div class="card p-5">
@@ -760,11 +793,241 @@
   </div><!-- end scrollable -->
 </main>
 
+<!-- ══ MODAL DE IMPORTACIÓN MASIVA ══ -->
+<div id="import-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col" style="max-height:90vh">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+      <div>
+        <h2 class="font-bold text-gray-900 text-lg" id="modal-title">Importar</h2>
+        <p class="text-xs text-gray-500" id="modal-subtitle">Desde Google Sheets o archivo CSV/Excel</p>
+      </div>
+      <button onclick="cerrarImport()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 text-lg font-bold">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-2 px-6 pt-4">
+      <button onclick="switchTab('url')" id="tab-url" class="px-4 py-1.5 text-sm font-semibold tab-active rounded">
+        🔗 Google Sheets URL
+      </button>
+      <button onclick="switchTab('file')" id="tab-file" class="px-4 py-1.5 text-sm font-semibold tab-inactive rounded">
+        📁 Subir archivo
+      </button>
+    </div>
+
+    <!-- Content scrollable -->
+    <div class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+
+      <!-- Columnas esperadas -->
+      <div class="bg-indigo-50 border border-indigo-100 rounded-lg px-4 py-3">
+        <p class="text-xs font-semibold text-indigo-700 mb-1">Columnas esperadas (primera fila del archivo):</p>
+        <code class="text-xs text-indigo-800" id="modal-cols"></code>
+        <p class="text-xs text-indigo-500 mt-1">Los nombres de columnas no son sensibles a mayúsculas ni tildes.</p>
+      </div>
+
+      <!-- Tab URL -->
+      <div id="tab-url-content">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Enlace de Google Sheets</label>
+        <input id="sheet-url-input" type="url" class="form-input"
+               placeholder="https://docs.google.com/spreadsheets/d/..."
+               oninput="clearPreview()">
+        <p class="text-xs text-gray-400 mt-1">El sheet debe ser público o compartido como «Cualquier persona con el enlace puede ver».</p>
+        <button onclick="previewSheet()" class="mt-3 btn-secondary text-sm">
+          👁 Vista previa (primeras 5 filas)
+        </button>
+      </div>
+
+      <!-- Tab Archivo -->
+      <div id="tab-file-content" class="hidden">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Seleccionar archivo CSV o Excel (.xlsx)</label>
+        <input id="file-input" type="file" accept=".csv,.xlsx,.xls"
+               class="block w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4
+                      file:rounded-lg file:border-0 file:font-semibold file:bg-indigo-50 file:text-indigo-700
+                      hover:file:bg-indigo-100 cursor-pointer border border-gray-200 rounded-lg p-1"
+               onchange="previewFile()">
+      </div>
+
+      <!-- Preview area -->
+      <div id="preview-area" class="hidden">
+        <div class="flex items-center gap-2 mb-2">
+          <p class="text-sm font-semibold text-gray-700">Vista previa</p>
+          <span id="preview-total" class="text-xs text-gray-400"></span>
+        </div>
+        <div class="overflow-x-auto border border-gray-200 rounded-lg">
+          <table class="preview-table w-full">
+            <thead id="preview-head"></thead>
+            <tbody id="preview-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Error area -->
+      <div id="preview-error" class="hidden bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+        <p class="text-sm text-red-700" id="preview-error-text"></p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-6 py-4 border-t border-gray-200 flex justify-between items-center">
+      <button onclick="cerrarImport()" class="btn-secondary text-sm">Cancelar</button>
+      <button onclick="ejecutarImport()" id="btn-importar"
+              class="btn-primary flex items-center gap-2" disabled>
+        🚀 Importar datos
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Auto-dismiss messages
 setTimeout(() => {
   document.querySelectorAll('[data-msg]').forEach(el => el.remove())
 }, 4000)
+
+// ── Import modal ──────────────────────────────────────────────────────────────
+let _entity = '', _tab = 'url';
+
+function abrirImport(entity, label, cols) {
+  _entity = entity;
+  _tab = 'url';
+  document.getElementById('modal-title').textContent = 'Importar ' + label;
+  document.getElementById('modal-cols').textContent = cols;
+  document.getElementById('sheet-url-input').value = '';
+  document.getElementById('file-input').value = '';
+  clearPreview();
+  switchTab('url');
+  document.getElementById('import-modal').classList.remove('hidden');
+}
+
+function cerrarImport() {
+  document.getElementById('import-modal').classList.add('hidden');
+}
+
+function switchTab(tab) {
+  _tab = tab;
+  document.getElementById('tab-url-content').classList.toggle('hidden', tab !== 'url');
+  document.getElementById('tab-file-content').classList.toggle('hidden', tab !== 'file');
+  document.getElementById('tab-url').className = 'px-4 py-1.5 text-sm font-semibold rounded ' + (tab==='url' ? 'tab-active' : 'tab-inactive');
+  document.getElementById('tab-file').className = 'px-4 py-1.5 text-sm font-semibold rounded ' + (tab==='file' ? 'tab-active' : 'tab-inactive');
+  clearPreview();
+}
+
+function clearPreview() {
+  document.getElementById('preview-area').classList.add('hidden');
+  document.getElementById('preview-error').classList.add('hidden');
+  document.getElementById('btn-importar').disabled = true;
+}
+
+async function previewSheet() {
+  const url = document.getElementById('sheet-url-input').value.trim();
+  if (!url) return;
+  clearPreview();
+  const btn = event.target;
+  btn.textContent = '⏳ Cargando...';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/setup/importar/preview/?entity=' + encodeURIComponent(_entity) + '&url=' + encodeURIComponent(url));
+    const data = await r.json();
+    if (data.ok) {
+      renderPreview(data);
+    } else {
+      showPreviewError(data.error);
+    }
+  } catch(e) {
+    showPreviewError('Error de conexión: ' + e.message);
+  } finally {
+    btn.textContent = '👁 Vista previa (primeras 5 filas)';
+    btn.disabled = false;
+  }
+}
+
+async function previewFile() {
+  const file = document.getElementById('file-input').files[0];
+  if (!file) return;
+  clearPreview();
+  const fd = new FormData();
+  fd.append('archivo', file);
+  fd.append('entity', _entity);
+  fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+  try {
+    const r = await fetch('/setup/importar/preview/?entity=' + encodeURIComponent(_entity), {method:'POST', body:fd});
+    const data = await r.json();
+    if (data.ok) {
+      renderPreview(data);
+    } else {
+      showPreviewError(data.error);
+    }
+  } catch(e) {
+    showPreviewError('Error al leer el archivo: ' + e.message);
+  }
+}
+
+function renderPreview(data) {
+  const head = document.getElementById('preview-head');
+  const body = document.getElementById('preview-body');
+  head.innerHTML = '<tr>' + data.columns.map(c => '<th>' + c + '</th>').join('') + '</tr>';
+  body.innerHTML = data.rows.map(row =>
+    '<tr>' + row.map(cell => '<td>' + (cell || '<span class="text-gray-300">—</span>') + '</td>').join('') + '</tr>'
+  ).join('');
+  document.getElementById('preview-total').textContent = '(' + data.total_filas + ' filas totales)';
+  document.getElementById('preview-area').classList.remove('hidden');
+  document.getElementById('btn-importar').disabled = false;
+}
+
+function showPreviewError(msg) {
+  document.getElementById('preview-error-text').textContent = msg;
+  document.getElementById('preview-error').classList.remove('hidden');
+}
+
+function ejecutarImport() {
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/setup/importar/' + _entity + '/';
+  form.enctype = 'multipart/form-data';
+
+  const csrf = document.createElement('input');
+  csrf.type = 'hidden'; csrf.name = 'csrfmiddlewaretoken';
+  csrf.value = '{{ csrf_token }}';
+  form.appendChild(csrf);
+
+  if (_tab === 'url') {
+    const urlVal = document.getElementById('sheet-url-input').value;
+    const inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = 'sheet_url'; inp.value = urlVal;
+    form.appendChild(inp);
+  } else {
+    const fileInput = document.getElementById('file-input');
+    fileInput.name = 'archivo';
+    form.appendChild(fileInput.cloneNode(true));
+    // Re-append original so clone has file
+    const realFile = document.createElement('input');
+    realFile.type = 'hidden'; realFile.name = '_file_sent'; realFile.value = '1';
+    form.appendChild(realFile);
+    // Use real file input via FormData submit
+    const btn = document.getElementById('btn-importar');
+    btn.textContent = '⏳ Importando...';
+    btn.disabled = true;
+    const fd = new FormData();
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    fd.append('archivo', document.getElementById('file-input').files[0]);
+    fetch('/setup/importar/' + _entity + '/', {method:'POST', body:fd})
+      .then(r => { window.location.reload(); })
+      .catch(() => { window.location.reload(); });
+    return;
+  }
+
+  document.body.appendChild(form);
+  const btn = document.getElementById('btn-importar');
+  btn.textContent = '⏳ Importando...';
+  btn.disabled = true;
+  form.submit();
+}
+
+// Cerrar al hacer click fuera
+document.getElementById('import-modal').addEventListener('click', function(e) {
+  if (e.target === this) cerrarImport();
+});
 </script>
 </body>
 </html>

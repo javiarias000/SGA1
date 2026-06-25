@@ -27,6 +27,23 @@ TIPO_LABELS = {
 
 is_staff = lambda u: u.is_staff or u.is_superuser
 
+# Agrupación jerárquica de niveles del conservatorio
+_GRUPOS_NIVEL = [
+    ('Básica  —  1° y 2°',       ['1', '2']),
+    ('Media  —  3° al 5°',       ['3', '4', '5']),
+    ('Superior  —  6° al 11°',   ['6', '7', '8', '9', '10', '11']),
+]
+
+def _niveles_agrupados():
+    """Devuelve lista de {label, items:[GradeLevel]} para usar con <optgroup>."""
+    qs = list(GradeLevel.objects.all().order_by('level', 'section'))
+    grupos = []
+    for label, levels in _GRUPOS_NIVEL:
+        items = [n for n in qs if n.level in levels]
+        if items:
+            grupos.append({'label': label, 'items': items})
+    return grupos
+
 
 STEPS = [
     {'id': 'institucion',   'titulo': 'Institución',       'url': 'setup:institucion',   'desc': 'Nombre, ciudad y año lectivo'},
@@ -261,12 +278,12 @@ def step_clases(request):
 
     clases = Clase.objects.select_related('subject', 'grade_level', 'docente_base').order_by('name')
     subjects = Subject.objects.all().order_by('name')
-    niveles = GradeLevel.objects.all().order_by('level', 'section')
     docentes = Usuario.objects.filter(rol='DOCENTE').order_by('nombre')
     cfg = ConfiguracionInstitucion.get()
     return render(request, 'setup/wizard.html', {
         **_ctx('clases'),
-        'clases': clases, 'subjects': subjects, 'niveles': niveles,
+        'clases': clases, 'subjects': subjects,
+        'niveles_agrupados': _niveles_agrupados(),
         'docentes': docentes, 'anio_lectivo': cfg.anio_lectivo,
     })
 
@@ -316,8 +333,11 @@ def step_estudiantes(request):
         return redirect('setup:estudiantes')
 
     estudiantes = Student.objects.select_related('usuario', 'grade_level').order_by('usuario__nombre')
-    niveles = GradeLevel.objects.all().order_by('level', 'section')
-    return render(request, 'setup/wizard.html', {**_ctx('estudiantes'), 'estudiantes': estudiantes, 'niveles': niveles})
+    return render(request, 'setup/wizard.html', {
+        **_ctx('estudiantes'),
+        'estudiantes': estudiantes,
+        'niveles_agrupados': _niveles_agrupados(),
+    })
 
 
 @login_required
@@ -682,3 +702,97 @@ def _apply_pensum_rows(rows):
             else:
                 skipped += 1
     return saved, skipped
+
+
+# ─── IMPORTACIÓN MASIVA ───────────────────────────────────────────────────────
+
+from .importar import IMPORTADORES, SCHEMAS, read_source, sheet_url_to_csv_url
+
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def importar_preview(request):
+    """GET/POST: devuelve primeras filas del sheet/archivo como JSON para preview."""
+    entity = request.GET.get('entity', '')
+    url = request.GET.get('url', '').strip()
+    archivo = request.FILES.get('archivo') if request.method == 'POST' else None
+    try:
+        df = read_source(file_obj=archivo, url=url if url else None)
+        cols = list(df.columns)
+        rows = df.head(5).fillna('').astype(str).values.tolist()
+        schema = SCHEMAS.get(entity, {})
+        return JsonResponse({
+            'ok': True,
+            'columns': cols,
+            'rows': rows,
+            'expected': schema.get('cols', []),
+            'requeridos': schema.get('requeridos', []),
+            'total_filas': len(df),
+        })
+    except Exception as e:
+        return JsonResponse({'ok': False, 'error': str(e)})
+
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def importar_entidad(request, entity):
+    """POST: importa datos desde Google Sheets o archivo subido."""
+    if entity not in IMPORTADORES:
+        messages.error(request, f'Entidad "{entity}" no soportada.')
+        return redirect('setup:home')
+
+    if request.method != 'POST':
+        return redirect('setup:home')
+
+    url = request.POST.get('sheet_url', '').strip()
+    archivo = request.FILES.get('archivo')
+
+    try:
+        df = read_source(file_obj=archivo, url=url if url else None)
+        fn = IMPORTADORES[entity]
+        creados, actualizados, errores = fn(df)
+
+        if creados or actualizados:
+            messages.success(
+                request,
+                f'✓ Importación completada: {creados} creados, {actualizados} actualizados.'
+                + (f' ({len(errores)} con errores)' if errores else '')
+            )
+        if errores:
+            for err in errores[:5]:
+                messages.warning(request, err)
+            if len(errores) > 5:
+                messages.warning(request, f'... y {len(errores) - 5} errores más.')
+    except Exception as e:
+        messages.error(request, f'Error al leer los datos: {e}')
+
+    # Redirigir al paso correspondiente
+    ENTITY_STEP = {
+        'materias': 'setup:materias',
+        'tipos_aporte': 'setup:tipos_aporte',
+        'niveles': 'setup:niveles',
+        'docentes': 'setup:docentes',
+        'estudiantes': 'setup:estudiantes',
+        'clases': 'setup:clases',
+        'matriculas': 'setup:matriculas',
+    }
+    return redirect(ENTITY_STEP.get(entity, 'setup:home'))
+
+
+# ─── LINKS DE REGISTRO ────────────────────────────────────────────────────────
+
+@login_required
+@user_passes_test(is_staff, login_url='/users/login/')
+def links_registro(request):
+    """Página con los links públicos de registro para compartir."""
+    from matriculas.models import SolicitudDocente, SolicitudMatricula
+    ctx = {
+        'current_step_id': 'links',
+        'steps': STEPS,
+        'done': _completion(),
+        'total_steps': len(STEPS),
+        'pendientes_docentes': SolicitudDocente.objects.filter(estado='PENDIENTE').count(),
+        'pendientes_estudiantes': SolicitudMatricula.objects.filter(
+            estado__in=['PENDIENTE', 'EN_REVISION']).count(),
+    }
+    return render(request, 'setup/links.html', ctx)

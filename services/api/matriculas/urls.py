@@ -4,13 +4,16 @@ from . import views
 app_name = 'matriculas'
 
 urlpatterns = [
-    # Pública
+    # Pública — estudiantes
     path('nueva/', views.NuevaMatriculaView.as_view(), name='nueva'),
     path('confirmacion/<uuid:codigo>/', views.confirmacion_view, name='confirmacion'),
     path('seguimiento/', views.seguimiento_view, name='seguimiento'),
-
-    # Estudiante autenticado
     path('renovacion/', views.renovacion_view, name='renovacion'),
+
+    # Pública — docentes / personal
+    path('registro-docente/', views.registro_docente_view, name='registro_docente'),
+    path('registro-docente/confirmacion/<uuid:codigo>/',
+         views.registro_docente_confirmacion_view, name='registro_docente_confirmacion'),
 
     # Secretaría
     path('secretaria/', views.secretaria_lista_view, name='secretaria_lista'),

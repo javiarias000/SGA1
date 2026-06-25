@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud Enviada — Conservatorio Bolívar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <script>tailwind.config = {theme:{extend:{fontFamily:{sans:['Lato','sans-serif'],serif:['Playfair Display','serif']},colors:{'cb-blue':{900:'#00204a',800:'#002e6d',700:'#004299',50:'#f0f5ff'},'cb-gold':{400:'#fccb00',500:'#e0ac00'}}}}}</script>
+</head>
+<body class="bg-cb-blue-50 font-sans min-h-screen flex items-center justify-center p-4">
+
+<div class="max-w-lg w-full">
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+
+    <!-- Success header -->
+    <div class="bg-green-600 px-6 py-8 text-center text-white">
+      <div class="text-5xl mb-3">✅</div>
+      <h1 class="font-serif text-2xl font-bold">¡Solicitud enviada!</h1>
+      <p class="text-green-100 text-sm mt-1">Su registro ha sido recibido correctamente</p>
+    </div>
+
+    <div class="px-6 py-6 space-y-4">
+      <p class="text-gray-700">
+        Hola <strong>{{ solicitud.nombre_completo.split.0 }}</strong>, gracias por registrarse.
+        La administración del Conservatorio Bolívar revisará su solicitud y se comunicará con usted.
+      </p>
+
+      <div class="bg-gray-50 rounded-lg divide-y divide-gray-100">
+        <div class="px-4 py-3 flex justify-between text-sm">
+          <span class="text-gray-500">Código de seguimiento</span>
+          <code class="font-mono text-xs text-gray-800">{{ solicitud.codigo_seguimiento }}</code>
+        </div>
+        <div class="px-4 py-3 flex justify-between text-sm">
+          <span class="text-gray-500">Especialidad</span>
+          <span class="text-gray-800">{{ solicitud.especialidad|default:"—" }}</span>
+        </div>
+        <div class="px-4 py-3 flex justify-between text-sm">
+          <span class="text-gray-500">Estado</span>
+          <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded">
+            Pendiente de revisión
+          </span>
+        </div>
+      </div>
+
+      {% if solicitud.telefono %}
+      <div class="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-sm text-blue-800">
+        📱 Cuando su solicitud sea aprobada recibirá un mensaje de WhatsApp al número
+        <strong>{{ solicitud.telefono }}</strong> con sus credenciales de acceso.
+      </div>
+      {% else %}
+      <div class="bg-yellow-50 border border-yellow-100 rounded-lg px-4 py-3 text-sm text-yellow-800">
+        ⚠️ No proporcionó número de teléfono. La administración le enviará sus credenciales por correo a
+        <strong>{{ solicitud.email }}</strong>.
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="px-6 pb-6">
+      <a href="/" class="block text-center bg-cb-blue-800 hover:bg-cb-blue-700 text-white font-semibold
+                         px-6 py-2.5 rounded-lg text-sm transition">
+        ← Volver al inicio
+      </a>
+    </div>
+  </div>
+
+  <p class="text-center text-xs text-gray-400 mt-4">
+    Conservatorio Bolívar de Ambato &nbsp;·&nbsp; Sistema de Gestión Académica
+  </p>
+</div>
+
+</body>
+</html>

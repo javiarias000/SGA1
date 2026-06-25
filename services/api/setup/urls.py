@@ -18,6 +18,11 @@ urlpatterns = [
     path('pensum/', views.pensum_home, name='pensum_home'),
     path('pensum/nivel/<str:nivel>/', views.pensum_nivel, name='pensum_nivel'),
     path('pensum/importar/', views.pensum_importar, name='pensum_importar'),
+    # Links de registro público
+    path('links/', views.links_registro, name='links'),
+    # Importación masiva
+    path('importar/preview/', views.importar_preview, name='importar_preview'),
+    path('importar/<str:entity>/', views.importar_entidad, name='importar_entidad'),
     # Acciones inline
     path('materias/<int:pk>/eliminar/', views.delete_materia, name='delete_materia'),
     path('tipos-aporte/<int:pk>/eliminar/', views.delete_tipo_aporte, name='delete_tipo_aporte'),

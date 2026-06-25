@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import SolicitudMatricula, DocumentoMatricula
+from .models import SolicitudMatricula, DocumentoMatricula, SolicitudDocente
 
 
 class DocumentoMatriculaInline(admin.TabularInline):
@@ -111,12 +111,25 @@ class SolicitudMatriculaAdmin(admin.ModelAdmin):
         return format_html('<span style="color:#059669">✅ OK</span>')
     get_ia_review.short_description = 'Revisión IA'
 
-    actions = ['aprobar', 'rechazar', 'marcar_en_revision']
+    actions = ['aprobar_y_crear_cuenta', 'rechazar', 'marcar_en_revision']
 
-    @admin.action(description='✅ Aprobar solicitudes seleccionadas')
-    def aprobar(self, request, queryset):
-        n = queryset.update(estado='APROBADA')
-        self.message_user(request, f'{n} solicitud(es) aprobada(s).')
+    @admin.action(description='✅ Aprobar y crear cuenta de estudiante')
+    def aprobar_y_crear_cuenta(self, request, queryset):
+        from .views import _crear_matricula_academica
+        creadas = errores = 0
+        for sol in queryset.exclude(estado='APROBADA'):
+            try:
+                _crear_matricula_academica(sol)
+                sol.estado = 'APROBADA'
+                sol.save(update_fields=['estado'])
+                creadas += 1
+            except Exception as e:
+                self.message_user(request, f'Error en {sol.nombre_completo}: {e}',
+                                  level='error')
+                errores += 1
+        if creadas:
+            self.message_user(request,
+                f'{creadas} solicitud(es) aprobada(s) — cuentas de estudiante creadas.')
 
     @admin.action(description='❌ Rechazar solicitudes seleccionadas')
     def rechazar(self, request, queryset):
@@ -127,3 +140,91 @@ class SolicitudMatriculaAdmin(admin.ModelAdmin):
     def marcar_en_revision(self, request, queryset):
         n = queryset.update(estado='EN_REVISION')
         self.message_user(request, f'{n} solicitud(es) en revisión.')
+
+
+# ─── SOLICITUDES DOCENTE ─────────────────────────────────────────────────────
+
+@admin.register(SolicitudDocente)
+class SolicitudDocenteAdmin(admin.ModelAdmin):
+    list_display  = ['get_nombre', 'especialidad', 'get_estado_badge',
+                     'get_credenciales', 'created_at']
+    list_filter   = ['estado', 'especialidad']
+    search_fields = ['nombre_completo', 'cedula', 'email', 'especialidad']
+    readonly_fields = ['codigo_seguimiento', 'username_generado', 'password_temporal',
+                       'created_at', 'updated_at']
+    date_hierarchy  = 'created_at'
+    list_per_page   = 25
+    actions = ['aprobar_y_crear_cuenta', 'rechazar']
+
+    fieldsets = (
+        ('Estado', {
+            'fields': ('codigo_seguimiento', 'estado', 'notas_admin'),
+        }),
+        ('Datos personales', {
+            'fields': ('nombre_completo', 'cedula', 'email', 'telefono'),
+        }),
+        ('Perfil profesional', {
+            'fields': ('especialidad', 'titulo_academico', 'experiencia_anios', 'mensaje'),
+        }),
+        ('Credenciales generadas', {
+            'fields': ('username_generado', 'password_temporal'),
+            'description': 'La contraseña se muestra sólo una vez al aprobar.',
+        }),
+        ('Fechas', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+    ESTADO_PALETTE = {
+        'PENDIENTE': ('#854d0e', '#fef9c3'),
+        'APROBADO':  ('#166534', '#dcfce7'),
+        'RECHAZADO': ('#374151', '#f3f4f6'),
+    }
+
+    def get_nombre(self, obj):
+        return format_html(
+            '<strong>{}</strong><br>'
+            '<span style="font-size:11px;color:#6B7280">{}</span>',
+            obj.nombre_completo, obj.email,
+        )
+    get_nombre.short_description = 'Docente'
+    get_nombre.admin_order_field = 'nombre_completo'
+
+    def get_estado_badge(self, obj):
+        c, bg = self.ESTADO_PALETTE.get(obj.estado, ('#374151', '#f3f4f6'))
+        return format_html(
+            '<span style="background:{};color:{};padding:2px 8px;border-radius:4px;'
+            'font-size:11px;font-weight:600;">{}</span>',
+            bg, c, obj.get_estado_display(),
+        )
+    get_estado_badge.short_description = 'Estado'
+
+    def get_credenciales(self, obj):
+        if obj.username_generado:
+            return format_html(
+                '<code style="font-size:11px;">👤 {}</code>',
+                obj.username_generado,
+            )
+        return format_html('<span style="color:#9CA3AF">—</span>')
+    get_credenciales.short_description = 'Usuario asignado'
+
+    @admin.action(description='✅ Aprobar y crear cuenta de docente')
+    def aprobar_y_crear_cuenta(self, request, queryset):
+        from .views import _crear_cuenta_docente
+        for sol in queryset.filter(estado='PENDIENTE'):
+            try:
+                _, username, password = _crear_cuenta_docente(sol)
+                self.message_user(
+                    request,
+                    f'✅ {sol.nombre_completo} — usuario: {username}  '
+                    f'contraseña temporal: {password}',
+                )
+            except Exception as e:
+                self.message_user(request, f'Error en {sol.nombre_completo}: {e}',
+                                  level='error')
+
+    @admin.action(description='❌ Rechazar solicitudes seleccionadas')
+    def rechazar(self, request, queryset):
+        n = queryset.update(estado='RECHAZADO')
+        self.message_user(request, f'{n} solicitud(es) rechazada(s).')

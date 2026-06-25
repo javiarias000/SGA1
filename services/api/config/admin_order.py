@@ -48,12 +48,18 @@ def _sort_key(app):
 
 
 def install_custom_app_list():
-    """Monkey-patch AdminSite.get_app_list to return apps in hierarchy order."""
+    """Monkey-patch AdminSite.get_app_list to return apps in hierarchy order with section labels."""
+    if getattr(admin.AdminSite, '_sga1_patched', False):
+        return
     _original = admin.AdminSite.get_app_list
 
     def custom_get_app_list(self, request, app_label=None):
         app_list = _original(self, request, app_label)
         app_list.sort(key=_sort_key)
+        for app in app_list:
+            info = SECTION_LABELS.get(app['app_label'], ('9', '⚙️ Sistema'))
+            app['section_label'] = info[1]
         return app_list
 
     admin.AdminSite.get_app_list = custom_get_app_list
+    admin.AdminSite._sga1_patched = True

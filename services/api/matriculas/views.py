@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 
 import json
-from .models import SolicitudMatricula, DocumentoMatricula
+from .models import SolicitudMatricula, DocumentoMatricula, SolicitudDocente
 from .forms import DatosPersonalesForm, DocumentosForm, SecretariaRevisionForm
 from .malla_curricular import get_materias_para_anio, INSTRUMENTOS
 
@@ -333,20 +333,106 @@ def secretaria_relanzar_ia_view(request, pk):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-# ─── HELPER: crear matrículas académicas al aprobar ─────────────────────────
+# ─── HELPERS: crear cuentas y matrículas al aprobar ─────────────────────────
+
+import secrets
+import string as _string
+
+
+def _gen_username(base):
+    """Genera username único a partir de cédula o email."""
+    from django.contrib.auth.models import User
+    username = ''.join(c for c in base if c.isalnum() or c in ('_', '.'))[:30]
+    if not User.objects.filter(username=username).exists():
+        return username
+    suffix = secrets.randbelow(9999)
+    return username[:25] + str(suffix)
+
+
+def _gen_password(length=10):
+    alphabet = _string.ascii_letters + _string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+
+def _enviar_credenciales_wa(telefono, nombre, username, password, tipo='estudiante'):
+    """Intenta enviar credenciales de acceso por WhatsApp. Silencia errores."""
+    try:
+        from informes.whatsapp import send_text, normalize_phone
+        msg = (
+            f"✅ *Conservatorio Bolívar — Acceso al sistema*\n\n"
+            f"Hola {nombre.split()[0]}, tu cuenta ha sido activada.\n\n"
+            f"👤 Usuario: `{username}`\n"
+            f"🔑 Contraseña temporal: `{password}`\n\n"
+            f"🔗 Ingresa en: https://sga1.12t4ag.easypanel.host/users/login/\n\n"
+            f"_Por seguridad te recomendamos cambiar tu contraseña al ingresar._"
+        )
+        phone = normalize_phone(telefono)
+        if phone:
+            send_text(phone, msg)
+    except Exception:
+        pass
+
+
+def _crear_cuenta_estudiante(solicitud: SolicitudMatricula):
+    """
+    Crea auth.User + Usuario(ESTUDIANTE) + Student al aprobar una solicitud.
+    Retorna (usuario_obj, username, password) o (None, '', '') si ya existe.
+    """
+    from django.contrib.auth.models import User
+    from users.models import Usuario
+    from students.models import Student
+
+    # Evitar duplicados por cédula o email
+    if solicitud.cedula:
+        existing = Usuario.objects.filter(cedula=solicitud.cedula).first()
+        if existing:
+            return existing, '', ''
+
+    email = solicitud.email_representante or ''
+    username = _gen_username(solicitud.cedula or email.split('@')[0] or 'est')
+    password = _gen_password()
+
+    auth_user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        first_name=solicitud.nombre_completo,
+    )
+
+    usuario = Usuario.objects.create(
+        auth_user=auth_user,
+        nombre=solicitud.nombre_completo,
+        email=email if email else None,
+        cedula=solicitud.cedula or None,
+        phone=solicitud.phone_representante or None,
+        rol='ESTUDIANTE',
+    )
+    Student.objects.get_or_create(usuario=usuario)
+
+    # Vincular solicitud con el usuario
+    solicitud.usuario = auth_user
+    solicitud.save(update_fields=['usuario'])
+
+    if solicitud.phone_representante:
+        _enviar_credenciales_wa(
+            solicitud.phone_representante,
+            solicitud.nombre_representante or solicitud.nombre_completo,
+            username, password, 'estudiante',
+        )
+
+    return usuario, username, password
+
 
 def _crear_matricula_academica(solicitud: SolicitudMatricula):
     """
-    Al aprobar una solicitud, crea/vincula la matrícula en el sistema académico
-    usando los modelos existentes (Enrollment, Clase, Subject).
+    Al aprobar una solicitud:
+    1. Crea cuenta si aún no existe.
+    2. Crea Enrollments en las clases del ciclo.
     """
     from subjects.models import Subject
     from classes.models import Clase, Enrollment
-    from users.models import Usuario
 
-    materias = get_materias_para_anio(solicitud.anio_solicitado)
-
-    # Intentar encontrar el Usuario asociado
+    # Crear cuenta si es estudiante nuevo (sin usuario aún)
     usuario_obj = None
     if solicitud.usuario:
         try:
@@ -355,28 +441,115 @@ def _crear_matricula_academica(solicitud: SolicitudMatricula):
             pass
 
     if not usuario_obj:
-        return  # Para nuevos sin cuenta, no se puede aún sin crear la cuenta
+        usuario_obj, _, _ = _crear_cuenta_estudiante(solicitud)
 
+    if not usuario_obj:
+        return
+
+    materias = get_materias_para_anio(solicitud.anio_solicitado)
     for materia_data in materias:
         nombre_materia = materia_data['nombre']
         tipo = materia_data['tipo']
-
-        # Buscar o crear la asignatura
         subject, _ = Subject.objects.get_or_create(
             name=nombre_materia,
             defaults={'tipo_materia': tipo, 'description': ''},
         )
-
-        # Buscar clase del ciclo lectivo
         clase = Clase.objects.filter(
             subject=subject,
             ciclo_lectivo=solicitud.ciclo_lectivo,
             active=True,
         ).first()
-
         if clase:
             Enrollment.objects.get_or_create(
                 estudiante=usuario_obj,
                 clase=clase,
                 defaults={'estado': 'ACTIVO'},
             )
+
+
+def _crear_cuenta_docente(solicitud: 'SolicitudDocente'):
+    """Crea auth.User + Usuario(DOCENTE) + Teacher al aprobar solicitud de docente."""
+    from django.contrib.auth.models import User
+    from users.models import Usuario
+    from teachers.models import Teacher
+
+    # Evitar duplicados
+    if solicitud.cedula and Usuario.objects.filter(cedula=solicitud.cedula).exists():
+        raise ValueError(f"Ya existe un docente con cédula {solicitud.cedula}")
+    if Usuario.objects.filter(email=solicitud.email).exists():
+        raise ValueError(f"Ya existe un usuario con email {solicitud.email}")
+
+    username = _gen_username(solicitud.cedula or solicitud.email.split('@')[0])
+    password = _gen_password()
+
+    nombre_parts = solicitud.nombre_completo.strip().split()
+    auth_user = User.objects.create_user(
+        username=username,
+        email=solicitud.email,
+        password=password,
+        first_name=nombre_parts[0] if nombre_parts else '',
+        last_name=' '.join(nombre_parts[1:]) if len(nombre_parts) > 1 else '',
+    )
+
+    usuario = Usuario.objects.create(
+        auth_user=auth_user,
+        nombre=solicitud.nombre_completo,
+        email=solicitud.email,
+        cedula=solicitud.cedula or None,
+        phone=solicitud.telefono or None,
+        rol='DOCENTE',
+    )
+    Teacher.objects.create(usuario=usuario, specialization=solicitud.especialidad or '')
+
+    solicitud.username_generado = username
+    solicitud.password_temporal = password
+    solicitud.estado = 'APROBADO'
+    solicitud.save(update_fields=['username_generado', 'password_temporal', 'estado'])
+
+    if solicitud.telefono:
+        _enviar_credenciales_wa(solicitud.telefono, solicitud.nombre_completo, username, password, 'docente')
+
+    return usuario, username, password
+
+
+# ─── VISTAS PÚBLICAS: REGISTRO DOCENTE ───────────────────────────────────────
+
+def registro_docente_view(request):
+    """Formulario público de auto-registro para docentes/personal."""
+    error = None
+    if request.method == 'POST':
+        p = request.POST
+        nombre   = p.get('nombre_completo', '').strip()
+        cedula   = p.get('cedula', '').strip()
+        email    = p.get('email', '').strip()
+        telefono = p.get('telefono', '').strip()
+        espec    = p.get('especialidad', '').strip()
+        titulo   = p.get('titulo_academico', '').strip()
+        exp      = p.get('experiencia_anios', '').strip()
+        msg      = p.get('mensaje', '').strip()
+
+        if not nombre or not email:
+            error = 'Nombre y email son obligatorios.'
+        elif SolicitudDocente.objects.filter(email=email).exists():
+            error = 'Ya existe una solicitud registrada con ese email.'
+        else:
+            solicitud = SolicitudDocente.objects.create(
+                nombre_completo=nombre,
+                cedula=cedula,
+                email=email,
+                telefono=telefono,
+                especialidad=espec,
+                titulo_academico=titulo,
+                experiencia_anios=int(exp) if exp.isdigit() else None,
+                mensaje=msg,
+            )
+            return redirect('matriculas:registro_docente_confirmacion',
+                            codigo=solicitud.codigo_seguimiento)
+
+    return render(request, 'matriculas/registro_docente.html', {'error': error})
+
+
+def registro_docente_confirmacion_view(request, codigo):
+    solicitud = get_object_or_404(SolicitudDocente, codigo_seguimiento=codigo)
+    return render(request, 'matriculas/registro_docente_confirmacion.html',
+                  {'solicitud': solicitud})
