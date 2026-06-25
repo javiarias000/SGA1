@@ -10,7 +10,10 @@
             <h1 class="h3 mb-1">📚 Gestionar Tipos de Aportes</h1>
             <p class="text-muted mb-0">Administra los tipos de evaluaciones disponibles</p>
         </div>
-        <div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="btn btn-primary">
+                <i class="fas fa-magic"></i> Nuevo Aporte (Wizard)
+            </a>
             <a href="{% url 'teachers:teacher_dashboard' %}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i> Volver al Dashboard
             </a>

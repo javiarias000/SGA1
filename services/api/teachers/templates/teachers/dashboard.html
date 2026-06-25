@@ -95,6 +95,44 @@
         </div>
     </div>
 
+    <!-- Acciones Rápidas -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'teachers:wizard_notas' %}?paso=1" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100" style="border-left:4px solid #4338ca !important">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:48px;height:48px;background:#ede9fe">
+                            <i class="fas fa-pen text-primary fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">Pasar Notas</div>
+                            <div class="small text-muted">Registro global para toda la clase</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-muted ms-auto"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100" style="border-left:4px solid #0891b2 !important">
+                    <div class="card-body d-flex align-items-center gap-3 py-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:48px;height:48px;background:#e0f2fe">
+                            <i class="fas fa-plus-circle text-info fs-5"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark">Nuevo Tipo de Aporte</div>
+                            <div class="small text-muted">Crear categoría de evaluación</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-muted ms-auto"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <!-- Distribución por Escala -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-white">
