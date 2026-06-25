@@ -2293,79 +2293,205 @@ def detalle_deber(request, deber_id):
 
 
 # ============================================
-# WIZARD: CREAR TIPO DE APORTE
+# WIZARD: REGISTRAR APORTE A ESTUDIANTE
 # ============================================
 
 @login_required
 @teacher_required
 def wizard_aporte(request):
-    """Wizard 3 pasos para crear un TipoAporte."""
+    """
+    Wizard 5 pasos para registrar un aporte (CalificacionParcial) a un estudiante:
+    1. Clase  2. Estudiante + Período  3. Tipo de aporte  4. Nota  5. Confirmar
+    """
     paso = int(request.GET.get('paso', 1))
-    SK = 'wiz_aporte'  # session key prefix
+    SK = 'wiz_aporte'
+    teacher = request.user.teacher_profile
+    teacher_usuario = teacher.usuario
 
     if request.method == 'POST':
+
         if paso == 1:
-            nombre = request.POST.get('nombre', '').strip()
-            descripcion = request.POST.get('descripcion', '').strip()
-            if not nombre:
-                messages.error(request, 'El nombre es obligatorio.')
+            clase_id = request.POST.get('clase_id', '').strip()
+            if not clase_id:
+                messages.error(request, 'Selecciona una clase.')
                 return redirect(f"{request.path}?paso=1")
-            request.session[f'{SK}_nombre'] = nombre
-            request.session[f'{SK}_descripcion'] = descripcion
-            codigo_sugerido = nombre.upper().replace(' ', '_')[:50]
-            request.session[f'{SK}_codigo'] = codigo_sugerido
+            get_object_or_404(Clase, id=clase_id, docente_base=teacher_usuario)
+            request.session[f'{SK}_clase_id'] = int(clase_id)
             return redirect(f"{request.path}?paso=2")
 
         elif paso == 2:
-            codigo = request.POST.get('codigo', '').strip().upper().replace(' ', '_')[:50]
-            peso = request.POST.get('peso', '1.0').strip()
-            if not codigo:
-                messages.error(request, 'El código es obligatorio.')
+            student_id = request.POST.get('student_id', '').strip()
+            quimestre  = request.POST.get('quimestre', '').strip()
+            parcial    = request.POST.get('parcial', '').strip()
+            if not student_id:
+                messages.error(request, 'Selecciona un estudiante.')
                 return redirect(f"{request.path}?paso=2")
-            try:
-                peso_val = Decimal(peso)
-                if peso_val <= 0:
-                    raise ValueError
-            except Exception:
-                messages.error(request, 'El peso debe ser un número positivo.')
+            if quimestre not in ('Q1', 'Q2') or parcial not in ('1P', '2P', '3P', '4P'):
+                messages.error(request, 'Selecciona quimestre y parcial válidos.')
                 return redirect(f"{request.path}?paso=2")
-            request.session[f'{SK}_codigo'] = codigo
-            request.session[f'{SK}_peso'] = str(peso_val)
+            request.session[f'{SK}_student_id'] = int(student_id)
+            request.session[f'{SK}_quimestre']  = quimestre
+            request.session[f'{SK}_parcial']    = parcial
             return redirect(f"{request.path}?paso=3")
 
         elif paso == 3:
-            nombre = request.session.get(f'{SK}_nombre')
-            codigo = request.session.get(f'{SK}_codigo')
-            peso   = request.session.get(f'{SK}_peso', '1.0')
-            descripcion = request.session.get(f'{SK}_descripcion', '')
-            if not nombre or not codigo:
+            accion    = request.POST.get('accion', 'existente')
+            if accion == 'nuevo':
+                nombre = request.POST.get('nombre', '').strip()
+                peso   = request.POST.get('peso', '1.0').strip()
+                if not nombre:
+                    messages.error(request, 'Escribe el nombre del nuevo tipo de aporte.')
+                    return redirect(f"{request.path}?paso=3")
+                try:
+                    peso_val = Decimal(peso)
+                    if peso_val <= 0: raise ValueError
+                except Exception:
+                    messages.error(request, 'El peso debe ser un número positivo.')
+                    return redirect(f"{request.path}?paso=3")
+                codigo = nombre.upper().replace(' ', '_')[:50]
+                tipo_aporte, _ = TipoAporte.objects.get_or_create(
+                    codigo=codigo,
+                    defaults={'nombre': nombre, 'peso': peso_val, 'activo': True}
+                )
+                request.session[f'{SK}_aporte_id'] = tipo_aporte.id
+            else:
+                aporte_id = request.POST.get('aporte_id', '').strip()
+                if not aporte_id:
+                    messages.error(request, 'Selecciona un tipo de aporte.')
+                    return redirect(f"{request.path}?paso=3")
+                request.session[f'{SK}_aporte_id'] = int(aporte_id)
+            return redirect(f"{request.path}?paso=4")
+
+        elif paso == 4:
+            nota = request.POST.get('nota', '').strip()
+            observaciones = request.POST.get('observaciones', '').strip()
+            try:
+                nota_val = Decimal(nota)
+                if nota_val < 0 or nota_val > 10: raise ValueError
+            except Exception:
+                messages.error(request, 'Ingresa una nota válida entre 0 y 10.')
+                return redirect(f"{request.path}?paso=4")
+            request.session[f'{SK}_nota']         = str(nota_val)
+            request.session[f'{SK}_observaciones'] = observaciones
+            return redirect(f"{request.path}?paso=5")
+
+        elif paso == 5:
+            clase_id      = request.session.get(f'{SK}_clase_id')
+            student_id    = request.session.get(f'{SK}_student_id')
+            quimestre     = request.session.get(f'{SK}_quimestre')
+            parcial       = request.session.get(f'{SK}_parcial')
+            aporte_id     = request.session.get(f'{SK}_aporte_id')
+            nota          = request.session.get(f'{SK}_nota')
+            observaciones = request.session.get(f'{SK}_observaciones', '')
+            if not all([clase_id, student_id, quimestre, parcial, aporte_id, nota]):
                 messages.error(request, 'Sesión expirada. Empieza de nuevo.')
                 return redirect(f"{request.path}?paso=1")
             try:
-                aporte, created = TipoAporte.objects.get_or_create(
-                    codigo=codigo,
-                    defaults={'nombre': nombre, 'peso': Decimal(peso),
-                              'descripcion': descripcion, 'activo': True}
+                clase        = get_object_or_404(Clase, id=clase_id)
+                student      = get_object_or_404(Student, id=student_id)
+                tipo_aporte  = get_object_or_404(TipoAporte, id=aporte_id)
+                CalificacionParcial.objects.update_or_create(
+                    student=student,
+                    subject=clase.subject,
+                    parcial=parcial,
+                    quimestre=quimestre,
+                    tipo_aporte=tipo_aporte,
+                    defaults={
+                        'calificacion': Decimal(nota),
+                        'observaciones': observaciones,
+                        'registrado_por': teacher,
+                    }
                 )
-                if created:
-                    messages.success(request, f'Aporte "{nombre}" creado correctamente.')
-                else:
-                    messages.info(request, f'El aporte con código "{codigo}" ya existe.')
+                messages.success(request,
+                    f'Aporte "{tipo_aporte.nombre}" registrado para '
+                    f'{student.usuario.nombre} — nota {nota}.')
             except Exception as e:
                 messages.error(request, f'Error al guardar: {e}')
-                return redirect(f"{request.path}?paso=3")
-            for k in ['nombre', 'descripcion', 'codigo', 'peso']:
+                return redirect(f"{request.path}?paso=5")
+            for k in ['clase_id','student_id','quimestre','parcial','aporte_id','nota','observaciones']:
                 request.session.pop(f'{SK}_{k}', None)
-            return redirect('teachers:gestionar_aportes')
+            return redirect('teachers:calificaciones_detalladas')
 
-    ctx = {
-        'paso': paso,
-        'total_pasos': 3,
-        'nombre': request.session.get(f'{SK}_nombre', ''),
-        'descripcion': request.session.get(f'{SK}_descripcion', ''),
-        'codigo': request.session.get(f'{SK}_codigo', ''),
-        'peso': request.session.get(f'{SK}_peso', '1.0'),
-    }
+    # ── GET: armar contexto por paso ──────────────────────────────────────
+    ctx = {'paso': paso, 'total_pasos': 5}
+
+    if paso == 1:
+        ctx['clases'] = Clase.objects.filter(
+            docente_base=teacher_usuario, active=True
+        ).select_related('subject', 'grade_level').order_by('subject__name')
+
+    elif paso == 2:
+        clase_id = request.session.get(f'{SK}_clase_id')
+        if not clase_id:
+            return redirect(f"{request.path}?paso=1")
+        clase = get_object_or_404(Clase, id=clase_id)
+        enrollments = Enrollment.objects.filter(
+            clase=clase, estado='ACTIVO'
+        ).select_related('estudiante__student_profile')
+        estudiantes = []
+        for enr in enrollments:
+            if enr.estudiante:
+                try:
+                    estudiantes.append({
+                        'student': enr.estudiante.student_profile,
+                        'nombre': enr.estudiante.nombre,
+                    })
+                except Exception:
+                    pass
+        ctx.update({
+            'clase': clase,
+            'estudiantes': estudiantes,
+            'quimestre_choices': CalificacionParcial.QUIMESTRE_CHOICES,
+            'parcial_choices':   CalificacionParcial.PARCIAL_CHOICES,
+        })
+
+    elif paso == 3:
+        if not request.session.get(f'{SK}_student_id'):
+            return redirect(f"{request.path}?paso=2")
+        clase_id   = request.session.get(f'{SK}_clase_id')
+        student_id = request.session.get(f'{SK}_student_id')
+        clase      = get_object_or_404(Clase, id=clase_id)
+        student    = get_object_or_404(Student, id=student_id)
+        ctx.update({
+            'clase': clase,
+            'student': student,
+            'quimestre': request.session.get(f'{SK}_quimestre'),
+            'parcial':   request.session.get(f'{SK}_parcial'),
+            'aportes':   TipoAporte.objects.filter(activo=True).order_by('orden','nombre'),
+        })
+
+    elif paso == 4:
+        if not request.session.get(f'{SK}_aporte_id'):
+            return redirect(f"{request.path}?paso=3")
+        tipo_aporte = get_object_or_404(TipoAporte, id=request.session[f'{SK}_aporte_id'])
+        student     = get_object_or_404(Student, id=request.session[f'{SK}_student_id'])
+        ctx.update({
+            'tipo_aporte': tipo_aporte,
+            'student': student,
+            'nota_actual': request.session.get(f'{SK}_nota', ''),
+            'observaciones': request.session.get(f'{SK}_observaciones', ''),
+        })
+
+    elif paso == 5:
+        clase_id   = request.session.get(f'{SK}_clase_id')
+        student_id = request.session.get(f'{SK}_student_id')
+        aporte_id  = request.session.get(f'{SK}_aporte_id')
+        if not all([clase_id, student_id, aporte_id]):
+            return redirect(f"{request.path}?paso=1")
+        ctx.update({
+            'clase':        get_object_or_404(Clase, id=clase_id),
+            'student':      get_object_or_404(Student, id=student_id),
+            'tipo_aporte':  get_object_or_404(TipoAporte, id=aporte_id),
+            'quimestre':    request.session.get(f'{SK}_quimestre'),
+            'parcial':      request.session.get(f'{SK}_parcial'),
+            'nota':         request.session.get(f'{SK}_nota'),
+            'observaciones':request.session.get(f'{SK}_observaciones',''),
+            'quimestre_label': dict(CalificacionParcial.QUIMESTRE_CHOICES).get(
+                                   request.session.get(f'{SK}_quimestre',''), ''),
+            'parcial_label':   dict(CalificacionParcial.PARCIAL_CHOICES).get(
+                                   request.session.get(f'{SK}_parcial',''), ''),
+        })
+
     return render(request, 'teachers/wizard_aporte.html', ctx)
 
 
