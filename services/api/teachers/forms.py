@@ -2,8 +2,51 @@ from django import forms
 from classes.models import Deber, DeberEntrega, Clase
 from django.contrib.auth.models import User
 
-from teachers.models import Teacher 
-from users.models import Usuario # Added import
+from teachers.models import Teacher
+from users.models import Usuario
+
+
+class TeacherProfileForm(forms.ModelForm):
+    """Formulario para que el docente edite su perfil."""
+    nombre   = forms.CharField(max_length=100, label='Nombre')
+    apellido = forms.CharField(max_length=100, label='Apellido')
+    email    = forms.EmailField(label='Correo electrónico')
+    telefono = forms.CharField(max_length=20, required=False, label='Teléfono')
+    cedula   = forms.CharField(max_length=20, required=False, label='Cédula')
+
+    class Meta:
+        model = Teacher
+        fields = ['specialization', 'photo']
+        labels = {
+            'specialization': 'Especialidad / Instrumento',
+            'photo': 'Foto de perfil',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.usuario:
+            u = self.instance.usuario
+            self.fields['nombre'].initial   = u.nombre
+            self.fields['apellido'].initial = u.apellido
+            self.fields['email'].initial    = u.email
+            self.fields['telefono'].initial = u.telefono
+            self.fields['cedula'].initial   = u.cedula
+        for field in self.fields.values():
+            field.widget.attrs.setdefault('class', 'form-control')
+
+    def save(self, commit=True):
+        teacher = super().save(commit=False)
+        if teacher.usuario:
+            u = teacher.usuario
+            u.nombre   = self.cleaned_data['nombre']
+            u.apellido = self.cleaned_data['apellido']
+            u.email    = self.cleaned_data['email']
+            u.telefono = self.cleaned_data.get('telefono', '')
+            u.cedula   = self.cleaned_data.get('cedula', '')
+            u.save()
+        if commit:
+            teacher.save()
+        return teacher
 # Removed: from subjects.models import Subject
 
 class DeberForm(forms.ModelForm):

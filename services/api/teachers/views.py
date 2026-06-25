@@ -37,7 +37,7 @@ from students.forms import StudentForm
 
 
 
-from .forms import DeberForm, DeberEntregaForm, CalificacionForm
+from .forms import DeberForm, DeberEntregaForm, CalificacionForm, TeacherProfileForm
 
 # ============================================
 # DASHBOARD DOCENTE
