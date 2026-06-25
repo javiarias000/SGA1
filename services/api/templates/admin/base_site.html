@@ -9,7 +9,13 @@
 {% endblock %}
 
 {% block branding %}
-<h1 id="site-name">
+<h1 id="site-name" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
   <a href="{% url 'admin:index' %}">Conservatorio Bolívar</a>
+  <a href="/setup/"
+     style="display:inline-flex;align-items:center;gap:5px;background:#6366f1;color:#fff;
+            padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;
+            text-decoration:none;letter-spacing:.3px;">
+    ⚙️ Wizard de Configuración
+  </a>
 </h1>
 {% endblock %}

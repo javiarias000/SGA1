@@ -1,0 +1,633 @@
+{% load docente_filters %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Docente — {{ mi_usuario.nombre|default:"Docente" }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .nav-item { transition: all .15s; }
+    .nav-item:hover { background: rgba(255,255,255,.07); }
+    .nav-item.active { background: rgba(16,185,129,.2); border-left: 3px solid #10b981; }
+    .form-input {
+      width:100%; padding:.55rem .85rem; border:1.5px solid #e5e7eb;
+      border-radius:.5rem; font-size:.875rem; outline:none; background:#fff;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-input:focus { border-color:#10b981; box-shadow:0 0 0 3px rgba(16,185,129,.15); }
+    .form-select {
+      width:100%; padding:.55rem .85rem; border:1.5px solid #e5e7eb;
+      border-radius:.5rem; font-size:.875rem; background:#fff; cursor:pointer;
+    }
+    .form-select:focus { border-color:#10b981; outline:none; box-shadow:0 0 0 3px rgba(16,185,129,.15); }
+    .btn-primary {
+      background:#10b981; color:#fff; padding:.55rem 1.25rem; border-radius:.5rem;
+      font-weight:600; font-size:.875rem; cursor:pointer; border:none;
+      transition: background .2s, transform .1s;
+    }
+    .btn-primary:hover { background:#059669; transform:translateY(-1px); }
+    .btn-outline {
+      background:transparent; color:#10b981; padding:.45rem 1rem; border-radius:.5rem;
+      font-weight:500; font-size:.8rem; border:1.5px solid #10b981; cursor:pointer;
+      transition:all .15s; text-decoration:none; display:inline-flex; align-items:center; gap:.35rem;
+    }
+    .btn-outline:hover { background:#ecfdf5; }
+    .btn-ghost {
+      background:#f3f4f6; color:#374151; padding:.45rem 1rem; border-radius:.5rem;
+      font-size:.8rem; font-weight:500; border:none; cursor:pointer; transition:background .15s;
+      text-decoration:none; display:inline-flex; align-items:center; gap:.35rem;
+    }
+    .btn-ghost:hover { background:#e5e7eb; }
+    .card { background:#fff; border-radius:.875rem; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+    .stat-card { border-radius:.875rem; padding:1.25rem 1.5rem; }
+    .badge { display:inline-flex; align-items:center; padding:.2rem .65rem; border-radius:9999px; font-size:.72rem; font-weight:600; }
+    .badge-presente  { background:#d1fae5; color:#065f46; }
+    .badge-ausente   { background:#fee2e2; color:#991b1b; }
+    .badge-justif    { background:#fef3c7; color:#92400e; }
+    .nota-input {
+      width:4.5rem; text-align:center; padding:.35rem .4rem; border:1.5px solid #d1d5db;
+      border-radius:.4rem; font-size:.875rem; font-weight:600;
+    }
+    .nota-input:focus { border-color:#10b981; outline:none; box-shadow:0 0 0 2px rgba(16,185,129,.2); }
+    .nota-input.nota-alta { background:#ecfdf5; border-color:#6ee7b7; }
+    .nota-input.nota-media { background:#fefce8; border-color:#fde68a; }
+    .nota-input.nota-baja  { background:#fff1f2; border-color:#fda4af; }
+    .clase-nav { border-left: 2px solid transparent; }
+    .clase-nav:hover { border-left-color: #6ee7b7; }
+    .clase-nav.active-clase { border-left-color: #10b981; background: rgba(16,185,129,.1); }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:#064e3b; }
+    ::-webkit-scrollbar-thumb { background:#34d399; border-radius:3px; }
+    .tab-btn { padding:.5rem 1rem; border-radius:.5rem .5rem 0 0; font-size:.8rem; font-weight:600;
+               border-bottom: 2px solid transparent; transition:all .15s; cursor:pointer; }
+    .tab-btn.active { border-bottom-color:#10b981; color:#059669; background:#ecfdf5; }
+    .tab-btn:not(.active) { color:#6b7280; }
+    .tab-btn:not(.active):hover { color:#374151; background:#f9fafb; }
+  </style>
+</head>
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+
+<!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+<aside class="w-64 flex-shrink-0 flex flex-col h-screen overflow-y-auto"
+       style="background:linear-gradient(180deg,#064e3b 0%,#065f46 100%);">
+
+  <!-- Header -->
+  <div class="px-5 pt-6 pb-4 border-b border-emerald-800">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-emerald-400 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+        {{ mi_usuario.nombre|first|upper|default:"D" }}
+      </div>
+      <div class="min-w-0">
+        <p class="text-white font-semibold text-sm leading-tight truncate">{{ mi_usuario.nombre|default:"Docente" }}</p>
+        <p class="text-emerald-300 text-xs truncate">{{ mi_usuario.email|default:"Docente" }}</p>
+      </div>
+    </div>
+    {% if mi_teacher.specialization %}
+    <div class="text-xs text-emerald-400 bg-emerald-900 px-2.5 py-1 rounded-full inline-block truncate">
+      🎵 {{ mi_teacher.specialization }}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Nav principal -->
+  <nav class="flex-1 px-2 py-3 space-y-0.5">
+    <a href="/docente/"
+       class="nav-item {% if section == 'dashboard' %}active{% endif %} flex items-center gap-2.5 px-3 py-2 rounded-lg">
+      <svg class="w-4 h-4 text-emerald-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <span class="text-sm {% if section == 'dashboard' %}text-white font-semibold{% else %}text-emerald-200{% endif %}">Mi Dashboard</span>
+    </a>
+
+    <a href="/docente/estudiantes/"
+       class="nav-item {% if section == 'estudiantes' %}active{% endif %} flex items-center gap-2.5 px-3 py-2 rounded-lg">
+      <svg class="w-4 h-4 text-emerald-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <span class="text-sm {% if section == 'estudiantes' %}text-white font-semibold{% else %}text-emerald-200{% endif %}">Mis Estudiantes</span>
+    </a>
+
+    <!-- Mis Clases -->
+    <div class="pt-2 pb-1 px-3">
+      <p class="text-emerald-500 text-xs font-semibold uppercase tracking-wider">Mis Clases</p>
+    </div>
+
+    {% for c in mis_clases %}
+    <div class="rounded-lg overflow-hidden">
+      <div class="clase-nav px-3 py-2 {% if clase_pk == c.pk %}active-clase{% endif %}">
+        <p class="text-xs font-semibold text-emerald-100 truncate">{{ c.subject.name }}</p>
+        <p class="text-xs text-emerald-400 truncate">{{ c.name }}</p>
+        {% if clase_pk == c.pk %}
+        <!-- Sub-nav para esta clase -->
+        <div class="mt-2 space-y-0.5 pl-1">
+          <a href="/docente/clase/{{ c.pk }}/"
+             class="flex items-center gap-1.5 text-xs py-1 px-2 rounded {% if section == 'clase' %}text-white bg-emerald-700{% else %}text-emerald-300 hover:text-white{% endif %}">
+            👥 Estudiantes
+          </a>
+          <a href="/docente/clase/{{ c.pk }}/calificaciones/"
+             class="flex items-center gap-1.5 text-xs py-1 px-2 rounded {% if section == 'calificaciones' %}text-white bg-emerald-700{% else %}text-emerald-300 hover:text-white{% endif %}">
+            📊 Calificaciones
+          </a>
+          <a href="/docente/clase/{{ c.pk }}/asistencia/"
+             class="flex items-center gap-1.5 text-xs py-1 px-2 rounded {% if section == 'asistencia' %}text-white bg-emerald-700{% else %}text-emerald-300 hover:text-white{% endif %}">
+            📅 Asistencia
+          </a>
+        </div>
+        {% else %}
+        <a href="/docente/clase/{{ c.pk }}/" class="text-xs text-emerald-500 hover:text-emerald-300 transition mt-0.5 block">
+          Ver clase →
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-xs text-emerald-600 px-3 py-2">Sin clases asignadas.</p>
+    {% endfor %}
+  </nav>
+
+  <!-- Bottom -->
+  <div class="px-3 py-3 border-t border-emerald-800 space-y-0.5">
+    <a href="/setup/" class="nav-item flex items-center gap-2 px-3 py-2 rounded-lg text-emerald-300 hover:text-white text-xs">
+      ⚙️ Configuración
+    </a>
+    <a href="/admin/" class="nav-item flex items-center gap-2 px-3 py-2 rounded-lg text-emerald-300 hover:text-white text-xs">
+      🔧 Panel Admin
+    </a>
+    <a href="/users/logout/" class="nav-item flex items-center gap-2 px-3 py-2 rounded-lg text-emerald-400 hover:text-red-300 text-xs">
+      ← Cerrar sesión
+    </a>
+  </div>
+</aside>
+
+<!-- ══════════════════════ MAIN ══════════════════════ -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+  <!-- Top bar -->
+  <header class="bg-white border-b border-gray-200 px-7 py-3.5 flex items-center justify-between flex-shrink-0">
+    <div>
+      {% if section == 'dashboard' %}
+      <h1 class="text-lg font-bold text-gray-900">Mi Dashboard</h1>
+      <p class="text-xs text-gray-500">Resumen de tu actividad académica</p>
+      {% elif section == 'clase' %}
+      <h1 class="text-lg font-bold text-gray-900">{{ clase.subject.name }} — {{ clase.name }}</h1>
+      <p class="text-xs text-gray-500">{{ clase.grade_level|default:"Sin nivel" }} · {{ clase.ciclo_lectivo }}</p>
+      {% elif section == 'calificaciones' %}
+      <h1 class="text-lg font-bold text-gray-900">Calificaciones — {{ clase.subject.name }}</h1>
+      <p class="text-xs text-gray-500">{{ clase.name }} · {{ quimestre }} · {{ parcial }}</p>
+      {% elif section == 'asistencia' %}
+      <h1 class="text-lg font-bold text-gray-900">Asistencia — {{ clase.subject.name }}</h1>
+      <p class="text-xs text-gray-500">{{ clase.name }} · {{ fecha }}</p>
+      {% elif section == 'estudiantes' %}
+      <h1 class="text-lg font-bold text-gray-900">Mis Estudiantes</h1>
+      <p class="text-xs text-gray-500">Todos los estudiantes en tus clases</p>
+      {% endif %}
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-400">{{ hoy|default:"" }}</span>
+      <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
+        {{ mi_usuario.nombre|first|upper|default:"D" }}
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages -->
+  {% if messages %}
+  <div class="px-7 pt-3 flex-shrink-0">
+    {% for msg in messages %}
+    <div class="flex items-center gap-3 px-4 py-2.5 rounded-lg mb-2 text-sm font-medium
+                {% if msg.tags == 'success' %}bg-green-50 text-green-800 border border-green-200
+                {% elif msg.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+                {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+      {{ msg }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Content -->
+  <div class="flex-1 overflow-y-auto px-7 py-5">
+
+    <!-- ════ DASHBOARD ════ -->
+    {% if section == 'dashboard' %}
+    <!-- Stats row -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="stat-card bg-emerald-50 border border-emerald-100">
+        <p class="text-2xl font-bold text-emerald-700">{{ total_clases }}</p>
+        <p class="text-sm text-emerald-600 font-medium">Clases activas</p>
+      </div>
+      <div class="stat-card bg-blue-50 border border-blue-100">
+        <p class="text-2xl font-bold text-blue-700">{{ total_estudiantes }}</p>
+        <p class="text-sm text-blue-600 font-medium">Estudiantes en total</p>
+      </div>
+      <div class="stat-card bg-amber-50 border border-amber-100">
+        <p class="text-2xl font-bold text-amber-700">{{ hoy }}</p>
+        <p class="text-sm text-amber-600 font-medium">Fecha de hoy</p>
+      </div>
+    </div>
+
+    <!-- Clases cards -->
+    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Mis Clases</h2>
+    {% if clases_info %}
+    <div class="grid grid-cols-2 gap-4">
+      {% for info in clases_info %}
+      <div class="card p-5 hover:shadow-md transition">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <h3 class="font-bold text-gray-900">{{ info.clase.subject.name }}</h3>
+            <p class="text-xs text-gray-400 mt-0.5">{{ info.clase.name }}</p>
+            <p class="text-xs text-gray-400">{{ info.clase.grade_level|default:"Sin nivel" }} · {{ info.clase.ciclo_lectivo }}</p>
+          </div>
+          <span class="badge bg-emerald-100 text-emerald-700">{{ info.estudiantes }} est.</span>
+        </div>
+        {% if info.clase.schedule %}
+        <p class="text-xs text-gray-500 mb-4">🕐 {{ info.clase.schedule }}</p>
+        {% endif %}
+        <div class="flex gap-2 flex-wrap">
+          <a href="/docente/clase/{{ info.clase.pk }}/" class="btn-ghost text-xs">👥 Estudiantes</a>
+          <a href="/docente/clase/{{ info.clase.pk }}/calificaciones/" class="btn-ghost text-xs">📊 Calificaciones</a>
+          <a href="/docente/clase/{{ info.clase.pk }}/asistencia/" class="btn-ghost text-xs">📅 Asistencia</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card p-10 text-center">
+      <p class="text-3xl mb-2">📚</p>
+      <p class="text-gray-500 font-medium">No tienes clases asignadas todavía.</p>
+      <p class="text-sm text-gray-400 mt-1">El administrador debe asignarte clases en el wizard de configuración.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- ════ DETALLE CLASE ════ -->
+    {% if section == 'clase' %}
+    <!-- Info de la clase -->
+    <div class="card p-5 mb-5">
+      <div class="grid grid-cols-4 gap-4 text-sm">
+        <div><p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Materia</p><p class="font-semibold text-gray-800">{{ clase.subject.name }}</p></div>
+        <div><p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Nivel</p><p class="font-semibold text-gray-800">{{ clase.grade_level|default:"—" }}</p></div>
+        <div><p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Horario</p><p class="font-semibold text-gray-800">{{ clase.schedule|default:"—" }}</p></div>
+        <div><p class="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">Aula</p><p class="font-semibold text-gray-800">{{ clase.room|default:"—" }}</p></div>
+      </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="flex gap-3 mb-5">
+      <a href="/docente/clase/{{ clase_pk }}/calificaciones/" class="btn-primary" style="text-decoration:none">📊 Ingresar Calificaciones</a>
+      <a href="/docente/clase/{{ clase_pk }}/asistencia/" class="btn-outline" style="text-decoration:none">📅 Tomar Asistencia Hoy</a>
+    </div>
+
+    <!-- Lista de estudiantes -->
+    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+      Estudiantes inscritos ({{ enrollments|length }})
+    </h2>
+    {% if enrollments %}
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">#</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Estudiante</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nivel</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Representante</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Teléfono WA</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for enr in enrollments %}
+          <tr class="hover:bg-gray-50 transition">
+            <td class="px-5 py-3 text-gray-400 text-xs">{{ forloop.counter }}</td>
+            <td class="px-5 py-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs flex-shrink-0">
+                  {{ enr.estudiante.nombre|first|upper }}
+                </div>
+                <div>
+                  <p class="font-medium text-gray-800">{{ enr.estudiante.nombre }}</p>
+                  <p class="text-xs text-gray-400">{{ enr.estudiante.email|default:"—" }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 text-gray-600 text-xs">
+              {% if enr.estudiante.student_profile.grade_level %}{{ enr.estudiante.student_profile.grade_level }}{% else %}—{% endif %}
+            </td>
+            <td class="px-5 py-3 text-gray-600 text-xs">
+              {% if enr.estudiante.student_profile %}{{ enr.estudiante.student_profile.parent_name|default:"—" }}{% else %}—{% endif %}
+            </td>
+            <td class="px-5 py-3 text-gray-600 text-xs font-mono">
+              {% if enr.estudiante.student_profile %}{{ enr.estudiante.student_profile.parent_phone|default:"—" }}{% else %}—{% endif %}
+            </td>
+            <td class="px-5 py-3">
+              <span class="badge {% if enr.estado == 'ACTIVO' %}badge-presente{% else %}badge-ausente{% endif %}">
+                {{ enr.estado }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="card p-8 text-center">
+      <p class="text-gray-400">No hay estudiantes inscritos en esta clase.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- ════ CALIFICACIONES ════ -->
+    {% if section == 'calificaciones' %}
+    <!-- Filtros Q/P -->
+    <div class="card p-4 mb-5">
+      <form method="get" class="flex items-center gap-4 flex-wrap">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-gray-700">Quimestre:</label>
+          <select name="q" class="form-select w-auto" onchange="this.form.submit()">
+            {% for val, lbl in quimestre_choices %}
+            <option value="{{ val }}" {% if val == quimestre %}selected{% endif %}>{{ lbl }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-gray-700">Parcial:</label>
+          <select name="p" class="form-select w-auto" onchange="this.form.submit()">
+            {% for val, lbl in parcial_choices %}
+            <option value="{{ val }}" {% if val == parcial %}selected{% endif %}>{{ lbl }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex gap-1 ml-auto">
+          {% for val, lbl in quimestre_choices %}
+          {% for pval, plbl in parcial_choices %}
+          <a href="?q={{ val }}&p={{ pval }}"
+             class="text-xs px-2.5 py-1 rounded-full border transition
+                    {% if val == quimestre and pval == parcial %}bg-emerald-600 text-white border-emerald-600{% else %}border-gray-300 text-gray-500 hover:border-emerald-400{% endif %}">
+            {{ val }}/{{ pval }}
+          </a>
+          {% endfor %}
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+
+    {% if enrollments %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="card overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 sticky left-0 bg-gray-50 min-w-48">Estudiante</th>
+              {% for tipo in tipos_aporte %}
+              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 min-w-28">
+                <div>{{ tipo.nombre }}</div>
+                <div class="text-gray-400 font-normal">peso {{ tipo.peso }}</div>
+              </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for enr in enrollments %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 sticky left-0 bg-white hover:bg-gray-50 border-r border-gray-100">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs flex-shrink-0">
+                    {{ enr.estudiante.nombre|first|upper }}
+                  </div>
+                  <span class="font-medium text-gray-800 text-xs">{{ enr.estudiante.nombre }}</span>
+                </div>
+              </td>
+              {% for tipo in tipos_aporte %}
+              <td class="px-3 py-3 text-center">
+                {% if enr.estudiante.student_profile %}
+                {% with key_val=enr.estudiante.student_profile.pk %}
+                <input type="number"
+                  name="nota_{{ enr.estudiante.student_profile.pk }}_{{ tipo.pk }}"
+                  value="{% with lookup=enr.estudiante.student_profile.pk|stringformat:'d' %}{% for k,v in califs.items %}{% if k.0 == enr.estudiante.student_profile.pk and k.1 == tipo.pk %}{{ v.calificacion }}{% endif %}{% endfor %}{% endwith %}"
+                  min="0" max="10" step="0.01"
+                  class="nota-input"
+                  placeholder="—"
+                  oninput="colorNota(this)">
+                {% endwith %}
+                {% else %}
+                <span class="text-gray-300 text-xs">—</span>
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-4">
+        <p class="text-xs text-gray-400">Los valores deben estar entre 0 y 10. Se guardan automáticamente al enviar.</p>
+        <button type="submit" class="btn-primary flex items-center gap-2">
+          💾 Guardar calificaciones
+        </button>
+      </div>
+    </form>
+    {% else %}
+    <div class="card p-8 text-center">
+      <p class="text-gray-400">No hay estudiantes inscritos. <a href="/docente/clase/{{ clase_pk }}/" class="text-emerald-600 underline">Ver clase</a></p>
+    </div>
+    {% endif %}
+
+    {% if not tipos_aporte %}
+    <div class="card p-6 mt-4 border-l-4 border-amber-400 bg-amber-50">
+      <p class="text-amber-800 font-semibold text-sm">⚠️ No hay tipos de aporte configurados.</p>
+      <p class="text-amber-700 text-xs mt-1">El administrador debe crear los tipos de aporte en el wizard de configuración antes de poder ingresar calificaciones.</p>
+      <a href="/setup/tipos-aporte/" class="text-xs text-amber-800 underline mt-2 block">Ir a configurar tipos de aporte →</a>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- ════ ASISTENCIA ════ -->
+    {% if section == 'asistencia' %}
+    <!-- Selector de fecha -->
+    <div class="card p-4 mb-5">
+      <div class="flex items-center gap-4 flex-wrap">
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-semibold text-gray-700">Fecha:</label>
+          <input type="date" id="fecha-picker" value="{{ fecha_str }}"
+                 class="form-input w-auto"
+                 onchange="window.location.href='/docente/clase/{{ clase_pk }}/asistencia/?fecha='+this.value">
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          {% for f in fechas_recientes %}
+          <a href="?fecha={{ f }}"
+             class="text-xs px-2.5 py-1 rounded-full border transition
+                    {% if f == fecha %}bg-emerald-600 text-white border-emerald-600{% else %}border-gray-300 text-gray-500 hover:border-emerald-400{% endif %}">
+            {{ f }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {% if enrollments %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="card overflow-hidden mb-4">
+        <!-- Botones de acción masiva -->
+        <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex gap-2 flex-wrap items-center">
+          <span class="text-xs font-semibold text-gray-500">Marcar todos:</span>
+          <button type="button" onclick="setAll('Presente')"
+                  class="text-xs px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold hover:bg-emerald-200 transition">
+            ✓ Todos presentes
+          </button>
+          <button type="button" onclick="setAll('Ausente')"
+                  class="text-xs px-3 py-1.5 rounded-full bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">
+            ✗ Todos ausentes
+          </button>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-white border-b border-gray-200">
+            <tr>
+              <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Estudiante</th>
+              <th class="text-center px-4 py-3 text-xs font-semibold text-emerald-600 uppercase tracking-wide w-28">✓ Presente</th>
+              <th class="text-center px-4 py-3 text-xs font-semibold text-red-500 uppercase tracking-wide w-28">✗ Ausente</th>
+              <th class="text-center px-4 py-3 text-xs font-semibold text-amber-600 uppercase tracking-wide w-28">⊘ Justificado</th>
+              <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Observación</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for enr in enrollments %}
+            {% with existing=asistencias|get_item:enr.pk %}
+            <tr class="hover:bg-gray-50 transition" id="row-{{ enr.pk }}">
+              <td class="px-5 py-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs flex-shrink-0">
+                    {{ enr.estudiante.nombre|first|upper }}
+                  </div>
+                  <span class="font-medium text-gray-800">{{ enr.estudiante.nombre }}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <input type="radio" name="estado_{{ enr.pk }}" value="Presente"
+                  class="w-4 h-4 accent-emerald-600"
+                  {% if existing.estado == 'Presente' %}checked{% elif not existing %}checked{% endif %}
+                  onclick="rowColor({{ enr.pk }}, 'Presente')">
+              </td>
+              <td class="px-4 py-3 text-center">
+                <input type="radio" name="estado_{{ enr.pk }}" value="Ausente"
+                  class="w-4 h-4 accent-red-500"
+                  {% if existing.estado == 'Ausente' %}checked{% endif %}
+                  onclick="rowColor({{ enr.pk }}, 'Ausente')">
+              </td>
+              <td class="px-4 py-3 text-center">
+                <input type="radio" name="estado_{{ enr.pk }}" value="Justificado"
+                  class="w-4 h-4 accent-amber-500"
+                  {% if existing.estado == 'Justificado' %}checked{% endif %}
+                  onclick="rowColor({{ enr.pk }}, 'Justificado')">
+              </td>
+              <td class="px-5 py-3">
+                <input type="text" name="obs_{{ enr.pk }}"
+                  value="{{ existing.observacion|default:'' }}"
+                  class="form-input text-xs" placeholder="Observación opcional">
+              </td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center">
+        <p class="text-xs text-gray-400">Fecha: <strong>{{ fecha }}</strong> · {{ enrollments|length }} estudiantes</p>
+        <button type="submit" class="btn-primary flex items-center gap-2">
+          💾 Guardar asistencia
+        </button>
+      </div>
+    </form>
+    {% else %}
+    <div class="card p-8 text-center">
+      <p class="text-gray-400">No hay estudiantes inscritos en esta clase.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- ════ MIS ESTUDIANTES ════ -->
+    {% if section == 'estudiantes' %}
+    {% if enrollments %}
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Estudiante</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Clase</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Nivel</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Representante</th>
+            <th class="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Teléfono WA</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for enr in enrollments %}
+          <tr class="hover:bg-gray-50 transition">
+            <td class="px-5 py-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs flex-shrink-0">{{ enr.estudiante.nombre|first|upper }}</div>
+                <div>
+                  <p class="font-medium text-gray-800">{{ enr.estudiante.nombre }}</p>
+                  <p class="text-xs text-gray-400">{{ enr.estudiante.email|default:"—" }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3 text-gray-600 text-xs">{{ enr.clase.subject.name }}</td>
+            <td class="px-5 py-3 text-gray-600 text-xs">{{ enr.clase.grade_level|default:"—" }}</td>
+            <td class="px-5 py-3 text-gray-600 text-xs">
+              {% if enr.estudiante.student_profile %}{{ enr.estudiante.student_profile.parent_name|default:"—" }}{% else %}—{% endif %}
+            </td>
+            <td class="px-5 py-3 text-xs font-mono text-gray-600">
+              {% if enr.estudiante.student_profile %}{{ enr.estudiante.student_profile.parent_phone|default:"—" }}{% else %}—{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="card p-8 text-center">
+      <p class="text-gray-400">No tienes estudiantes asignados.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+  </div><!-- end content -->
+</main>
+
+<script>
+function colorNota(input) {
+  const v = parseFloat(input.value);
+  input.classList.remove('nota-alta','nota-media','nota-baja');
+  if (!isNaN(v)) {
+    if (v >= 7) input.classList.add('nota-alta');
+    else if (v >= 5) input.classList.add('nota-media');
+    else input.classList.add('nota-baja');
+  }
+}
+// Aplicar color a notas al cargar
+document.querySelectorAll('.nota-input').forEach(colorNota);
+
+function setAll(estado) {
+  document.querySelectorAll('input[type=radio][value="'+estado+'"]').forEach(r => {
+    r.checked = true;
+    const pk = r.name.split('_')[1];
+    rowColor(pk, estado);
+  });
+}
+
+function rowColor(pk, estado) {
+  const row = document.getElementById('row-'+pk);
+  if (!row) return;
+  row.classList.remove('bg-green-50','bg-red-50','bg-amber-50');
+  if (estado === 'Presente') row.classList.add('bg-green-50');
+  else if (estado === 'Ausente') row.classList.add('bg-red-50');
+  else if (estado === 'Justificado') row.classList.add('bg-amber-50');
+}
+// Colorear filas al cargar según estado guardado
+document.querySelectorAll('input[type=radio]:checked').forEach(r => {
+  const pk = r.name.split('_')[1];
+  rowColor(pk, r.value);
+});
+</script>
+</body>
+</html>

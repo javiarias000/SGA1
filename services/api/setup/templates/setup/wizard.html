@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración del Sistema — {% if steps %}{% for s in steps %}{% if s.active %}{{ s.titulo }}{% endif %}{% endfor %}{% endif %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .sidebar-item.active { background: rgba(99,102,241,0.2); border-left: 3px solid #6366f1; }
+    .sidebar-item:hover:not(.active) { background: rgba(255,255,255,0.05); }
+    .step-done { background: #10b981; }
+    .step-active { background: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.3); }
+    .step-pending { background: #374151; }
+    .form-input {
+      width:100%; padding:0.625rem 0.875rem; border:1.5px solid #e5e7eb;
+      border-radius:0.5rem; font-size:0.9rem; transition:border-color .2s, box-shadow .2s;
+      outline:none; background:#fff;
+    }
+    .form-input:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
+    .form-select {
+      width:100%; padding:0.625rem 0.875rem; border:1.5px solid #e5e7eb;
+      border-radius:0.5rem; font-size:0.9rem; background:#fff; cursor:pointer;
+    }
+    .form-select:focus { border-color:#6366f1; outline:none; box-shadow:0 0 0 3px rgba(99,102,241,0.15); }
+    .btn-primary {
+      background:#6366f1; color:#fff; padding:0.625rem 1.5rem; border-radius:0.5rem;
+      font-weight:600; font-size:0.9rem; cursor:pointer; transition:background .2s, transform .1s;
+      border:none;
+    }
+    .btn-primary:hover { background:#4f46e5; transform:translateY(-1px); }
+    .btn-secondary {
+      background:#f3f4f6; color:#374151; padding:0.625rem 1.25rem; border-radius:0.5rem;
+      font-weight:500; font-size:0.9rem; cursor:pointer; transition:background .2s;
+      border:1.5px solid #e5e7eb; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem;
+    }
+    .btn-secondary:hover { background:#e5e7eb; }
+    .btn-danger {
+      background:#fee2e2; color:#dc2626; padding:0.3rem 0.7rem; border-radius:0.375rem;
+      font-size:0.78rem; font-weight:500; border:none; cursor:pointer; transition:background .2s;
+    }
+    .btn-danger:hover { background:#fecaca; }
+    .card { background:#fff; border-radius:0.875rem; box-shadow:0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05); }
+    .info-box { background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%); border:1px solid #c7d2fe; border-radius:0.75rem; padding:1rem 1.25rem; }
+    .tag-instrumento { background:#dbeafe; color:#1e40af; }
+    .tag-teoria      { background:#dcfce7; color:#166534; }
+    .tag-agrupacion  { background:#fef9c3; color:#854d0e; }
+    .progress-bar { transition: width 0.5s ease; }
+    ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:#1e1b4b; }
+    ::-webkit-scrollbar-thumb { background:#4338ca; border-radius:3px; }
+  </style>
+</head>
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+
+<!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+<aside class="w-72 flex-shrink-0 flex flex-col h-screen overflow-y-auto" style="background:linear-gradient(180deg,#1e1b4b 0%,#312e81 100%);">
+
+  <!-- Logo / Header -->
+  <div class="px-6 pt-7 pb-5 border-b border-indigo-800">
+    <div class="flex items-center gap-3 mb-1">
+      <div class="w-9 h-9 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold text-base">S</div>
+      <div>
+        <p class="text-white font-semibold text-sm leading-tight">SGA1</p>
+        <p class="text-indigo-300 text-xs">Panel de Configuración</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress total -->
+  <div class="px-6 py-4 border-b border-indigo-800">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-indigo-300 text-xs font-medium">Progreso general</span>
+      <span class="text-white text-xs font-bold">{{ completed_steps }}/{{ total_steps }}</span>
+    </div>
+    <div class="w-full bg-indigo-900 rounded-full h-1.5">
+      <div class="bg-indigo-400 h-1.5 rounded-full progress-bar" style="width:{{ progress_pct }}%"></div>
+    </div>
+    <p class="text-indigo-300 text-xs mt-1.5">{{ progress_pct }}% completado</p>
+  </div>
+
+  <!-- Steps list -->
+  <nav class="flex-1 px-3 py-4 space-y-1">
+    {% for step in steps %}
+    <a href="{% url step.url %}"
+       class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all {% if step.active %}active{% endif %}">
+
+      <!-- Status indicator -->
+      <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold
+                  {% if step.done %}step-done{% elif step.active %}step-active{% else %}step-pending{% endif %}">
+        {% if step.done %}
+          <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        {% else %}
+          <span class="text-white">{{ step.numero }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Text -->
+      <div class="min-w-0 flex-1">
+        <p class="text-sm font-medium leading-tight {% if step.active %}text-white{% elif step.done %}text-indigo-200{% else %}text-indigo-400{% endif %}">
+          {{ step.titulo }}
+        </p>
+        <p class="text-xs {% if step.active %}text-indigo-300{% else %}text-indigo-500{% endif %} truncate">{{ step.desc }}</p>
+      </div>
+
+      <!-- Active arrow -->
+      {% if step.active %}
+      <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </nav>
+
+  <!-- Bottom links -->
+  <div class="px-4 py-4 border-t border-indigo-800 space-y-1">
+    <a href="/admin/" class="flex items-center gap-2 px-3 py-2 rounded-lg text-indigo-300 hover:text-white hover:bg-indigo-800 transition text-sm">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Panel Admin Django
+    </a>
+    <a href="/" class="flex items-center gap-2 px-3 py-2 rounded-lg text-indigo-300 hover:text-white hover:bg-indigo-800 transition text-sm">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Inicio del sitio
+    </a>
+  </div>
+</aside>
+
+<!-- ══════════════════════ MAIN CONTENT ══════════════════════ -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+  <!-- Top bar -->
+  <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between flex-shrink-0">
+    <div>
+      {% for step in steps %}{% if step.active %}
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Paso {{ step.numero }} de {{ total_steps }}</span>
+        <h1 class="text-xl font-bold text-gray-900 ml-1">{{ step.titulo }}</h1>
+      </div>
+      <p class="text-sm text-gray-500 mt-0.5">{{ step.desc }}</p>
+      {% endif %}{% endfor %}
+    </div>
+    <div class="flex items-center gap-3">
+      {% if request.user.first_name %}
+      <span class="text-sm text-gray-500">Hola, <strong>{{ request.user.first_name }}</strong></span>
+      {% endif %}
+      <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
+        {{ request.user.username|first|upper }}
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages -->
+  {% if messages %}
+  <div class="px-8 pt-4">
+    {% for msg in messages %}
+    <div class="flex items-center gap-3 px-4 py-3 rounded-lg mb-2 text-sm font-medium
+                {% if msg.tags == 'success' %}bg-green-50 text-green-800 border border-green-200
+                {% elif msg.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+                {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+      {% if msg.tags == 'success' %}
+        <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      {% endif %}
+      {{ msg }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Scrollable content -->
+  <div class="flex-1 overflow-y-auto px-8 py-6">
+
+    <!-- ═══ PASO 1: INSTITUCIÓN ═══ -->
+    {% if current_step_id == 'institucion' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">📋 Comencemos con los datos básicos de tu institución. Esta información aparecerá en reportes y comunicaciones.</p>
+    </div>
+    <form method="post" class="card p-6 max-w-2xl">
+      {% csrf_token %}
+      <div class="grid grid-cols-2 gap-5">
+        <div class="col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre de la institución <span class="text-red-500">*</span></label>
+          <input name="nombre" value="{{ cfg.nombre }}" required class="form-input" placeholder="Conservatorio de Música Bolívar">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Siglas</label>
+          <input name="siglas" value="{{ cfg.siglas }}" class="form-input" placeholder="CMB">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Año lectivo actual <span class="text-red-500">*</span></label>
+          <input name="anio_lectivo" value="{{ cfg.anio_lectivo }}" required class="form-input" placeholder="2025-2026">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Ciudad</label>
+          <input name="ciudad" value="{{ cfg.ciudad }}" class="form-input" placeholder="Ambato">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Teléfono</label>
+          <input name="telefono" value="{{ cfg.telefono }}" class="form-input" placeholder="+593 3 280 0000">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email institucional</label>
+          <input type="email" name="email" value="{{ cfg.email }}" class="form-input" placeholder="info@conservatorio.edu.ec">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Sitio web</label>
+          <input name="website" value="{{ cfg.website }}" class="form-input" placeholder="https://conservatorio.edu.ec">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Dirección</label>
+          <input name="direccion" value="{{ cfg.direccion }}" class="form-input" placeholder="Calle principal y avenida">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Misión</label>
+          <textarea name="mision" rows="2" class="form-input" placeholder="Misión institucional...">{{ cfg.mision }}</textarea>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Visión</label>
+          <textarea name="vision" rows="2" class="form-input" placeholder="Visión institucional...">{{ cfg.vision }}</textarea>
+        </div>
+      </div>
+      <div class="flex justify-end mt-6">
+        <button type="submit" class="btn-primary flex items-center gap-2">
+          Guardar y continuar
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </form>
+    {% endif %}
+
+    <!-- ═══ PASO 2: MATERIAS ═══ -->
+    {% if current_step_id == 'materias' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">🎵 Define las materias que se imparten. Puedes tener <strong>Instrumento</strong> (piano, guitarra…), <strong>Teoría</strong> (solfeo, armonía…) y <strong>Agrupación</strong> (orquesta, coro…).</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-4xl">
+      <!-- Lista existente -->
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ materias|length }}</span>
+          Materias registradas
+        </h3>
+        {% if materias %}
+        <div class="space-y-2">
+          {% for m in materias %}
+          <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0
+                {% if m.tipo_materia == 'INSTRUMENTO' %}tag-instrumento
+                {% elif m.tipo_materia == 'TEORIA' %}tag-teoria
+                {% else %}tag-agrupacion{% endif %}">
+                {{ m.get_tipo_materia_display }}
+              </span>
+              <span class="text-sm text-gray-700 font-medium truncate">{{ m.name }}</span>
+            </div>
+            <a href="{% url 'setup:delete_materia' m.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition"
+               onclick="return confirm('¿Eliminar {{ m.name }}?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay materias.<br>Agrega la primera.</p>
+        {% endif %}
+      </div>
+      <!-- Formulario -->
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Agregar materia</h3>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre de la materia <span class="text-red-500">*</span></label>
+            <input name="nombre" required class="form-input" placeholder="Ej: Piano, Solfeo, Orquesta" autofocus>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tipo</label>
+            <select name="tipo_materia" class="form-select">
+              <option value="INSTRUMENTO">🎹 Instrumento</option>
+              <option value="TEORIA">📖 Teoría</option>
+              <option value="AGRUPACION">🎶 Agrupación</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Descripción (opcional)</label>
+            <input name="description" class="form-input" placeholder="Descripción breve">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Agregar materia</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-4xl mt-6">
+      <a href="{% url 'setup:institucion' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:tipos_aporte' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">
+        Continuar → <span class="text-xs opacity-75">Tipos de Aporte</span>
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 3: TIPOS DE APORTE ═══ -->
+    {% if current_step_id == 'tipos_aporte' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">📋 Los tipos de aporte definen cómo se califica cada materia. Ejemplos: <strong>Trabajo en clase</strong>, <strong>Exposición</strong>, <strong>Transcripción</strong>. El peso determina su importancia relativa en el promedio.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-4xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ tipos|length }}</span>
+          Tipos de aporte configurados
+        </h3>
+        {% if tipos %}
+        <div class="space-y-2">
+          {% for t in tipos %}
+          <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-gray-800">{{ t.nombre }}</p>
+              <p class="text-xs text-gray-400">Código: <span class="font-mono">{{ t.codigo }}</span> · Peso: <strong>{{ t.peso }}</strong></p>
+            </div>
+            <a href="{% url 'setup:delete_tipo_aporte' t.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition ml-2 flex-shrink-0"
+               onclick="return confirm('¿Eliminar {{ t.nombre }}?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Sin tipos de aporte.<br>Crea el primero →</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Agregar tipo de aporte</h3>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre <span class="text-red-500">*</span></label>
+            <input name="nombre" required class="form-input" placeholder="Ej: Trabajo en clase">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Código <span class="text-red-500">*</span></label>
+              <input name="codigo" required class="form-input font-mono" placeholder="TC">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Peso</label>
+              <input name="peso" type="number" step="0.1" min="0.1" value="1.0" class="form-input" placeholder="1.0">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Descripción</label>
+            <input name="descripcion" class="form-input" placeholder="Descripción opcional">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Agregar tipo de aporte</button>
+        </form>
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <p class="text-xs text-gray-500 font-semibold mb-2">Aportes típicos de un conservatorio:</p>
+          <div class="flex flex-wrap gap-1.5">
+            {% for sugerido in "Trabajo en clase,Exposición,Transcripción,Deberes,Lección oral,Evaluación parcial,Proyecto" %}
+            <span class="text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded cursor-pointer hover:bg-indigo-100"
+                  onclick="document.querySelector('[name=nombre]').value='{{ sugerido }}'">
+              {{ sugerido }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-4xl mt-6">
+      <a href="{% url 'setup:materias' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:niveles' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">
+        Continuar → <span class="text-xs opacity-75">Niveles</span>
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 4: NIVELES ═══ -->
+    {% if current_step_id == 'niveles' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">🎓 Crea los niveles y paralelos de tu institución. Ej: <strong>Básica 1 — Paralelo A</strong>. El ciclo se asigna automáticamente según el nivel.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-4xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ niveles|length }}</span>
+          Niveles registrados
+        </h3>
+        {% if niveles %}
+        <div class="space-y-2">
+          {% for n in niveles %}
+          <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div>
+              <p class="text-sm font-medium text-gray-800">{{ n.get_level_display }} — {{ n.section }}</p>
+              <p class="text-xs text-gray-400">Ciclo: {{ n.ciclo }}</p>
+            </div>
+            <a href="{% url 'setup:delete_nivel' n.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition"
+               onclick="return confirm('¿Eliminar este nivel?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay niveles.</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Agregar nivel</h3>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nivel <span class="text-red-500">*</span></label>
+            <select name="level" required class="form-select">
+              {% for val, label in level_choices %}
+              <option value="{{ val }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Paralelo / Sección <span class="text-red-500">*</span></label>
+            <input name="section" required class="form-input" placeholder="Ej: A, B, Único">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Agregar nivel</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-4xl mt-6">
+      <a href="{% url 'setup:tipos_aporte' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:docentes' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">Continuar → <span class="text-xs opacity-75">Docentes</span></a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 4: DOCENTES ═══ -->
+    {% if current_step_id == 'docentes' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">👨‍🏫 Registra los docentes. Se crea automáticamente un usuario de acceso. Contraseña por defecto: <code class="bg-indigo-100 px-1 rounded">Docente2025!</code></p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-4xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ docentes|length }}</span>
+          Docentes registrados
+        </h3>
+        {% if docentes %}
+        <div class="space-y-2">
+          {% for d in docentes %}
+          <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm flex-shrink-0">
+                {{ d.nombre|first|upper }}
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-800">{{ d.nombre }}</p>
+                <p class="text-xs text-gray-400">{{ d.email|default:"Sin email" }}</p>
+              </div>
+            </div>
+            <a href="{% url 'setup:delete_docente' d.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition"
+               onclick="return confirm('¿Eliminar a {{ d.nombre }}?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay docentes.</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Agregar docente</h3>
+        <form method="post" class="space-y-3">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre completo <span class="text-red-500">*</span></label>
+            <input name="nombre" required class="form-input" placeholder="Apellido Nombre">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+              <input type="email" name="email" class="form-input" placeholder="docente@email.com">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Cédula</label>
+              <input name="cedula" class="form-input" placeholder="1234567890">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Teléfono</label>
+            <input name="phone" class="form-input" placeholder="593987654321">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Especialidad</label>
+            <input name="specialization" class="form-input" placeholder="Ej: Piano, Guitarra clásica">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Registrar docente</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-4xl mt-6">
+      <a href="{% url 'setup:niveles' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:clases' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">Continuar → <span class="text-xs opacity-75">Clases</span></a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 5: CLASES ═══ -->
+    {% if current_step_id == 'clases' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">🎵 Cada clase conecta una materia con un docente y un nivel. Ej: <strong>Piano I — Prof. García — Básica 1 A</strong>.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-5xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ clases|length }}</span>
+          Clases creadas
+        </h3>
+        {% if clases %}
+        <div class="space-y-2 max-h-80 overflow-y-auto">
+          {% for c in clases %}
+          <div class="flex items-start justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-gray-800">{{ c.name }}</p>
+              <p class="text-xs text-gray-400">
+                {{ c.subject.name|default:"—" }} · {{ c.grade_level|default:"Sin nivel" }}
+                {% if c.docente_base %} · {{ c.docente_base.nombre }}{% endif %}
+              </p>
+            </div>
+            <a href="{% url 'setup:delete_clase' c.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition ml-2 flex-shrink-0"
+               onclick="return confirm('¿Eliminar esta clase?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay clases.</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Nueva clase</h3>
+        <form method="post" class="space-y-3">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre de la clase <span class="text-red-500">*</span></label>
+            <input name="name" required class="form-input" placeholder="Ej: Piano I 2025-2026">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Materia <span class="text-red-500">*</span></label>
+            <select name="subject" required class="form-select">
+              <option value="">— Seleccionar materia —</option>
+              {% for s in subjects %}<option value="{{ s.pk }}">{{ s.name }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nivel / Paralelo</label>
+            <select name="grade_level" class="form-select">
+              <option value="">— Sin nivel asignado —</option>
+              {% for n in niveles %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Docente</label>
+            <select name="docente_base" class="form-select">
+              <option value="">— Sin docente —</option>
+              {% for d in docentes %}<option value="{{ d.pk }}">{{ d.nombre }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Ciclo lectivo</label>
+            <input name="ciclo_lectivo" value="{{ anio_lectivo }}" class="form-input">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Crear clase</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-5xl mt-6">
+      <a href="{% url 'setup:docentes' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:estudiantes' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">Continuar → <span class="text-xs opacity-75">Estudiantes</span></a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 6: ESTUDIANTES ═══ -->
+    {% if current_step_id == 'estudiantes' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">👨‍🎓 Registra los estudiantes. El teléfono del representante se usará para las notificaciones por WhatsApp. Contraseña por defecto: <code class="bg-indigo-100 px-1 rounded">Alumno2025!</code></p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-5xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ estudiantes|length }}</span>
+          Estudiantes registrados
+        </h3>
+        {% if estudiantes %}
+        <div class="space-y-2 max-h-96 overflow-y-auto">
+          {% for e in estudiantes %}
+          <div class="flex items-start justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs flex-shrink-0">
+                {{ e.usuario.nombre|first|upper }}
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-gray-800">{{ e.usuario.nombre }}</p>
+                <p class="text-xs text-gray-400 truncate">{{ e.grade_level|default:"Sin nivel" }} · 📱 {{ e.parent_phone|default:"—" }}</p>
+              </div>
+            </div>
+            <a href="{% url 'setup:delete_estudiante' e.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition ml-2 flex-shrink-0"
+               onclick="return confirm('¿Eliminar a {{ e.usuario.nombre }}?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay estudiantes.</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Registrar estudiante</h3>
+        <form method="post" class="space-y-3">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre completo <span class="text-red-500">*</span></label>
+            <input name="nombre" required class="form-input" placeholder="Apellido Nombre del estudiante">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+              <input type="email" name="email" class="form-input" placeholder="alumno@email.com">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-1.5">Cédula</label>
+              <input name="cedula" class="form-input" placeholder="1234567890">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nivel</label>
+            <select name="grade_level" class="form-select">
+              <option value="">— Sin nivel —</option>
+              {% for n in niveles %}<option value="{{ n.pk }}">{{ n }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="border-t pt-3">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Datos del representante</p>
+            <input name="parent_name" class="form-input mb-2" placeholder="Nombre del padre / madre / representante">
+            <input name="parent_phone" class="form-input" placeholder="Teléfono WhatsApp (ej: 593987654321)">
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Registrar estudiante</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-5xl mt-6">
+      <a href="{% url 'setup:clases' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:matriculas' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">Continuar → <span class="text-xs opacity-75">Matrículas</span></a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 7: MATRÍCULAS ═══ -->
+    {% if current_step_id == 'matriculas' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">📝 Matricula a cada estudiante en las clases que le corresponden. Un estudiante puede estar en múltiples clases.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 max-w-5xl">
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 text-xs font-bold">{{ matriculas|length }}</span>
+          Matrículas registradas
+        </h3>
+        {% if matriculas %}
+        <div class="space-y-2 max-h-96 overflow-y-auto">
+          {% for m in matriculas %}
+          <div class="flex items-start justify-between py-2 px-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition group">
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-gray-800">{{ m.estudiante.nombre }}</p>
+              <p class="text-xs text-gray-400">↳ {{ m.clase.name }}</p>
+            </div>
+            <a href="{% url 'setup:delete_matricula' m.pk %}" class="btn-danger opacity-0 group-hover:opacity-100 transition ml-2 flex-shrink-0"
+               onclick="return confirm('¿Eliminar esta matrícula?')">✕</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-gray-400 text-center py-6">Aún no hay matrículas.</p>
+        {% endif %}
+      </div>
+      <div class="card p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Nueva matrícula</h3>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Estudiante <span class="text-red-500">*</span></label>
+            <select name="estudiante" required class="form-select">
+              <option value="">— Seleccionar estudiante —</option>
+              {% for e in estudiantes %}<option value="{{ e.pk }}">{{ e.nombre }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Clase <span class="text-red-500">*</span></label>
+            <select name="clase" required class="form-select">
+              <option value="">— Seleccionar clase —</option>
+              {% for c in clases %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn-primary w-full">+ Matricular</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex justify-between max-w-5xl mt-6">
+      <a href="{% url 'setup:estudiantes' %}" class="btn-secondary">← Anterior</a>
+      <a href="{% url 'setup:whatsapp' %}" class="btn-primary flex items-center gap-2" style="text-decoration:none;display:inline-flex">Continuar → <span class="text-xs opacity-75">WhatsApp</span></a>
+    </div>
+    {% endif %}
+
+    <!-- ═══ PASO 8: WHATSAPP ═══ -->
+    {% if current_step_id == 'whatsapp' %}
+    <div class="info-box mb-6">
+      <p class="text-indigo-800 text-sm font-medium">📱 Conecta tu instancia de Evolution API para enviar notificaciones automáticas a los representantes por WhatsApp.</p>
+    </div>
+    <div class="max-w-2xl">
+      {% if wa %}
+      <div class="card p-4 mb-5 flex items-center gap-3 border-l-4 border-green-500">
+        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-gray-800">WhatsApp configurado: {{ wa.nombre_instancia }}</p>
+          <p class="text-xs text-gray-500">{{ wa.api_url }}</p>
+        </div>
+      </div>
+      {% endif %}
+      <div class="card p-6">
+        <h3 class="font-semibold text-gray-800 mb-5">{{ wa|yesno:"Actualizar,Configurar" }} Evolution API</h3>
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre de instancia <span class="text-red-500">*</span></label>
+            <input name="nombre_instancia" value="{{ wa.nombre_instancia|default:'' }}" required class="form-input" placeholder="AgenteCitas">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Ciclo lectivo</label>
+            <input name="ciclo_lectivo" value="{{ wa.ciclo_lectivo|default:'2025-2026' }}" class="form-input">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">URL de Evolution API</label>
+            <input name="api_url" value="{{ api_url }}" class="form-input" placeholder="https://tu-evolution-api.host" readonly>
+            <p class="text-xs text-gray-400 mt-1">Configurada en variables de entorno del servidor.</p>
+          </div>
+          <div class="flex items-center gap-2.5 p-3 bg-gray-50 rounded-lg">
+            <input type="checkbox" name="activa" id="activa" {% if wa.activa %}checked{% endif %} class="w-4 h-4 accent-indigo-600">
+            <label for="activa" class="text-sm font-medium text-gray-700 cursor-pointer">Instancia activa</label>
+          </div>
+          <button type="submit" class="btn-primary w-full">💾 Guardar configuración WhatsApp</button>
+        </form>
+      </div>
+
+      {% if completed_steps == total_steps %}
+      <div class="mt-6 p-5 rounded-xl text-center" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac">
+        <div class="text-4xl mb-2">🎉</div>
+        <h3 class="font-bold text-green-800 text-lg mb-1">¡Configuración completa!</h3>
+        <p class="text-green-700 text-sm mb-4">Tu sistema está listo para usarse. Todos los pasos han sido completados.</p>
+        <a href="/admin/" class="btn-primary inline-flex items-center gap-2" style="text-decoration:none">
+          Ir al Panel de Administración →
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="flex justify-between max-w-2xl mt-6">
+      <a href="{% url 'setup:matriculas' %}" class="btn-secondary">← Anterior</a>
+    </div>
+    {% endif %}
+
+  </div><!-- end scrollable -->
+</main>
+
+<script>
+// Auto-dismiss messages
+setTimeout(() => {
+  document.querySelectorAll('[data-msg]').forEach(el => el.remove())
+}, 4000)
+</script>
+</body>
+</html>

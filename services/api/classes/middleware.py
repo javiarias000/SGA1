@@ -25,7 +25,10 @@ class RoleBasedAccessMiddleware:
         path = request.path or "/"
 
         # Permitir admin, estáticos, media, API REST, GraphQL, reseteo de contraseña y matrículas públicas
-        if (path.startswith('/admin/') or
+        if (path == '/healthz/' or
+            path.startswith('/setup/') or
+            path.startswith('/docente/') or
+            path.startswith('/admin/') or
             path.startswith('/static/') or
             path.startswith('/media/') or
             path.startswith('/reset/') or

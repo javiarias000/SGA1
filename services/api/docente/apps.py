@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class SubjectsConfig(AppConfig):
+class DocenteConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'subjects'
-    verbose_name = '📚 Materias'
+    name = 'docente'
+    verbose_name = 'Panel del Docente'

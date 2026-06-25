@@ -31,7 +31,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(','
 # Orígenes de confianza para CSRF — incluye todos los puertos de desarrollo local
 _csrf_origins = os.environ.get(
     'CSRF_TRUSTED_ORIGINS',
-    'http://localhost,http://localhost:80,http://localhost:8000,http://localhost:8001,http://127.0.0.1,http://127.0.0.1:8000,http://127.0.0.1:8001',
+    'http://localhost,http://localhost:80,http://localhost:8000,http://localhost:8001,http://127.0.0.1,http://127.0.0.1:8000,http://127.0.0.1:8001,http://76.13.229.236:8080,http://76.13.229.236:8001,https://sga1.12t4ag.easypanel.host',
 )
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
 
@@ -46,6 +46,8 @@ _admin_site.AdminSite.index_title  = 'Panel de Administración Académica'
 
 INSTALLED_APPS = [
     # Apps propias
+    'setup',
+    'docente',
     'teachers',
     'students',
     'classes',
@@ -198,7 +200,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Login
-# LOGIN_URL = '/users/login/'
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/users/login/'
 
