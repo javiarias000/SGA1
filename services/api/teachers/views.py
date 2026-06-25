@@ -2290,3 +2290,236 @@ def detalle_deber(request, deber_id):
         'es_profesor': teacher_required(request.user),
     }
     return render(request, 'teachers/deberes/detalle_deber.html', context)
+
+
+# ============================================
+# WIZARD: CREAR TIPO DE APORTE
+# ============================================
+
+@login_required
+@teacher_required
+def wizard_aporte(request):
+    """Wizard 3 pasos para crear un TipoAporte."""
+    paso = int(request.GET.get('paso', 1))
+    SK = 'wiz_aporte'  # session key prefix
+
+    if request.method == 'POST':
+        if paso == 1:
+            nombre = request.POST.get('nombre', '').strip()
+            descripcion = request.POST.get('descripcion', '').strip()
+            if not nombre:
+                messages.error(request, 'El nombre es obligatorio.')
+                return redirect(f"{request.path}?paso=1")
+            request.session[f'{SK}_nombre'] = nombre
+            request.session[f'{SK}_descripcion'] = descripcion
+            codigo_sugerido = nombre.upper().replace(' ', '_')[:50]
+            request.session[f'{SK}_codigo'] = codigo_sugerido
+            return redirect(f"{request.path}?paso=2")
+
+        elif paso == 2:
+            codigo = request.POST.get('codigo', '').strip().upper().replace(' ', '_')[:50]
+            peso = request.POST.get('peso', '1.0').strip()
+            if not codigo:
+                messages.error(request, 'El código es obligatorio.')
+                return redirect(f"{request.path}?paso=2")
+            try:
+                peso_val = Decimal(peso)
+                if peso_val <= 0:
+                    raise ValueError
+            except Exception:
+                messages.error(request, 'El peso debe ser un número positivo.')
+                return redirect(f"{request.path}?paso=2")
+            request.session[f'{SK}_codigo'] = codigo
+            request.session[f'{SK}_peso'] = str(peso_val)
+            return redirect(f"{request.path}?paso=3")
+
+        elif paso == 3:
+            nombre = request.session.get(f'{SK}_nombre')
+            codigo = request.session.get(f'{SK}_codigo')
+            peso   = request.session.get(f'{SK}_peso', '1.0')
+            descripcion = request.session.get(f'{SK}_descripcion', '')
+            if not nombre or not codigo:
+                messages.error(request, 'Sesión expirada. Empieza de nuevo.')
+                return redirect(f"{request.path}?paso=1")
+            try:
+                aporte, created = TipoAporte.objects.get_or_create(
+                    codigo=codigo,
+                    defaults={'nombre': nombre, 'peso': Decimal(peso),
+                              'descripcion': descripcion, 'activo': True}
+                )
+                if created:
+                    messages.success(request, f'Aporte "{nombre}" creado correctamente.')
+                else:
+                    messages.info(request, f'El aporte con código "{codigo}" ya existe.')
+            except Exception as e:
+                messages.error(request, f'Error al guardar: {e}')
+                return redirect(f"{request.path}?paso=3")
+            for k in ['nombre', 'descripcion', 'codigo', 'peso']:
+                request.session.pop(f'{SK}_{k}', None)
+            return redirect('teachers:gestionar_aportes')
+
+    ctx = {
+        'paso': paso,
+        'total_pasos': 3,
+        'nombre': request.session.get(f'{SK}_nombre', ''),
+        'descripcion': request.session.get(f'{SK}_descripcion', ''),
+        'codigo': request.session.get(f'{SK}_codigo', ''),
+        'peso': request.session.get(f'{SK}_peso', '1.0'),
+    }
+    return render(request, 'teachers/wizard_aporte.html', ctx)
+
+
+# ============================================
+# WIZARD: PASAR NOTAS GLOBAL
+# ============================================
+
+@login_required
+@teacher_required
+def wizard_notas(request):
+    """Wizard 4 pasos para ingresar notas a todos los estudiantes de una clase."""
+    paso = int(request.GET.get('paso', 1))
+    SK = 'wiz_notas'
+    teacher = request.user.teacher_profile
+    teacher_usuario = teacher.usuario
+
+    if request.method == 'POST':
+        if paso == 1:
+            clase_id = request.POST.get('clase_id', '').strip()
+            if not clase_id:
+                messages.error(request, 'Selecciona una clase.')
+                return redirect(f"{request.path}?paso=1")
+            clase = get_object_or_404(Clase, id=clase_id, docente_base=teacher_usuario)
+            request.session[f'{SK}_clase_id'] = clase.id
+            return redirect(f"{request.path}?paso=2")
+
+        elif paso == 2:
+            quimestre = request.POST.get('quimestre', '').strip()
+            parcial   = request.POST.get('parcial', '').strip()
+            if quimestre not in ('Q1', 'Q2') or parcial not in ('1P', '2P', '3P', '4P'):
+                messages.error(request, 'Selecciona quimestre y parcial válidos.')
+                return redirect(f"{request.path}?paso=2")
+            request.session[f'{SK}_quimestre'] = quimestre
+            request.session[f'{SK}_parcial']   = parcial
+            return redirect(f"{request.path}?paso=3")
+
+        elif paso == 3:
+            aporte_id = request.POST.get('aporte_id', '').strip()
+            if not aporte_id:
+                messages.error(request, 'Selecciona un tipo de aporte.')
+                return redirect(f"{request.path}?paso=3")
+            get_object_or_404(TipoAporte, id=aporte_id, activo=True)
+            request.session[f'{SK}_aporte_id'] = int(aporte_id)
+            return redirect(f"{request.path}?paso=4")
+
+        elif paso == 4:
+            clase_id   = request.session.get(f'{SK}_clase_id')
+            quimestre  = request.session.get(f'{SK}_quimestre')
+            parcial    = request.session.get(f'{SK}_parcial')
+            aporte_id  = request.session.get(f'{SK}_aporte_id')
+            if not all([clase_id, quimestre, parcial, aporte_id]):
+                messages.error(request, 'Sesión expirada. Empieza de nuevo.')
+                return redirect(f"{request.path}?paso=1")
+
+            clase      = get_object_or_404(Clase, id=clase_id)
+            tipo_aporte = get_object_or_404(TipoAporte, id=aporte_id)
+            subject    = clase.subject
+            guardados  = 0
+            errores    = 0
+
+            for key, valor in request.POST.items():
+                if key.startswith('nota_'):
+                    try:
+                        student_id = int(key.split('_', 1)[1])
+                        nota = Decimal(valor.strip() or '0')
+                        if nota < 0: nota = Decimal('0')
+                        if nota > 10: nota = Decimal('10')
+                        student = get_object_or_404(Student, id=student_id)
+                        CalificacionParcial.objects.update_or_create(
+                            student=student,
+                            subject=subject,
+                            parcial=parcial,
+                            quimestre=quimestre,
+                            tipo_aporte=tipo_aporte,
+                            defaults={'calificacion': nota, 'registrado_por': teacher}
+                        )
+                        guardados += 1
+                    except Exception:
+                        errores += 1
+
+            for k in ['clase_id', 'quimestre', 'parcial', 'aporte_id']:
+                request.session.pop(f'{SK}_{k}', None)
+
+            if errores:
+                messages.warning(request, f'{guardados} notas guardadas, {errores} con error.')
+            else:
+                messages.success(request, f'{guardados} notas guardadas correctamente.')
+            return redirect('teachers:calificaciones_detalladas')
+
+    # GET — armar contexto según paso
+    ctx = {'paso': paso, 'total_pasos': 4}
+
+    if paso == 1:
+        ctx['clases'] = Clase.objects.filter(
+            docente_base=teacher_usuario, active=True
+        ).select_related('subject', 'grade_level').order_by('subject__name')
+
+    elif paso == 2:
+        clase_id = request.session.get(f'{SK}_clase_id')
+        if not clase_id:
+            return redirect(f"{request.path}?paso=1")
+        ctx['clase'] = get_object_or_404(Clase, id=clase_id)
+        ctx['quimestre_choices'] = CalificacionParcial.QUIMESTRE_CHOICES
+        ctx['parcial_choices']   = CalificacionParcial.PARCIAL_CHOICES
+
+    elif paso == 3:
+        if not request.session.get(f'{SK}_quimestre'):
+            return redirect(f"{request.path}?paso=2")
+        ctx['aportes'] = TipoAporte.objects.filter(activo=True).order_by('orden', 'nombre')
+        ctx['quimestre'] = request.session.get(f'{SK}_quimestre')
+        ctx['parcial']   = request.session.get(f'{SK}_parcial')
+
+    elif paso == 4:
+        clase_id  = request.session.get(f'{SK}_clase_id')
+        aporte_id = request.session.get(f'{SK}_aporte_id')
+        if not clase_id or not aporte_id:
+            return redirect(f"{request.path}?paso=3")
+        clase        = get_object_or_404(Clase, id=clase_id)
+        tipo_aporte  = get_object_or_404(TipoAporte, id=aporte_id)
+        quimestre    = request.session.get(f'{SK}_quimestre')
+        parcial      = request.session.get(f'{SK}_parcial')
+
+        enrollments = Enrollment.objects.filter(
+            clase=clase, estado='ACTIVO'
+        ).select_related('estudiante__student_profile')
+
+        estudiantes_con_nota = []
+        for enr in enrollments:
+            usu = enr.estudiante
+            if usu is None:
+                continue
+            try:
+                student = usu.student_profile
+            except Exception:
+                continue
+            nota_actual = CalificacionParcial.objects.filter(
+                student=student, subject=clase.subject,
+                parcial=parcial, quimestre=quimestre,
+                tipo_aporte=tipo_aporte
+            ).values_list('calificacion', flat=True).first()
+            estudiantes_con_nota.append({
+                'student': student,
+                'nombre': usu.nombre_completo if hasattr(usu, 'nombre_completo') else f"{usu.nombre} {usu.apellido}",
+                'nota_actual': nota_actual or '',
+            })
+
+        ctx.update({
+            'clase': clase,
+            'tipo_aporte': tipo_aporte,
+            'quimestre': quimestre,
+            'parcial': parcial,
+            'quimestre_label': dict(CalificacionParcial.QUIMESTRE_CHOICES).get(quimestre, quimestre),
+            'parcial_label': dict(CalificacionParcial.PARCIAL_CHOICES).get(parcial, parcial),
+            'estudiantes': estudiantes_con_nota,
+        })
+
+    return render(request, 'teachers/wizard_notas.html', ctx)

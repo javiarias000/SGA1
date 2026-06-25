@@ -1,0 +1,288 @@
+{% extends "teachers/base.html" %}
+{% block title %}Pasar Notas — Paso {{ paso }} de {{ total_pasos }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .nota-input {
+    width: 80px;
+    text-align: center;
+    font-weight: 600;
+    font-size: .95rem;
+  }
+  .nota-input:focus { border-color: #4338ca; box-shadow: 0 0 0 2px rgba(67,56,202,.2); }
+  .student-row:hover { background: #f8f7ff; }
+  .paso-indicator.active  { background: #4338ca; color: #fff; }
+  .paso-indicator.done    { background: #22c55e; color: #fff; }
+  .paso-indicator.pending { background: #e2e8f0; color: #94a3b8; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:860px">
+
+  <!-- Encabezado -->
+  <div class="mb-4">
+    <a href="{% url 'teachers:calificaciones_detalladas' %}" class="text-muted text-decoration-none small">
+      ← Volver a Calificaciones
+    </a>
+    <h3 class="mt-2 mb-0 fw-bold">Pasar Notas — Registro Global</h3>
+    <p class="text-muted small">Ingresa las notas de todos los estudiantes de una clase en un solo paso.</p>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between small text-muted mb-1">
+      <span>Paso {{ paso }} de {{ total_pasos }}</span>
+      <span>{% if paso == 1 %}Clase{% elif paso == 2 %}Período{% elif paso == 3 %}Aporte{% else %}Notas{% endif %}</span>
+    </div>
+    <div class="progress mb-2" style="height:6px">
+      <div class="progress-bar bg-primary" style="width:{% widthratio paso total_pasos 100 %}%"></div>
+    </div>
+    <div class="d-flex gap-3">
+      {% for label in "Clase,Período,Aporte,Notas"|split:"," %}
+      {% with n=forloop.counter %}
+      <div class="d-flex align-items-center gap-1">
+        <div class="paso-indicator rounded-circle d-flex align-items-center justify-content-center fw-bold
+                    {% if n < paso %}done{% elif n == paso %}active{% else %}pending{% endif %}"
+             style="width:26px;height:26px;font-size:.72rem">
+          {% if n < paso %}✓{% else %}{{ n }}{% endif %}
+        </div>
+        <span class="small {% if n == paso %}fw-semibold text-dark{% else %}text-muted{% endif %}">
+          {{ label }}
+        </span>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if messages %}
+  {% for m in messages %}
+  <div class="alert alert-{{ m.tags|default:'info' }} alert-dismissible fade show py-2" role="alert">
+    {{ m }} <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <!-- PASO 1: Seleccionar clase -->
+      {% if paso == 1 %}
+      <h5 class="fw-bold mb-1">Selecciona la clase</h5>
+      <p class="text-muted small mb-4">Solo se muestran tus clases activas.</p>
+      <form method="post" action="?paso=1">
+        {% csrf_token %}
+        {% if clases %}
+        <div class="row g-3 mb-4">
+          {% for clase in clases %}
+          <div class="col-md-6">
+            <label class="d-block cursor-pointer">
+              <input type="radio" name="clase_id" value="{{ clase.id }}" class="d-none clase-radio">
+              <div class="card h-100 border clase-card p-3" style="cursor:pointer;transition:.15s">
+                <div class="fw-semibold text-primary">{{ clase.subject.name }}</div>
+                <div class="small text-muted">{{ clase.name }}</div>
+                {% if clase.grade_level %}
+                <div class="small text-muted">{{ clase.grade_level }}</div>
+                {% endif %}
+                <div class="small text-muted mt-1">
+                  <span class="badge bg-light text-dark border">{{ clase.get_enrolled_count }} estudiantes</span>
+                </div>
+              </div>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <a href="{% url 'teachers:calificaciones_detalladas' %}" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary px-4" id="btn-paso1" disabled>Siguiente →</button>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+          No tienes clases asignadas. Pide al administrador que te asigne clases.
+        </div>
+        {% endif %}
+      </form>
+      <script>
+        document.querySelectorAll('.clase-radio').forEach(r => {
+          r.addEventListener('change', () => {
+            document.querySelectorAll('.clase-card').forEach(c => c.classList.remove('border-primary','shadow-sm'));
+            r.closest('label').querySelector('.clase-card').classList.add('border-primary','shadow-sm');
+            document.getElementById('btn-paso1').disabled = false;
+          });
+        });
+      </script>
+
+      <!-- PASO 2: Seleccionar período -->
+      {% elif paso == 2 %}
+      <h5 class="fw-bold mb-1">Selecciona el período</h5>
+      <p class="text-muted small mb-4">Clase: <strong>{{ clase.subject.name }} — {{ clase.name }}</strong></p>
+      <form method="post" action="?paso=2">
+        {% csrf_token %}
+        <div class="row g-4 mb-4">
+          <div class="col-sm-6">
+            <label class="form-label fw-semibold">Quimestre *</label>
+            {% for val, label in quimestre_choices %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="quimestre"
+                     id="q{{ val }}" value="{{ val }}" required>
+              <label class="form-check-label" for="q{{ val }}">{{ label }}</label>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label fw-semibold">Parcial *</label>
+            {% for val, label in parcial_choices %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="parcial"
+                     id="p{{ val }}" value="{{ val }}" required>
+              <label class="form-check-label" for="p{{ val }}">{{ label }}</label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="d-flex justify-content-between gap-2">
+          <a href="?paso=1" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- PASO 3: Seleccionar tipo de aporte -->
+      {% elif paso == 3 %}
+      <h5 class="fw-bold mb-1">Selecciona el tipo de aporte</h5>
+      <p class="text-muted small mb-4">
+        Período: <strong>{{ quimestre_label|default:quimestre }} — {{ parcial_label|default:parcial }}</strong>
+      </p>
+      <form method="post" action="?paso=3">
+        {% csrf_token %}
+        {% if aportes %}
+        <div class="table-responsive mb-4">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width:40px"></th>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th class="text-end">Peso</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in aportes %}
+              <tr style="cursor:pointer" onclick="this.querySelector('input').click()">
+                <td><input type="radio" name="aporte_id" value="{{ a.id }}" required></td>
+                <td class="fw-semibold">{{ a.nombre }}</td>
+                <td class="font-monospace small text-muted">{{ a.codigo }}</td>
+                <td class="text-end">{{ a.peso }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between gap-2">
+          <a href="?paso=2" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+          No hay tipos de aportes activos.
+          <a href="{% url 'teachers:wizard_aporte' %}" class="alert-link">Crea uno aquí</a>.
+        </div>
+        {% endif %}
+      </form>
+
+      <!-- PASO 4: Ingresar notas -->
+      {% elif paso == 4 %}
+      <h5 class="fw-bold mb-1">Ingresa las notas</h5>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2">
+          📚 {{ clase.subject.name }}
+        </span>
+        <span class="badge bg-secondary bg-opacity-10 text-secondary border px-3 py-2">
+          {{ quimestre_label }} · {{ parcial_label }}
+        </span>
+        <span class="badge bg-secondary bg-opacity-10 text-secondary border px-3 py-2">
+          {{ tipo_aporte.nombre }} (Peso: {{ tipo_aporte.peso }})
+        </span>
+      </div>
+
+      {% if estudiantes %}
+      <form method="post" action="?paso=4">
+        {% csrf_token %}
+        <div class="table-responsive mb-4">
+          <table class="table align-middle" id="tabla-notas">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Estudiante</th>
+                <th class="text-center">Nota (0–10)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for est in estudiantes %}
+              <tr class="student-row">
+                <td class="text-muted small">{{ forloop.counter }}</td>
+                <td class="fw-semibold">{{ est.nombre }}</td>
+                <td class="text-center">
+                  <input type="number" name="nota_{{ est.student.id }}"
+                         class="form-control nota-input d-inline-block"
+                         min="0" max="10" step="0.01"
+                         value="{{ est.nota_actual }}"
+                         placeholder="—"
+                         tabindex="{{ forloop.counter }}">
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Botones de acción rápida -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="llenarTodo(10)">
+            Todos 10
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="llenarVacio(10)">
+            Vacíos → 10
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="limpiarTodo()">
+            Limpiar todo
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-between gap-2 border-top pt-3">
+          <a href="?paso=3" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-success px-4 fw-semibold">
+            ✔ Guardar {{ estudiantes|length }} notas
+          </button>
+        </div>
+      </form>
+      {% else %}
+      <div class="alert alert-warning">
+        Esta clase no tiene estudiantes inscritos activos.
+      </div>
+      <a href="?paso=1" class="btn btn-outline-secondary">← Reiniciar</a>
+      {% endif %}
+
+      <script>
+        function llenarTodo(v) {
+          document.querySelectorAll('.nota-input').forEach(i => i.value = v);
+        }
+        function llenarVacio(v) {
+          document.querySelectorAll('.nota-input').forEach(i => { if (!i.value) i.value = v; });
+        }
+        function limpiarTodo() {
+          document.querySelectorAll('.nota-input').forEach(i => i.value = '');
+        }
+        // Tab entre campos de notas
+        document.querySelectorAll('.nota-input').forEach((inp, idx, all) => {
+          inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); all[idx+1]?.focus(); }
+          });
+        });
+      </script>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

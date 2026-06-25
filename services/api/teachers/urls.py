@@ -17,6 +17,10 @@ urlpatterns = [
     
     # Gestión de tipos de aportes
     path('aportes/', views.gestionar_tipos_aportes, name='gestionar_aportes'),
+
+    # Wizards
+    path('wizard/aporte/', views.wizard_aporte, name='wizard_aporte'),
+    path('wizard/notas/', views.wizard_notas, name='wizard_notas'),
     
     # Clases teóricas (gestión)
     path('clases/', views.clases_dashboard_view, name='clases_dashboard'),

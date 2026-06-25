@@ -1,0 +1,132 @@
+{% extends "teachers/base.html" %}
+{% block title %}Nuevo Aporte — Paso {{ paso }} de {{ total_pasos }}{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:680px">
+
+  <!-- Encabezado -->
+  <div class="mb-4">
+    <a href="{% url 'teachers:gestionar_aportes' %}" class="text-muted text-decoration-none small">
+      ← Volver a Aportes
+    </a>
+    <h3 class="mt-2 mb-0 fw-bold">Nuevo Tipo de Aporte</h3>
+    <p class="text-muted small">Define cómo se evaluará a los estudiantes en esta categoría.</p>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between small text-muted mb-1">
+      <span>Paso {{ paso }} de {{ total_pasos }}</span>
+      <span>{% if paso == 1 %}Nombre{% elif paso == 2 %}Peso{% else %}Confirmar{% endif %}</span>
+    </div>
+    <div class="progress" style="height:6px">
+      <div class="progress-bar bg-primary" style="width:{% widthratio paso total_pasos 100 %}%"></div>
+    </div>
+    <div class="d-flex justify-content-between mt-2">
+      {% for i in "123" %}
+      {% with n=forloop.counter %}
+      <div class="d-flex align-items-center gap-1">
+        <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+             style="width:28px;height:28px;font-size:.75rem;
+                    background:{% if n <= paso %}#4338ca{% else %}#e2e8f0{% endif %};
+                    color:{% if n <= paso %}#fff{% else %}#94a3b8{% endif %}">
+          {{ n }}
+        </div>
+        <span class="small {% if n == paso %}fw-semibold text-dark{% else %}text-muted{% endif %}">
+          {% if n == 1 %}Nombre{% elif n == 2 %}Peso{% else %}Confirmar{% endif %}
+        </span>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if messages %}
+  {% for m in messages %}
+  <div class="alert alert-{{ m.tags|default:'info' }} alert-dismissible fade show py-2" role="alert">
+    {{ m }} <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <!-- PASO 1: Nombre y descripción -->
+      {% if paso == 1 %}
+      <h5 class="fw-bold mb-1">¿Cómo se llama este aporte?</h5>
+      <p class="text-muted small mb-4">Ejemplos: Trabajo en clase, Exposición, Transcripción, Examen…</p>
+      <form method="post" action="?paso=1">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nombre del aporte *</label>
+          <input type="text" name="nombre" class="form-control" required autofocus
+                 value="{{ nombre }}" placeholder="Ej: Trabajo en clase">
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Descripción <span class="text-muted fw-normal">(opcional)</span></label>
+          <textarea name="descripcion" class="form-control" rows="3"
+                    placeholder="Qué evalúa este aporte…">{{ descripcion }}</textarea>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <a href="{% url 'teachers:gestionar_aportes' %}" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- PASO 2: Código y Peso -->
+      {% elif paso == 2 %}
+      <h5 class="fw-bold mb-1">Código y peso en el promedio</h5>
+      <p class="text-muted small mb-4">El peso determina cuánto vale este aporte en el cálculo del promedio.</p>
+      <form method="post" action="?paso=2">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Código único *</label>
+          <input type="text" name="codigo" class="form-control font-monospace text-uppercase"
+                 required value="{{ codigo }}" placeholder="TRABAJO_CLASE">
+          <div class="form-text">Se genera automáticamente del nombre. Puedes editarlo si deseas.</div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Peso en el promedio *</label>
+          <div class="input-group" style="max-width:200px">
+            <input type="number" name="peso" class="form-control" required
+                   min="0.1" max="10" step="0.1" value="{{ peso }}">
+            <span class="input-group-text text-muted">/ 10</span>
+          </div>
+          <div class="form-text">Peso relativo. Aportes con mayor peso contribuyen más al promedio.</div>
+        </div>
+        <div class="d-flex justify-content-between gap-2">
+          <a href="?paso=1" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- PASO 3: Confirmar -->
+      {% elif paso == 3 %}
+      <h5 class="fw-bold mb-1">Confirmar nuevo aporte</h5>
+      <p class="text-muted small mb-4">Revisa los datos antes de guardar.</p>
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered">
+          <tbody>
+            <tr><th class="bg-light" style="width:40%">Nombre</th><td class="fw-semibold">{{ nombre }}</td></tr>
+            <tr><th class="bg-light">Código</th><td class="font-monospace">{{ codigo }}</td></tr>
+            <tr><th class="bg-light">Peso</th><td>{{ peso }}</td></tr>
+            {% if descripcion %}
+            <tr><th class="bg-light">Descripción</th><td>{{ descripcion }}</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <form method="post" action="?paso=3">
+        {% csrf_token %}
+        <div class="d-flex justify-content-between gap-2">
+          <a href="?paso=2" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-success px-4">✔ Crear aporte</button>
+        </div>
+      </form>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

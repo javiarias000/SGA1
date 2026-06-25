@@ -60,11 +60,26 @@
                     <span>Carpetas</span>
                 </a>
                 
+                <a href="{% url 'teachers:calificaciones_detalladas' %}" class="nav-item {% if request.resolver_match.url_name == 'calificaciones_detalladas' %}active{% endif %}">
+                    <span class="icon">📝</span>
+                    <span>Calificaciones</span>
+                </a>
+
+                <a href="{% url 'teachers:wizard_notas' %}?paso=1" class="nav-item {% if request.resolver_match.url_name == 'wizard_notas' %}active{% endif %}">
+                    <span class="icon">📊</span>
+                    <span>Pasar Notas</span>
+                </a>
+
+                <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="nav-item {% if request.resolver_match.url_name == 'wizard_aporte' %}active{% endif %}">
+                    <span class="icon">➕</span>
+                    <span>Nuevo Aporte</span>
+                </a>
+
                 <a href="{% url 'teachers:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                     <span class="icon">👤</span>
                     <span>Mi Perfil</span>
                 </a>
-                
+
 <a href="{% url 'users:logout' %}" class="nav-item">
                     <span class="icon">🚪</span>
                     <span>Cerrar Sesión</span>
