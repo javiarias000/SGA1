@@ -1,231 +1,185 @@
 /* ══════════════════════════════════════════════════════════════════
-   Conservatorio Bolívar — Admin Theme (matched to Wizard indigo)
+   Conservatorio Bolívar — Admin Theme (indigo, matched to Wizard)
+   Estrategia: sobreescribir las variables CSS propias de Django en
+   :root para que TODOS los componentes de base.css hereden la paleta.
    ══════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ── Variables — paleta idéntica al wizard ── */
+/* ─── 1. Sobreescribir variables de Django ─────────────────────── */
 :root {
-  --ind-950:  #1e1b4b;   /* wizard sidebar bg */
-  --ind-900:  #312e81;   /* wizard sidebar hover */
-  --ind-800:  #3730a3;
-  --ind-700:  #4338ca;   /* wizard accent / botones activos */
-  --ind-600:  #4f46e5;
-  --ind-100:  #e0e7ff;
-  --ind-50:   #eef2ff;
+  /* Colores primarios → índigo (igual que el wizard) */
+  --primary:          #4338ca;   /* ind-700 */
+  --secondary:        #312e81;   /* ind-900 */
+  --accent:           #a5b4fc;   /* ind-300 */
+  --primary-fg:       #fff;
 
-  --cb-success:  #16a34a;
-  --cb-danger:   #dc2626;
-  --cb-warning:  #d97706;
-  --cb-info:     #0891b2;
+  /* Cuerpo */
+  --body-fg:          #1e1b4b;   /* ind-950 — texto principal oscuro */
+  --body-bg:          #f5f5ff;   /* fondo general, tinte índigo muy sutil */
+  --body-quiet-color: #6b7280;
+  --body-medium-color:#374151;
+  --body-loud-color:  #111827;
 
-  --bg:       #f5f5ff;   /* fondo general ligeramente índigo */
-  --surface:  #ffffff;
-  --border:   #e0e7ff;
-  --text:     #1e1b4b;
-  --muted:    #6b7280;
-  --radius:   10px;
-  --shadow:   0 1px 4px rgba(67,56,202,.10);
-  --shadow-md:0 4px 16px rgba(67,56,202,.15);
-  --tr:       .15s ease;
+  /* Header */
+  --header-bg:        #1e1b4b;   /* ind-950 — mismo que el sidebar del wizard */
+  --header-color:     rgba(255,255,255,.92);
+  --header-branding-color: #a5b4fc;
+  --header-link-color:#fff;
+
+  /* Breadcrumbs */
+  --breadcrumbs-bg:   #312e81;   /* ind-900 */
+  --breadcrumbs-fg:   rgba(255,255,255,.75);
+  --breadcrumbs-link-fg: rgba(255,255,255,.92);
+
+  /* Links */
+  --link-fg:          #4338ca;
+  --link-hover-color: #312e81;
+  --link-selected-fg: #312e81;
+
+  /* Bordes */
+  --hairline-color:   #e0e7ff;
+  --border-color:     #c7d2fe;
+
+  /* Error */
+  --error-fg:         #dc2626;
+
+  /* Mensajes */
+  --message-success-bg: #dcfce7;
+  --message-warning-bg: #fef9c3;
+  --message-error-bg:   #fee2e2;
+
+  /* Fondos alternativos */
+  --darkened-bg:      #eef2ff;   /* ind-50 — filas alternadas, sidebar nav */
+  --selected-bg:      #e0e7ff;   /* ind-100 */
+  --selected-row:     #eef2ff;
+
+  /* Botones */
+  --button-fg:            #fff;
+  --button-bg:            #4338ca;
+  --button-hover-bg:      #3730a3;
+  --default-button-bg:    #3730a3;
+  --default-button-hover-bg: #312e81;
+  --close-button-bg:      #6b7280;
+  --close-button-hover-bg:#4b5563;
+  --delete-button-bg:     #dc2626;
+  --delete-button-hover-bg:#b91c1c;
+
+  /* Object tools */
+  --object-tools-fg:      #fff;
+  --object-tools-bg:      #4338ca;
+  --object-tools-hover-bg:#3730a3;
+
+  /* Tipografía */
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-monospace: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
-/* ── Tipografía — misma que el wizard ── */
+/* ─── 2. Font global ───────────────────────────────────────────── */
 body, input, select, textarea, button {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-}
-body {
-  background: var(--bg) !important;
-  color: var(--text) !important;
+  font-family: var(--font-family-primary) !important;
 }
 
-/* ══════════════════════
-   HEADER
-══════════════════════ */
-#header {
-  background: var(--ind-950) !important;
-  box-shadow: 0 2px 12px rgba(30,27,75,.35) !important;
-  padding: 0 24px !important;
-  height: 56px !important;
-  display: flex !important;
-  align-items: center !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 1000 !important;
-  border-bottom: 1px solid rgba(255,255,255,.07) !important;
-}
-
-#site-name a,
-#site-name {
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  letter-spacing: .01em !important;
-  color: #fff !important;
-  text-decoration: none !important;
-}
-
-#user-tools {
-  font-size: .78rem !important;
-  color: rgba(255,255,255,.7) !important;
-}
-#user-tools a {
-  color: var(--ind-100) !important;
-  text-decoration: none !important;
-  transition: color var(--tr) !important;
-}
-#user-tools a:hover { color: #fff !important; }
-
-/* ══════════════════════
-   BREADCRUMBS
-══════════════════════ */
-div.breadcrumbs {
-  background: var(--ind-900) !important;
-  color: rgba(255,255,255,.7) !important;
-  padding: 7px 24px !important;
-  font-size: .78rem !important;
-  border-bottom: 1px solid rgba(255,255,255,.08) !important;
-}
-div.breadcrumbs a {
-  color: var(--ind-100) !important;
-}
-div.breadcrumbs a:hover { color: #fff !important; }
-
-/* ══════════════════════
-   NAV SIDEBAR (izquierda)
-   — misma estética que el wizard
-══════════════════════ */
+/* ─── 3. Sidebar nav → fondo oscuro índigo (igual que wizard) ─── */
+/*
+   Django usa --darkened-bg para el sidebar, pero no podemos oscurecerlo
+   globalmente (se usa en filas de tabla también). Lo override específicamente.
+*/
 nav#nav-sidebar {
-  background: var(--ind-950) !important;
+  background: #1e1b4b !important;
   border-right: 1px solid rgba(255,255,255,.06) !important;
-  box-shadow: 2px 0 12px rgba(30,27,75,.18) !important;
+  box-shadow: 2px 0 12px rgba(30,27,75,.2) !important;
 }
 
-/* Títulos de sección en el nav */
+/* Links del sidebar */
+#nav-sidebar a:link,
+#nav-sidebar a:visited {
+  color: rgba(255,255,255,.7) !important;
+  border-radius: 6px !important;
+  padding: 5px 10px !important;
+  display: block !important;
+  font-size: .82rem !important;
+  transition: background .15s, color .15s !important;
+}
+#nav-sidebar a:hover {
+  background: rgba(255,255,255,.09) !important;
+  color: #fff !important;
+}
+/* Sección activa */
 #nav-sidebar .current-app .section:link,
 #nav-sidebar .current-app .section:visited {
   color: #fff !important;
+  background: #4338ca !important;
   font-weight: 700 !important;
-  background: var(--ind-700) !important;
   border-radius: 6px !important;
 }
+/* Cabeceras de sección */
 #nav-sidebar .section:link,
 #nav-sidebar .section:visited {
   color: rgba(255,255,255,.85) !important;
-  font-size: .8rem !important;
   font-weight: 600 !important;
-  padding: 6px 10px !important;
-  border-radius: 6px !important;
-  display: block !important;
-  transition: background var(--tr), color var(--tr) !important;
+  font-size: .79rem !important;
   text-transform: uppercase !important;
   letter-spacing: .04em !important;
 }
-#nav-sidebar .section:hover {
-  background: rgba(255,255,255,.08) !important;
-  color: #fff !important;
-}
 
-#nav-sidebar a:link,
-#nav-sidebar a:visited {
-  color: rgba(255,255,255,.65) !important;
-  font-size: .82rem !important;
-  padding: 5px 10px !important;
-  border-radius: 6px !important;
-  display: block !important;
-  transition: background var(--tr), color var(--tr) !important;
-}
-#nav-sidebar a:hover {
-  background: rgba(255,255,255,.08) !important;
-  color: #fff !important;
-}
-#nav-sidebar a.selected,
-#nav-sidebar li.selected > a {
-  background: var(--ind-700) !important;
-  color: #fff !important;
-  font-weight: 600 !important;
-}
-
-#toggle-nav-sidebar {
-  background: var(--ind-800) !important;
-  color: rgba(255,255,255,.8) !important;
-  border: none !important;
-}
-#toggle-nav-sidebar:hover { background: var(--ind-700) !important; color: #fff !important; }
-
-/* Buscador dentro del nav */
+/* Input de búsqueda dentro del sidebar */
 #nav-sidebar #nav-filter {
-  background: rgba(255,255,255,.08) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
+  background: rgba(255,255,255,.09) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
   border-radius: 6px !important;
   color: #fff !important;
   font-size: .82rem !important;
-  padding: 6px 10px !important;
 }
 #nav-sidebar #nav-filter::placeholder { color: rgba(255,255,255,.4) !important; }
 #nav-sidebar #nav-filter:focus {
   outline: none !important;
-  border-color: var(--ind-600) !important;
-  box-shadow: 0 0 0 2px rgba(99,102,241,.25) !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99,102,241,.3) !important;
 }
 
-/* ══════════════════════
-   CONTENT AREA
-══════════════════════ */
-#content {
-  background: transparent !important;
-  padding: 20px 24px !important;
+/* Toggle button del sidebar */
+#toggle-nav-sidebar {
+  background: #3730a3 !important;
+  color: rgba(255,255,255,.8) !important;
+  border: none !important;
 }
-#content-main { background: transparent !important; }
-
-/* ══════════════════════
-   MÓDULOS (app groups)
-══════════════════════ */
-.module {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  box-shadow: var(--shadow) !important;
-  overflow: hidden !important;
-  margin-bottom: 16px !important;
-}
-.module h2,
-.module caption {
-  background: var(--ind-800) !important;
+#toggle-nav-sidebar:hover {
+  background: #4338ca !important;
   color: #fff !important;
-  padding: 10px 16px !important;
+}
+
+/* ─── 4. Módulos — cabecera con índigo ─────────────────────────── */
+.module caption,
+.module h2 {
+  background: #3730a3 !important;   /* ind-800 */
+  color: #fff !important;
   font-size: .8rem !important;
   font-weight: 700 !important;
   letter-spacing: .04em !important;
   text-transform: uppercase !important;
   border: none !important;
+  padding: 10px 16px !important;
 }
+/* Links dentro de la caption deben ser blancos */
+.module caption a:link,
+.module caption a:visited { color: #fff !important; }
+.module caption a:hover   { color: #e0e7ff !important; }
+
 .module h3 {
-  color: var(--ind-700) !important;
+  color: #4338ca !important;
   font-size: .78rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: .05em !important;
   padding: 8px 16px 4px !important;
-  border-bottom: 1px solid var(--border) !important;
+  border-bottom: 1px solid #e0e7ff !important;
   margin: 0 !important;
 }
 
-/* ══════════════════════
-   TABLAS (changelist)
-══════════════════════ */
-#changelist table,
-#result_list {
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-  width: 100% !important;
-  background: var(--surface) !important;
-  border-radius: var(--radius) !important;
-  overflow: hidden !important;
-  box-shadow: var(--shadow) !important;
-  border: 1px solid var(--border) !important;
-}
+/* ─── 5. Tablas changelist ─────────────────────────────────────── */
 #result_list thead th {
-  background: var(--ind-800) !important;
+  background: #3730a3 !important;
   color: #fff !important;
   font-size: .75rem !important;
   font-weight: 700 !important;
@@ -233,82 +187,32 @@ nav#nav-sidebar {
   letter-spacing: .06em !important;
   padding: 11px 14px !important;
   border: none !important;
-  white-space: nowrap !important;
 }
-#result_list thead th a,
 #result_list thead th a:link,
-#result_list thead th a:visited {
-  color: rgba(255,255,255,.85) !important;
-}
-#result_list thead th a:hover { color: #fff !important; }
+#result_list thead th a:visited { color: rgba(255,255,255,.85) !important; }
+#result_list thead th a:hover   { color: #fff !important; }
 
-#result_list tbody tr {
-  border-bottom: 1px solid var(--border) !important;
-  transition: background var(--tr) !important;
-}
-#result_list tbody tr:hover { background: var(--ind-50) !important; }
-#result_list tbody tr:last-child { border-bottom: none !important; }
-#result_list tbody td,
-#result_list tbody th {
-  padding: 10px 14px !important;
-  font-size: .84rem !important;
-  color: var(--text) !important;
-  vertical-align: middle !important;
-  border: none !important;
-}
-#result_list tbody td a {
-  color: var(--ind-700) !important;
+#result_list tbody tr:hover { background: #eef2ff !important; }
+#result_list tbody td a:link,
+#result_list tbody td a:visited {
+  color: #4338ca !important;
   font-weight: 600 !important;
-  text-decoration: none !important;
 }
-#result_list tbody td a:hover { color: var(--ind-900) !important; }
+#result_list tbody td a:hover { color: #312e81 !important; }
 
-.row1 { background: var(--surface) !important; }
-.row2 { background: #f9f9ff !important; }
-
-/* ══════════════════════
-   PAGINACIÓN
-══════════════════════ */
-.paginator {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 8px 14px !important;
-  font-size: .8rem !important;
-  margin-top: 10px !important;
-  box-shadow: var(--shadow) !important;
-  color: var(--muted) !important;
-}
-.paginator a { color: var(--ind-700) !important; font-weight: 600 !important; }
-.paginator .this-page {
-  background: var(--ind-700) !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-  padding: 1px 7px !important;
-}
-
-/* ══════════════════════
-   FILTROS
-══════════════════════ */
-#changelist-filter {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  box-shadow: var(--shadow) !important;
-  overflow: hidden !important;
-}
+/* ─── 6. Filtros sidebar ────────────────────────────────────────── */
 #changelist-filter h2 {
-  background: var(--ind-800) !important;
+  background: #3730a3 !important;
   color: #fff !important;
-  padding: 10px 14px !important;
   font-size: .75rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: .05em !important;
+  padding: 10px 14px !important;
   margin: 0 !important;
 }
 #changelist-filter h3 {
-  color: var(--ind-700) !important;
+  color: #4338ca !important;
   font-size: .73rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
@@ -316,219 +220,18 @@ nav#nav-sidebar {
   padding: 10px 14px 4px !important;
   margin: 0 !important;
 }
-#changelist-filter ul {
-  padding: 4px 14px 10px !important;
-  margin: 0 !important;
-}
-#changelist-filter ul li {
-  padding: 2px 0 !important;
-  font-size: .82rem !important;
+#changelist-filter ul li.selected a {
+  background: #4338ca !important;
+  color: #fff !important;
+  border-radius: 5px !important;
 }
 #changelist-filter ul li a {
-  color: var(--ind-700) !important;
-  border-radius: 5px !important;
-  padding: 2px 6px !important;
-  display: inline-block !important;
-  transition: background var(--tr) !important;
-}
-#changelist-filter ul li a:hover { background: var(--ind-50) !important; }
-#changelist-filter ul li.selected a {
-  background: var(--ind-700) !important;
-  color: #fff !important;
-  border-radius: 5px !important;
+  color: #4338ca !important;
 }
 
-/* ══════════════════════
-   BUSCADOR
-══════════════════════ */
-#toolbar, #changelist-search {
-  background: transparent !important;
-  padding: 0 0 12px !important;
-  border: none !important;
-}
-#searchbar {
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  padding: 8px 12px !important;
-  font-size: .86rem !important;
-  color: var(--text) !important;
-  background: var(--surface) !important;
-  box-shadow: var(--shadow) !important;
-  transition: border-color var(--tr), box-shadow var(--tr) !important;
-  width: 280px !important;
-}
-#searchbar:focus {
-  outline: none !important;
-  border-color: var(--ind-600) !important;
-  box-shadow: 0 0 0 3px rgba(99,102,241,.18) !important;
-}
-
-/* ══════════════════════
-   OBJECT TOOLS (botón Add)
-══════════════════════ */
-.object-tools { margin-bottom: 12px !important; }
-.object-tools a,
-.object-tools a:link,
-.object-tools a:visited {
-  background: var(--ind-700) !important;
-  border-radius: 8px !important;
-  padding: 7px 16px !important;
-  font-size: .8rem !important;
-  font-weight: 700 !important;
-  color: #fff !important;
-  text-decoration: none !important;
-  letter-spacing: .02em !important;
-  transition: background var(--tr), box-shadow var(--tr) !important;
-  box-shadow: var(--shadow) !important;
-}
-.object-tools a:hover {
-  background: var(--ind-800) !important;
-  box-shadow: var(--shadow-md) !important;
-}
-.object-tools a.addlink { background: var(--cb-success) !important; }
-.object-tools a.addlink:hover { background: #15803d !important; }
-
-/* ══════════════════════
-   ACCIONES (bulk)
-══════════════════════ */
-.actions {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 8px 14px !important;
-  margin-bottom: 10px !important;
-  box-shadow: var(--shadow) !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  flex-wrap: wrap !important;
-}
-.actions select {
-  border: 1px solid var(--border) !important;
-  border-radius: 6px !important;
-  padding: 5px 8px !important;
-  font-size: .82rem !important;
-  background: var(--surface) !important;
-  color: var(--text) !important;
-}
-.actions .button,
-.actions input[type=submit] {
-  background: var(--ind-700) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 6px !important;
-  padding: 6px 14px !important;
-  font-size: .82rem !important;
-  font-weight: 700 !important;
-  cursor: pointer !important;
-  transition: background var(--tr) !important;
-}
-.actions .button:hover,
-.actions input[type=submit]:hover { background: var(--ind-800) !important; }
-
-/* ══════════════════════
-   FORMULARIOS (add/change)
-══════════════════════ */
-.form-row {
-  border-bottom: 1px solid var(--border) !important;
-  padding: 12px 16px !important;
-}
-.form-row:last-child { border-bottom: none !important; }
-
-.fieldBox label,
-.form-row > div > label,
-.form-row label {
-  font-weight: 600 !important;
-  color: var(--ind-800) !important;
-  font-size: .83rem !important;
-  min-width: 180px !important;
-}
-
-input[type=text],
-input[type=email],
-input[type=password],
-input[type=number],
-input[type=url],
-input[type=date],
-input[type=time],
-select,
-textarea {
-  border: 1px solid #c7d2fe !important;
-  border-radius: 6px !important;
-  padding: 6px 10px !important;
-  font-size: .86rem !important;
-  color: var(--text) !important;
-  background: var(--surface) !important;
-  transition: border-color var(--tr), box-shadow var(--tr) !important;
-}
-input[type=text]:focus,
-input[type=email]:focus,
-input[type=password]:focus,
-input[type=number]:focus,
-input[type=date]:focus,
-input[type=time]:focus,
-select:focus,
-textarea:focus {
-  outline: none !important;
-  border-color: var(--ind-600) !important;
-  box-shadow: 0 0 0 3px rgba(99,102,241,.15) !important;
-}
-
-/* ══════════════════════
-   BOTONES GUARDAR
-══════════════════════ */
-.submit-row {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 12px 16px !important;
-  box-shadow: var(--shadow) !important;
-  display: flex !important;
-  gap: 8px !important;
-  align-items: center !important;
-}
-.submit-row input[type=submit],
-.submit-row a.deletelink,
-.submit-row a.closelink {
-  border-radius: 8px !important;
-  padding: 8px 20px !important;
-  font-size: .84rem !important;
-  font-weight: 700 !important;
-  cursor: pointer !important;
-  border: none !important;
-  transition: background var(--tr), box-shadow var(--tr) !important;
-}
-.submit-row input[type=submit] {
-  background: var(--ind-700) !important;
-  color: #fff !important;
-}
-.submit-row input[type=submit]:hover {
-  background: var(--ind-800) !important;
-  box-shadow: var(--shadow-md) !important;
-}
-.submit-row input[name=_continue] { background: var(--cb-info) !important; }
-.submit-row input[name=_addanother] { background: var(--cb-success) !important; }
-.submit-row a.deletelink {
-  background: var(--cb-danger) !important;
-  color: #fff !important;
-  text-decoration: none !important;
-  display: inline-block !important;
-}
-.submit-row a.deletelink:hover { background: #b91c1c !important; }
-
-/* ══════════════════════
-   INLINES
-══════════════════════ */
-.inline-group {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  margin-top: 16px !important;
-  overflow: hidden !important;
-  box-shadow: var(--shadow) !important;
-}
+/* ─── 7. Inlines ─────────────────────────────────────────────────  */
 .inline-group h2 {
-  background: var(--ind-800) !important;
+  background: #3730a3 !important;
   color: #fff !important;
   font-size: .78rem !important;
   padding: 9px 14px !important;
@@ -538,80 +241,11 @@ textarea:focus {
   margin: 0 !important;
 }
 .inline-related .module h3 {
-  background: var(--ind-50) !important;
-  border-bottom: 1px solid var(--border) !important;
-  padding: 7px 14px !important;
-  font-size: .76rem !important;
-  color: var(--ind-700) !important;
+  background: #eef2ff !important;
+  color: #4338ca !important;
 }
-.add-row a { color: var(--cb-success) !important; font-weight: 700 !important; font-size: .82rem !important; }
 
-/* ══════════════════════
-   MENSAJES / ALERTAS
-══════════════════════ */
-ul.messagelist {
-  padding: 0 !important;
-  margin: 0 0 14px !important;
-  list-style: none !important;
-}
-ul.messagelist li {
-  border-radius: var(--radius) !important;
-  padding: 11px 16px !important;
-  margin-bottom: 8px !important;
-  font-size: .86rem !important;
-  font-weight: 600 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  box-shadow: var(--shadow) !important;
-}
-ul.messagelist li::before { font-size: 1rem; }
-ul.messagelist li.success {
-  background: #dcfce7 !important;
-  color: #14532d !important;
-  border-left: 4px solid var(--cb-success) !important;
-}
-ul.messagelist li.success::before { content: '✅'; }
-ul.messagelist li.warning {
-  background: #fef9c3 !important;
-  color: #713f12 !important;
-  border-left: 4px solid var(--cb-warning) !important;
-}
-ul.messagelist li.warning::before { content: '⚠️'; }
-ul.messagelist li.error {
-  background: #fee2e2 !important;
-  color: #7f1d1d !important;
-  border-left: 4px solid var(--cb-danger) !important;
-}
-ul.messagelist li.error::before { content: '❌'; }
-ul.messagelist li.info {
-  background: var(--ind-50) !important;
-  color: var(--ind-900) !important;
-  border-left: 4px solid var(--ind-600) !important;
-}
-ul.messagelist li.info::before { content: 'ℹ️'; }
-
-/* ══════════════════════
-   HELP TEXT
-══════════════════════ */
-.help { color: var(--muted) !important; font-size: .76rem !important; }
-
-/* ══════════════════════
-   DATE HIERARCHY
-══════════════════════ */
-#changelist .xfull {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 6px !important;
-  padding: 6px 12px !important;
-  margin-bottom: 10px !important;
-  font-size: .8rem !important;
-}
-#changelist .xfull a { color: var(--ind-700) !important; }
-
-/* ══════════════════════
-   DASHBOARD — STAT CARDS
-══════════════════════ */
+/* ─── 8. Dashboard cards (index.html custom) ────────────────────── */
 .cb-stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -619,38 +253,35 @@ ul.messagelist li.info::before { content: 'ℹ️'; }
   margin-bottom: 24px;
 }
 .cb-stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: #fff;
+  border: 1px solid #e0e7ff;
+  border-radius: 10px;
   padding: 18px 20px 14px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 1px 4px rgba(67,56,202,.10);
   text-align: center;
-  transition: box-shadow var(--tr), transform var(--tr);
+  transition: box-shadow .15s, transform .15s;
   text-decoration: none;
   display: block;
 }
 .cb-stat-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px rgba(67,56,202,.15);
   transform: translateY(-2px);
 }
 .cb-stat-card .cb-stat-icon  { font-size: 1.8rem; margin-bottom: 6px; display: block; }
 .cb-stat-card .cb-stat-value {
-  font-size: 2rem; font-weight: 800; color: var(--ind-800);
+  font-size: 2rem; font-weight: 800; color: #3730a3;
   line-height: 1; margin-bottom: 4px; display: block;
 }
 .cb-stat-card .cb-stat-label {
-  font-size: .72rem; color: var(--muted); font-weight: 600;
+  font-size: .72rem; color: #6b7280; font-weight: 600;
   text-transform: uppercase; letter-spacing: .06em; display: block;
 }
-.cb-stat-card.accent  { border-top: 3px solid var(--ind-600); }
-.cb-stat-card.success { border-top: 3px solid var(--cb-success); }
-.cb-stat-card.info    { border-top: 3px solid var(--cb-info); }
-.cb-stat-card.warning { border-top: 3px solid var(--cb-warning); }
-.cb-stat-card.danger  { border-top: 3px solid var(--cb-danger); }
+.cb-stat-card.accent  { border-top: 3px solid #6366f1; }
+.cb-stat-card.success { border-top: 3px solid #16a34a; }
+.cb-stat-card.info    { border-top: 3px solid #0891b2; }
+.cb-stat-card.warning { border-top: 3px solid #d97706; }
+.cb-stat-card.danger  { border-top: 3px solid #dc2626; }
 
-/* ══════════════════════
-   DASHBOARD — QUICK ACTIONS
-══════════════════════ */
 .cb-quick-actions {
   display: flex;
   flex-wrap: wrap;
@@ -658,78 +289,51 @@ ul.messagelist li.info::before { content: 'ℹ️'; }
   margin-bottom: 24px;
 }
 .cb-quick-action {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: #fff;
+  border: 1px solid #e0e7ff;
+  border-radius: 10px;
   padding: 10px 18px;
   font-size: .84rem;
   font-weight: 600;
-  color: var(--ind-800);
+  color: #3730a3;
   text-decoration: none;
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: var(--shadow);
-  transition: background var(--tr), color var(--tr), box-shadow var(--tr), transform var(--tr);
+  box-shadow: 0 1px 4px rgba(67,56,202,.10);
+  transition: background .15s, color .15s, box-shadow .15s, transform .15s;
 }
 .cb-quick-action:hover {
-  background: var(--ind-700);
+  background: #4338ca;
   color: #fff;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px rgba(67,56,202,.15);
   transform: translateY(-1px);
 }
 
 .cb-section-title {
   font-size: .7rem;
   font-weight: 800;
-  color: var(--muted);
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: .09em;
   margin: 0 0 10px;
 }
 
-/* ══════════════════════
-   LOGIN PAGE
-══════════════════════ */
-body.login {
-  background: var(--ind-950) !important;
-}
-body.login #header {
-  display: none !important;
-}
-body.login #content-main {
-  background: var(--surface) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 40px rgba(30,27,75,.4) !important;
-  padding: 32px !important;
-}
-body.login h1 {
-  color: var(--ind-900) !important;
-  font-size: 1.4rem !important;
-  font-weight: 800 !important;
-}
-body.login .submit-row input[type=submit] {
-  background: var(--ind-700) !important;
-  width: 100% !important;
-  font-size: 1rem !important;
-  padding: 10px !important;
+/* ─── 9. Paginación ─────────────────────────────────────────────── */
+.paginator .this-page {
+  background: #4338ca !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 1px 7px !important;
 }
 
-/* ══════════════════════
-   SCROLLBAR
-══════════════════════ */
+/* ─── 10. Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--ind-50); }
+::-webkit-scrollbar-track { background: #eef2ff; }
 ::-webkit-scrollbar-thumb { background: #a5b4fc; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--ind-600); }
+::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-/* ══════════════════════
-   RESPONSIVE
-══════════════════════ */
+/* ─── 11. Responsive ────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  #header { padding: 0 12px !important; }
-  #content { padding: 12px !important; }
   .cb-stats-row { grid-template-columns: repeat(2, 1fr); }
-  #result_list thead th { font-size: .7rem !important; padding: 8px !important; }
-  #result_list tbody td { padding: 8px !important; font-size: .8rem !important; }
 }
