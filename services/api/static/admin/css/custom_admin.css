@@ -75,7 +75,34 @@
   --font-family-monospace: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
-/* ─── 2. Font global ───────────────────────────────────────────── */
+/* ─── 2. Layout — permitir scroll natural en el body ───────────── */
+/*
+   base.css pone html, body { height: 100% } y #container { height: 100% }
+   en un flex-direction: column. Esto fija el viewport y el contenido largo
+   queda atrapado sin poder hacer scroll. Lo corregimos a min-height.
+*/
+html, body {
+  height: auto !important;
+  min-height: 100% !important;
+}
+#container {
+  height: auto !important;
+  min-height: 100vh !important;
+}
+/* El sidebar sí puede tener scroll propio y altura fija */
+#nav-sidebar {
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+.sticky {
+  position: sticky !important;
+  top: 0 !important;
+  max-height: 100vh !important;
+}
+
+/* ─── Font global ──────────────────────────────────────────────── */
 body, input, select, textarea, button {
   font-family: var(--font-family-primary) !important;
 }
