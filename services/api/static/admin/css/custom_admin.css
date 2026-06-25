@@ -139,14 +139,56 @@ nav#nav-sidebar {
 }
 
 /* Toggle button del sidebar */
-#toggle-nav-sidebar {
-  background: #3730a3 !important;
-  color: rgba(255,255,255,.8) !important;
-  border: none !important;
+.toggle-nav-sidebar {
+  background: #1e1b4b !important;
+  color: rgba(255,255,255,.7) !important;
+  border-right: 1px solid rgba(255,255,255,.08) !important;
 }
-#toggle-nav-sidebar:hover {
-  background: #4338ca !important;
+.toggle-nav-sidebar:hover,
+.toggle-nav-sidebar:focus {
+  background: #312e81 !important;
   color: #fff !important;
+}
+
+/*
+   SOLUCIÓN DEFINITIVA: todos los subelementos dentro del nav sidebar
+   reciben fondo transparente y texto claro, heredando el oscuro del padre.
+   Django aplica var(--body-bg) a .module dentro del sidebar, lo que
+   pone fondo claro con texto blanco = invisible.
+*/
+#nav-sidebar .module,
+#nav-sidebar table,
+#nav-sidebar thead,
+#nav-sidebar tbody,
+#nav-sidebar tr,
+#nav-sidebar td,
+#nav-sidebar th {
+  background: transparent !important;
+  color: rgba(255,255,255,.7) !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+/* App name (caption del módulo dentro del sidebar) */
+#nav-sidebar .module caption,
+#nav-sidebar .module h2 {
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.5) !important;
+  font-size: .68rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .07em !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+}
+/* Fila del modelo activo */
+#nav-sidebar .current-model,
+#nav-sidebar .current-model td,
+#nav-sidebar .current-model th {
+  background: rgba(99,102,241,.25) !important;
+  border-radius: 6px !important;
+}
+#nav-sidebar .current-model a:link,
+#nav-sidebar .current-model a:visited {
+  color: #fff !important;
+  font-weight: 600 !important;
 }
 
 /* ─── 4. Módulos — cabecera con índigo ─────────────────────────── */
