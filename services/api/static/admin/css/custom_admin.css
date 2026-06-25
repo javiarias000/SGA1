@@ -119,18 +119,32 @@ nav#nav-sidebar {
 }
 
 /* Links del sidebar */
-#nav-sidebar a:link,
-#nav-sidebar a:visited {
-  color: rgba(255,255,255,.7) !important;
-  border-radius: 6px !important;
-  padding: 5px 10px !important;
+/* Links de nombre de modelo (dentro de <th>) */
+#nav-sidebar th a:link,
+#nav-sidebar th a:visited {
+  color: rgba(255,255,255,.75) !important;
+  border-radius: 5px !important;
+  padding: 3px 8px !important;
   display: block !important;
   font-size: .82rem !important;
   transition: background .15s, color .15s !important;
 }
-#nav-sidebar a:hover {
+#nav-sidebar th a:hover {
   background: rgba(255,255,255,.09) !important;
   color: #fff !important;
+}
+/* Links + y Ver (dentro de <td>) — deben quedar inline y pequeños */
+#nav-sidebar td a:link,
+#nav-sidebar td a:visited {
+  color: rgba(255,255,255,.45) !important;
+  display: inline !important;
+  padding: 0 4px !important;
+  font-size: .75rem !important;
+  border-radius: 3px !important;
+}
+#nav-sidebar td a:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,.1) !important;
 }
 /* Sección activa */
 #nav-sidebar .current-app .section:link,
@@ -140,7 +154,7 @@ nav#nav-sidebar {
   font-weight: 700 !important;
   border-radius: 6px !important;
 }
-/* Cabeceras de sección */
+/* Cabeceras de sección (app name) */
 #nav-sidebar .section:link,
 #nav-sidebar .section:visited {
   color: rgba(255,255,255,.85) !important;
