@@ -2,144 +2,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro Docente / Personal — Conservatorio Bolívar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: { extend: {
-        fontFamily: { sans: ['Lato','sans-serif'], serif: ['Playfair Display','serif'] },
-        colors: {
-          'cb-blue': { 900:'#00204a', 800:'#002e6d', 700:'#004299', 50:'#f0f5ff' },
-          'cb-gold': { 400:'#fccb00', 500:'#e0ac00', 600:'#b38600' }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Docente / Personal — Conservatorio Bolívar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { sans: ['Lato', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                colors: {
+                    'cb-blue': { 900:'#00204a', 800:'#002e6d', 700:'#004299', 50:'#f0f5ff' },
+                    'cb-gold': { 400:'#fccb00', 500:'#e0ac00', 600:'#b38600' }
+                }
+            }}
         }
-      }}
-    }
-  </script>
-  <style>
-    .form-label { @apply block text-sm font-semibold text-gray-700 mb-1; }
-    .form-input { @apply w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
-                         focus:outline-none focus:ring-2 focus:ring-cb-blue-700 focus:border-transparent; }
-    .form-input:disabled { @apply bg-gray-100 text-gray-500; }
-  </style>
+    </script>
 </head>
 <body class="bg-cb-blue-50 font-sans min-h-screen">
 
-<!-- Navbar -->
-<nav class="bg-white shadow border-b-4 border-cb-gold-400 sticky top-0 z-50">
-  <div class="max-w-4xl mx-auto px-4 flex items-center justify-between h-20">
-    <div class="flex items-center gap-3">
-      <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto object-contain" onerror="this.style.display='none'">
-      <div>
-        <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
-        <p class="text-xs text-gray-500 mt-0.5">Ambato — Ecuador</p>
-      </div>
+    <!-- Navbar -->
+    <nav class="bg-white shadow border-b-4 border-cb-gold-400 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between h-20">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'img/LogoCB.jpg' %}" class="h-12 w-auto object-contain" onerror="this.style.display='none'">
+                <div>
+                    <p class="font-serif font-bold text-cb-blue-800 text-lg leading-none">CONSERVATORIO "BOLÍVAR"</p>
+                    <p class="text-xs text-gray-500 font-bold tracking-widest uppercase">Ambato</p>
+                </div>
+            </div>
+            <a href="/" class="text-cb-blue-800 text-sm font-bold hover:text-cb-gold-500 transition">← Volver al inicio</a>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 py-10">
+
+        <!-- Encabezado -->
+        <div class="text-center mb-8">
+            <span class="inline-block bg-cb-blue-800 text-cb-gold-400 text-xs font-bold px-4 py-1 rounded uppercase tracking-widest mb-3">Personal Docente</span>
+            <h1 class="text-3xl font-serif font-bold text-cb-blue-900">Registro de Docentes y Personal</h1>
+            <p class="text-gray-500 mt-2">Completa el formulario para solicitar tu acceso al sistema. Recibirás tus credenciales por WhatsApp una vez aprobada tu solicitud.</p>
+        </div>
+
+        <!-- Card del formulario -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-cb-blue-800 px-8 py-5">
+                <h2 class="text-white font-serif font-bold text-xl">Datos Personales y Profesionales</h2>
+                <p class="text-cb-blue-50 text-sm mt-1">Los campos marcados con * son obligatorios.</p>
+            </div>
+
+            <form method="post" class="p-8 space-y-6">
+                {% csrf_token %}
+
+                {% if error %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p class="text-red-700 font-bold text-sm mb-1">Por favor corrige los siguientes errores:</p>
+                    <p class="text-red-600 text-sm">• {{ error }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Sección A: Datos personales -->
+                <div>
+                    <h3 class="font-bold text-cb-blue-800 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-cb-gold-400 text-cb-blue-900 flex items-center justify-center text-xs font-bold">A</span>
+                        Datos Personales
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre completo *</label>
+                            <input type="text" name="nombre_completo" required
+                                placeholder="Apellidos y nombres completos"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 focus:border-transparent transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Cédula de identidad</label>
+                            <input type="text" name="cedula" maxlength="20"
+                                placeholder="0000000000"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Teléfono / WhatsApp</label>
+                            <input type="tel" name="telefono"
+                                placeholder="+593 9 9999 9999"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                            <p class="text-xs text-gray-400 mt-1">Sus credenciales llegarán a este número.</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Correo electrónico *</label>
+                            <input type="email" name="email" required
+                                placeholder="su.correo@ejemplo.com"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección B: Perfil profesional -->
+                <div class="border-t border-gray-100 pt-6">
+                    <h3 class="font-bold text-cb-blue-800 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-cb-gold-400 text-cb-blue-900 flex items-center justify-center text-xs font-bold">B</span>
+                        Perfil Profesional
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Especialidad / Instrumento</label>
+                            <input type="text" name="especialidad"
+                                placeholder="Ej: Piano, Guitarra, Solfeo…"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Años de experiencia docente</label>
+                            <input type="number" name="experiencia_anios" min="0" max="60"
+                                placeholder="Ej: 5"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Título académico más alto</label>
+                            <input type="text" name="titulo_academico"
+                                placeholder="Ej: Licenciado en Música, Maestría en Pedagogía Musical…"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Carta de presentación / mensaje adicional</label>
+                            <textarea name="mensaje" rows="4"
+                                placeholder="Cuéntenos brevemente su experiencia y motivación para unirse al conservatorio…"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cb-blue-700 transition resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nota informativa -->
+                <div class="border border-cb-blue-200 rounded-xl p-4 bg-cb-blue-50">
+                    <p class="text-cb-blue-800 font-bold text-sm mb-1">¿Qué pasa después?</p>
+                    <p class="text-cb-blue-700 text-sm">
+                        Su solicitud será revisada por la administración del conservatorio. Si es aprobada,
+                        recibirá un mensaje de <strong>WhatsApp</strong> con su usuario y contraseña temporal
+                        para acceder al sistema. El proceso puede tomar entre 1 y 3 días hábiles.
+                    </p>
+                </div>
+
+                <!-- Botón submit -->
+                <div class="border-t border-gray-100 pt-6">
+                    <button type="submit"
+                        class="w-full bg-cb-blue-800 hover:bg-cb-blue-900 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+                        📨 Enviar solicitud de registro
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <p class="text-center text-xs text-gray-400 mt-3">
+                        ¿Ya tiene una cuenta? <a href="/users/login/" class="text-cb-blue-700 hover:underline">Ingrese al sistema aquí</a>
+                    </p>
+                </div>
+            </form>
+        </div>
     </div>
-    <span class="text-sm font-semibold text-cb-blue-800 bg-cb-blue-50 border border-cb-blue-700 px-3 py-1 rounded-full">
-      Registro de Personal
-    </span>
-  </div>
-</nav>
 
-<main class="max-w-2xl mx-auto px-4 py-12">
-
-  <!-- Header -->
-  <div class="text-center mb-8">
-    <div class="w-16 h-16 bg-cb-blue-800 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">👨‍🏫</div>
-    <h1 class="font-serif text-2xl font-bold text-cb-blue-800">Registro de Docentes y Personal</h1>
-    <p class="text-gray-600 mt-2 text-sm max-w-md mx-auto">
-      Complete este formulario para solicitar su acceso al Sistema de Gestión Académica.
-      Una vez revisada su solicitud, recibirá sus credenciales de acceso por WhatsApp.
-    </p>
-  </div>
-
-  {% if error %}
-  <div class="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-6 flex items-start gap-3">
-    <span class="text-red-500 text-lg">⚠️</span>
-    <p class="text-sm text-red-700">{{ error }}</p>
-  </div>
-  {% endif %}
-
-  <form method="post" class="bg-white rounded-2xl shadow-sm border border-gray-200 divide-y divide-gray-100">
-    {% csrf_token %}
-
-    <!-- Datos personales -->
-    <div class="px-6 py-5">
-      <h2 class="font-semibold text-cb-blue-800 text-base mb-4">1. Datos personales</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="sm:col-span-2">
-          <label class="form-label">Nombre completo <span class="text-red-500">*</span></label>
-          <input type="text" name="nombre_completo" required class="form-input"
-                 placeholder="Apellidos y nombres completos">
-        </div>
-        <div>
-          <label class="form-label">Cédula de identidad</label>
-          <input type="text" name="cedula" class="form-input" maxlength="20"
-                 placeholder="0000000000">
-        </div>
-        <div>
-          <label class="form-label">Teléfono / WhatsApp</label>
-          <input type="tel" name="telefono" class="form-input"
-                 placeholder="+593 9 9999 9999">
-          <p class="text-xs text-gray-400 mt-1">Sus credenciales llegarán a este número.</p>
-        </div>
-        <div class="sm:col-span-2">
-          <label class="form-label">Correo electrónico <span class="text-red-500">*</span></label>
-          <input type="email" name="email" required class="form-input"
-                 placeholder="su.correo@ejemplo.com">
-        </div>
-      </div>
-    </div>
-
-    <!-- Perfil profesional -->
-    <div class="px-6 py-5">
-      <h2 class="font-semibold text-cb-blue-800 text-base mb-4">2. Perfil profesional</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label class="form-label">Especialidad / Instrumento</label>
-          <input type="text" name="especialidad" class="form-input"
-                 placeholder="Ej: Piano, Guitarra, Solfeo…">
-        </div>
-        <div>
-          <label class="form-label">Años de experiencia docente</label>
-          <input type="number" name="experiencia_anios" min="0" max="60" class="form-input"
-                 placeholder="Ej: 5">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="form-label">Título académico más alto</label>
-          <input type="text" name="titulo_academico" class="form-input"
-                 placeholder="Ej: Licenciado en Música, Maestría en Pedagogía Musical…">
-        </div>
-        <div class="sm:col-span-2">
-          <label class="form-label">Carta de presentación / mensaje adicional</label>
-          <textarea name="mensaje" rows="4" class="form-input resize-none"
-                    placeholder="Cuéntenos brevemente su experiencia y motivación para unirse al conservatorio…"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- Info -->
-    <div class="px-6 py-4 bg-cb-blue-50 rounded-b-2xl">
-      <p class="text-xs text-cb-blue-700">
-        <strong>¿Qué pasa después?</strong> Su solicitud será revisada por la administración del conservatorio.
-        Si es aprobada, recibirá un mensaje de WhatsApp con su usuario y contraseña temporal para acceder al sistema.
-        El proceso puede tomar entre 1 y 3 días hábiles.
-      </p>
-    </div>
-
-    <!-- Footer / submit -->
-    <div class="px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-sm text-gray-500 hover:text-gray-700 transition">← Volver al inicio</a>
-      <button type="submit"
-              class="bg-cb-blue-800 hover:bg-cb-blue-700 text-white font-semibold px-8 py-2.5 rounded-lg
-                     text-sm transition flex items-center gap-2">
-        📨 Enviar solicitud
-      </button>
-    </div>
-  </form>
-
-</main>
 </body>
 </html>
