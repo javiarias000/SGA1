@@ -1,0 +1,419 @@
+{% extends "teachers/base.html" %}
+{% block title %}Informe Final Docente — Paso {{ paso }} de {{ total_pasos }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .paso-indicator { width: 28px; height: 28px; font-size: .72rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .paso-indicator.active  { background: #4338ca; color: #fff; }
+  .paso-indicator.done    { background: #22c55e; color: #fff; }
+  .paso-indicator.pending { background: #e2e8f0; color: #94a3b8; }
+  .stat-row input { font-size: .85rem; }
+  .narrative-area { min-height: 120px; resize: vertical; font-size: .875rem; }
+  .preview-badge { font-size: .75rem; padding: .25rem .55rem; }
+  #ai-loading { display: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:900px">
+
+  <!-- Encabezado -->
+  <div class="mb-4">
+    <a href="{% url 'teachers:informes' %}" class="text-muted text-decoration-none small">← Volver a Informes</a>
+    <h3 class="mt-2 mb-0 fw-bold">Informe Final Docente</h3>
+    <p class="text-muted small">Genera el informe en formato Word listo para entregar a dirección.</p>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between small text-muted mb-1">
+      <span>Paso {{ paso }} de {{ total_pasos }}</span>
+    </div>
+    <div class="progress mb-2" style="height:6px">
+      <div class="progress-bar bg-primary" style="width:{% widthratio paso total_pasos 100 %}%"></div>
+    </div>
+    <div class="d-flex gap-3 flex-wrap">
+      {% for label in "Período,Director,Estadísticas,Narrativa,Exportar"|split:"," %}
+      {% with n=forloop.counter %}
+      <div class="d-flex align-items-center gap-1">
+        <div class="paso-indicator {% if n < paso %}done{% elif n == paso %}active{% else %}pending{% endif %}">
+          {% if n < paso %}✓{% else %}{{ n }}{% endif %}
+        </div>
+        <span class="small {% if n == paso %}fw-semibold text-dark{% else %}text-muted{% endif %}">{{ label }}</span>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if messages %}
+  {% for m in messages %}
+  <div class="alert alert-{{ m.tags|default:'warning' }} alert-dismissible fade show py-2" role="alert">
+    {{ m }} <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <!-- ══════════════════════════════════════════════════════════════════════
+           PASO 1 — PERÍODO Y FECHAS
+      ══════════════════════════════════════════════════════════════════════ -->
+      {% if paso == 1 %}
+      <h5 class="fw-bold mb-1">Período y fechas</h5>
+      <p class="text-muted small mb-4">Define el quimestre y las fechas del informe.</p>
+      <form method="post" action="?paso=1">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Quimestre <span class="text-danger">*</span></label>
+            <select name="quimestre" class="form-select" required>
+              <option value="">— Selecciona —</option>
+              <option value="Primer Quimestre" {% if quimestre_sel == "Primer Quimestre" %}selected{% endif %}>Primer Quimestre</option>
+              <option value="Segundo Quimestre" {% if quimestre_sel == "Segundo Quimestre" %}selected{% endif %}>Segundo Quimestre</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Fecha del informe <span class="text-danger">*</span></label>
+            <input type="date" name="fecha_informe" class="form-control" value="{{ fecha_informe_sel|default:today }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Fecha de firma</label>
+            <input type="date" name="fecha_firma" class="form-control" value="{{ fecha_firma_sel|default:today }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Fecha de aprobación</label>
+            <input type="date" name="fecha_aprobacion" class="form-control" value="{{ fecha_aprobacion_sel|default:today }}">
+          </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a href="{% url 'teachers:informes' %}" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- ══════════════════════════════════════════════════════════════════════
+           PASO 2 — DATOS DEL DIRECTOR
+      ══════════════════════════════════════════════════════════════════════ -->
+      {% elif paso == 2 %}
+      <h5 class="fw-bold mb-1">Datos del director</h5>
+      <p class="text-muted small mb-4">Información de quien recibirá el informe.</p>
+      <form method="post" action="?paso=2">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-semibold">Nombre del director <span class="text-danger">*</span></label>
+            <input type="text" name="director_nombre" class="form-control" value="{{ director_nombre_sel }}" placeholder="Ej: Dr. Juan Pérez" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Teléfono</label>
+            <input type="text" name="director_telefono" class="form-control" value="{{ director_telefono_sel }}" placeholder="Ej: 0999000000">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Correo electrónico</label>
+            <input type="email" name="director_correo" class="form-control" value="{{ director_correo_sel }}" placeholder="director@conservatorio.edu.ec">
+          </div>
+        </div>
+        <div class="d-flex justify-content-between gap-2 mt-4">
+          <a href="?paso=1" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- ══════════════════════════════════════════════════════════════════════
+           PASO 3 — ESTADÍSTICAS POR ASIGNATURA
+      ══════════════════════════════════════════════════════════════════════ -->
+      {% elif paso == 3 %}
+      <h5 class="fw-bold mb-1">Estadísticas por asignatura</h5>
+      <p class="text-muted small mb-4">Datos precargados desde el sistema. Puedes editarlos antes de continuar.</p>
+      <form method="post" action="?paso=3" id="form-stats">
+        {% csrf_token %}
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered align-middle" id="stats-table">
+            <thead class="table-light">
+              <tr>
+                <th>Asignatura</th>
+                <th class="text-center" style="width:90px">Asignados</th>
+                <th class="text-center" style="width:90px">Aprobados</th>
+                <th class="text-center" style="width:90px">Retirados</th>
+                <th class="text-center" style="width:90px">Supletorio</th>
+                <th class="text-center" style="width:90px">% Avance</th>
+                <th style="width:40px"></th>
+              </tr>
+            </thead>
+            <tbody id="stats-body">
+              {% for s in estadisticas %}
+              <tr class="stat-row">
+                <td><input type="text" name="asignatura[]" class="form-control form-control-sm" value="{{ s.asignatura }}" required></td>
+                <td><input type="text" name="n_asignados[]" class="form-control form-control-sm text-center" value="{{ s.n_asignados }}"></td>
+                <td><input type="text" name="n_aprobados[]" class="form-control form-control-sm text-center" value="{{ s.n_aprobados }}"></td>
+                <td><input type="text" name="n_retirados[]" class="form-control form-control-sm text-center" value="{{ s.n_retirados }}"></td>
+                <td><input type="text" name="n_supletorio[]" class="form-control form-control-sm text-center" value="{{ s.n_supletorio }}"></td>
+                <td><input type="text" name="pct_avance[]" class="form-control form-control-sm text-center" value="{{ s.pct_avance }}"></td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger py-0 px-1 remove-row" title="Eliminar">×</button></td>
+              </tr>
+              {% empty %}
+              <tr class="stat-row">
+                <td><input type="text" name="asignatura[]" class="form-control form-control-sm" placeholder="Nombre asignatura" required></td>
+                <td><input type="text" name="n_asignados[]" class="form-control form-control-sm text-center" value="0"></td>
+                <td><input type="text" name="n_aprobados[]" class="form-control form-control-sm text-center" value="0"></td>
+                <td><input type="text" name="n_retirados[]" class="form-control form-control-sm text-center" value="0"></td>
+                <td><input type="text" name="n_supletorio[]" class="form-control form-control-sm text-center" value="0"></td>
+                <td><input type="text" name="pct_avance[]" class="form-control form-control-sm text-center" value="0%"></td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger py-0 px-1 remove-row" title="Eliminar">×</button></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="button" id="add-row" class="btn btn-sm btn-outline-primary mb-3">+ Agregar fila</button>
+        <div class="d-flex justify-content-between gap-2 mt-2">
+          <a href="?paso=2" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- ══════════════════════════════════════════════════════════════════════
+           PASO 4 — NARRATIVA
+      ══════════════════════════════════════════════════════════════════════ -->
+      {% elif paso == 4 %}
+      <h5 class="fw-bold mb-1">Narrativa del informe</h5>
+      <p class="text-muted small mb-3">Usa el botón de IA para generar las secciones automáticamente, o escríbelas directamente.</p>
+
+      <div class="d-flex gap-2 mb-4">
+        <button type="button" id="btn-ai" class="btn btn-outline-primary btn-sm">
+          ✨ Generar con IA
+        </button>
+        <span id="ai-loading" class="text-muted small align-self-center">
+          <span class="spinner-border spinner-border-sm me-1"></span>Generando narrativa…
+        </span>
+      </div>
+
+      <form method="post" action="?paso=4" id="form-narrative">
+        {% csrf_token %}
+        <input type="hidden" id="ai-docente" value="{{ docente_nombre }}">
+        <input type="hidden" id="ai-quimestre" value="{{ quimestre }}">
+        <input type="hidden" id="ai-estadisticas" value="{{ estadisticas_json }}">
+
+        {% for field, label in narrative_labels %}
+        {% endfor %}
+
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-semibold">Antecedentes</label>
+            <textarea name="antecedentes" id="f-antecedentes" class="form-control narrative-area">{{ antecedentes }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Alcance</label>
+            <textarea name="alcance" id="f-alcance" class="form-control narrative-area">{{ alcance }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Desarrollo</label>
+            <textarea name="desarrollo" id="f-desarrollo" class="form-control narrative-area">{{ desarrollo }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Métodos y técnicas pedagógicas</label>
+            <textarea name="metodos" id="f-metodos" class="form-control narrative-area">{{ metodos }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Destrezas desarrolladas</label>
+            <textarea name="destrezas" id="f-destrezas" class="form-control narrative-area">{{ destrezas }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Temáticas tratadas</label>
+            <textarea name="tematicas" id="f-tematicas" class="form-control narrative-area">{{ tematicas }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Dificultades pedagógicas</label>
+            <textarea name="dificultades_pedagogicas" id="f-dificultades_pedagogicas" class="form-control narrative-area">{{ dificultades_pedagogicas }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Actividades y estrategias</label>
+            <textarea name="actividades_estrategias" id="f-actividades_estrategias" class="form-control narrative-area">{{ actividades_estrategias }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Conclusiones</label>
+            <textarea name="conclusiones" id="f-conclusiones" class="form-control narrative-area">{{ conclusiones }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Recomendaciones</label>
+            <textarea name="recomendaciones" id="f-recomendaciones" class="form-control narrative-area">{{ recomendaciones }}</textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between gap-2 mt-4">
+          <a href="?paso=3" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+
+      <!-- ══════════════════════════════════════════════════════════════════════
+           PASO 5 — PREVIEW Y EXPORTAR
+      ══════════════════════════════════════════════════════════════════════ -->
+      {% elif paso == 5 %}
+      <h5 class="fw-bold mb-1">Revisar y exportar</h5>
+      <p class="text-muted small mb-4">Verifica el resumen y descarga el documento Word.</p>
+
+      <!-- Resumen -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card bg-light border-0 h-100">
+            <div class="card-body p-3">
+              <p class="small text-muted mb-1">Docente</p>
+              <p class="fw-semibold mb-0">{{ docente_nombre }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card bg-light border-0 h-100">
+            <div class="card-body p-3">
+              <p class="small text-muted mb-1">Período</p>
+              <p class="fw-semibold mb-0">{{ quimestre }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card bg-light border-0 h-100">
+            <div class="card-body p-3">
+              <p class="small text-muted mb-1">Fecha del informe</p>
+              <p class="fw-semibold mb-0">{{ fecha_informe }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card bg-light border-0 h-100">
+            <div class="card-body p-3">
+              <p class="small text-muted mb-1">Director</p>
+              <p class="fw-semibold mb-0">{{ director_nombre }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estadísticas resumen -->
+      {% if estadisticas %}
+      <h6 class="fw-bold mb-2">Asignaturas ({{ estadisticas|length }})</h6>
+      <div class="table-responsive mb-4">
+        <table class="table table-sm table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>Asignatura</th>
+              <th class="text-center">Asignados</th>
+              <th class="text-center">Aprobados</th>
+              <th class="text-center">Retirados</th>
+              <th class="text-center">Supletorio</th>
+              <th class="text-center">Avance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in estadisticas %}
+            <tr>
+              <td>{{ s.asignatura }}</td>
+              <td class="text-center">{{ s.n_asignados }}</td>
+              <td class="text-center">{{ s.n_aprobados }}</td>
+              <td class="text-center">{{ s.n_retirados }}</td>
+              <td class="text-center">{{ s.n_supletorio }}</td>
+              <td class="text-center">{{ s.pct_avance }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+      <!-- Narrativa resumen -->
+      {% if antecedentes %}
+      <h6 class="fw-bold mb-2">Antecedentes (vista previa)</h6>
+      <p class="text-muted small border rounded p-3 bg-light">{{ antecedentes|truncatechars:300 }}</p>
+      {% endif %}
+
+      <!-- Acciones -->
+      <div class="d-flex justify-content-between gap-2 mt-4">
+        <a href="?paso=4" class="btn btn-outline-secondary">← Anterior</a>
+        <div class="d-flex gap-2">
+          <a href="{% url 'teachers:export_informe_final' %}" class="btn btn-success px-4">
+            ⬇ Descargar DOCX
+          </a>
+          <a href="?paso=1" class="btn btn-outline-secondary">Nuevo informe</a>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Paso 3: gestión de filas ──────────────────────────────────────────────
+(function () {
+  const tbody = document.getElementById('stats-body');
+  if (!tbody) return;
+
+  document.getElementById('add-row').addEventListener('click', () => {
+    const row = document.querySelector('.stat-row').cloneNode(true);
+    row.querySelectorAll('input').forEach(inp => { inp.value = inp.name.includes('asignatura') ? '' : (inp.name.includes('pct') ? '0%' : '0'); });
+    tbody.appendChild(row);
+    bindRemove(row.querySelector('.remove-row'));
+  });
+
+  document.querySelectorAll('.remove-row').forEach(bindRemove);
+
+  function bindRemove(btn) {
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const rows = tbody.querySelectorAll('.stat-row');
+      if (rows.length > 1) btn.closest('.stat-row').remove();
+    });
+  }
+})();
+
+// ── Paso 4: generación IA ─────────────────────────────────────────────────
+(function () {
+  const btn = document.getElementById('btn-ai');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    const docente = document.getElementById('ai-docente').value;
+    const quimestre = document.getElementById('ai-quimestre').value;
+    const estadisticasRaw = document.getElementById('ai-estadisticas').value;
+    let estadisticas = [];
+    try { estadisticas = JSON.parse(estadisticasRaw); } catch(e) {}
+
+    btn.disabled = true;
+    document.getElementById('ai-loading').style.display = 'inline';
+
+    try {
+      const res = await fetch('{% url "teachers:api_informe_narrative" %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({ docente, quimestre, estadisticas }),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      const fields = [
+        'antecedentes', 'alcance', 'desarrollo', 'metodos', 'destrezas',
+        'tematicas', 'dificultades_pedagogicas', 'actividades_estrategias',
+        'conclusiones', 'recomendaciones'
+      ];
+      fields.forEach(f => {
+        const el = document.getElementById(`f-${f}`);
+        if (el && data[f]) el.value = data[f];
+      });
+    } catch (err) {
+      alert('Error generando narrativa: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      document.getElementById('ai-loading').style.display = 'none';
+    }
+  });
+})();
+</script>
+{% endblock %}

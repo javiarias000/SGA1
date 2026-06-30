@@ -81,6 +81,10 @@
                     <span class="icon">💬</span>
                     <span>Informes WhatsApp</span>
                 </a>
+                <a href="{% url 'teachers:wizard_informe_final' %}" class="nav-item {% if 'informe_final' in request.resolver_match.url_name %}active{% endif %}">
+                    <span class="icon">📄</span>
+                    <span>Informe Final</span>
+                </a>
 
                 <!-- Cuenta -->
                 <div class="nav-divider"></div>

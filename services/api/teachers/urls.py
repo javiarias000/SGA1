@@ -21,6 +21,10 @@ urlpatterns = [
     # Wizards
     path('wizard/aporte/', views.wizard_aporte, name='wizard_aporte'),
     path('wizard/notas/', views.wizard_notas, name='wizard_notas'),
+    path('wizard/clase/', views.wizard_clase_diaria, name='wizard_clase_diaria'),
+    path('wizard/informe-final/', views.wizard_informe_final, name='wizard_informe_final'),
+    path('wizard/informe-final/export/', views.export_informe_final, name='export_informe_final'),
+    path('api/informe-narrative/', views.api_informe_narrative, name='api_informe_narrative'),
     
     # Clases teóricas (gestión)
     path('clases/', views.clases_dashboard_view, name='clases_dashboard'),

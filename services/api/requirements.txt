@@ -23,5 +23,6 @@ factory-boy>=3.3,<4.0
 faker>=19.0,<20.0
 python-dotenv>=1.0,<2.0
 openai>=1.30,<2.0
+docxtpl>=0.16,<1.0
 django-environ>=0.10,<1.0
 coverage>=7.3,<8.0

@@ -1,3 +1,7 @@
+import io
+import json
+import os
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
@@ -22,6 +26,7 @@ from students.models import Student
 from subjects.models import Subject
 from classes.models import (
     Activity,
+    Asistencia,
     Attendance,
     CalificacionParcial,
     Clase,
@@ -30,7 +35,7 @@ from classes.models import (
     Enrollment,
     PromedioCache,
     TipoAporte,
-    GradeLevel, # Import GradeLevel
+    GradeLevel,
 )
 
 from students.forms import StudentForm
@@ -2649,3 +2654,414 @@ def wizard_notas(request):
         })
 
     return render(request, 'teachers/wizard_notas.html', ctx)
+
+
+# ============================================
+# WIZARD: REGISTRO DE CLASE DIARIA
+# ============================================
+
+@login_required
+@teacher_required
+def wizard_clase_diaria(request):
+    """
+    Wizard 4 pasos para registrar una clase del día:
+    1. Clase (tipo materia + paralelo)
+    2. Asistencia de todos los estudiantes
+    3. Aporte diario (opcional — nota rápida a todos)
+    4. Confirmar y guardar
+    """
+    paso = int(request.GET.get('paso', 1))
+    SK = 'wiz_clase'
+    teacher = request.user.teacher_profile
+    teacher_usuario = teacher.usuario
+    hoy = date.today()
+
+    if request.method == 'POST':
+
+        if paso == 1:
+            clase_id = request.POST.get('clase_id', '').strip()
+            if not clase_id:
+                messages.error(request, 'Selecciona una clase.')
+                return redirect(f"{request.path}?paso=1")
+            get_object_or_404(Clase, id=clase_id, docente_base=teacher_usuario)
+            request.session[f'{SK}_clase_id'] = int(clase_id)
+            request.session[f'{SK}_fecha'] = str(hoy)
+            return redirect(f"{request.path}?paso=2")
+
+        elif paso == 2:
+            clase_id = request.session.get(f'{SK}_clase_id')
+            if not clase_id:
+                return redirect(f"{request.path}?paso=1")
+            clase = get_object_or_404(Clase, id=clase_id)
+            fecha_str = request.session.get(f'{SK}_fecha', str(hoy))
+            fecha = date.fromisoformat(fecha_str)
+
+            enrollments = Enrollment.objects.filter(clase=clase, estado='ACTIVO')
+            for enr in enrollments:
+                estado = request.POST.get(f'asist_{enr.id}', 'Presente')
+                obs    = request.POST.get(f'obs_{enr.id}', '').strip()
+                if estado not in ('Presente', 'Ausente', 'Justificado'):
+                    estado = 'Presente'
+                Asistencia.objects.update_or_create(
+                    inscripcion=enr,
+                    fecha=fecha,
+                    defaults={'estado': estado, 'observacion': obs}
+                )
+            request.session[f'{SK}_asist_ok'] = True
+            return redirect(f"{request.path}?paso=3")
+
+        elif paso == 3:
+            # Aporte diario opcional
+            registrar = request.POST.get('registrar_aporte') == '1'
+            if registrar:
+                aporte_id  = request.POST.get('aporte_id', '').strip()
+                quimestre  = request.POST.get('quimestre', '').strip()
+                parcial    = request.POST.get('parcial', '').strip()
+                if not aporte_id or quimestre not in ('Q1','Q2') or parcial not in ('1P','2P','3P','4P'):
+                    messages.error(request, 'Selecciona aporte, quimestre y parcial.')
+                    return redirect(f"{request.path}?paso=3")
+                request.session[f'{SK}_aporte_id'] = int(aporte_id)
+                request.session[f'{SK}_quimestre'] = quimestre
+                request.session[f'{SK}_parcial']   = parcial
+
+                # Guardar notas de cada estudiante
+                clase_id = request.session.get(f'{SK}_clase_id')
+                clase    = get_object_or_404(Clase, id=clase_id)
+                tipo_aporte = get_object_or_404(TipoAporte, id=aporte_id)
+                enrollments = Enrollment.objects.filter(
+                    clase=clase, estado='ACTIVO'
+                ).select_related('estudiante__student_profile')
+                for enr in enrollments:
+                    nota_str = request.POST.get(f'nota_{enr.id}', '').strip()
+                    if nota_str:
+                        try:
+                            nota = Decimal(nota_str)
+                            if nota < 0: nota = Decimal('0')
+                            if nota > 10: nota = Decimal('10')
+                            student = enr.estudiante.student_profile
+                            CalificacionParcial.objects.update_or_create(
+                                student=student,
+                                subject=clase.subject,
+                                parcial=parcial,
+                                quimestre=quimestre,
+                                tipo_aporte=tipo_aporte,
+                                defaults={'calificacion': nota, 'registrado_por': teacher}
+                            )
+                        except Exception:
+                            pass
+            return redirect(f"{request.path}?paso=4")
+
+        elif paso == 4:
+            for k in ['clase_id','fecha','asist_ok','aporte_id','quimestre','parcial']:
+                request.session.pop(f'{SK}_{k}', None)
+            messages.success(request, 'Clase del día registrada correctamente.')
+            return redirect('teachers:teacher_dashboard')
+
+    # ── GET ──────────────────────────────────────────────────────────────
+    ctx = {'paso': paso, 'total_pasos': 4, 'hoy': hoy}
+
+    if paso == 1:
+        ctx['clases'] = Clase.objects.filter(
+            docente_base=teacher_usuario, active=True
+        ).select_related('subject', 'grade_level').order_by('subject__name')
+
+    elif paso == 2:
+        clase_id = request.session.get(f'{SK}_clase_id')
+        if not clase_id:
+            return redirect(f"{request.path}?paso=1")
+        clase = get_object_or_404(Clase, id=clase_id)
+        enrollments = Enrollment.objects.filter(
+            clase=clase, estado='ACTIVO'
+        ).select_related('estudiante')
+        # Asistencias previas del día
+        fecha = date.fromisoformat(request.session.get(f'{SK}_fecha', str(hoy)))
+        asist_prev = {
+            a.inscripcion_id: a
+            for a in Asistencia.objects.filter(
+                inscripcion__clase=clase, fecha=fecha
+            )
+        }
+        filas = []
+        for enr in enrollments:
+            prev = asist_prev.get(enr.id)
+            filas.append({
+                'enr': enr,
+                'nombre': enr.estudiante.nombre if enr.estudiante else '—',
+                'estado': prev.estado if prev else 'Presente',
+                'obs':    prev.observacion if prev else '',
+            })
+        ctx.update({'clase': clase, 'filas': filas, 'fecha': fecha})
+
+    elif paso == 3:
+        clase_id = request.session.get(f'{SK}_clase_id')
+        if not clase_id:
+            return redirect(f"{request.path}?paso=1")
+        clase = get_object_or_404(Clase, id=clase_id)
+        enrollments = Enrollment.objects.filter(
+            clase=clase, estado='ACTIVO'
+        ).select_related('estudiante')
+        # Contar asistencia ya registrada
+        fecha = date.fromisoformat(request.session.get(f'{SK}_fecha', str(hoy)))
+        resumen_asist = Asistencia.objects.filter(
+            inscripcion__clase=clase, fecha=fecha
+        ).values('estado').annotate(total=Count('id'))
+        ctx.update({
+            'clase': clase,
+            'enrollments': enrollments,
+            'resumen_asist': {r['estado']: r['total'] for r in resumen_asist},
+            'aportes': TipoAporte.objects.filter(activo=True).order_by('orden','nombre'),
+            'quimestre_choices': CalificacionParcial.QUIMESTRE_CHOICES,
+            'parcial_choices':   CalificacionParcial.PARCIAL_CHOICES,
+        })
+
+    elif paso == 4:
+        clase_id = request.session.get(f'{SK}_clase_id')
+        if clase_id:
+            clase = get_object_or_404(Clase, id=clase_id)
+            fecha = date.fromisoformat(request.session.get(f'{SK}_fecha', str(hoy)))
+            resumen = Asistencia.objects.filter(
+                inscripcion__clase=clase, fecha=fecha
+            ).values('estado').annotate(total=Count('id'))
+            ctx.update({
+                'clase': clase,
+                'fecha': fecha,
+                'resumen_asist': {r['estado']: r['total'] for r in resumen},
+            })
+
+    return render(request, 'teachers/wizard_clase_diaria.html', ctx)
+
+
+# ============================================
+# WIZARD INFORME FINAL DOCENTE
+# ============================================
+
+_IF_SK = 'wiz_if'
+_IF_NARRATIVE_FIELDS = [
+    'antecedentes', 'alcance', 'desarrollo', 'metodos',
+    'destrezas', 'tematicas', 'dificultades_pedagogicas',
+    'actividades_estrategias', 'conclusiones', 'recomendaciones',
+]
+_IF_TEMPLATE = os.path.join(os.path.dirname(__file__), 'data', 'informe-template-py.docx')
+
+
+@login_required
+@teacher_required
+def wizard_informe_final(request):
+    """
+    Wizard 5 pasos para generar el Informe Final Docente en DOCX.
+    1. Período y fechas  2. Director  3. Estadísticas  4. Narrativa  5. Exportar
+    """
+    paso = int(request.GET.get('paso', 1))
+    SK = _IF_SK
+    teacher = request.user.teacher_profile
+    teacher_usuario = teacher.usuario
+
+    if request.method == 'POST':
+
+        if paso == 1:
+            quimestre = request.POST.get('quimestre', '').strip()
+            fecha_informe = request.POST.get('fecha_informe', '').strip()
+            fecha_firma = request.POST.get('fecha_firma', '').strip()
+            fecha_aprobacion = request.POST.get('fecha_aprobacion', '').strip()
+            if not quimestre or not fecha_informe:
+                messages.error(request, 'Selecciona el quimestre y la fecha del informe.')
+                return redirect(f"{request.path}?paso=1")
+            request.session[f'{SK}_quimestre'] = quimestre
+            request.session[f'{SK}_fecha_informe'] = fecha_informe
+            request.session[f'{SK}_fecha_firma'] = fecha_firma
+            request.session[f'{SK}_fecha_aprobacion'] = fecha_aprobacion
+            return redirect(f"{request.path}?paso=2")
+
+        elif paso == 2:
+            director_nombre = request.POST.get('director_nombre', '').strip()
+            director_telefono = request.POST.get('director_telefono', '').strip()
+            director_correo = request.POST.get('director_correo', '').strip()
+            if not director_nombre:
+                messages.error(request, 'Ingresa el nombre del director.')
+                return redirect(f"{request.path}?paso=2")
+            request.session[f'{SK}_director_nombre'] = director_nombre
+            request.session[f'{SK}_director_telefono'] = director_telefono
+            request.session[f'{SK}_director_correo'] = director_correo
+            return redirect(f"{request.path}?paso=3")
+
+        elif paso == 3:
+            asignaturas = request.POST.getlist('asignatura[]')
+            n_asignados_list = request.POST.getlist('n_asignados[]')
+            n_aprobados_list = request.POST.getlist('n_aprobados[]')
+            n_retirados_list = request.POST.getlist('n_retirados[]')
+            n_supletorio_list = request.POST.getlist('n_supletorio[]')
+            pct_avance_list = request.POST.getlist('pct_avance[]')
+            estadisticas = []
+            for i, asig in enumerate(asignaturas):
+                if asig.strip():
+                    estadisticas.append({
+                        'asignatura': asig.strip(),
+                        'n_asignados': n_asignados_list[i] if i < len(n_asignados_list) else '0',
+                        'n_aprobados': n_aprobados_list[i] if i < len(n_aprobados_list) else '0',
+                        'n_retirados': n_retirados_list[i] if i < len(n_retirados_list) else '0',
+                        'n_supletorio': n_supletorio_list[i] if i < len(n_supletorio_list) else '0',
+                        'pct_avance': pct_avance_list[i] if i < len(pct_avance_list) else '0%',
+                    })
+            if not estadisticas:
+                messages.error(request, 'Agrega al menos una asignatura.')
+                return redirect(f"{request.path}?paso=3")
+            request.session[f'{SK}_estadisticas'] = json.dumps(estadisticas)
+            return redirect(f"{request.path}?paso=4")
+
+        elif paso == 4:
+            for field in _IF_NARRATIVE_FIELDS:
+                request.session[f'{SK}_{field}'] = request.POST.get(field, '').strip()
+            return redirect(f"{request.path}?paso=5")
+
+    # ── GET ──────────────────────────────────────────────────────────────────
+    ctx = {'paso': paso, 'total_pasos': 5}
+
+    if paso == 1:
+        ctx['today'] = date.today().strftime('%Y-%m-%d')
+        ctx['quimestre_sel'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['fecha_informe_sel'] = request.session.get(f'{SK}_fecha_informe', '')
+        ctx['fecha_firma_sel'] = request.session.get(f'{SK}_fecha_firma', '')
+        ctx['fecha_aprobacion_sel'] = request.session.get(f'{SK}_fecha_aprobacion', '')
+
+    elif paso == 2:
+        ctx['director_nombre_sel'] = request.session.get(f'{SK}_director_nombre', '')
+        ctx['director_telefono_sel'] = request.session.get(f'{SK}_director_telefono', '')
+        ctx['director_correo_sel'] = request.session.get(f'{SK}_director_correo', '')
+
+    elif paso == 3:
+        saved = request.session.get(f'{SK}_estadisticas')
+        if saved:
+            ctx['estadisticas'] = json.loads(saved)
+        else:
+            clases = Clase.objects.filter(docente_base=teacher_usuario, active=True).select_related('subject')
+            auto = []
+            for c in clases:
+                auto.append({
+                    'asignatura': c.subject.name if c.subject else c.name,
+                    'n_asignados': str(c.enrollments.filter(estado='ACTIVO').count()),
+                    'n_aprobados': '0',
+                    'n_retirados': str(c.enrollments.filter(estado='RETIRADO').count()),
+                    'n_supletorio': '0',
+                    'pct_avance': '0%',
+                })
+            ctx['estadisticas'] = auto
+
+    elif paso == 4:
+        for field in _IF_NARRATIVE_FIELDS:
+            ctx[field] = request.session.get(f'{SK}_{field}', '')
+        ctx['quimestre'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['docente_nombre'] = teacher_usuario.nombre
+        ctx['estadisticas_json'] = request.session.get(f'{SK}_estadisticas', '[]')
+
+    elif paso == 5:
+        ctx['docente_nombre'] = teacher_usuario.nombre
+        ctx['quimestre'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['fecha_informe'] = request.session.get(f'{SK}_fecha_informe', '')
+        ctx['director_nombre'] = request.session.get(f'{SK}_director_nombre', '')
+        ctx['estadisticas'] = json.loads(request.session.get(f'{SK}_estadisticas', '[]'))
+        ctx['antecedentes'] = request.session.get(f'{SK}_antecedentes', '')
+
+    return render(request, 'teachers/wizard_informe_final.html', ctx)
+
+
+@login_required
+@teacher_required
+def export_informe_final(request):
+    """Genera y descarga el DOCX del informe final relleno con los datos de sesión."""
+    from docxtpl import DocxTemplate
+
+    SK = _IF_SK
+    teacher = request.user.teacher_profile
+    teacher_usuario = teacher.usuario
+
+    estadisticas = json.loads(request.session.get(f'{SK}_estadisticas', '[]'))
+
+    context = {
+        'fecha_informe': request.session.get(f'{SK}_fecha_informe', ''),
+        'docente_nombre': teacher_usuario.nombre or '',
+        'docente_telefono': teacher_usuario.phone or '',
+        'docente_correo': teacher_usuario.email or '',
+        'director_nombre': request.session.get(f'{SK}_director_nombre', ''),
+        'director_telefono': request.session.get(f'{SK}_director_telefono', ''),
+        'director_correo': request.session.get(f'{SK}_director_correo', ''),
+        'antecedentes': request.session.get(f'{SK}_antecedentes', ''),
+        'alcance': request.session.get(f'{SK}_alcance', ''),
+        'desarrollo': request.session.get(f'{SK}_desarrollo', ''),
+        'metodos': request.session.get(f'{SK}_metodos', ''),
+        'destrezas': request.session.get(f'{SK}_destrezas', ''),
+        'tematicas': request.session.get(f'{SK}_tematicas', ''),
+        'dificultades_pedagogicas': request.session.get(f'{SK}_dificultades_pedagogicas', ''),
+        'actividades_estrategias': request.session.get(f'{SK}_actividades_estrategias', ''),
+        'conclusiones': request.session.get(f'{SK}_conclusiones', ''),
+        'recomendaciones': request.session.get(f'{SK}_recomendaciones', ''),
+        'fecha_firma': request.session.get(f'{SK}_fecha_firma', ''),
+        'fecha_aprobacion': request.session.get(f'{SK}_fecha_aprobacion', ''),
+        'estadisticas': estadisticas,
+    }
+
+    tpl = DocxTemplate(_IF_TEMPLATE)
+    tpl.render(context)
+
+    buf = io.BytesIO()
+    tpl.save(buf)
+    buf.seek(0)
+
+    safe_name = (teacher_usuario.nombre or 'docente').replace(' ', '_')
+    filename = f'informe_final_{safe_name}.docx'
+    response = HttpResponse(
+        buf.read(),
+        content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    )
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+
+
+@login_required
+@teacher_required
+def api_informe_narrative(request):
+    """Genera la narrativa del informe con IA (llamada AJAX desde paso 4)."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST only'}, status=405)
+
+    from openai import OpenAI
+
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+    docente = data.get('docente', '')
+    quimestre = data.get('quimestre', '')
+    estadisticas = data.get('estadisticas', [])
+
+    stats_lines = '\n'.join(
+        f"- {s.get('asignatura', '')}: {s.get('n_asignados', 0)} asignados, "
+        f"{s.get('n_aprobados', 0)} aprobados, {s.get('n_retirados', 0)} retirados, "
+        f"avance {s.get('pct_avance', '0%')}"
+        for s in estadisticas
+    )
+
+    prompt = f"""Eres un asistente especializado en educación musical del Conservatorio Nacional de Música del Ecuador.
+Genera las secciones narrativas del informe final docente para el período {quimestre}.
+Docente: {docente}
+Estadísticas académicas:
+{stats_lines}
+
+Genera texto formal y detallado (100-200 palabras por sección) adaptado al contexto de un conservatorio de música.
+Responde SOLO con un objeto JSON con estas claves exactas:
+antecedentes, alcance, desarrollo, metodos, destrezas, tematicas,
+dificultades_pedagogicas, actividades_estrategias, conclusiones, recomendaciones"""
+
+    api_key = getattr(settings, 'OPENAI_API_KEY', '')
+    if not api_key:
+        return JsonResponse({'error': 'OPENAI_API_KEY no configurada'}, status=500)
+
+    client = OpenAI(api_key=api_key)
+    resp = client.chat.completions.create(
+        model='gpt-4.1-mini',
+        messages=[{'role': 'user', 'content': prompt}],
+        response_format={'type': 'json_object'},
+    )
+
+    narrative = json.loads(resp.choices[0].message.content)
+    return JsonResponse(narrative)
