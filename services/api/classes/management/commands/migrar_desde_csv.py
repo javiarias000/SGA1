@@ -28,7 +28,7 @@ import os
 import re
 import unicodedata
 import logging
-from collections import defaultdict
+from collections import defaultdict, Counter
 from typing import Optional, Dict, List, Tuple
 
 from django.core.management.base import BaseCommand
@@ -114,6 +114,9 @@ class Command(BaseCommand):
         if dry:
             self.stdout.write(self.style.WARNING('--- DRY RUN (sin escritura) ---'))
 
+        # Pre-load docente cache desde DB (incluye docentes importados antes de este comando)
+        self._refresh_docente_cache()
+
         with transaction.atomic():
             self._step1_docentes()
             self._step2_estudiantes()
@@ -127,6 +130,9 @@ class Command(BaseCommand):
             self._step9_asignaciones_agrupacion()
             self._step10_asignaciones_acompanamiento()
             self._step11_asignaciones_complementario()
+            self._step12_materias_teoria_desde_horarios()
+            self._step13_fix_agrupacion_docentes()
+            self._step14_info_medica_escolar()
 
             if dry:
                 transaction.set_rollback(True)
@@ -853,6 +859,317 @@ class Command(BaseCommand):
                 f'  ⚠ {len(unmatched)} sin match en complementario: '
                 + ', '.join(unmatched[:5]) + ('...' if len(unmatched) > 5 else '')
             ))
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # HELPER: recarga cache de docentes desde DB (incluye pre-existentes)
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def _refresh_docente_cache(self):
+        self._docentes_by_norm = {}
+        for u in Usuario.objects.filter(rol='DOCENTE'):
+            self._docentes_by_norm[_norm(u.nombre)] = u
+
+    def _find_docente_by_short_name(self, nombre_corto: str) -> Optional[Usuario]:
+        """Busca docente por nombre parcial (ej: 'Jorge Arias' → 'Jorge Arias' en DB)."""
+        if not nombre_corto or nombre_corto.strip().upper() in ('ND', 'NULO', 'NULL', ''):
+            return None
+        # Quitar puntos finales / abreviaturas de título
+        nombre_corto = nombre_corto.strip().rstrip('.')
+        parts = [_norm(w) for w in nombre_corto.split() if len(w) > 2]
+        if not parts:
+            return None
+        # Buscar en cache: todos los tokens deben aparecer en la key
+        for norm_key, u in self._docentes_by_norm.items():
+            if all(p in norm_key for p in parts):
+                return u
+        # Intento con el apellido solamente (primer token largo)
+        last = parts[-1]
+        matches = [u for k, u in self._docentes_by_norm.items() if last in k]
+        if len(matches) == 1:
+            return matches[0]
+        return None
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PASO 12: Horarios → Subject(TEORIA) + Clase + Enrollment por GradeLevel
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def _step12_materias_teoria_desde_horarios(self):
+        self._head('Paso 12: Materias Teoría desde Horarios')
+
+        horario_path = csv_path(self.csv_dir, 'horarios')
+        if not os.path.exists(horario_path):
+            self.stdout.write('  (archivo horarios.csv no encontrado — omitiendo)')
+            return
+
+        # Mapa de nombre crudo de horario → nombre canónico + tipo_materia
+        ASIG_MAP: Dict[str, tuple] = {
+            'audioperceptiva':                    ('Audioperceptiva', 'TEORIA'),
+            'educacion ritmica audioperceptiva':   ('Audioperceptiva', 'TEORIA'),
+            'lenguaje musical':                    ('Lenguaje Musical', 'TEORIA'),
+            'lenguaje musica':                     ('Lenguaje Musical', 'TEORIA'),
+            'lenguaje':                            ('Lenguaje Musical', 'TEORIA'),
+            'armonia':                             ('Armonía', 'TEORIA'),
+            'formas musicales':                    ('Formas Musicales', 'TEORIA'),
+            'formas musical':                      ('Formas Musicales', 'TEORIA'),
+            'historia de la musica':               ('Historia de la Música', 'TEORIA'),
+            'creacion y arreglos':                 ('Creación y Arreglos Musicales', 'TEORIA'),
+            'produccion artistico musical':        ('Producción Artístico Musical', 'TEORIA'),
+            'capacitacion en musica':              ('Capacitación en Música', 'TEORIA'),
+            'capacitacion en musica':              ('Capacitación en Música', 'TEORIA'),
+            'informatica aplicada':                ('Informática Aplicada', 'TEORIA'),
+            'formacion y orientacion':             ('Formación y Orientación', 'TEORIA'),
+            'coro':                                ('Coro', 'AGRUPACION'),
+            'orquesta pedagogica':                 ('Orquesta Pedagógica', 'AGRUPACION'),
+        }
+        # Asignaturas a ignorar (ya importadas como INSTRUMENTO o no relevantes)
+        ASIG_SKIP = {
+            'agrupacion: orquesta, banda, ensamble de guitarra o coro',
+            'conjunto instrumental/vocal o mixto',
+            'piano complementario',
+            'instrumento',
+            'acompanamiento para pianistas',
+        }
+
+        CURSO_MAP = {
+            'decimo primer': '11', 'decimo': '10', 'noveno': '9',
+            'octavo': '8', 'septimo': '7', 'sexto': '6', 'quinto': '5',
+            'cuarto': '4', 'tercero': '3', 'segundo': '2', 'primero': '1',
+        }
+
+        def parse_level(curso_str: str) -> Optional[str]:
+            s = _norm(curso_str)
+            for key, val in sorted(CURSO_MAP.items(), key=lambda x: -len(x[0])):
+                if s.startswith(key):
+                    return val
+            return None
+
+        def parse_section(par_str: str) -> str:
+            return par_str.strip().split()[0].upper() if par_str.strip() else ''
+
+        def normalize_asig(raw: str) -> Optional[tuple]:
+            """Devuelve (nombre_canonico, tipo) o None si debe ignorarse."""
+            s = _norm(raw)
+            # Strip embedded teacher names like "Lenguaje Musica Mgs.Jorge De La Cruz"
+            if 'mgs.' in s or 'mgs ' in s:
+                s = s.split('mgs.')[0].split('mgs ')[0].strip()
+            if 'jose luis' in s:
+                s = s.replace('jose luis cumbicos', '').strip()
+            if 'israel' in s and 'perez' in s:
+                s = s.split(' israel')[0].strip()
+            if 'jorge de la' in s:
+                s = s.split(' jorge de la')[0].strip()
+            # Check skip list
+            for skip in ASIG_SKIP:
+                if s.startswith(skip) or skip in s:
+                    return None
+            # Check mapping
+            for key, val in ASIG_MAP.items():
+                if s.startswith(key) or s == key:
+                    return val
+            return None
+
+        # Primera pasada: construir Subjects + Clases
+        # key: (nombre_canonico, docente_id_or_None) → Clase
+        clase_cache: Dict[str, 'Clase'] = {}
+
+        # Segunda pasada: (level, section, nombre_canonico) → Clase
+        level_clase: Dict[tuple, 'Clase'] = {}
+
+        with open(horario_path, encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f, delimiter=';')
+            rows = list(reader)
+
+        for r in rows:
+            asig_raw  = r.get('asignatura', '').strip()
+            doc_raw   = r.get('docente', '').strip()
+            curso_raw = r.get('curso', '').strip()
+            par_raw   = r.get('paralelo', '').strip()
+
+            asig_info = normalize_asig(asig_raw)
+            if asig_info is None:
+                continue
+
+            asig_nombre, asig_tipo = asig_info
+            level = parse_level(curso_raw)
+            section = parse_section(par_raw)
+            if not level or not section:
+                continue
+
+            docente_u = self._find_docente_by_short_name(doc_raw)
+            docente_key = docente_u.pk if docente_u else 'nd'
+            clase_key = f'{_norm(asig_nombre)}|{docente_key}'
+
+            if not self.dry:
+                # Get/create Subject
+                subj, _ = Subject.objects.get_or_create(
+                    name=asig_nombre,
+                    defaults={'tipo_materia': asig_tipo}
+                )
+                # Get/create Clase
+                if clase_key not in clase_cache:
+                    if docente_u:
+                        clase, _ = Clase.objects.get_or_create(
+                            subject=subj,
+                            ciclo_lectivo=self.ciclo,
+                            docente_base=docente_u,
+                            defaults={'name': f'{asig_nombre} — {docente_u.nombre}', 'paralelo': ''}
+                        )
+                    else:
+                        clase, _ = Clase.objects.get_or_create(
+                            subject=subj,
+                            ciclo_lectivo=self.ciclo,
+                            docente_base=None,
+                            paralelo='',
+                            defaults={'name': asig_nombre}
+                        )
+                    clase_cache[clase_key] = clase
+                    self._ok('clase_teoria', 'created')
+                else:
+                    self._ok('clase_teoria', 'skipped')
+
+                clase = clase_cache[clase_key]
+                level_clase[(level, section)] = clase
+
+                # Enrollar todos los estudiantes del nivel/sección
+                try:
+                    gl = GradeLevel.objects.get(level=level, section=section)
+                    for st in gl.students.all():
+                        self._enroll(st.usuario, clase, docente_u, 'TEORIA')
+                except GradeLevel.DoesNotExist:
+                    self._err(f'GL no encontrado: {level}{section}')
+            else:
+                self._ok('clase_teoria', 'skipped')
+
+        if not self.dry:
+            self.stdout.write(f'  Clases teoría creadas/cacheadas: {len(clase_cache)}')
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PASO 13: Asignar docentes a Clases de agrupación (cross-ref instrumento)
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def _step13_fix_agrupacion_docentes(self):
+        self._head('Paso 13: Asignar docentes a Clases de Agrupación')
+
+        # Construir mapa: student_norm → Counter de docente_nombre
+        docentes_csv_map = {
+            r['id']: r['nombre_completo']
+            for r in read_csv(csv_path(self.csv_dir, 'docente'))
+        }
+        student_teacher: Dict[str, 'Counter'] = defaultdict(Counter)
+        for r in read_csv(csv_path(self.csv_dir, 'asignacion_instrumento')):
+            ap = r.get('apellidos_estudiante', '')
+            nm = r.get('nombres_estudiante', '')
+            snorm = _norm(_nombre_completo(ap, nm))
+            doc_id = str(r.get('docente_id', '')).replace('.0', '').strip()
+            doc_nombre = docentes_csv_map.get(doc_id, '')
+            if doc_nombre:
+                student_teacher[snorm][doc_nombre] += 1
+
+        if self.dry:
+            self._ok('agrupacion_docente', 'skipped')
+            return
+
+        for clase in Clase.objects.filter(
+            docente_base=None, subject__tipo_materia='AGRUPACION'
+        ).prefetch_related('enrollments__estudiante'):
+
+            votes: Counter = Counter()
+            n_enrolled = clase.enrollments.count()
+
+            for enroll in clase.enrollments.all():
+                snorm = _norm(enroll.estudiante.nombre)
+                votes += student_teacher.get(snorm, Counter())
+
+            if not votes:
+                self._ok('agrupacion_docente', 'skipped')
+                continue
+
+            best_nombre, best_count = votes.most_common(1)[0]
+            confidence = best_count / max(n_enrolled, 1)
+
+            docente_u = self._find_docente(best_nombre)
+            if docente_u and confidence >= 0.25:
+                clase.docente_base = docente_u
+                clase.name = f'{clase.subject.name} — {docente_u.nombre}'
+                clase.save()
+                # Update enrollments.docente
+                clase.enrollments.filter(docente=None).update(docente=docente_u)
+                self._ok('agrupacion_docente', 'updated')
+                self.stdout.write(
+                    f'  ✓ {clase.subject.name}: → {docente_u.nombre} '
+                    f'(confianza {confidence:.0%}, {best_count}/{n_enrolled} alumnos)'
+                )
+            else:
+                self._ok('agrupacion_docente', 'skipped')
+                self.stdout.write(
+                    f'  ⚠ {clase.subject.name}: sin docente confiable '
+                    f'(mejor: {best_nombre!r} {best_count}/{n_enrolled})'
+                )
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PASO 14: info_medica + info_escolar → Student.notes
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def _step14_info_medica_escolar(self):
+        self._head('Paso 14: Info Médica y Escolar → Student.notes')
+
+        medica_path  = csv_path(self.csv_dir, 'info_medica')
+        escolar_path = csv_path(self.csv_dir, 'info_escolar')
+
+        def _append_note(student, tag: str, value: str):
+            if not value or tag.lower() in student.notes.lower():
+                return False
+            student.notes = (student.notes + f'\n{tag}: {value}').strip()
+            return True
+
+        updated = 0
+        for r in read_csv(medica_path):
+            cedula = (r.get('cedula_estudiante') or '').strip()
+            if not cedula:
+                continue
+            try:
+                u = Usuario.objects.get(cedula=cedula)
+                st = u.student_profile
+            except (Usuario.DoesNotExist, AttributeError):
+                continue
+
+            changed = False
+            if not self.dry:
+                alergias = (r.get('alergias_condiciones') or '').strip()
+                nee_flag = (r.get('tiene_necesidad_educativa') or '').strip()
+                nee_det  = (r.get('detalle_necesidad') or '').strip()
+                if alergias and alergias not in ('nan', 'None', 'No'):
+                    changed |= _append_note(st, 'Alergias', alergias)
+                if nee_flag in ('Sí', 'Si', 'si', 'sí', 'YES', 'True', '1') and nee_det:
+                    changed |= _append_note(st, 'NEE', nee_det)
+                if changed:
+                    st.save()
+                    updated += 1
+
+        for r in read_csv(escolar_path):
+            cedula = (r.get('cedula_estudiante') or '').strip()
+            if not cedula:
+                continue
+            try:
+                u = Usuario.objects.get(cedula=cedula)
+                st = u.student_profile
+            except (Usuario.DoesNotExist, AttributeError):
+                continue
+
+            if not self.dry:
+                inst = (r.get('institucion_regular') or '').strip()
+                anio = (r.get('anio_estudio_regular') or '').strip()
+                changed = False
+                if inst and inst not in ('nan', 'None', 'No'):
+                    changed |= _append_note(st, 'Institución regular', inst)
+                if anio and anio not in ('nan', 'None'):
+                    changed |= _append_note(st, 'Año escolar regular', anio)
+                if changed:
+                    st.save()
+                    updated += 1
+
+        self.stdout.write(f'  Estudiantes actualizados con info médica/escolar: {updated}')
+        self._ok('info_medica_escolar', 'updated')
 
     # ─────────────────────────────────────────────────────────────────────────
     # RESUMEN

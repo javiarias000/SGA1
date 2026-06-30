@@ -1,0 +1,298 @@
+﻿curso;paralelo;dia;hora;asignatura;docente;aula
+Primero;A;MARTES;07:30 a 08:15;Coro;Daniel Laura.;Sala 1 Bloque 1
+Primero;A;MIERCOLES;07:30 a 08:15;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;A;JUEVES;07:30 a 08:15;Audioperceptiva;Inés Larreátegui;Sala Sala 4 Bloque 2
+Primero;A;MARTES;08:15 a 09:00;Coro;Daniel Laura.;Sala 1 Bloque 1
+Primero;A;MIERCOLES;08:15 a 09:00;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;A;JUEVES;08:15 a 09:00;Audioperceptiva;Inés Larreátegui;Sala Sala 4 Bloque 2
+Primero;B;MARTES;15:30 a 16:15;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;B;MIERCOLES;15:30 a 16:15;Coro;Daniel Laura;Sala 13 Bloque 1
+Primero;B;JUEVES;15:30 a 16:15;Educación Rítmica Audioperceptiva;Elizabeth Reyes;Sala 5 Bloque 2
+Primero;B;MARTES;16:15 a 17:00;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;B;MIERCOLES;16:15 a 17:00;Coro;Daniel Laura;Sala 13 Bloque 1
+Primero;B;JUEVES;16:15 a 17:00;Educación Rítmica Audioperceptiva;Elizabeth Reyes;Sala 5 Bloque 2
+Primero;C;MARTES;15:30 a 16:15;Educación Rítmica Audioperceptiva;Delia Núñez;Sala 5 Bloque 2
+Primero;C;JUEVES;15:30 a 16:15;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;C;VIERNES;15:30 a 16:15;Coro;Daniel Laura;Sala 13 Bloque 1
+Primero;C;MARTES;16:15 a 17:00;Educación Rítmica Audioperceptiva;Delia Núñez;Sala 5 Bloque 2
+Primero;C;JUEVES;16:15 a 17:00;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Primero;C;VIERNES;16:15 a 17:00;Coro;Daniel Laura;Sala 13 Bloque 1
+Segundo;A;MARTES;09:00 a 09:45;Coro;Daniel Laura.;Sala 1 Bloque 1
+Segundo;A;JUEVES;09:00 a 09:45;Audioperceptiva;Inés Larreátegui;Sala Sala 4 Bloque 2
+Segundo;A;MARTES;09:45 a 10:30;Coro;Daniel Laura.;Sala 1 Bloque 1
+Segundo;A;MIERCOLES;09:45 a 10:30;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Segundo;A;JUEVES;09:45 a 10:30;Audioperceptiva;Inés Larreátegui;Sala Sala 4 Bloque 2
+Segundo;A;LUNES;10:30 a 11:15;Instrumento;ND;ND
+Segundo;A;MIERCOLES;10:30 a 11:15;Orquesta Pedagógica;Marco Paredes;Sala 6 Bloque 2
+Segundo;B;MARTES;15:30 a 16:15;Coro Mgs.Marco Tocto;ND;Sala 8 Bloque 2
+Segundo;B;MIERCOLES;15:30 a 16:15;Educación Rítmica Audioperceptiva;Elizabeth Reyes;Sala 5 Bloque 2
+Segundo;B;JUEVES;15:30 a 16:15;Orquesta Pedagógica;Jenny Amores ;Bloque 1
+Segundo;B;MARTES;16:15 a 17:00;Coro Mgs.Marco Tocto;ND;Sala 8 Bloque 2
+Segundo;B;MIERCOLES;16:15 a 17:00;Educación Rítmica Audioperceptiva;Elizabeth Reyes;Sala 5 Bloque 2
+Segundo;B;JUEVES;16:15 a 17:00;Orquesta Pedagógica;Jenny Amores ;Bloque 1
+Segundo;B;LUNES;17:45 a 18:30;Instrumento;ND;ND
+Segundo;C;LUNES;15:30 a 16:15;Orquesta Pedagógica;Jenny Amores ;Bloque 1
+Segundo;C;JUEVES;15:30 a 16:15;Coro Mgs.Marco Tocto;ND;Sala 8 Bloque 2
+Segundo;C;LUNES;16:15 a 17:00;Orquesta Pedagógica;Jenny Amores ;Bloque 1
+Segundo;C;JUEVES;16:15 a 17:00;Coro Mgs.Marco Tocto;ND;Sala 8 Bloque 2
+Segundo;C;MIERCOLES;17:00 a 17:45;Educación Rítmica Audioperceptiva;Delia Núñez;Sala 5 Bloque 2
+Segundo;C;LUNES;17:45 a 18:30;Instrumento;ND;ND
+Segundo;C;MIERCOLES;17:45 a 18:30;Educación Rítmica Audioperceptiva;Delia Núñez;Sala 5 Bloque 2
+Segundo;C;VIERNES;17:45 a 18:30;Instrumento;ND;ND
+Tercero;A;LUNES;07:30 a 08:15;Lenguaje Musical;Diego Túquerez;Sala 4 Bloque 1
+Tercero;A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Tercero;A;JUEVES;07:30 a 08:15;Lenguaje Musical;Diego Túquerez;Sala 4 Bloque 1
+Tercero;A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Tercero;A;LUNES;08:15 a 09:00;Lenguaje Musical;Diego Túquerez;Sala 4 Bloque 1
+Tercero;A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Tercero;A;JUEVES;08:15 a 09:00;Lenguaje Musical;Diego Túquerez;Sala 4 Bloque 1
+Tercero;A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Tercero;A;VIERNES;10:30 a 11:15;Instrumento;ND;ND
+Tercero;B;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;B;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;B;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;B;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;B;MARTES;17:00 a 17:45;Lenguaje Musical;Andrea Peña;Sala 10 Bloque 2
+Tercero;B;JUEVES;17:00 a 17:45;Lenguaje Musical;Andrea Peña;Sala 10 Bloque 2
+Tercero;B;MARTES;17:45 a 18:30;Lenguaje Musical;Andrea Peña;Sala 10 Bloque 2
+Tercero;B;JUEVES;17:45 a 18:30;Lenguaje Musical;Andrea Peña;Sala 10 Bloque 2
+Tercero;B;VIERNES;17:45 a 18:30;Instrumento;ND;ND
+Tercero;C;LUNES;15:30 a 16:15;Lenguaje Musical;Guillermo Fonseca;Sala 4 Bloque 1
+Tercero;C;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;C;JUEVES;15:30 a 16:15;Lenguaje Musical;Andrea Peña;Sala 4 Bloque 1
+Tercero;C;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;C;LUNES;16:15 a 17:00;Lenguaje Musical;Andrea Peña;Sala 4 Bloque 1
+Tercero;C;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;C;JUEVES;16:15 a 17:00;Lenguaje Musical;Andrea Peña;Sala 4 Bloque 1
+Tercero;C;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Tercero;C;VIERNES;17:45 a 18:30;Instrumento;ND;ND
+Cuarto;A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Cuarto;A;JUEVES;07:30 a 08:15;Lenguaje Musical;Juan Solís;Bloque 1
+Cuarto;A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Cuarto;A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Cuarto;A;JUEVES;08:15 a 09:00;Lenguaje Musical;Juan Solís;Bloque 1
+Cuarto;A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Cuarto;A;LUNES;09:45 a 10:30;Lenguaje Musical;Juan Solís;Bloque 1
+Cuarto;A;LUNES;10:30 a 11:15;Lenguaje Musical;Juan Solís;Bloque 1
+Cuarto;B;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;B;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;B;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;B;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;B;MARTES;17:00 a 17:45;Lenguaje Musical;Rafael Guzñay ;Bloque 1
+Cuarto;B;JUEVES;17:00 a 17:45;Lenguaje Musical;Rafael Guzñay ;Bloque 1
+Cuarto;B;MARTES;17:45 a 18:30;Lenguaje Musical;Rafael Guzñay ;Bloque 1
+Cuarto;B;JUEVES;17:45 a 18:30;Lenguaje Musical;Rafael Guzñay ;Bloque 1
+Cuarto;C;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;C;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;C;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;C;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Cuarto;C;MARTES;17:00 a 17:45;Lenguaje Musical;Fabricio Chico ;Bloque 2
+Cuarto;C;JUEVES;17:00 a 17:45;Lenguaje Musical;Fabricio Chico ;Bloque 2
+Cuarto;C;MARTES;17:45 a 18:30;Lenguaje Musical;Fabricio Chico ;Bloque 2
+Cuarto;C;JUEVES;17:45 a 18:30;Lenguaje Musical;Fabricio Chico ;Bloque 2
+Quinto;A;MARTES;07:30 a 08:15;Lenguaje Musical;Juan Solís;Bloque 1
+Quinto;A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Quinto;A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Quinto;A;MARTES;08:15 a 09:00;Lenguaje Musical;Juan Solís;Bloque 1
+Quinto;A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Quinto;A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Quinto;A;LUNES;09:45 a 10:30;Instrumento;ND;ND
+Quinto;A;LUNES;10:30 a 11:15;Piano Complementario;ND;ND
+Quinto;B;LUNES;15:30 a 16:15;Lenguaje Musica Mgs.Jorge De La Cruz;ND;Sala 1 Bloque 1
+Quinto;B;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;B;JUEVES;15:30 a 16:15;Lenguaje Musica Mgs.Jorge De La Cruz;ND;Sala 1 Bloque 1
+Quinto;B;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;B;LUNES;16:15 a 17:00;Lenguaje Musica Mgs.Jorge De La Cruz;ND;Sala 1 Bloque 1
+Quinto;B;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;B;JUEVES;16:15 a 17:00;Lenguaje Musica Mgs.Jorge De La Cruz;ND;Sala 1 Bloque 1
+Quinto;B;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;B;LUNES;17:00 a 17:45;Instrumento;ND;ND
+Quinto;B;MARTES;17:00 a 17:45;Piano Complementario;ND;ND
+Quinto;B;LUNES;17:45 a 18:30;Piano Complementario;ND;ND
+Quinto;C;MARTES;15:30 a 16:15;Lenguaje Musica Mgs.Israel Pérez;ND;Sala 1 Bloque 2
+Quinto;C;MIERCOLES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;C;VIERNES;15:30 a 16:15;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;C;MARTES;16:15 a 17:00;Lenguaje Musica Mgs.Israel Pérez;ND;Sala 1 Bloque 2
+Quinto;C;MIERCOLES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;C;VIERNES;16:15 a 17:00;Conjunto Instrumental/Vocal O Mixto;ND;ND
+Quinto;C;LUNES;17:00 a 17:45;Instrumento;ND;ND
+Quinto;C;MARTES;17:00 a 17:45;Piano Complementario;ND;ND
+Quinto;C;VIERNES;17:00 a 17:45;Lenguaje Musica Mgs.Israel Pérez;ND;Sala 1 Bloque 2
+Quinto;C;LUNES;17:45 a 18:30;Piano Complementario;ND;ND
+Quinto;C;VIERNES;17:45 a 18:30;Lenguaje Musica Mgs.Israel Pérez;ND;Sala 1 Bloque 2
+Sexto;B;LUNES;17:00 a 17:45;Lenguaje Musical;Acosta Karolina;Sala 13 Bloque 1
+Sexto;B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;B;MIERCOLES;17:00 a 17:45;Lenguaje Musical;Acosta Karolina;Sala 13 Bloque 1
+Sexto;B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;B;VIERNES;17:00 a 17:45;Instrumento;ND;ND
+Sexto;B;LUNES;17:45 a 18:30;Lenguaje Musical;Acosta Karolina;Sala 13 Bloque 1
+Sexto;B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;B;MIERCOLES;17:45 a 18:30;Lenguaje Musical;Acosta Karolina;Sala 13 Bloque 1
+Sexto;B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;B;VIERNES;17:45 a 18:30;Piano Complementario;ND;ND
+Sexto;C;MARTES;15:30 a 16:15;Lenguaje Musical;Roberto Caiza;Sala 12 Bloque 1
+Sexto;C;MARTES;16:15 a 17:00;Lenguaje Musical;Roberto Caiza;Sala 12 Bloque 1
+Sexto;C;LUNES;17:00 a 17:45;Instrumento;ND;ND
+Sexto;C;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;C;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;C;VIERNES;17:00 a 17:45;Lenguaje Musical;Roberto Caiza;Sala 12 Bloque 1
+Sexto;C;LUNES;17:45 a 18:30;Piano Complementario;ND;ND
+Sexto;C;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;C;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Sexto;C;VIERNES;17:45 a 18:30;Lenguaje Musical;Roberto Caiza;Sala 12 Bloque 1
+Septimo;A;LUNES;07:30 a 08:15;Lenguaje Musical;Félix Amancha;Sala 1 Bloque 2
+Septimo;A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;A;LUNES;08:15 a 09:00;Lenguaje Musical;Félix Amancha;Sala 1 Bloque 2
+Septimo;A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;A;MIERCOLES;09:00 a 09:45;Lenguaje Musical;Félix Amancha;Sala 1 Bloque 2
+Septimo;A;LUNES;09:45 a 10:30;Instrumento;ND;ND
+Septimo;A;MIERCOLES;09:45 a 10:30;Lenguaje Musical;Félix Amancha;Sala 1 Bloque 2
+Septimo;A;LUNES;10:30 a 11:15;Piano Complementario;ND;ND
+Septimo;B;LUNES;17:00 a 17:45;Instrumento;ND;ND
+Septimo;B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;B;MIERCOLES;17:00 a 17:45;Lenguaje Musical;Danny Toapanta;Sala 6 Bloque 2
+Septimo;B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;B;VIERNES;17:00 a 17:45;Lenguaje Musical;Danny Toapanta;Sala 6 Bloque 2
+Septimo;B;LUNES;17:45 a 18:30;Piano Complementario;ND;ND
+Septimo;B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;B;MIERCOLES;17:45 a 18:30;Lenguaje Musical;Danny Toapanta;Sala 6 Bloque 2
+Septimo;B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;B;VIERNES;17:45 a 18:30;Lenguaje Musical;Danny Toapanta;Sala 6 Bloque 2
+Septimo;C;MIERCOLES;15:30 a 16:15;Lenguaje Musical;Juan Diego Gutama ;Bloque 1
+Septimo;C;VIERNES;15:30 a 16:15;Lenguaje Musical;Juan Diego Gutama ;Bloque 1
+Septimo;C;MIERCOLES;16:15 a 17:00;Lenguaje Musical;Juan Diego Gutama ;Bloque 1
+Septimo;C;VIERNES;16:15 a 17:00;Lenguaje Musical;Juan Diego Gutama ;Bloque 1
+Septimo;C;LUNES;17:00 a 17:45;Instrumento;ND;ND
+Septimo;C;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;C;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;C;LUNES;17:45 a 18:30;Piano Complementario;ND;ND
+Septimo;C;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Septimo;C;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;A;LUNES;09:00 a 09:45;Instrumento;ND;ND
+Octavo;A;MIERCOLES;09:00 a 09:45;Lenguaje Musical;Angel Quinapanta;Sala 1 Bloque 1
+Octavo;A;VIERNES;09:00 a 09:45;Lenguaje Musical;Angel Quinapanta;Sala 1 Bloque 1
+Octavo;A;LUNES;09:45 a 10:30;Piano Complementario;ND;ND
+Octavo;A;LUNES;10:30 a 11:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Octavo;A;VIERNES;10:30 a 11:15;Acompañamiento Para Pianistas;Alex Chicaiza;ND
+Octavo;B;LUNES;14:45 a 15:30;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Octavo;B;LUNES;15:30 a 16:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Octavo;B;MIERCOLES;16:15 a 17:00;Acompañamiento Para Pianistas;Juan Solís;ND
+Octavo;B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;B;MIERCOLES;17:00 a 17:45;Lenguaje Musical;Christian Peralta;Sala 9 Bloque 2
+Octavo;B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;B;VIERNES;17:00 a 17:45;Lenguaje Musical;Christian Peralta;Sala 9 Bloque 2
+Octavo;B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;B;MIERCOLES;17:45 a 18:30;Lenguaje Musical;Christian Peralta;Sala 9 Bloque 2
+Octavo;B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;B;VIERNES;17:45 a 18:30;Lenguaje Musical;Christian Peralta;Sala 9 Bloque 2
+Octavo;C;JUEVES;14:45 a 15:30;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Octavo;C;MIERCOLES;15:30 a 16:15;Lenguaje;Santiago Zumbana;Bloque 1
+Octavo;C;JUEVES;15:30 a 16:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Octavo;C;VIERNES;15:30 a 16:15;Lenguaje;Santiago Zumbana;Bloque 1
+Octavo;C;MIERCOLES;16:15 a 17:00;Lenguaje;Santiago Zumbana;Bloque 1
+Octavo;C;VIERNES;16:15 a 17:00;Lenguaje;Santiago Zumbana;Bloque 1
+Octavo;C;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;C;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;C;VIERNES;17:00 a 17:45;Acompañamiento Para Pianistas;Juan Solís;ND
+Octavo;C;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Octavo;C;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);A;MARTES;07:30 a 08:15;Formación Y Orientación;ND;Laboral Dr. Rubén Chicaiza Sala 12 Bloque 1
+Noveno Año (1O Bachillerato);A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);A;MARTES;08:15 a 09:00;Informática Aplicada;Diego Túquerez;Sala 4 Bloque 1
+Noveno Año (1O Bachillerato);A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);A;MIERCOLES;09:00 a 09:45;Capacitacion En Música;Diego Túquerez;Sala 4 Bloque 1
+Noveno Año (1O Bachillerato);A;VIERNES;09:00 a 09:45;Armonía;Marcelo Chicaiza;Sala 13 Bloque 1
+Noveno Año (1O Bachillerato);A;VIERNES;09:45 a 10:30;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Noveno Año (1O Bachillerato);A;VIERNES;10:30 a 11:15;Acompañamiento Para Pianistas;Alex Chicaiza;ND
+Noveno Año (1O Bachillerato);B;MIERCOLES;15:30 a 16:15;Informática Aplicada 9O B;David Díaz;Sala 4 Bloque 1
+Noveno Año (1O Bachillerato);B;JUEVES;15:30 a 16:15;Acompañamiento Para Pianistas;Diego Pérez;ND
+Noveno Año (1O Bachillerato);B;LUNES;16:15 a 17:00;Formación Y Orientación;ND;Laboral Dr. Rubén Chicaiza Sala 12 Bloque 1
+Noveno Año (1O Bachillerato);B;MIERCOLES;16:15 a 17:00;Informática Aplicada 9O B;David Díaz;Sala 4 Bloque 1
+Noveno Año (1O Bachillerato);B;JUEVES;16:15 a 17:00;Acompañamiento Para Pianistas;Diego Pérez;ND
+Noveno Año (1O Bachillerato);B;LUNES;17:00 a 17:45;Capacitación En Música;Jorge De La Cruz;Sala 1 Bloque 1
+Noveno Año (1O Bachillerato);B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);B;MIERCOLES;17:00 a 17:45;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Noveno Año (1O Bachillerato);B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);B;VIERNES;17:00 a 17:45;Armonía;David Vásquez;Sala 3 Bloque 2
+Noveno Año (1O Bachillerato);B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);B;MIERCOLES;17:45 a 18:30;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Noveno Año (1O Bachillerato);B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Noveno Año (1O Bachillerato);B;VIERNES;17:45 a 18:30;Armonía;David Vásquez;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);A;MIERCOLES;09:00 a 09:45;Armonía;Marcelo Chicaiza;Sala 13 Bloque 1
+Decimo Año (2O Bachillerato);A;VIERNES;09:00 a 09:45;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);A;MARTES;09:45 a 10:30;Instrumento;ND;ND
+Decimo Año (2O Bachillerato);A;VIERNES;09:45 a 10:30;Creación Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Año (2O Bachillerato);A;LUNES;10:30 a 11:15;Formas Musicales José Luis Cumbicos;ND;Sala 12 Bloque 1
+Decimo Año (2O Bachillerato);A;MARTES;10:30 a 11:15;Piano Complementario;ND;ND
+Decimo Año (2O Bachillerato);A;VIERNES;10:30 a 11:15;Acompañamiento Para Pianistas;Alex Chicaiza;ND
+Decimo Año (2O Bachillerato);B;LUNES;14:45 a 15:30;Armonía;David Vásquez;Sala12 Bloque 1
+Decimo Año (2O Bachillerato);B;LUNES;15:30 a 16:15;Armonía;David Vásquez;Sala 12 Bloque 1
+Decimo Año (2O Bachillerato);B;MIERCOLES;15:30 a 16:15;Formas Musicales;Edwin Chico;Sala 6 Bloque 2
+Decimo Año (2O Bachillerato);B;JUEVES;15:30 a 16:15;Acompañamiento Para Pianistas;Diego Pérez;ND
+Decimo Año (2O Bachillerato);B;MIERCOLES;16:15 a 17:00;Formas Musicales;Edwin Chico;Sala 6 Bloque 2
+Decimo Año (2O Bachillerato);B;JUEVES;16:15 a 17:00;Acompañamiento Para Pianistas;Diego Pérez;ND
+Decimo Año (2O Bachillerato);B;LUNES;17:00 a 17:45;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);B;MIERCOLES;17:00 a 17:45;Creacion Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Año (2O Bachillerato);B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);B;VIERNES;17:00 a 17:45;Instrumento;ND;ND
+Decimo Año (2O Bachillerato);B;LUNES;17:45 a 18:30;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);B;MIERCOLES;17:45 a 18:30;Creacion Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Año (2O Bachillerato);B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);B;VIERNES;17:45 a 18:30;Piano Complementario;ND;ND
+Decimo Año (2O Bachillerato);C;MARTES;15:30 a 16:15;Creación Y Arreglos;Jorge Arias;Sala 13 Bloque 1
+Decimo Año (2O Bachillerato);C;MIERCOLES;15:30 a 16:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);C;VIERNES;15:30 a 16:15;Armonía;David Vásquez;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);C;MARTES;16:15 a 17:00;Creación Y Arreglos;Jorge Arias;Sala 13 Bloque 1
+Decimo Año (2O Bachillerato);C;MIERCOLES;16:15 a 17:00;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);C;VIERNES;16:15 a 17:00;Armonía;David Vásquez;Sala 3 Bloque 2
+Decimo Año (2O Bachillerato);C;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);C;MIERCOLES;17:00 a 17:45;Formas Musical;ND;Sala Mgs. Mauricio Jiménez 3 Bloque 1
+Decimo Año (2O Bachillerato);C;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);C;VIERNES;17:00 a 17:45;Instrumento;ND;ND
+Decimo Año (2O Bachillerato);C;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);C;MIERCOLES;17:45 a 18:30;Formas Musical;ND;Sala Mgs. Mauricio Jiménez 3 Bloque 1
+Decimo Año (2O Bachillerato);C;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Año (2O Bachillerato);C;VIERNES;17:45 a 18:30;Piano Complementario;ND;ND
+Decimo Primer Año (3O Bachillerato);A;MIERCOLES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);A;VIERNES;07:30 a 08:15;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);A;MIERCOLES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);A;VIERNES;08:15 a 09:00;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);A;LUNES;09:00 a 09:45;Armonía;Santiago Guananga;Sala 3 Bloque 2
+Decimo Primer Año (3O Bachillerato);A;MIERCOLES;09:00 a 09:45;Producción Artístico Musical;Marco Paredes;Sala 6 Bloque 2
+Decimo Primer Año (3O Bachillerato);A;VIERNES;09:00 a 09:45;Creación Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Primer Año (3O Bachillerato);A;LUNES;09:45 a 10:30;Instrumento;ND;ND
+Decimo Primer Año (3O Bachillerato);A;LUNES;10:30 a 11:15;Instrumento;ND;ND
+Decimo Primer Año (3O Bachillerato);A;VIERNES;10:30 a 11:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Primer Año (3O Bachillerato);B;LUNES;15:30 a 16:15;Acompañamiento Para Pianistas;Diego Pérez;ND
+Decimo Primer Año (3O Bachillerato);B;MARTES;15:30 a 16:15;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Primer Año (3O Bachillerato);B;JUEVES;15:30 a 16:15;Armonía;David Vásquez;Sala 12 Bloque 1
+Decimo Primer Año (3O Bachillerato);B;LUNES;16:15 a 17:00;Producción Artístico Musical;Marco Tocto;Sala 8 Bloque 2
+Decimo Primer Año (3O Bachillerato);B;MARTES;16:15 a 17:00;Historia De La Música;Jorge Arevalos;Sala 3 Bloque 2
+Decimo Primer Año (3O Bachillerato);B;JUEVES;16:15 a 17:00;Armonía;David Vásquez;Sala 12 Bloque 1
+Decimo Primer Año (3O Bachillerato);B;LUNES;17:00 a 17:45;Creación Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Primer Año (3O Bachillerato);B;MARTES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);B;JUEVES;17:00 a 17:45;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);B;LUNES;17:45 a 18:30;Creación Y Arreglos;Alex Chicaiza;Sala 12 Bloque 1
+Decimo Primer Año (3O Bachillerato);B;MARTES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+Decimo Primer Año (3O Bachillerato);B;JUEVES;17:45 a 18:30;Agrupacion: Orquesta, Banda, Ensamble De Guitarra O Coro;ND;ND
+"Primero Extraordinario ""B""";ND;MARTES;15:30 a 16:15;Lenguaje Musica;David Vásquez;ND
+"Primero Extraordinario ""B""";ND;LUNES;16:15 a 17:00;Lenguaje Musica;David Vásquez;ND
+"Primero Extraordinario ""B""";ND;MARTES;16:15 a 17:00;Lenguaje Musica;David Vásquez;ND
+"Primero Extraordinario ""B""";ND;LUNES;17:00 a 17:45;Lenguaje Musica;David Vásquez;ND
+"Primero Extraordinario ""B""";ND;MIERCOLES;17:00 a 17:45;Lenguaje Musica;David Vásquez;ND
+"Primero Extraordinario ""B""";ND;LUNES;17:45 a 18:30;Instrumento;ND;ND
+"Primero Extraordinario ""B""";ND;MIERCOLES;17:45 a 18:30;Lenguaje Musica;David Vásquez;ND

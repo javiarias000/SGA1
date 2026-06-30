@@ -362,6 +362,82 @@
 {% block extra_js %}
 <script>
 // ── Paso 3: gestión de filas ──────────────────────────────────────────────
+// ── Paso 2: búsqueda de director de área ──────────────────────────────────
+(function () {
+  const input = document.getElementById('director-search');
+  if (!input) return;
+
+  const resultsBox    = document.getElementById('director-results');
+  const idField       = document.getElementById('director_id');
+  const nombreField   = document.getElementById('director_nombre');
+  const areaField     = document.getElementById('director_area');
+  const telefonoField = document.getElementById('director_telefono');
+  const correoField   = document.getElementById('director_correo');
+  const selectedBox   = document.getElementById('director-selected');
+  let debounceTimer;
+
+  input.addEventListener('input', () => {
+    idField.value = '';
+    clearTimeout(debounceTimer);
+    const q = input.value.trim();
+    if (q.length < 2) { resultsBox.style.display = 'none'; return; }
+    debounceTimer = setTimeout(() => buscar(q), 250);
+  });
+
+  async function buscar(q) {
+    try {
+      const res = await fetch(`{% url 'teachers:api_directores_area_buscar' %}?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      renderResultados(data.resultados || []);
+    } catch (e) {
+      resultsBox.style.display = 'none';
+    }
+  }
+
+  function renderResultados(items) {
+    if (!items.length) {
+      resultsBox.innerHTML = '<div class="list-group-item small text-muted">Sin resultados</div>';
+      resultsBox.style.display = 'block';
+      return;
+    }
+    resultsBox.innerHTML = items.map(d => `
+      <button type="button" class="list-group-item list-group-item-action small director-option"
+        data-id="${d.id}" data-nombre="${d.nombre}" data-area="${d.area}"
+        data-telefono="${d.telefono}" data-correo="${d.correo}">
+        <strong>${d.nombre}</strong>${d.area ? ' — ' + d.area : ''}
+      </button>`).join('');
+    resultsBox.style.display = 'block';
+    resultsBox.querySelectorAll('.director-option').forEach(btn => {
+      btn.addEventListener('click', () => seleccionar(btn.dataset));
+    });
+  }
+
+  function seleccionar(d) {
+    idField.value = d.id;
+    nombreField.value = d.nombre;
+    areaField.value = d.area;
+    telefonoField.value = d.telefono;
+    correoField.value = d.correo;
+    input.value = d.nombre;
+    document.getElementById('director-area-display').textContent = d.area || '—';
+    document.getElementById('director-telefono-display').textContent = d.telefono || '—';
+    document.getElementById('director-correo-display').textContent = d.correo || '—';
+    selectedBox.classList.remove('d-none');
+    resultsBox.style.display = 'none';
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target !== input && !resultsBox.contains(e.target)) resultsBox.style.display = 'none';
+  });
+
+  document.getElementById('form-director').addEventListener('submit', (e) => {
+    if (!idField.value) {
+      e.preventDefault();
+      alert('Selecciona un director de la lista de resultados.');
+    }
+  });
+})();
+
 (function () {
   const tbody = document.getElementById('stats-body');
   if (!tbody) return;
