@@ -1,0 +1,55 @@
+{% extends "teachers/base.html" %}
+{% block title %}Inventario de Instrumentos{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">🎸 Inventario de Instrumentos</h3>
+    {% if request.user.is_staff %}
+    <a href="{% url 'inventario:crear' %}" class="btn btn-primary">+ Agregar</a>
+    {% endif %}
+  </div>
+  <!-- Filtros -->
+  <form class="d-flex gap-2 mb-3" method="get">
+    <select name="tipo" class="form-select form-select-sm" style="max-width:180px">
+      <option value="">Todos los tipos</option>
+      {% for val,lbl in tipos %}<option value="{{ val }}" {% if val == tipo_filtro %}selected{% endif %}>{{ lbl }}</option>{% endfor %}
+    </select>
+    <select name="estado" class="form-select form-select-sm" style="max-width:180px">
+      <option value="">Todos los estados</option>
+      {% for val,lbl in estados %}<option value="{{ val }}" {% if val == estado_filtro %}selected{% endif %}>{{ lbl }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-sm btn-outline-secondary">Filtrar</button>
+  </form>
+  <!-- Lista -->
+  {% if instrumentos %}
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover mb-0">
+      <thead class="table-light"><tr><th>Nombre</th><th>Tipo</th><th>Marca</th><th>Serie</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+      {% for i in instrumentos %}
+      <tr>
+        <td class="fw-semibold">{{ i.nombre }}</td>
+        <td>{{ i.get_tipo_display }}</td>
+        <td>{{ i.marca|default:"—" }}</td>
+        <td class="text-muted small">{{ i.numero_serie }}</td>
+        <td>
+          <span class="badge {% if i.estado == 'DISPONIBLE' %}bg-success{% elif i.estado == 'PRESTADO' %}bg-warning text-dark{% elif i.estado == 'MANTENIMIENTO' %}bg-secondary{% else %}bg-danger{% endif %}">
+            {{ i.get_estado_display }}
+          </span>
+        </td>
+        <td>
+          <a href="{% url 'inventario:detalle' i.pk %}" class="btn btn-sm btn-outline-primary">Ver</a>
+          {% if i.estado == 'DISPONIBLE' %}
+          <a href="{% url 'inventario:prestamo' i.pk %}" class="btn btn-sm btn-outline-warning">Prestar</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-5 text-muted"><p>Sin instrumentos registrados.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

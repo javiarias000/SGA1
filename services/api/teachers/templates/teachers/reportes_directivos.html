@@ -1,0 +1,124 @@
+{% extends "teachers/base.html" %}
+{% block title %}Reportes Directivos{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h3 class="fw-bold mb-0">📊 Reportes Directivos</h3>
+    <div>
+      <a href="?quimestre=Q1" class="btn btn-sm {% if quimestre == 'Q1' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Q1</a>
+      <a href="?quimestre=Q2" class="btn btn-sm {% if quimestre == 'Q2' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Q2</a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Promedios por materia -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Promedio por Materia — {{ quimestre }}</h5>
+          <canvas id="chartMaterias" height="260"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Asistencia por clase -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Tasa de Asistencia por Clase</h5>
+          <canvas id="chartAsistencia" height="260"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estudiantes en riesgo -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">⚠️ Estudiantes en Riesgo (promedio &lt; 7)</h5>
+          {% if en_riesgo %}
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="table-light"><tr><th>Estudiante</th><th>Materia</th><th class="text-center">Promedio</th></tr></thead>
+              <tbody>
+              {% for r in en_riesgo %}
+              <tr>
+                <td>{{ r.student__usuario__nombre }}</td>
+                <td>{{ r.subject__name }}</td>
+                <td class="text-center"><span class="badge bg-danger">{{ r.promedio|floatformat:2 }}</span></td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted">Sin estudiantes en riesgo. 🎉</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparativa Q1 vs Q2 -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Comparativa Quimestral</h5>
+          <canvas id="chartComparativa" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const promediosMaterias = {{ promedios_materia|safe }};
+const claseStats = {{ clases_stats|safe }};
+const comparativa = {{ comparativa|safe }};
+
+// Chart 1: Promedios por materia
+new Chart(document.getElementById('chartMaterias'), {
+  type: 'bar',
+  data: {
+    labels: promediosMaterias.map(x => x.subject__name),
+    datasets: [{
+      label: 'Promedio',
+      data: promediosMaterias.map(x => parseFloat(x.promedio).toFixed(2)),
+      backgroundColor: '#4338ca',
+      borderRadius: 4,
+    }]
+  },
+  options: { plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 10 } } }
+});
+
+// Chart 2: Tasa de asistencia
+new Chart(document.getElementById('chartAsistencia'), {
+  type: 'bar',
+  data: {
+    labels: claseStats.map(x => x.clase),
+    datasets: [{
+      label: '% Asistencia',
+      data: claseStats.map(x => x.tasa),
+      backgroundColor: claseStats.map(x => x.tasa < 70 ? '#ef4444' : x.tasa < 85 ? '#f59e0b' : '#10b981'),
+      borderRadius: 4,
+    }]
+  },
+  options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 100 } } }
+});
+
+// Chart 3: Comparativa Q1 vs Q2
+new Chart(document.getElementById('chartComparativa'), {
+  type: 'bar',
+  data: {
+    labels: ['Q1', 'Q2'],
+    datasets: [{
+      label: 'Promedio General',
+      data: [comparativa['Q1'] || 0, comparativa['Q2'] || 0],
+      backgroundColor: ['#6366f1', '#10b981'],
+      borderRadius: 6,
+    }]
+  },
+  options: { plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 10 } } }
+});
+</script>
+{% endblock %}

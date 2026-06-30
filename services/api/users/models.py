@@ -13,9 +13,8 @@ class Usuario(models.Model):
     class Rol(models.TextChoices):
         DOCENTE = 'DOCENTE', 'Docente'
         ESTUDIANTE = 'ESTUDIANTE', 'Estudiante'
-        # Add a default or a 'PENDING' role if needed for initial creation
-        # For now, let's make ESTUDIANTE the default if not specified
-        PENDIENTE = 'PENDIENTE', 'Pendiente' # New role for users who haven't been assigned yet
+        REPRESENTANTE = 'REPRESENTANTE', 'Representante'
+        PENDIENTE = 'PENDIENTE', 'Pendiente'
 
     nombre = models.CharField(max_length=255)
     rol = models.CharField(max_length=20, choices=Rol.choices, default=Rol.PENDIENTE)
@@ -58,6 +57,10 @@ class Usuario(models.Model):
     def is_student(self):
         return self.rol == self.Rol.ESTUDIANTE
 
+    @property
+    def is_representante(self):
+        return self.rol == self.Rol.REPRESENTANTE
+
 
 class Profile(models.Model):
     """Perfil técnico para extender auth_user (solo banderas internas)."""
@@ -67,6 +70,30 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Notificacion(models.Model):
+    class Tipo(models.TextChoices):
+        INFO = 'INFO', 'Información'
+        ALERTA = 'ALERTA', 'Alerta'
+        EXITO = 'EXITO', 'Éxito'
+        SISTEMA = 'SISTEMA', 'Sistema'
+
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='notificaciones')
+    titulo = models.CharField(max_length=200)
+    mensaje = models.TextField()
+    tipo = models.CharField(max_length=10, choices=Tipo.choices, default=Tipo.INFO)
+    leida = models.BooleanField(default=False)
+    fecha = models.DateTimeField(auto_now_add=True)
+    url_accion = models.CharField(max_length=500, blank=True)
+
+    class Meta:
+        ordering = ['-fecha']
+        verbose_name = 'Notificación'
+        verbose_name_plural = 'Notificaciones'
+
+    def __str__(self):
+        return f"{self.titulo} → {self.usuario.nombre}"
 
 
 @receiver(post_save, sender=User)

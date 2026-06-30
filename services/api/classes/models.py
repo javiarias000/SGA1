@@ -971,6 +971,77 @@ class DeberEntrega(models.Model):
 
 
 # ============================================
+# JUSTIFICACIÓN DE AUSENCIAS
+# ============================================
+
+class JustificacionAusencia(models.Model):
+    class Estado(models.TextChoices):
+        PENDIENTE = 'PENDIENTE', 'Pendiente'
+        APROBADA = 'APROBADA', 'Aprobada'
+        RECHAZADA = 'RECHAZADA', 'Rechazada'
+
+    asistencia = models.OneToOneField(Asistencia, on_delete=models.CASCADE, related_name='justificacion')
+    motivo = models.TextField(verbose_name='Motivo')
+    archivo = models.FileField(upload_to='justificaciones/', blank=True, null=True)
+    estado = models.CharField(max_length=10, choices=Estado.choices, default=Estado.PENDIENTE)
+    fecha_solicitud = models.DateTimeField(auto_now_add=True)
+    revisado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True, related_name='justificaciones_revisadas')
+    fecha_revision = models.DateTimeField(null=True, blank=True)
+    comentario_revision = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'Justificación de Ausencia'
+        verbose_name_plural = 'Justificaciones de Ausencia'
+        ordering = ['-fecha_solicitud']
+
+    def __str__(self):
+        return f"Justificación {self.estado} — {self.asistencia}"
+
+    def save(self, *args, **kwargs):
+        if self.revisado_por and not self.fecha_revision:
+            from django.utils import timezone
+            self.fecha_revision = timezone.now()
+        super().save(*args, **kwargs)
+
+
+# ============================================
+# RECUPERACIONES / EXÁMENES SUPLETORIOS
+# ============================================
+
+class Recuperacion(models.Model):
+    class Tipo(models.TextChoices):
+        SUPLETORIO = 'SUPLETORIO', 'Supletorio'
+        REMEDIAL = 'REMEDIAL', 'Remedial'
+        GRACIA = 'GRACIA', 'De Gracia'
+
+    class EstadoRec(models.TextChoices):
+        PENDIENTE = 'PENDIENTE', 'Pendiente'
+        APROBADA = 'APROBADA', 'Aprobada'
+        REPROBADA = 'REPROBADA', 'Reprobada'
+
+    estudiante = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='recuperaciones')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='recuperaciones')
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name='recuperaciones')
+    tipo = models.CharField(max_length=15, choices=Tipo.choices, default=Tipo.SUPLETORIO)
+    quimestre = models.CharField(max_length=2, choices=[('Q1', 'Quimestre 1'), ('Q2', 'Quimestre 2')], default='Q1')
+    fecha = models.DateField()
+    nota_original = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    nota_recuperacion = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    estado = models.CharField(max_length=10, choices=EstadoRec.choices, default=EstadoRec.PENDIENTE)
+    observaciones = models.TextField(blank=True)
+    registrado_por = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name='recuperaciones_registradas')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Recuperación'
+        verbose_name_plural = 'Recuperaciones'
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"{self.get_tipo_display()} — {self.estudiante} — {self.subject.name}"
+
+
+# ============================================
 # MALLA CURRICULAR
 # ============================================
 

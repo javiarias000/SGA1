@@ -1,0 +1,31 @@
+{% extends "teachers/base.html" %}
+{% block title %}Vincular Representante{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:480px">
+  <h3 class="fw-bold mb-4">🔗 Vincular Representante</h3>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <p class="text-muted small mb-3">Crear acceso de portal para el representante de <strong>{{ student.name }}</strong>.</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Usuario (login)</label>
+          <input name="username" class="form-control" required placeholder="ej: juan.perez">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Contraseña temporal</label>
+          <input name="password" type="password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Email (opcional)</label>
+          <input name="email" type="email" class="form-control" value="{{ student.parent_email }}">
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary">Crear y Vincular</button>
+          <a href="{% url 'teachers:student_detail' student.pk %}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

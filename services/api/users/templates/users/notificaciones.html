@@ -1,0 +1,44 @@
+{% extends "teachers/base.html" %}
+{% block title %}Notificaciones{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:700px">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">🔔 Notificaciones</h3>
+    <form method="post" action="{% url 'users:notificaciones_todas_leidas' %}">
+      {% csrf_token %}
+      <button class="btn btn-sm btn-outline-secondary">Marcar todas como leídas</button>
+    </form>
+  </div>
+
+  {% if notificaciones %}
+    <div class="list-group shadow-sm">
+      {% for n in notificaciones %}
+      <div class="list-group-item list-group-item-action {% if not n.leida %}border-start border-4 border-primary{% endif %}">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <span class="badge me-1
+              {% if n.tipo == 'ALERTA' %}bg-danger
+              {% elif n.tipo == 'EXITO' %}bg-success
+              {% elif n.tipo == 'SISTEMA' %}bg-secondary
+              {% else %}bg-info{% endif %}">
+              {{ n.get_tipo_display }}
+            </span>
+            <strong>{{ n.titulo }}</strong>
+            <p class="mb-1 mt-1 text-muted small">{{ n.mensaje }}</p>
+          </div>
+          <small class="text-muted text-nowrap ms-2">{{ n.fecha|date:"d/m/Y H:i" }}</small>
+        </div>
+        {% if n.url_accion %}
+          <a href="{{ n.url_accion }}" class="btn btn-sm btn-link p-0 mt-1">Ver →</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5 text-muted">
+      <div style="font-size:3rem">🔔</div>
+      <p class="mt-2">Sin notificaciones por el momento.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

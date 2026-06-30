@@ -1,0 +1,21 @@
+{% extends "representante/base.html" %}
+{% block title %}Deberes de {{ student.name }}{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-4">📝 Deberes — {{ student.name }}</h3>
+{% if deberes %}
+<div class="list-group shadow-sm">
+  {% for d in deberes %}
+  <div class="list-group-item">
+    <div class="d-flex justify-content-between">
+      <strong>{{ d.titulo }}</strong>
+      <small class="text-muted">Entrega: {{ d.fecha_entrega }}</small>
+    </div>
+    {% if d.descripcion %}<p class="mb-0 text-muted small">{{ d.descripcion }}</p>{% endif %}
+    <small class="text-muted">{{ d.clase.name }}</small>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">Sin deberes registrados.</p>
+{% endif %}
+{% endblock %}

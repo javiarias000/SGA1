@@ -1,0 +1,49 @@
+{% extends "teachers/base.html" %}
+{% block title %}Recuperaciones{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">📚 Recuperaciones / Supletorios</h3>
+    <a href="{% url 'classes:registrar_recuperacion' %}" class="btn btn-primary">+ Nueva Recuperación</a>
+  </div>
+  {% if recuperaciones %}
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover mb-0">
+      <thead class="table-light"><tr>
+        <th>Estudiante</th><th>Materia</th><th>Tipo</th><th>Quimestre</th><th>Fecha</th>
+        <th>Nota orig.</th><th>Nota rec.</th><th>Estado</th><th></th>
+      </tr></thead>
+      <tbody>
+      {% for r in recuperaciones %}
+      <tr>
+        <td>{{ r.estudiante.name }}</td>
+        <td>{{ r.subject.name }}</td>
+        <td><span class="badge bg-secondary">{{ r.get_tipo_display }}</span></td>
+        <td>{{ r.quimestre }}</td>
+        <td>{{ r.fecha }}</td>
+        <td>{{ r.nota_original|default:"—" }}</td>
+        <td>{% if r.nota_recuperacion %}{{ r.nota_recuperacion }}{% else %}—{% endif %}</td>
+        <td>
+          <span class="badge {% if r.estado == 'APROBADA' %}bg-success{% elif r.estado == 'REPROBADA' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+            {{ r.estado }}
+          </span>
+        </td>
+        <td>
+          {% if r.estado == 'PENDIENTE' %}
+          <form method="post" action="{% url 'classes:resultado_recuperacion' r.pk %}" class="d-flex gap-1">
+            {% csrf_token %}
+            <input name="nota_recuperacion" type="number" step="0.01" min="0" max="10" class="form-control form-control-sm" style="width:80px" placeholder="Nota">
+            <button class="btn btn-sm btn-primary">✓</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-5 text-muted"><p>Sin recuperaciones registradas.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,527 +1,287 @@
 {% extends 'teachers/base.html' %}
 {% load static %}
 
-{% block title %}Dashboard Unificado - Sistema de Calificaciones{% endblock %}
+{% block title %}Dashboard Docente{% endblock %}
 
 {% block extra_css %}
 <style>
-    .stat-card {
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .nota-badge {
-        font-size: 1.1rem;
-        font-weight: bold;
-        padding: 0.4rem 0.8rem;
-    }
-    .table-calificaciones tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-    .escala-badge {
-        min-width: 60px;
-        display: inline-block;
-        text-align: center;
-    }
+  .stat-card { transition: transform .2s, box-shadow .2s; }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+
+  /* Burbuja flotante FAB */
+  .fab-clase {
+    position: fixed;
+    bottom: 36px;
+    right: 36px;
+    z-index: 1050;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4338ca, #7c3aed);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 24px rgba(67,56,202,.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .fab-clase:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 32px rgba(67,56,202,.6);
+    color: #fff;
+  }
+  .fab-tooltip {
+    position: fixed;
+    bottom: 112px;
+    right: 36px;
+    z-index: 1049;
+    background: #1e1b4b;
+    color: #fff;
+    padding: .35rem .75rem;
+    border-radius: 8px;
+    font-size: .82rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .fab-clase:hover ~ .fab-tooltip { opacity: 1; }
+
+  /* Alerta compacta */
+  .riesgo-item { border-left: 3px solid #ef4444; }
+
+  /* Clases hoy */
+  .clase-hoy { border-left: 3px solid #4338ca; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-1">📊 Dashboard de Calificaciones</h1>
-            <p class="text-muted mb-0">Sistema Unificado e Integral</p>
+
+  <!-- ─── Header ─────────────────────────────────────────────────────── -->
+  <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-0 fw-bold">¡Hola, {{ request.user.usuario.nombre|default:request.user.get_full_name }}!</h2>
+      <p class="text-muted mb-0 small">{{ today|date:"l, d \d\e F \d\e Y" }}</p>
+    </div>
+    <a href="{% url 'teachers:gestionar_aportes' %}" class="btn btn-outline-secondary btn-sm">
+      Gestionar Aportes
+    </a>
+  </div>
+
+  <!-- ─── Estadísticas rápidas ──────────────────────────────────────── -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100 text-center py-3">
+        <div class="text-primary mb-1" style="font-size:1.6rem">👩‍🎓</div>
+        <h3 class="mb-0 fw-bold">{{ total_students }}</h3>
+        <p class="text-muted small mb-0">Estudiantes activos</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100 text-center py-3">
+        <div class="text-success mb-1" style="font-size:1.6rem">✅</div>
+        <h3 class="mb-0 fw-bold">{{ total_estudiantes_evaluados }}</h3>
+        <p class="text-muted small mb-0">Evaluados</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100 text-center py-3">
+        <div class="text-danger mb-1" style="font-size:1.6rem">⚠️</div>
+        <h3 class="mb-0 fw-bold">{{ estudiantes_en_riesgo|length }}</h3>
+        <p class="text-muted small mb-0">En riesgo (&lt;7.0)</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100 text-center py-3">
+        <div class="text-indigo mb-1" style="font-size:1.6rem;color:#4338ca">📅</div>
+        <h3 class="mb-0 fw-bold">{{ today_classes.count }}</h3>
+        <p class="text-muted small mb-0">Clases hoy</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Fila principal ────────────────────────────────────────────── -->
+  <div class="row g-4 mb-4">
+
+    <!-- Clases de hoy -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+          📅 Clases de hoy
         </div>
-        <div class="text-end">
-            <a href="{% url 'teachers:gestionar_aportes' %}" class="btn btn-outline-primary me-2">
-                <i class="fas fa-cog"></i> Gestionar Aportes
-            </a>
-            <div>
-                <p class="mb-0"><strong>{{ teacher.user.get_full_name }}</strong></p>
-                <small class="text-muted">{{ teacher.user.email }}</small>
-            </div>
+        <div class="card-body pt-2">
+          {% if today_classes %}
+          {% for clase in today_classes %}
+          <div class="clase-hoy rounded p-2 mb-2 ps-3">
+            <div class="fw-semibold small">{{ clase.subject.name }}</div>
+            <div class="text-muted" style="font-size:.8rem">{{ clase.name }}</div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted small text-center pt-3">Sin clases programadas hoy.</p>
+          {% endif %}
         </div>
+      </div>
     </div>
 
-    <!-- Estadísticas Rápidas -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-primary mb-2">
-                        <i class="fas fa-users fa-2x"></i>
-                    </div>
-                    <h3 class="mb-1">{{ total_students }}</h3>
-                    <p class="text-muted mb-0 small">Estudiantes Activos</p>
-                </div>
-            </div>
+    <!-- Acciones rápidas -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+          ⚡ Acciones rápidas
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-success mb-2">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <h3 class="mb-1">{{ total_estudiantes_evaluados }}</h3>
-                    <p class="text-muted mb-0 small">Estudiantes Evaluados</p>
-                </div>
+        <div class="card-body pt-2 d-flex flex-column gap-2">
+          <a href="{% url 'teachers:wizard_notas' %}?paso=1" class="text-decoration-none">
+            <div class="card border-0 bg-light p-3 d-flex flex-row align-items-center gap-3"
+                 style="border-left:3px solid #4338ca !important">
+              <span style="font-size:1.4rem">📝</span>
+              <div>
+                <div class="fw-semibold small text-dark">Pasar Notas</div>
+                <div class="text-muted" style="font-size:.78rem">Registro global para toda la clase</div>
+              </div>
+              <i class="fas fa-arrow-right text-muted ms-auto"></i>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-warning mb-2">
-                        <i class="fas fa-exclamation-triangle fa-2x"></i>
-                    </div>
-                    <h3 class="mb-1">{{ estudiantes_en_riesgo|length }}</h3>
-                    <p class="text-muted mb-0 small">En Riesgo (< 7.0)</p>
-                </div>
+          </a>
+          <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="text-decoration-none">
+            <div class="card border-0 bg-light p-3 d-flex flex-row align-items-center gap-3"
+                 style="border-left:3px solid #0891b2 !important">
+              <span style="font-size:1.4rem">➕</span>
+              <div>
+                <div class="fw-semibold small text-dark">Nuevo Aporte</div>
+                <div class="text-muted" style="font-size:.78rem">Registrar aporte individual</div>
+              </div>
+              <i class="fas fa-arrow-right text-muted ms-auto"></i>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-info mb-2">
-                        <i class="fas fa-calendar-day fa-2x"></i>
-                    </div>
-                    <h3 class="mb-1">{{ today_classes.count }}</h3>
-                    <p class="text-muted mb-0 small">Clases Hoy</p>
-                </div>
+          </a>
+          <a href="{% url 'teachers:calificaciones_detalladas' %}" class="text-decoration-none">
+            <div class="card border-0 bg-light p-3 d-flex flex-row align-items-center gap-3"
+                 style="border-left:3px solid #22c55e !important">
+              <span style="font-size:1.4rem">📊</span>
+              <div>
+                <div class="fw-semibold small text-dark">Calificaciones</div>
+                <div class="text-muted" style="font-size:.78rem">Ver tabla detallada por parcial</div>
+              </div>
+              <i class="fas fa-arrow-right text-muted ms-auto"></i>
             </div>
+          </a>
         </div>
+      </div>
     </div>
 
-    <!-- Acciones Rápidas -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <a href="{% url 'teachers:wizard_notas' %}?paso=1" class="text-decoration-none">
-                <div class="card border-0 shadow-sm h-100" style="border-left:4px solid #4338ca !important">
-                    <div class="card-body d-flex align-items-center gap-3 py-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                             style="width:48px;height:48px;background:#ede9fe">
-                            <i class="fas fa-pen text-primary fs-5"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold text-dark">Pasar Notas</div>
-                            <div class="small text-muted">Registro global para toda la clase</div>
-                        </div>
-                        <i class="fas fa-arrow-right text-muted ms-auto"></i>
-                    </div>
-                </div>
-            </a>
+    <!-- Estudiantes en riesgo -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+          ⚠️ Estudiantes en riesgo
         </div>
-        <div class="col-md-6">
-            <a href="{% url 'teachers:wizard_aporte' %}?paso=1" class="text-decoration-none">
-                <div class="card border-0 shadow-sm h-100" style="border-left:4px solid #0891b2 !important">
-                    <div class="card-body d-flex align-items-center gap-3 py-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                             style="width:48px;height:48px;background:#e0f2fe">
-                            <i class="fas fa-plus-circle text-info fs-5"></i>
-                        </div>
-                        <div>
-                            <div class="fw-bold text-dark">Nuevo Tipo de Aporte</div>
-                            <div class="small text-muted">Crear categoría de evaluación</div>
-                        </div>
-                        <i class="fas fa-arrow-right text-muted ms-auto"></i>
-                    </div>
-                </div>
-            </a>
+        <div class="card-body pt-2" style="max-height:260px;overflow-y:auto">
+          {% if estudiantes_en_riesgo %}
+          {% for item in estudiantes_en_riesgo %}
+          <div class="riesgo-item rounded p-2 mb-2 ps-3 d-flex justify-content-between align-items-center">
+            <span class="small fw-semibold">{{ item.estudiante.name }}</span>
+            <span class="badge bg-danger">{{ item.promedio }}</span>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted small text-center pt-3">Ningún estudiante en riesgo.</p>
+          {% endif %}
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Distribución por Escala -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-white">
-            <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Distribución por Escala Cualitativa</h5>
-        </div>
-        <div class="card-body">
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <div class="p-3 rounded" style="background-color: #10B981; color: white;">
-                        <h2 class="mb-1">{{ stats_por_escala.DAR }}</h2>
-                        <p class="mb-0 small">DAR (9-10)</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3 rounded" style="background-color: #3B82F6; color: white;">
-                        <h2 class="mb-1">{{ stats_por_escala.AAR }}</h2>
-                        <p class="mb-0 small">AAR (7-8.99)</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3 rounded" style="background-color: #F59E0B; color: black;">
-                        <h2 class="mb-1">{{ stats_por_escala.PAAR }}</h2>
-                        <p class="mb-0 small">PAAR (4.01-6.99)</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="p-3 rounded" style="background-color: #EF4444; color: white;">
-                        <h2 class="mb-1">{{ stats_por_escala.NAAR }}</h2>
-                        <p class="mb-0 small">NAAR (≤4)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- ─── Distribución por escala ───────────────────────────────────── -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+      📈 Distribución de calificaciones
     </div>
-
-    <!-- Formulario de Registro de Calificaciones -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-edit"></i> Registrar Calificaciones</h5>
+    <div class="card-body">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="rounded p-3" style="background:#10b981;color:#fff">
+            <h2 class="mb-0 fw-bold">{{ stats_por_escala.DAR }}</h2>
+            <p class="mb-0 small">DAR (9–10)</p>
+          </div>
         </div>
-        <div class="card-body">
-            {% if messages %}
-            <div class="mb-3">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message|safe }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <form method="POST" id="formCalificaciones" action="{% url 'teachers:teacher_dashboard' %}">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="save_calificaciones">
-
-                <!-- Selectores Principales -->
-                <div class="row g-3 mb-4">
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Estudiante *</label>
-                        <select name="student_id" id="studentSelect" class="form-select" required>
-                            <option value="">Seleccionar estudiante...</option>
-                            {% for est in estudiantes %}
-                            <option value="{{ est.id }}">{{ est.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Materia *</label>
-                        <select name="subject" id="subjectSelect" class="form-select" required>
-                            <option value="">Seleccionar materia...</option>
-                            {% for code, name in materias %}
-                            <option value="{{ code }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Parcial *</label>
-                        <select name="parcial" id="parcialSelect" class="form-select" required>
-                            {% for code, name in parciales %}
-                            <option value="{{ code }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Quimestre *</label>
-                        <select name="quimestre" id="quimestreSelect" class="form-select" required>
-                            {% for code, name in quimestres %}
-                            <option value="{{ code }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Tabla de Calificaciones Dinámica -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Aportes y Calificaciones</label>
-                    <div id="aportesContainer">
-                        <!-- Fila inicial -->
-                        <div class="row g-2 mb-2 aporte-row">
-                            <div class="col-md-5">
-                                <input type="text" 
-                                       name="aporte_nombre_1" 
-                                       class="form-control" 
-                                       placeholder="Nombre del aporte (ej: Tarea 1, Examen, etc.)">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" 
-                                       name="aporte_nota_1" 
-                                       class="form-control calificacion-input" 
-                                       min="0" 
-                                       max="10" 
-                                       step="0.01" 
-                                       placeholder="Nota (0-10)">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" 
-                                       name="obs_1" 
-                                       class="form-control form-control-sm" 
-                                       placeholder="Observación (opcional)">
-                            </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-danger btn-sm w-100 remove-aporte" disabled>
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="button" class="btn btn-secondary btn-sm" id="addAporte">
-                        <i class="fas fa-plus"></i> Agregar Otro Aporte
-                    </button>
-                </div>
-
-                <!-- Observaciones Generales -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Observaciones Generales</label>
-                    <textarea name="observaciones" class="form-control" rows="2" placeholder="Comentarios adicionales (opcional)..."></textarea>
-                </div>
-
-                <!-- Promedio Calculado en Tiempo Real -->
-                <div class="alert alert-info" id="promedioPreview" style="display: none;">
-                    <strong>Promedio calculado:</strong> <span id="promedioValor">0.00</span>
-                </div>
-
-                <!-- Botones -->
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
-                        <i class="fas fa-eraser"></i> Limpiar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-save"></i> Guardar Calificaciones
-                    </button>
-                </div>
-            </form>
+        <div class="col-6 col-md-3">
+          <div class="rounded p-3" style="background:#3b82f6;color:#fff">
+            <h2 class="mb-0 fw-bold">{{ stats_por_escala.AAR }}</h2>
+            <p class="mb-0 small">AAR (7–8.99)</p>
+          </div>
         </div>
+        <div class="col-6 col-md-3">
+          <div class="rounded p-3" style="background:#f59e0b;color:#000">
+            <h2 class="mb-0 fw-bold">{{ stats_por_escala.PAAR }}</h2>
+            <p class="mb-0 small">PAAR (4–6.99)</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="rounded p-3" style="background:#ef4444;color:#fff">
+            <h2 class="mb-0 fw-bold">{{ stats_por_escala.NAAR }}</h2>
+            <p class="mb-0 small">NAAR (≤4)</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Dos Columnas: Calificaciones Recientes y Rankings -->
-    <div class="row">
-        <!-- Calificaciones Recientes -->
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="fas fa-clock"></i> Calificaciones Recientes</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm table-calificaciones">
-                            <thead>
-                                <tr>
-                                    <th>Estudiante</th>
-                                    <th>Materia</th>
-                                    <th>Parcial</th>
-                                    <th>Aporte</th>
-                                    <th class="text-center">Nota</th>
-                                    <th class="text-center">Escala</th>
-                                    <th>Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for calif in calificaciones_recientes %}
-                                <tr>
-                                    <td><strong>{{ calif.student.name }}</strong></td>
-                                    <td><small>{{ calif.get_subject_display }}</small></td>
-                                    <td>
-                                        <span class="badge bg-secondary">
-                                            {{ calif.get_parcial_display }}
-                                        </span>
-                                    </td>
-                                    <td><small>{{ calif.tipo_aporte.nombre }}</small></td>
-                                    <td class="text-center">
-                                        <span class="nota-badge">{{ calif.calificacion }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        {% with escala=calif.get_escala_cualitativa %}
-                                        <span class="badge escala-badge"
-                                              style="background-color: {{ escala.color }}; color: {{ escala.text_color }};">
-                                            {{ escala.codigo }}
-                                        </span>
-                                        {% endwith %}
-                                    </td>
-                                    <td><small>{{ calif.fecha_actualizacion|date:"d/m/Y" }}</small></td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="7" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox fa-2x mb-2"></i>
-                                        <p>No hay calificaciones registradas</p>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sidebar: Rankings y Alertas -->
-        <div class="col-md-4">
-            <!-- Top 10 Estudiantes -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="fas fa-trophy"></i> Top 10 Estudiantes</h5>
-                </div>
-                <div class="card-body">
-                    {% for item in top_estudiantes %}
-                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                        <div class="flex-grow-1">
-                            <strong>{{ forloop.counter }}. {{ item.estudiante.name }}</strong>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge escala-badge"
-                                  style="background-color: {{ item.escala.color }}; color: {{ item.escala.text_color }}; font-size: 1rem;">
-                                {{ item.promedio }}
-                            </span>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <p class="text-muted text-center">Sin datos disponibles</p>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Estudiantes en Riesgo -->
-            {% if estudiantes_en_riesgo %}
-            <div class="card shadow-sm border-warning">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Estudiantes en Riesgo</h5>
-                </div>
-                <div class="card-body">
-                    {% for item in estudiantes_en_riesgo %}
-                    <div class="alert alert-warning mb-2 py-2">
-                        <div class="d-flex justify-content-between">
-                            <strong>{{ item.estudiante.name }}</strong>
-                            <span class="badge bg-danger">{{ item.promedio }}</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-        </div>
+  <!-- ─── Calificaciones recientes ──────────────────────────────────── -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+      🕐 Calificaciones recientes
     </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-3">Estudiante</th>
+              <th>Materia</th>
+              <th>Parcial</th>
+              <th>Aporte</th>
+              <th class="text-center">Nota</th>
+              <th class="text-center">Escala</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for calif in calificaciones_recientes %}
+            <tr>
+              <td class="ps-3 fw-semibold">{{ calif.student.name }}</td>
+              <td class="small">{{ calif.get_subject_display }}</td>
+              <td><span class="badge bg-secondary">{{ calif.get_parcial_display }}</span></td>
+              <td class="small">{{ calif.tipo_aporte.nombre }}</td>
+              <td class="text-center fw-bold">{{ calif.calificacion }}</td>
+              <td class="text-center">
+                {% with escala=calif.get_escala_cualitativa %}
+                <span class="badge" style="background:{{ escala.color }};color:{{ escala.text_color }}">
+                  {{ escala.codigo }}
+                </span>
+                {% endwith %}
+              </td>
+              <td class="small text-muted">{{ calif.fecha_actualizacion|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">Sin calificaciones registradas aún.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<script>
-let aporteCounter = 1;
+<!-- ─── FAB burbuja "Clase del Día" ────────────────────────────────── -->
+<a href="{% url 'teachers:wizard_clase_diaria' %}?paso=1" class="fab-clase" title="Registrar clase del día">
+  📚
+</a>
+<div class="fab-tooltip">Registrar clase del día</div>
 
-// Agregar nuevo aporte
-document.getElementById('addAporte').addEventListener('click', function() {
-    aporteCounter++;
-    const container = document.getElementById('aportesContainer');
-    
-    const newRow = document.createElement('div');
-    newRow.className = 'row g-2 mb-2 aporte-row';
-    newRow.innerHTML = `
-        <div class="col-md-5">
-            <input type="text" 
-                   name="aporte_nombre_${aporteCounter}" 
-                   class="form-control" 
-                   placeholder="Nombre del aporte">
-        </div>
-        <div class="col-md-3">
-            <input type="number" 
-                   name="aporte_nota_${aporteCounter}" 
-                   class="form-control calificacion-input" 
-                   min="0" 
-                   max="10" 
-                   step="0.01" 
-                   placeholder="Nota (0-10)">
-        </div>
-        <div class="col-md-3">
-            <input type="text" 
-                   name="obs_${aporteCounter}" 
-                   class="form-control form-control-sm" 
-                   placeholder="Observación (opcional)">
-        </div>
-        <div class="col-md-1">
-            <button type="button" class="btn btn-danger btn-sm w-100 remove-aporte">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-    `;
-    
-    container.appendChild(newRow);
-    
-    // Añadir evento de eliminación
-    newRow.querySelector('.remove-aporte').addEventListener('click', function() {
-        newRow.remove();
-        updateRemoveButtons();
-        calcularPromedioTiempoReal();
-    });
-    
-    // Añadir evento de cálculo
-    newRow.querySelector('.calificacion-input').addEventListener('input', calcularPromedioTiempoReal);
-    
-    updateRemoveButtons();
-});
-
-// Actualizar estado de botones de eliminación
-function updateRemoveButtons() {
-    const rows = document.querySelectorAll('.aporte-row');
-    rows.forEach((row, index) => {
-        const btn = row.querySelector('.remove-aporte');
-        if (rows.length === 1) {
-            btn.disabled = true;
-        } else {
-            btn.disabled = false;
-        }
-    });
-}
-
-// Calcular promedio en tiempo real
-function calcularPromedioTiempoReal() {
-    const inputs = document.querySelectorAll('.calificacion-input');
-    let suma = 0;
-    let count = 0;
-
-    inputs.forEach(input => {
-        const valor = parseFloat(input.value);
-        if (!isNaN(valor) && valor > 0) {
-            suma += valor;
-            count++;
-        }
-    });
-
-    if (count > 0) {
-        const promedio = (suma / count).toFixed(2);
-        document.getElementById('promedioValor').textContent = promedio;
-        document.getElementById('promedioPreview').style.display = 'block';
-    } else {
-        document.getElementById('promedioPreview').style.display = 'none';
-    }
-}
-
-// Event listener para el primer input
-document.querySelector('.calificacion-input').addEventListener('input', calcularPromedioTiempoReal);
-
-function limpiarFormulario() {
-    // Limpiar formulario
-    document.getElementById('formCalificaciones').reset();
-    document.getElementById('promedioPreview').style.display = 'none';
-    
-    // Mantener solo una fila de aporte
-    const container = document.getElementById('aportesContainer');
-    const rows = container.querySelectorAll('.aporte-row');
-    for (let i = 1; i < rows.length; i++) {
-        rows[i].remove();
-    }
-    aporteCounter = 1;
-    updateRemoveButtons();
-}
-
-// Cargar calificaciones existentes cuando se selecciona estudiante
-document.getElementById('studentSelect').addEventListener('change', function() {
-    const studentId = this.value;
-    const subject = document.getElementById('subjectSelect').value;
-    const parcial = document.getElementById('parcialSelect').value;
-    const quimestre = document.getElementById('quimestreSelect').value;
-
-    if (studentId && subject && parcial) {
-        // Aquí podrías hacer una llamada AJAX para pre-cargar datos
-        console.log('Cargando datos de estudiante:', studentId);
-    }
-});
-</script>
 {% endblock %}

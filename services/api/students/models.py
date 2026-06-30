@@ -27,6 +27,14 @@ class Student(models.Model):
     parent_name = models.CharField(max_length=200, blank=True, verbose_name="Nombre del padre/madre")
     parent_email = models.EmailField(blank=True, verbose_name="Email del padre/madre")
     parent_phone = models.CharField(max_length=20, blank=True, verbose_name="Teléfono del padre/madre")
+    representante_usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='hijos',
+        verbose_name='Usuario Representante',
+        limit_choices_to={'rol': 'REPRESENTANTE'},
+    )
     notes = models.TextField(blank=True, verbose_name="Notas adicionales")
     photo = models.ImageField(upload_to='profiles/students/', blank=True, null=True, verbose_name="Foto de perfil")
     active = models.BooleanField(default=True, verbose_name="Activo")

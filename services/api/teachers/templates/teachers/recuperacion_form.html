@@ -1,0 +1,66 @@
+{% extends "teachers/base.html" %}
+{% block title %}Nueva Recuperación{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:600px">
+  <h3 class="fw-bold mb-4">📚 Registrar Recuperación</h3>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Estudiante</label>
+          <select name="student_id" class="form-select" required>
+            <option value="">Seleccionar...</option>
+            {% for e in estudiantes %}<option value="{{ e.pk }}">{{ e.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Materia</label>
+          <select name="subject_id" class="form-select" required>
+            {% for m in materias %}<option value="{{ m.pk }}">{{ m.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Clase</label>
+          <select name="clase_id" class="form-select" required>
+            {% for c in clases %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col">
+            <label class="form-label fw-semibold">Tipo</label>
+            <select name="tipo" class="form-select">
+              <option value="SUPLETORIO">Supletorio</option>
+              <option value="REMEDIAL">Remedial</option>
+              <option value="GRACIA">De Gracia</option>
+            </select>
+          </div>
+          <div class="col">
+            <label class="form-label fw-semibold">Quimestre</label>
+            <select name="quimestre" class="form-select">
+              <option value="Q1">Q1</option>
+              <option value="Q2">Q2</option>
+            </select>
+          </div>
+          <div class="col">
+            <label class="form-label fw-semibold">Fecha</label>
+            <input type="date" name="fecha" class="form-control" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nota original</label>
+          <input type="number" name="nota_original" step="0.01" min="0" max="10" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Observaciones</label>
+          <textarea name="observaciones" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Registrar</button>
+          <a href="{% url 'classes:recuperaciones' %}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

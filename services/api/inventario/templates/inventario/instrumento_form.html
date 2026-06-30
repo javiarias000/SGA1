@@ -1,0 +1,27 @@
+{% extends "teachers/base.html" %}
+{% block title %}Nuevo Instrumento{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:520px">
+  <h3 class="fw-bold mb-4">🎸 Registrar Instrumento</h3>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3"><label class="form-label fw-semibold">Nombre</label><input name="nombre" class="form-control" required></div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Tipo</label>
+          <select name="tipo" class="form-select">{% for val,lbl in tipos %}<option value="{{ val }}">{{ lbl }}</option>{% endfor %}</select>
+        </div>
+        <div class="mb-3"><label class="form-label fw-semibold">Marca</label><input name="marca" class="form-control"></div>
+        <div class="mb-3"><label class="form-label fw-semibold">Número de Serie</label><input name="numero_serie" class="form-control" required></div>
+        <div class="mb-3"><label class="form-label fw-semibold">Descripción</label><textarea name="descripcion" class="form-control" rows="2"></textarea></div>
+        <div class="mb-3"><label class="form-label fw-semibold">Fecha de Adquisición</label><input name="fecha_adquisicion" type="date" class="form-control"></div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary">Registrar</button>
+          <a href="{% url 'inventario:lista' %}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

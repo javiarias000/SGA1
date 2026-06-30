@@ -1,0 +1,35 @@
+{% extends "teachers/base.html" %}
+{% block title %}Justificaciones Pendientes{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-bold mb-4">📋 Justificaciones de Ausencia Pendientes</h3>
+  {% if justificaciones %}
+  <div class="list-group shadow-sm">
+    {% for j in justificaciones %}
+    <div class="list-group-item">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div>
+          <strong>{{ j.asistencia.inscripcion.estudiante.nombre }}</strong>
+          <span class="text-muted mx-1">·</span>
+          <span class="text-muted small">{{ j.asistencia.fecha }} — {{ j.asistencia.inscripcion.clase.name }}</span>
+        </div>
+        <span class="badge bg-warning text-dark">Pendiente</span>
+      </div>
+      <p class="mb-2 small">{{ j.motivo }}</p>
+      <form method="post" action="{% url 'classes:aprobar_justificacion' j.pk %}" class="d-flex gap-2 align-items-center">
+        {% csrf_token %}
+        <input name="comentario" class="form-control form-control-sm" placeholder="Comentario (opcional)" style="max-width:240px">
+        <button name="accion" value="aprobar" class="btn btn-sm btn-success">✓ Aprobar</button>
+        <button name="accion" value="rechazar" class="btn btn-sm btn-danger">✗ Rechazar</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5 text-muted">
+    <div style="font-size:3rem">✅</div>
+    <p class="mt-2">Sin justificaciones pendientes.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

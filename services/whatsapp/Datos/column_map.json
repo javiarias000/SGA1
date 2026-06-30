@@ -1,0 +1,467 @@
+{
+  "institution": "Conservatorio Bolívar de Ambato",
+  "sheets": {
+    "1P": {
+      "label": "Primer Parcial",
+      "headerRow": 6,
+      "skipRows": [
+        7
+      ],
+      "dataStartRow": 8,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "Clase N1"
+        },
+        {
+          "index": 4,
+          "name": "Clase N2"
+        },
+        {
+          "index": 5,
+          "name": "Clase N3"
+        },
+        {
+          "index": 6,
+          "name": "Clase N4"
+        },
+        {
+          "index": 7,
+          "name": "Clase N5"
+        },
+        {
+          "index": 19,
+          "name": "Promedio parcial"
+        }
+      ]
+    },
+    "2P": {
+      "label": "Segundo Parcial",
+      "headerRow": 6,
+      "skipRows": [
+        7
+      ],
+      "dataStartRow": 8,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "Clase 1"
+        },
+        {
+          "index": 4,
+          "name": "Clase 2"
+        },
+        {
+          "index": 5,
+          "name": "Clase 3"
+        },
+        {
+          "index": 6,
+          "name": "Clase 4"
+        },
+        {
+          "index": 19,
+          "name": "Promedio parcial"
+        }
+      ]
+    },
+    "3P": {
+      "label": "Tercer Parcial",
+      "headerRow": 6,
+      "skipRows": [
+        7
+      ],
+      "dataStartRow": 8,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "Clase 1"
+        },
+        {
+          "index": 4,
+          "name": "Clase 2"
+        },
+        {
+          "index": 5,
+          "name": "Clase 3"
+        },
+        {
+          "index": 19,
+          "name": "Promedio parcial"
+        }
+      ]
+    },
+    "4P": {
+      "label": "Cuarto Parcial",
+      "headerRow": 6,
+      "skipRows": [
+        7
+      ],
+      "dataStartRow": 8,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "Clase 1"
+        },
+        {
+          "index": 4,
+          "name": "Clase 2"
+        },
+        {
+          "index": 5,
+          "name": "Clase 3"
+        },
+        {
+          "index": 19,
+          "name": "Promedio parcial"
+        }
+      ]
+    },
+    "1Q": {
+      "label": "Primer Quimestre",
+      "headerRow": 4,
+      "skipRows": [
+        5
+      ],
+      "dataStartRow": 6,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "PROMEDIO - P1 - 1Q"
+        },
+        {
+          "index": 5,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 6,
+          "name": "FALTAS - Justificadas"
+        },
+        {
+          "index": 7,
+          "name": "FALTAS - Injustificadas"
+        },
+        {
+          "index": 8,
+          "name": "PROMEDIO - P2 - 1Q"
+        },
+        {
+          "index": 10,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 11,
+          "name": "FALTAS - Justificadas"
+        },
+        {
+          "index": 12,
+          "name": "FALTAS - Injustificadas"
+        },
+        {
+          "index": 13,
+          "name": "PROMEDIO PARCIALES"
+        },
+        {
+          "index": 14,
+          "name": "EQUIVALENCIA 70%"
+        },
+        {
+          "index": 15,
+          "name": "EXAMEN QUIMESTRAL"
+        },
+        {
+          "index": 16,
+          "name": "EQUIVALENCIA 30%"
+        },
+        {
+          "index": 17,
+          "name": "Nota Final 1o quimestre 100%"
+        },
+        {
+          "index": 18,
+          "name": "Escala Cualitativa"
+        },
+        {
+          "index": 19,
+          "name": "Comportamental - Cuantitativa"
+        },
+        {
+          "index": 20,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 21,
+          "name": "Faltas quimestrales - Justificadas"
+        },
+        {
+          "index": 22,
+          "name": "Faltas quimestrales - Injustificadas"
+        }
+      ]
+    },
+    "2Q": {
+      "label": "Segundo Quimestre",
+      "headerRow": 4,
+      "skipRows": [
+        5
+      ],
+      "dataStartRow": 6,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "PROMEDIO - P1 - 1Q"
+        },
+        {
+          "index": 5,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 6,
+          "name": "FALTAS - Justificadas"
+        },
+        {
+          "index": 7,
+          "name": "FALTAS - Injustificadas"
+        },
+        {
+          "index": 8,
+          "name": "PROMEDIO - P2 - 1Q"
+        },
+        {
+          "index": 10,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 11,
+          "name": "FALTAS - Justificadas"
+        },
+        {
+          "index": 12,
+          "name": "FALTAS - Injustificadas"
+        },
+        {
+          "index": 13,
+          "name": "PROMEDIO PARCIALES"
+        },
+        {
+          "index": 14,
+          "name": "EQUIVALENCIA 70%"
+        },
+        {
+          "index": 15,
+          "name": "EXAMEN QUIMESTRAL"
+        },
+        {
+          "index": 16,
+          "name": "EQUIVALENCIA 30%"
+        },
+        {
+          "index": 17,
+          "name": "Nota final 2o quimestre 100%"
+        },
+        {
+          "index": 18,
+          "name": "Escala Cualitativa"
+        },
+        {
+          "index": 19,
+          "name": "Comportamental - Cuantitativa"
+        },
+        {
+          "index": 20,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 21,
+          "name": "Faltas quimestrales - Justificadas"
+        },
+        {
+          "index": 22,
+          "name": "Faltas quimestrales - Injustificadas"
+        }
+      ]
+    },
+    "Anual": {
+      "label": "Anual",
+      "headerRow": 6,
+      "skipRows": [
+        7
+      ],
+      "dataStartRow": 8,
+      "columns": [
+        {
+          "index": 0,
+          "name": "No"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "1o quimestre"
+        },
+        {
+          "index": 4,
+          "name": "2o quimestre"
+        },
+        {
+          "index": 5,
+          "name": "Promedio quimestre"
+        },
+        {
+          "index": 6,
+          "name": "Equivalencia 80%"
+        },
+        {
+          "index": 7,
+          "name": "Evaluacion Final"
+        },
+        {
+          "index": 8,
+          "name": "Equivalencia 20%"
+        },
+        {
+          "index": 9,
+          "name": "NOTA FINAL"
+        },
+        {
+          "index": 10,
+          "name": "ESCALA CUALITATIVA"
+        },
+        {
+          "index": 12,
+          "name": "Evaluación Comportamental"
+        },
+        {
+          "index": 13,
+          "name": "Comportamental - Cualitativa"
+        },
+        {
+          "index": 14,
+          "name": "Faltas justificadas"
+        },
+        {
+          "index": 15,
+          "name": "Faltas injustificadas"
+        }
+      ]
+    },
+    "Contacto": {
+      "label": "Contacto",
+      "headerRow": 0,
+      "skipRows": [],
+      "dataStartRow": 1,
+      "columns": [
+        {
+          "index": 0,
+          "name": "id"
+        },
+        {
+          "index": 1,
+          "name": "Apellidos"
+        },
+        {
+          "index": 2,
+          "name": "Nombres"
+        },
+        {
+          "index": 3,
+          "name": "Telefono"
+        },
+        {
+          "index": 4,
+          "name": "Enviado"
+        },
+        {
+          "index": 5,
+          "name": "Fecha_Envio"
+        },
+        {
+          "index": 6,
+          "name": "Estado_Envio"
+        },
+        {
+          "index": 7,
+          "name": "Curso"
+        }
+      ]
+    }
+  }
+}

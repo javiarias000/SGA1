@@ -1,0 +1,40 @@
+{% extends "representante/base.html" %}
+{% block title %}Asistencia de {{ student.name }}{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">📅 Asistencia — {{ student.name }}</h3>
+<div class="row g-3 mb-4">
+  <div class="col-sm-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body"><h4 class="fw-bold text-success">{{ presentes }}</h4><small class="text-muted">Presencias</small></div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body"><h4 class="fw-bold text-danger">{{ total|add:"-"|add:presentes }}</h4><small class="text-muted">Ausencias</small></div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center shadow-sm">
+      <div class="card-body"><h4 class="fw-bold text-primary">{{ tasa }}%</h4><small class="text-muted">Tasa asistencia</small></div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive shadow-sm rounded">
+  <table class="table table-hover mb-0">
+    <thead class="table-light"><tr><th>Fecha</th><th>Clase</th><th>Estado</th></tr></thead>
+    <tbody>
+    {% for a in asistencias %}
+    <tr>
+      <td>{{ a.fecha }}</td>
+      <td>{{ a.inscripcion.clase.name }}</td>
+      <td>
+        <span class="badge {% if a.estado == 'PRESENTE' %}bg-success{% elif a.estado == 'JUSTIFICADO' %}bg-info{% else %}bg-danger{% endif %}">
+          {{ a.estado }}
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

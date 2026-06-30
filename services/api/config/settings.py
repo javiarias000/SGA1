@@ -65,6 +65,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'matriculas',
+    'calendario',
+    'representante',
+    'inventario',
 
     # Third-party
     'rest_framework',
@@ -117,6 +120,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.notificaciones',
             ],
         },
     },

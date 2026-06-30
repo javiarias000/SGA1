@@ -3065,3 +3065,122 @@ dificultades_pedagogicas, actividades_estrategias, conclusiones, recomendaciones
 
     narrative = json.loads(resp.choices[0].message.content)
     return JsonResponse(narrative)
+
+
+# ─── MÓDULO 3: EXPORTACIÓN CSV ───────────────────────────────────────────────
+import csv as csv_module
+
+@teacher_required
+def export_calificaciones_csv(request, clase_id):
+    from classes.models import Clase, CalificacionParcial, Enrollment
+    clase = get_object_or_404(Clase, pk=clase_id, docente_base=request.user.usuario)
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = f'attachment; filename="calificaciones_{clase.id}.csv"'
+    response.write('﻿')
+    writer = csv_module.writer(response)
+    writer.writerow(['Estudiante', 'Materia', 'Parcial', 'Quimestre', 'Tipo Aporte', 'Nota'])
+    cals = CalificacionParcial.objects.filter(
+        student__usuario__in=Enrollment.objects.filter(clase=clase, estado='ACTIVO').values('estudiante')
+    ).select_related('student__usuario', 'subject', 'tipo_aporte').order_by('student__usuario__nombre', 'subject__name', 'parcial')
+    for c in cals:
+        writer.writerow([c.student.name, c.subject.name, c.parcial, c.quimestre, c.tipo_aporte.nombre if c.tipo_aporte else '', float(c.calificacion)])
+    return response
+
+
+@teacher_required
+def export_asistencia_csv(request, clase_id):
+    from classes.models import Clase, Asistencia, Enrollment
+    clase = get_object_or_404(Clase, pk=clase_id, docente_base=request.user.usuario)
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = f'attachment; filename="asistencia_{clase.id}.csv"'
+    response.write('﻿')
+    writer = csv_module.writer(response)
+    writer.writerow(['Estudiante', 'Fecha', 'Estado', 'Observación'])
+    asistencias = Asistencia.objects.filter(
+        inscripcion__clase=clase
+    ).select_related('inscripcion__estudiante').order_by('inscripcion__estudiante__nombre', 'fecha')
+    for a in asistencias:
+        writer.writerow([a.inscripcion.estudiante.nombre, a.fecha, a.estado, a.observacion or ''])
+    return response
+
+
+@teacher_required
+def export_estudiantes_csv(request):
+    from students.models import Student
+    teacher = request.user.usuario.teacher_profile
+    estudiantes = Student.objects.filter(teacher=teacher, active=True).select_related('usuario', 'grade_level')
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="estudiantes.csv"'
+    response.write('﻿')
+    writer = csv_module.writer(response)
+    writer.writerow(['Nombre', 'Cédula', 'Email', 'Teléfono', 'Nivel', 'Representante', 'Tel. Representante'])
+    for s in estudiantes:
+        writer.writerow([s.name, s.usuario.cedula or '', s.usuario.email or '', s.usuario.phone or '', str(s.grade_level) if s.grade_level else '', s.parent_name, s.parent_phone])
+    return response
+
+
+# ─── MÓDULO 4: BOLETÍN PDF ───────────────────────────────────────────────────
+
+@teacher_required
+def boletin_pdf_view(request, student_id, quimestre='Q1'):
+    from students.models import Student
+    from django.http import HttpResponse as HR
+    from teachers.utils.pdf import generar_boletin_pdf
+    student = get_object_or_404(Student, pk=student_id)
+    buf = generar_boletin_pdf(student, quimestre)
+    nombre = student.name.replace(' ', '_')
+    response = HR(buf.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="boletin_{nombre}_{quimestre}.pdf"'
+    return response
+
+
+# ─── MÓDULO 10: REPORTES DIRECTIVOS ──────────────────────────────────────────
+
+@login_required
+def reportes_directivos_view(request):
+    from django.db.models import Avg, Count, Q
+    from classes.models import CalificacionParcial, Asistencia, Enrollment, Clase
+    from subjects.models import Subject
+
+    quimestre = request.GET.get('quimestre', 'Q1')
+
+    # Promedio por materia
+    promedios_materia = (
+        CalificacionParcial.objects.filter(quimestre=quimestre)
+        .values('subject__name')
+        .annotate(promedio=Avg('calificacion'), total=Count('id'))
+        .order_by('-promedio')[:10]
+    )
+
+    # Tasa de asistencia por clase
+    clases_stats = []
+    for clase in Clase.objects.filter(active=True).select_related('subject')[:15]:
+        total = Asistencia.objects.filter(inscripcion__clase=clase).count()
+        presentes = Asistencia.objects.filter(inscripcion__clase=clase, estado='PRESENTE').count()
+        tasa = round(presentes / total * 100, 1) if total else 0
+        clases_stats.append({'clase': clase.name, 'tasa': tasa, 'total': total})
+    clases_stats.sort(key=lambda x: x['tasa'])
+
+    # Estudiantes en riesgo (promedio < 7)
+    en_riesgo = (
+        CalificacionParcial.objects.filter(quimestre=quimestre)
+        .values('student__usuario__nombre', 'subject__name')
+        .annotate(promedio=Avg('calificacion'))
+        .filter(promedio__lt=7)
+        .order_by('promedio')[:20]
+    )
+
+    # Comparativa Q1 vs Q2
+    comparativa = (
+        CalificacionParcial.objects
+        .values('quimestre')
+        .annotate(promedio=Avg('calificacion'))
+    )
+
+    return render(request, 'teachers/reportes_directivos.html', {
+        'promedios_materia': list(promedios_materia),
+        'clases_stats': clases_stats,
+        'en_riesgo': list(en_riesgo),
+        'comparativa': {c['quimestre']: float(c['promedio'] or 0) for c in comparativa},
+        'quimestre': quimestre,
+    })

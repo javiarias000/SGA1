@@ -1,14 +1,16 @@
 import json
+from collections import defaultdict
 
 from django.contrib import messages, admin
+from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from classes.forms import EnrollStudentForm
-from classes.models import Clase, Enrollment, GradeLevel
+from classes.models import Clase, Enrollment, GradeLevel, Horario, Asistencia, JustificacionAusencia, Recuperacion
 from users.models import Usuario
 
 @staff_member_required
@@ -173,3 +175,168 @@ def api_asignar_docente(request):
         'clase_id': clase.id,
         'docente_nombre': docente.nombre if docente else None,
     })
+
+# ─── MÓDULO 2: HORARIO ────────────────────────────────────────────────────────
+
+DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+
+@login_required
+def horario_docente_view(request):
+    try:
+        usuario = request.user.usuario
+    except Exception:
+        return redirect('users:login')
+    clases = Clase.objects.filter(docente_base=usuario, active=True).prefetch_related('horarios', 'subject')
+    horario_grid = defaultdict(list)
+    for clase in clases:
+        for h in clase.horarios.all():
+            horario_grid[h.dia_semana].append({'clase': clase, 'hora_inicio': h.hora_inicio, 'hora_fin': h.hora_fin})
+    horario_dict = {dia: sorted(horario_grid[dia], key=lambda x: x['hora_inicio']) for dia in DIAS_ORDEN}
+    return render(request, 'classes/horario.html', {'horario': horario_dict, 'dias': DIAS_ORDEN, 'vista': 'docente'})
+
+
+@login_required
+def horario_estudiante_view(request):
+    try:
+        usuario = request.user.usuario
+    except Exception:
+        return redirect('users:login')
+    enrollments = Enrollment.objects.filter(estudiante=usuario, estado='ACTIVO').select_related('clase__subject')
+    horario_grid = defaultdict(list)
+    for enr in enrollments:
+        for h in enr.clase.horarios.all():
+            horario_grid[h.dia_semana].append({'clase': enr.clase, 'hora_inicio': h.hora_inicio, 'hora_fin': h.hora_fin})
+    horario_dict = {dia: sorted(horario_grid[dia], key=lambda x: x['hora_inicio']) for dia in DIAS_ORDEN}
+    return render(request, 'classes/horario.html', {'horario': horario_dict, 'dias': DIAS_ORDEN, 'vista': 'estudiante'})
+
+
+# ─── MÓDULO 3: JUSTIFICACIÓN DE AUSENCIAS ────────────────────────────────────
+
+@login_required
+def solicitar_justificacion_view(request, asistencia_id):
+    asistencia = get_object_or_404(Asistencia, pk=asistencia_id)
+    if request.method == 'POST':
+        motivo = request.POST.get('motivo', '').strip()
+        if motivo:
+            JustificacionAusencia.objects.get_or_create(
+                asistencia=asistencia,
+                defaults={'motivo': motivo, 'estado': 'PENDIENTE'},
+            )
+            messages.success(request, 'Solicitud de justificación enviada.')
+        return redirect('students:attendance')
+    return render(request, 'students/justificacion_form.html', {'asistencia': asistencia})
+
+
+@login_required
+def revisar_justificaciones_view(request):
+    try:
+        teacher = request.user.usuario.teacher_profile
+    except Exception:
+        return redirect('teachers:teacher_dashboard')
+    clases_docente = Clase.objects.filter(docente_base=request.user.usuario)
+    justificaciones = JustificacionAusencia.objects.filter(
+        asistencia__inscripcion__clase__in=clases_docente,
+        estado='PENDIENTE',
+    ).select_related('asistencia__inscripcion__estudiante', 'asistencia__inscripcion__clase')
+    return render(request, 'teachers/justificaciones.html', {'justificaciones': justificaciones})
+
+
+@login_required
+@require_POST
+def aprobar_justificacion_view(request, pk):
+    j = get_object_or_404(JustificacionAusencia, pk=pk)
+    accion = request.POST.get('accion')
+    comentario = request.POST.get('comentario', '')
+    if accion == 'aprobar':
+        j.estado = 'APROBADA'
+        j.asistencia.estado = 'JUSTIFICADO'
+        j.asistencia.save()
+    else:
+        j.estado = 'RECHAZADA'
+    j.comentario_revision = comentario
+    j.revisado_por = request.user.usuario
+    j.save()
+    messages.success(request, f'Justificación {"aprobada" if accion == "aprobar" else "rechazada"}.')
+    return redirect('classes:revisar_justificaciones')
+
+
+# ─── MÓDULO 4: RECUPERACIONES ────────────────────────────────────────────────
+
+@login_required
+def recuperaciones_view(request):
+    try:
+        teacher = request.user.usuario.teacher_profile
+    except Exception:
+        return redirect('teachers:teacher_dashboard')
+    clases_docente = Clase.objects.filter(docente_base=request.user.usuario)
+    recuperaciones = Recuperacion.objects.filter(
+        clase__in=clases_docente
+    ).select_related('estudiante__usuario', 'subject', 'clase').order_by('-fecha')
+    return render(request, 'teachers/recuperaciones.html', {
+        'recuperaciones': recuperaciones,
+        'clases': clases_docente,
+    })
+
+
+@login_required
+def registrar_recuperacion_view(request):
+    from students.models import Student
+    from subjects.models import Subject
+    try:
+        request.user.usuario.teacher_profile
+    except Exception:
+        return redirect('teachers:teacher_dashboard')
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        subject_id = request.POST.get('subject_id')
+        clase_id = request.POST.get('clase_id')
+        tipo = request.POST.get('tipo', 'SUPLETORIO')
+        quimestre = request.POST.get('quimestre', 'Q1')
+        fecha = request.POST.get('fecha')
+        nota_original = request.POST.get('nota_original') or None
+        observaciones = request.POST.get('observaciones', '')
+        Recuperacion.objects.create(
+            estudiante_id=student_id,
+            subject_id=subject_id,
+            clase_id=clase_id,
+            tipo=tipo,
+            quimestre=quimestre,
+            fecha=fecha,
+            nota_original=nota_original,
+            observaciones=observaciones,
+            registrado_por=request.user.usuario.teacher_profile,
+        )
+        messages.success(request, 'Recuperación registrada.')
+        return redirect('classes:recuperaciones')
+    clases = Clase.objects.filter(docente_base=request.user.usuario)
+    estudiantes = Student.objects.filter(active=True).select_related('usuario')
+    materias = Subject.objects.all()
+    return render(request, 'teachers/recuperacion_form.html', {
+        'clases': clases, 'estudiantes': estudiantes, 'materias': materias,
+    })
+
+
+@login_required
+@require_POST
+def resultado_recuperacion_view(request, pk):
+    rec = get_object_or_404(Recuperacion, pk=pk)
+    nota = request.POST.get('nota_recuperacion')
+    if nota:
+        rec.nota_recuperacion = nota
+        rec.estado = 'APROBADA' if float(nota) >= 7 else 'REPROBADA'
+        rec.save()
+        messages.success(request, 'Resultado de recuperación guardado.')
+    return redirect('classes:recuperaciones')
+
+
+@login_required
+def mis_recuperaciones_view(request):
+    try:
+        usuario = request.user.usuario
+        student = usuario.student_profile
+    except Exception:
+        return redirect('students:student_dashboard')
+    recuperaciones = Recuperacion.objects.filter(
+        estudiante=student
+    ).select_related('subject', 'clase').order_by('-fecha')
+    return render(request, 'students/mis_recuperaciones.html', {'recuperaciones': recuperaciones})

@@ -1,0 +1,369 @@
+{% extends "teachers/base.html" %}
+{% load custom_filters %}
+{% block title %}Clase del Día — Paso {{ paso }} de {{ total_pasos }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .clase-card:has(input:checked) { border-color: #4338ca !important; background: #f5f3ff; }
+  .paso-badge.active  { background:#4338ca; color:#fff; }
+  .paso-badge.done    { background:#22c55e; color:#fff; }
+  .paso-badge.pending { background:#e2e8f0; color:#94a3b8; }
+  .estado-btn input[type=radio]:checked + .btn { border-width:2px; font-weight:600; }
+  .btn-presente  { border-color:#22c55e; color:#15803d; }
+  .btn-ausente   { border-color:#ef4444; color:#b91c1c; }
+  .btn-justif    { border-color:#f59e0b; color:#b45309; }
+  input[type=radio][name^="asist_"]:checked ~ .btn-presente,
+  input[type=radio][value="Presente"]:checked + .btn { background:#dcfce7; border-color:#22c55e; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:820px">
+
+  <!-- Header -->
+  <div class="mb-4">
+    <a href="{% url 'teachers:teacher_dashboard' %}" class="text-muted text-decoration-none small">
+      ← Volver al Dashboard
+    </a>
+    <h3 class="mt-2 mb-0 fw-bold">Registro de Clase del Día</h3>
+    <p class="text-muted small">{{ hoy }}</p>
+  </div>
+
+  <!-- Progreso -->
+  <div class="mb-4">
+    <div class="progress mb-2" style="height:5px">
+      <div class="progress-bar bg-primary" style="width:{% widthratio paso total_pasos 100 %}%"></div>
+    </div>
+    <div class="d-flex gap-3 flex-wrap">
+      {% for label in "Clase,Asistencia,Aporte diario,Confirmar"|split:"," %}
+      {% with n=forloop.counter %}
+      <div class="d-flex align-items-center gap-1">
+        <div class="paso-badge rounded-circle d-flex align-items-center justify-content-center fw-bold
+                    {% if n < paso %}done{% elif n == paso %}active{% else %}pending{% endif %}"
+             style="width:26px;height:26px;font-size:.7rem;flex-shrink:0">
+          {% if n < paso %}✓{% else %}{{ n }}{% endif %}
+        </div>
+        <span class="small {% if n == paso %}fw-semibold text-dark{% else %}text-muted{% endif %}">
+          {{ label }}
+        </span>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if messages %}
+  {% for m in messages %}
+  <div class="alert alert-{{ m.tags|default:'warning' }} alert-dismissible fade show py-2">
+    {{ m }} <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      {# ── PASO 1: Seleccionar Clase ─────────────────────────────────── #}
+      {% if paso == 1 %}
+      <h5 class="fw-bold mb-1">¿Qué clase vas a dictar?</h5>
+      <p class="text-muted small mb-4">Selecciona la materia, curso y paralelo.</p>
+      <form method="post" action="?paso=1">
+        {% csrf_token %}
+        {% if clases %}
+        <div class="row g-3 mb-4">
+          {% for clase in clases %}
+          <div class="col-md-6">
+            <label class="d-block h-100" style="cursor:pointer">
+              <input type="radio" name="clase_id" value="{{ clase.id }}" class="d-none clase-radio">
+              <div class="card h-100 clase-card border p-3" style="transition:.15s">
+                <div class="d-flex align-items-start gap-2">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                       style="width:40px;height:40px;background:#ede9fe;color:#4338ca;font-size:1.1rem">
+                    🎵
+                  </div>
+                  <div>
+                    <div class="fw-semibold text-primary">{{ clase.subject.name }}</div>
+                    <div class="small text-dark fw-medium">{{ clase.name }}</div>
+                    {% if clase.grade_level %}
+                    <div class="small text-muted">{{ clase.grade_level }}</div>
+                    {% endif %}
+                    <div class="mt-1">
+                      <span class="badge bg-light text-dark border">
+                        {{ clase.get_enrolled_count }} estudiantes
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <a href="{% url 'teachers:teacher_dashboard' %}" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary px-4" id="btn-next" disabled>Siguiente →</button>
+        </div>
+        <script>
+          document.querySelectorAll('.clase-radio').forEach(r =>
+            r.addEventListener('change', () => document.getElementById('btn-next').disabled = false));
+        </script>
+        {% else %}
+        <div class="alert alert-warning">No tienes clases activas asignadas.</div>
+        <a href="{% url 'teachers:teacher_dashboard' %}" class="btn btn-secondary">Volver</a>
+        {% endif %}
+      </form>
+
+      {# ── PASO 2: Asistencia ────────────────────────────────────────── #}
+      {% elif paso == 2 %}
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h5 class="fw-bold mb-0">Asistencia</h5>
+          <p class="text-muted small mb-0">
+            {{ clase.subject.name }} · {{ clase.name }} · {{ fecha }}
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-success btn-sm" onclick="marcarTodos('Presente')">
+            Todos presentes
+          </button>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="marcarTodos('Ausente')">
+            Todos ausentes
+          </button>
+        </div>
+      </div>
+      <form method="post" action="?paso=2">
+        {% csrf_token %}
+        {% if filas %}
+        <div class="list-group mb-4">
+          {% for fila in filas %}
+          <div class="list-group-item px-3 py-2">
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+              <div class="fw-semibold flex-grow-1" style="min-width:140px">{{ fila.nombre }}</div>
+              <!-- Estado: radio buttons visuales -->
+              <div class="d-flex gap-1">
+                {% for val in "Presente,Ausente,Justificado"|split:"," %}
+                <label>
+                  <input type="radio" name="asist_{{ fila.enr.id }}" value="{{ val }}"
+                         class="d-none"
+                         {% if fila.estado == val %}checked{% endif %}>
+                  <span class="btn btn-sm btn-outline-secondary estado-opt"
+                        data-enr="{{ fila.enr.id }}" data-val="{{ val }}"
+                        onclick="selEstado(this)">
+                    {{ val }}
+                  </span>
+                </label>
+                {% endfor %}
+              </div>
+              <input type="text" name="obs_{{ fila.enr.id }}" value="{{ fila.obs }}"
+                     class="form-control form-control-sm" style="max-width:160px"
+                     placeholder="Observación">
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-warning">Esta clase no tiene estudiantes inscritos activos.</div>
+        {% endif %}
+        <div class="d-flex justify-content-between gap-2">
+          <a href="?paso=1" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Guardar asistencia →</button>
+        </div>
+      </form>
+      <script>
+        // Resaltar estado seleccionado visualmente
+        document.querySelectorAll('[name^="asist_"]').forEach(radio => {
+          highlightEstado(radio);
+        });
+        function selEstado(span) {
+          const enrId = span.dataset.enr;
+          const val   = span.dataset.val;
+          const radio = document.querySelector(`input[name="asist_${enrId}"][value="${val}"]`);
+          if (radio) radio.checked = true;
+          highlightAll(enrId);
+        }
+        function highlightAll(enrId) {
+          document.querySelectorAll(`[data-enr="${enrId}"]`).forEach(s => {
+            const r = document.querySelector(`input[name="asist_${enrId}"][value="${s.dataset.val}"]`);
+            const checked = r && r.checked;
+            s.className = s.className.replace(/\bbtn-\w+\b/g, '').trim();
+            if (checked) {
+              if (s.dataset.val === 'Presente') s.classList.add('btn-success');
+              else if (s.dataset.val === 'Ausente') s.classList.add('btn-danger');
+              else s.classList.add('btn-warning');
+            } else {
+              s.classList.add('btn-outline-secondary');
+            }
+          });
+        }
+        function highlightEstado(radio) {
+          const enrId = radio.name.replace('asist_','');
+          if (radio.checked) highlightAll(enrId);
+        }
+        document.querySelectorAll('[name^="asist_"]').forEach(r =>
+          r.addEventListener('change', () => highlightAll(r.name.replace('asist_','')))
+        );
+        // Init visual state
+        document.querySelectorAll('[name^="asist_"]').forEach(r => {
+          if (r.checked) highlightAll(r.name.replace('asist_',''));
+        });
+        function marcarTodos(estado) {
+          document.querySelectorAll('[name^="asist_"]').forEach(r => {
+            if (r.value === estado) {
+              r.checked = true;
+              highlightAll(r.name.replace('asist_',''));
+            }
+          });
+        }
+      </script>
+
+      {# ── PASO 3: Aporte Diario (opcional) ─────────────────────────── #}
+      {% elif paso == 3 %}
+      <h5 class="fw-bold mb-1">Aporte diario <span class="badge bg-secondary fw-normal fs-6">Opcional</span></h5>
+      <p class="text-muted small mb-3">
+        {{ clase.subject.name }} · {{ clase.name }} · {{ fecha }}
+      </p>
+
+      <!-- Resumen asistencia -->
+      <div class="d-flex gap-2 mb-4 flex-wrap">
+        {% if resumen_asist.Presente %}
+        <span class="badge bg-success px-3 py-2">✓ {{ resumen_asist.Presente }} presentes</span>
+        {% endif %}
+        {% if resumen_asist.Ausente %}
+        <span class="badge bg-danger px-3 py-2">✗ {{ resumen_asist.Ausente }} ausentes</span>
+        {% endif %}
+        {% if resumen_asist.Justificado %}
+        <span class="badge bg-warning text-dark px-3 py-2">⚠ {{ resumen_asist.Justificado }} justificados</span>
+        {% endif %}
+      </div>
+
+      <form method="post" action="?paso=3">
+        {% csrf_token %}
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="toggleAporte"
+                 name="registrar_aporte" value="1" onchange="toggleAporteForm(this.checked)">
+          <label class="form-check-label fw-semibold" for="toggleAporte">
+            Registrar aporte de hoy
+          </label>
+        </div>
+
+        <div id="aporte-form" style="display:none">
+          <div class="card bg-light border-0 p-3 mb-3">
+            <div class="row g-3 mb-3">
+              <div class="col-sm-6">
+                <label class="form-label fw-semibold">Tipo de aporte *</label>
+                <select name="aporte_id" class="form-select">
+                  <option value="">— Seleccionar —</option>
+                  {% for a in aportes %}
+                  <option value="{{ a.id }}">{{ a.nombre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <label class="form-label fw-semibold">Quimestre *</label>
+                {% for val, label in quimestre_choices %}
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="quimestre"
+                         id="q{{ val }}" value="{{ val }}">
+                  <label class="form-check-label" for="q{{ val }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="col-sm-3">
+                <label class="form-label fw-semibold">Parcial *</label>
+                {% for val, label in parcial_choices %}
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="parcial"
+                         id="p{{ val }}" value="{{ val }}">
+                  <label class="form-check-label" for="p{{ val }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Notas por estudiante -->
+            <label class="form-label fw-semibold mb-2">Notas (0–10) — deja vacío para omitir</label>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Estudiante</th>
+                    <th class="text-center" style="width:120px">Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for enr in enrollments %}
+                  <tr>
+                    <td>{{ enr.estudiante.nombre }}</td>
+                    <td>
+                      <input type="number" name="nota_{{ enr.id }}"
+                             class="form-control form-control-sm text-center"
+                             min="0" max="10" step="0.01" placeholder="—">
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between gap-2 border-top pt-3">
+          <a href="?paso=2" class="btn btn-outline-secondary">← Anterior</a>
+          <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
+        </div>
+      </form>
+      <script>
+        function toggleAporteForm(show) {
+          document.getElementById('aporte-form').style.display = show ? 'block' : 'none';
+        }
+      </script>
+
+      {# ── PASO 4: Confirmar ─────────────────────────────────────────── #}
+      {% elif paso == 4 %}
+      <div class="text-center py-4">
+        <div class="mb-3" style="font-size:3rem">✅</div>
+        <h4 class="fw-bold text-success mb-1">¡Clase registrada!</h4>
+        <p class="text-muted">La asistencia{% if resumen_asist %} y los aportes han{% else %} ha{% endif %} sido guardados correctamente.</p>
+
+        {% if clase %}
+        <div class="card border-0 bg-light mx-auto mb-4" style="max-width:360px">
+          <div class="card-body py-3">
+            <div class="text-start">
+              <div class="mb-1"><span class="text-muted small">Clase:</span>
+                <strong>{{ clase.subject.name }} — {{ clase.name }}</strong></div>
+              <div class="mb-1"><span class="text-muted small">Fecha:</span>
+                <strong>{{ fecha }}</strong></div>
+              {% if resumen_asist %}
+              <div class="d-flex gap-2 mt-2">
+                {% if resumen_asist.Presente %}
+                <span class="badge bg-success">{{ resumen_asist.Presente }} pres.</span>
+                {% endif %}
+                {% if resumen_asist.Ausente %}
+                <span class="badge bg-danger">{{ resumen_asist.Ausente }} aus.</span>
+                {% endif %}
+                {% if resumen_asist.Justificado %}
+                <span class="badge bg-warning text-dark">{{ resumen_asist.Justificado }} just.</span>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{% url 'teachers:teacher_dashboard' %}" class="btn btn-primary px-4">
+            Ir al Dashboard
+          </a>
+          <a href="{% url 'teachers:wizard_clase_diaria' %}?paso=1" class="btn btn-outline-primary px-4">
+            Registrar otra clase
+          </a>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

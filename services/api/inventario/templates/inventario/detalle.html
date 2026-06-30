@@ -1,0 +1,44 @@
+{% extends "teachers/base.html" %}
+{% block title %}{{ instrumento.nombre }}{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:700px">
+  <a href="{% url 'inventario:lista' %}" class="text-muted small">← Volver al inventario</a>
+  <h3 class="fw-bold mt-2 mb-1">🎸 {{ instrumento.nombre }}</h3>
+  <p class="text-muted">Serie: {{ instrumento.numero_serie }} · {{ instrumento.get_tipo_display }}{% if instrumento.marca %} · {{ instrumento.marca }}{% endif %}</p>
+  <span class="badge {% if instrumento.estado == 'DISPONIBLE' %}bg-success{% elif instrumento.estado == 'PRESTADO' %}bg-warning text-dark{% else %}bg-secondary{% endif %} mb-3">
+    {{ instrumento.get_estado_display }}
+  </span>
+  {% if instrumento.descripcion %}<p>{{ instrumento.descripcion }}</p>{% endif %}
+  {% if instrumento.estado == 'DISPONIBLE' %}
+  <a href="{% url 'inventario:prestamo' instrumento.pk %}" class="btn btn-warning mb-4">Registrar Préstamo</a>
+  {% endif %}
+  <h5 class="fw-bold mt-2">Historial de Préstamos</h5>
+  {% if prestamos %}
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table mb-0">
+      <thead class="table-light"><tr><th>Estudiante</th><th>Préstamo</th><th>Dev. esperada</th><th>Dev. real</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td>{{ p.estudiante.name }}</td>
+        <td>{{ p.fecha_prestamo }}</td>
+        <td>{{ p.fecha_devolucion_esperada }}</td>
+        <td>{{ p.fecha_devolucion_real|default:"—" }}</td>
+        <td><span class="badge {% if p.estado == 'DEVUELTO' %}bg-success{% elif p.estado == 'VENCIDO' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ p.estado }}</span></td>
+        <td>
+          {% if p.estado == 'ACTIVO' %}
+          <form method="post" action="{% url 'inventario:devolucion' p.pk %}">{% csrf_token %}
+            <button class="btn btn-sm btn-success">Devolver</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">Sin préstamos registrados.</p>
+  {% endif %}
+</div>
+{% endblock %}

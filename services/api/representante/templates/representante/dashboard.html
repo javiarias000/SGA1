@@ -1,0 +1,26 @@
+{% extends "representante/base.html" %}
+{% block title %}Mi Portal{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-4">👨‍👩‍👧 Portal de Representante</h3>
+{% if hijos %}
+<div class="row g-3">
+  {% for hijo in hijos %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="fw-bold">{{ hijo.name }}</h5>
+        {% if hijo.grade_level %}<p class="text-muted small mb-3">{{ hijo.grade_level }}</p>{% endif %}
+        <div class="d-flex flex-column gap-2">
+          <a href="{% url 'representante:calificaciones' hijo.pk %}" class="btn btn-outline-primary btn-sm">📋 Ver Calificaciones</a>
+          <a href="{% url 'representante:asistencia' hijo.pk %}" class="btn btn-outline-success btn-sm">📅 Ver Asistencia</a>
+          <a href="{% url 'representante:deberes' hijo.pk %}" class="btn btn-outline-warning btn-sm">📝 Ver Deberes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">No tienes estudiantes vinculados. Contacta al docente para vincular tu cuenta.</div>
+{% endif %}
+{% endblock %}

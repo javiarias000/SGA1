@@ -1,0 +1,33 @@
+{% extends "representante/base.html" %}
+{% block title %}Calificaciones de {{ student.name }}{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <h3 class="fw-bold mb-0">📋 Calificaciones — {{ student.name }}</h3>
+  <div class="ms-auto">
+    <a href="?q=Q1" class="btn btn-sm {% if quimestre == 'Q1' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Q1</a>
+    <a href="?q=Q2" class="btn btn-sm {% if quimestre == 'Q2' %}btn-primary{% else %}btn-outline-secondary{% endif %}">Q2</a>
+  </div>
+</div>
+{% if by_subject %}
+<div class="table-responsive shadow-sm rounded">
+  <table class="table mb-0">
+    <thead class="table-light"><tr><th>Materia</th><th>1P</th><th>2P</th><th>3P</th><th>4P</th><th>Promedio</th></tr></thead>
+    <tbody>
+    {% for mat, notas in by_subject.items %}
+    <tr>
+      <td class="fw-semibold">{{ mat }}</td>
+      {% for p in "1P,2P,3P,4P"|split:"," %}
+      <td>{% if notas|getitem:p %}{{ notas|getitem:p|floatformat:2 }}{% else %}—{% endif %}</td>
+      {% endfor %}
+      <td class="fw-bold text-primary">
+        {% with vals=notas.values %}{% if vals %}{{ vals|length }}{% endif %}{% endwith %}—
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">Sin calificaciones registradas para {{ quimestre }}.</p>
+{% endif %}
+{% endblock %}

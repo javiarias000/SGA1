@@ -1,0 +1,26 @@
+{% extends 'students/base.html' %}
+{% block title %}Solicitar Justificación{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:520px">
+  <h3 class="fw-bold mb-4">📋 Solicitar Justificación de Ausencia</h3>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <p class="text-muted small mb-3">
+        Ausencia del <strong>{{ asistencia.fecha }}</strong> en
+        <strong>{{ asistencia.inscripcion.clase.name }}</strong>
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Motivo de la ausencia</label>
+          <textarea name="motivo" class="form-control" rows="4" required placeholder="Describe el motivo de la inasistencia..."></textarea>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+          <a href="{% url 'students:attendance' %}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

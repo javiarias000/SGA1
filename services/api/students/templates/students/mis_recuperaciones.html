@@ -1,0 +1,30 @@
+{% extends 'students/base.html' %}
+{% block title %}Mis Recuperaciones{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-bold mb-4">📚 Mis Recuperaciones</h3>
+  {% if recuperaciones %}
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover mb-0">
+      <thead class="table-light"><tr>
+        <th>Materia</th><th>Tipo</th><th>Fecha</th><th>Nota orig.</th><th>Nota rec.</th><th>Estado</th>
+      </tr></thead>
+      <tbody>
+      {% for r in recuperaciones %}
+      <tr>
+        <td>{{ r.subject.name }}</td>
+        <td>{{ r.get_tipo_display }}</td>
+        <td>{{ r.fecha }}</td>
+        <td>{{ r.nota_original|default:"—" }}</td>
+        <td>{{ r.nota_recuperacion|default:"Pendiente" }}</td>
+        <td><span class="badge {% if r.estado == 'APROBADA' %}bg-success{% elif r.estado == 'REPROBADA' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ r.estado }}</span></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">Sin recuperaciones registradas.</p>
+  {% endif %}
+</div>
+{% endblock %}

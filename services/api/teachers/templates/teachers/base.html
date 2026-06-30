@@ -37,6 +37,16 @@
                     <span class="icon">📊</span>
                     <span>Dashboard</span>
                 </a>
+                <a href="{% url 'calendario:calendario' %}" class="nav-item {% if 'calendario' in request.path %}active{% endif %}">
+                    <span class="icon">🗓️</span>
+                    <span>Calendario</span>
+                </a>
+                {% if request.user.is_staff %}
+                <a href="{% url 'teachers:reportes_directivos' %}" class="nav-item {% if request.resolver_match.url_name == 'reportes_directivos' %}active{% endif %}">
+                    <span class="icon">📈</span>
+                    <span>Reportes</span>
+                </a>
+                {% endif %}
 
                 <!-- Alumnos -->
                 <span class="nav-section-title">Alumnos</span>
@@ -47,6 +57,14 @@
                 <a href="{% url 'teachers:estudiantes' %}" class="nav-item {% if request.resolver_match.url_name == 'estudiantes' %}active{% endif %}">
                     <span class="icon">👥</span>
                     <span>Estudiantes</span>
+                </a>
+                <a href="{% url 'classes:horario_docente' %}" class="nav-item {% if request.resolver_match.url_name == 'horario_docente' %}active{% endif %}">
+                    <span class="icon">🗃️</span>
+                    <span>Horario</span>
+                </a>
+                <a href="{% url 'classes:revisar_justificaciones' %}" class="nav-item {% if request.resolver_match.url_name == 'revisar_justificaciones' %}active{% endif %}">
+                    <span class="icon">✅</span>
+                    <span>Justificaciones</span>
                 </a>
 
                 <!-- Calificaciones -->
@@ -63,6 +81,10 @@
                     <span class="icon">➕</span>
                     <span>Nuevo Aporte</span>
                 </a>
+                <a href="{% url 'classes:recuperaciones' %}" class="nav-item {% if request.resolver_match.url_name == 'recuperaciones' %}active{% endif %}">
+                    <span class="icon">🔄</span>
+                    <span>Recuperaciones</span>
+                </a>
 
                 <!-- Tareas -->
                 <span class="nav-section-title">Tareas</span>
@@ -75,11 +97,22 @@
                     <span>Carpetas</span>
                 </a>
 
+                <!-- Recursos -->
+                <span class="nav-section-title">Recursos</span>
+                <a href="{% url 'inventario:lista' %}" class="nav-item {% if 'inventario' in request.path %}active{% endif %}">
+                    <span class="icon">🎸</span>
+                    <span>Instrumentos</span>
+                </a>
+
                 <!-- Comunicación -->
                 <span class="nav-section-title">Comunicación</span>
                 <a href="{% url 'teachers:informes' %}" class="nav-item {% if request.resolver_match.url_name == 'informes' %}active{% endif %}">
                     <span class="icon">💬</span>
                     <span>Informes WhatsApp</span>
+                </a>
+                <a href="{% url 'teachers:export_estudiantes_csv' %}" class="nav-item">
+                    <span class="icon">📥</span>
+                    <span>Exportar Datos</span>
                 </a>
                 <a href="{% url 'teachers:wizard_informe_final' %}" class="nav-item {% if 'informe_final' in request.resolver_match.url_name %}active{% endif %}">
                     <span class="icon">📄</span>
@@ -88,6 +121,10 @@
 
                 <!-- Cuenta -->
                 <div class="nav-divider"></div>
+                <a href="{% url 'users:notificaciones' %}" class="nav-item {% if request.resolver_match.url_name == 'notificaciones' %}active{% endif %}">
+                    <span class="icon">🔔</span>
+                    <span>Notificaciones{% if notificaciones_no_leidas %} <span class="badge bg-danger ms-1" style="font-size:.65rem">{{ notificaciones_no_leidas }}</span>{% endif %}</span>
+                </a>
                 <a href="{% url 'teachers:profile' %}" class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
                     <span class="icon">👤</span>
                     <span>Mi Perfil</span>

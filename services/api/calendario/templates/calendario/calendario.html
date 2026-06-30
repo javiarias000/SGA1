@@ -1,0 +1,94 @@
+{% extends "teachers/base.html" %}
+{% block title %}Calendario Académico{% endblock %}
+{% block extra_css %}
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row g-4">
+    <!-- Calendario -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">🗓️ Calendario Académico</h5>
+          <div id="calendar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel lateral -->
+    <div class="col-lg-4">
+      <!-- Próximos eventos -->
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Próximos Eventos</h6>
+          {% if proximos %}
+          <ul class="list-group list-group-flush">
+            {% for e in proximos %}
+            <li class="list-group-item px-0">
+              <span class="badge me-1" style="background:{{ e.color }}">{{ e.get_tipo_display }}</span>
+              <strong>{{ e.titulo }}</strong>
+              <div class="text-muted small">{{ e.fecha_inicio }} {% if e.fecha_fin != e.fecha_inicio %}→ {{ e.fecha_fin }}{% endif %}</div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted small">Sin eventos próximos.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Crear evento (solo staff) -->
+      {% if is_staff %}
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">➕ Nuevo Evento</h6>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-2">
+              <input name="titulo" class="form-control form-control-sm" placeholder="Título" required>
+            </div>
+            <div class="mb-2">
+              <textarea name="descripcion" class="form-control form-control-sm" rows="2" placeholder="Descripción"></textarea>
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col"><input name="fecha_inicio" type="date" class="form-control form-control-sm" required></div>
+              <div class="col"><input name="fecha_fin" type="date" class="form-control form-control-sm" placeholder="Fin"></div>
+            </div>
+            <div class="mb-2">
+              <select name="tipo" class="form-select form-select-sm">
+                {% for val, lbl in tipos %}<option value="{{ val }}">{{ lbl }}</option>{% endfor %}
+              </select>
+            </div>
+            <div class="mb-2 d-flex align-items-center gap-2">
+              <label class="small mb-0">Color:</label>
+              <input name="color" type="color" value="#4338ca" class="form-control form-control-color form-control-sm" style="width:40px">
+            </div>
+            <button class="btn btn-primary btn-sm w-100">Crear Evento</button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'es',
+    height: 520,
+    events: {{ eventos_json|safe }},
+    eventClick: function(info) {
+      var p = info.event.extendedProps;
+      alert(info.event.title + '\n' + p.tipo + (p.descripcion ? '\n' + p.descripcion : ''));
+    }
+  });
+  calendar.render();
+});
+</script>
+{% endblock %}

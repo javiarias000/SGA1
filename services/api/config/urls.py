@@ -34,5 +34,8 @@ urlpatterns = [
     path('api/informes/', include('informes.urls')),
     path('setup/', include(('setup.urls', 'setup'), namespace='setup')),
     path('docente/', include(('docente.urls', 'docente'), namespace='docente')),
+    path('calendario/', include(('calendario.urls', 'calendario'), namespace='calendario')),
+    path('representante/', include(('representante.urls', 'representante'), namespace='representante')),
+    path('inventario/', include(('inventario.urls', 'inventario'), namespace='inventario')),
 
 ] + (static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) if settings.DEBUG else [])

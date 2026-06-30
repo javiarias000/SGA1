@@ -1,0 +1,49 @@
+{% extends "teachers/base.html" %}
+{% block title %}Mi Horario{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-bold mb-4">🗓️ Horario Semanal</h3>
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered mb-0 text-center">
+      <thead class="table-dark">
+        <tr>
+          <th style="width:120px">Horario</th>
+          {% for dia in dias %}
+          <th>{{ dia }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% comment %}Build unique time slots{% endcomment %}
+        {% for dia, bloques in horario.items %}
+          {% for bloque in bloques %}
+            {# rendered inline below #}
+          {% endfor %}
+        {% endfor %}
+        {% if not horario %}
+        <tr><td colspan="7" class="text-muted py-4">Sin horarios registrados.</td></tr>
+        {% else %}
+        {% for dia, bloques in horario.items %}
+          {% for bloque in bloques %}
+          <tr>
+            <td class="text-muted small">{{ bloque.hora_inicio|time:"H:i" }} – {{ bloque.hora_fin|time:"H:i" }}</td>
+            {% for d in dias %}
+            <td {% if d == dia %}class="bg-primary bg-opacity-10 fw-semibold"{% endif %}>
+              {% if d == dia %}
+                <span class="badge bg-primary text-wrap" style="white-space:normal">{{ bloque.clase.name }}</span>
+                {% if bloque.clase.subject %}<br><small class="text-muted">{{ bloque.clase.subject.name }}</small>{% endif %}
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  {% if not horario %}
+  <div class="alert alert-info mt-3">No hay clases con horario configurado aún. El administrador puede asignar horarios desde el panel de administración.</div>
+  {% endif %}
+</div>
+{% endblock %}

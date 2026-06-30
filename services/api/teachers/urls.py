@@ -84,4 +84,15 @@ urlpatterns = [
     path('deberes/eliminar/<int:deber_id>/', views.eliminar_deber, name='eliminar_deber'),
     path('deberes/entregas/<int:deber_id>/', views.ver_entregas, name='ver_entregas'),
     path('deberes/calificar/<int:entrega_id>/', views.calificar_entrega, name='calificar_entrega'),
+
+    # Exportación CSV
+    path('export/calificaciones/<int:clase_id>/', views.export_calificaciones_csv, name='export_calificaciones_csv'),
+    path('export/asistencia/<int:clase_id>/', views.export_asistencia_csv, name='export_asistencia_csv'),
+    path('export/estudiantes/', views.export_estudiantes_csv, name='export_estudiantes_csv'),
+
+    # Boletín PDF
+    path('boletin/<int:student_id>/<str:quimestre>/pdf/', views.boletin_pdf_view, name='boletin_pdf'),
+
+    # Reportes directivos
+    path('reportes/directivos/', views.reportes_directivos_view, name='reportes_directivos'),
 ]
