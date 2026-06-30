@@ -34,7 +34,7 @@
       <div class="progress-bar bg-primary" style="width:{% widthratio paso total_pasos 100 %}%"></div>
     </div>
     <div class="d-flex gap-3 flex-wrap">
-      {% for label in "Período,Director,Estadísticas,Narrativa,Exportar"|split:"," %}
+      {% for label in "Año Lectivo,Director,Estadísticas,Narrativa,Exportar"|split:"," %}
       {% with n=forloop.counter %}
       <div class="d-flex align-items-center gap-1">
         <div class="paso-indicator {% if n < paso %}done{% elif n == paso %}active{% else %}pending{% endif %}">
@@ -62,18 +62,14 @@
            PASO 1 — PERÍODO Y FECHAS
       ══════════════════════════════════════════════════════════════════════ -->
       {% if paso == 1 %}
-      <h5 class="fw-bold mb-1">Período y fechas</h5>
-      <p class="text-muted small mb-4">Define el quimestre y las fechas del informe.</p>
+      <h5 class="fw-bold mb-1">Año lectivo y fechas</h5>
+      <p class="text-muted small mb-4">Este informe resume todo el año lectivo (ambos quimestres).</p>
       <form method="post" action="?paso=1">
         {% csrf_token %}
         <div class="row g-3">
           <div class="col-md-6">
-            <label class="form-label fw-semibold">Quimestre <span class="text-danger">*</span></label>
-            <select name="quimestre" class="form-select" required>
-              <option value="">— Selecciona —</option>
-              <option value="Primer Quimestre" {% if quimestre_sel == "Primer Quimestre" %}selected{% endif %}>Primer Quimestre</option>
-              <option value="Segundo Quimestre" {% if quimestre_sel == "Segundo Quimestre" %}selected{% endif %}>Segundo Quimestre</option>
-            </select>
+            <label class="form-label fw-semibold">Año lectivo <span class="text-danger">*</span></label>
+            <input type="text" name="anio_lectivo" class="form-control" value="{{ anio_lectivo_sel }}" placeholder="Ej: 2025-2026" required>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold">Fecha del informe <span class="text-danger">*</span></label>
@@ -99,23 +95,40 @@
       ══════════════════════════════════════════════════════════════════════ -->
       {% elif paso == 2 %}
       <h5 class="fw-bold mb-1">Datos del director</h5>
-      <p class="text-muted small mb-4">Información de quien recibirá el informe.</p>
-      <form method="post" action="?paso=2">
+      <p class="text-muted small mb-4">Busca al director de área en la tabla de Directores de Área del sistema.</p>
+      <form method="post" action="?paso=2" id="form-director">
         {% csrf_token %}
-        <div class="row g-3">
-          <div class="col-12">
-            <label class="form-label fw-semibold">Nombre del director <span class="text-danger">*</span></label>
-            <input type="text" name="director_nombre" class="form-control" value="{{ director_nombre_sel }}" placeholder="Ej: Dr. Juan Pérez" required>
+        <input type="hidden" name="director_id" id="director_id" value="{{ director_id_sel }}">
+        <input type="hidden" name="director_nombre" id="director_nombre" value="{{ director_nombre_sel }}">
+        <input type="hidden" name="director_area" id="director_area" value="{{ director_area_sel }}">
+        <input type="hidden" name="director_telefono" id="director_telefono" value="{{ director_telefono_sel }}">
+        <input type="hidden" name="director_correo" id="director_correo" value="{{ director_correo_sel }}">
+
+        <div class="mb-3 position-relative">
+          <label class="form-label fw-semibold">Director de área <span class="text-danger">*</span></label>
+          <input type="text" id="director-search" class="form-control" autocomplete="off"
+                 placeholder="Escribe el nombre o el área…" value="{{ director_nombre_sel }}" required>
+          <div id="director-results" class="list-group position-absolute w-100 shadow-sm"
+               style="z-index:10; max-height:220px; overflow-y:auto; display:none;"></div>
+        </div>
+
+        <div id="director-selected" class="row g-3 {% if not director_id_sel %}d-none{% endif %} mb-2">
+          <div class="col-md-4">
+            <p class="small text-muted mb-1">Área</p>
+            <p class="fw-semibold mb-0" id="director-area-display">{{ director_area_sel|default:'—' }}</p>
           </div>
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">Teléfono</label>
-            <input type="text" name="director_telefono" class="form-control" value="{{ director_telefono_sel }}" placeholder="Ej: 0999000000">
+          <div class="col-md-4">
+            <p class="small text-muted mb-1">Teléfono</p>
+            <p class="fw-semibold mb-0" id="director-telefono-display">{{ director_telefono_sel|default:'—' }}</p>
           </div>
-          <div class="col-md-6">
-            <label class="form-label fw-semibold">Correo electrónico</label>
-            <input type="email" name="director_correo" class="form-control" value="{{ director_correo_sel }}" placeholder="director@conservatorio.edu.ec">
+          <div class="col-md-4">
+            <p class="small text-muted mb-1">Correo</p>
+            <p class="fw-semibold mb-0" id="director-correo-display">{{ director_correo_sel|default:'—' }}</p>
           </div>
         </div>
+
+        <p class="small text-muted">¿No aparece? Agrégalo en el panel de administración, sección "Directores de Área".</p>
+
         <div class="d-flex justify-content-between gap-2 mt-4">
           <a href="?paso=1" class="btn btn-outline-secondary">← Anterior</a>
           <button type="submit" class="btn btn-primary px-4">Siguiente →</button>
@@ -126,8 +139,8 @@
            PASO 3 — ESTADÍSTICAS POR ASIGNATURA
       ══════════════════════════════════════════════════════════════════════ -->
       {% elif paso == 3 %}
-      <h5 class="fw-bold mb-1">Estadísticas por asignatura</h5>
-      <p class="text-muted small mb-4">Datos precargados desde el sistema. Puedes editarlos antes de continuar.</p>
+      <h5 class="fw-bold mb-1">Estadísticas por asignatura — año lectivo completo</h5>
+      <p class="text-muted small mb-4">Acumulado de Primer y Segundo Quimestre, precargado desde el sistema. Puedes editarlos antes de continuar.</p>
       <form method="post" action="?paso=3" id="form-stats">
         {% csrf_token %}
         <div class="table-responsive">
@@ -194,7 +207,7 @@
       <form method="post" action="?paso=4" id="form-narrative">
         {% csrf_token %}
         <input type="hidden" id="ai-docente" value="{{ docente_nombre }}">
-        <input type="hidden" id="ai-quimestre" value="{{ quimestre }}">
+        <input type="hidden" id="ai-anio-lectivo" value="{{ anio_lectivo }}">
         <input type="hidden" id="ai-estadisticas" value="{{ estadisticas_json }}">
 
         {% for field, label in narrative_labels %}
@@ -269,8 +282,8 @@
         <div class="col-md-6">
           <div class="card bg-light border-0 h-100">
             <div class="card-body p-3">
-              <p class="small text-muted mb-1">Período</p>
-              <p class="fw-semibold mb-0">{{ quimestre }}</p>
+              <p class="small text-muted mb-1">Año lectivo</p>
+              <p class="fw-semibold mb-0">{{ anio_lectivo }}</p>
             </div>
           </div>
         </div>
@@ -378,7 +391,7 @@
 
   btn.addEventListener('click', async () => {
     const docente = document.getElementById('ai-docente').value;
-    const quimestre = document.getElementById('ai-quimestre').value;
+    const anio_lectivo = document.getElementById('ai-anio-lectivo').value;
     const estadisticasRaw = document.getElementById('ai-estadisticas').value;
     let estadisticas = [];
     try { estadisticas = JSON.parse(estadisticasRaw); } catch(e) {}
@@ -393,7 +406,7 @@
           'Content-Type': 'application/json',
           'X-CSRFToken': '{{ csrf_token }}',
         },
-        body: JSON.stringify({ docente, quimestre, estadisticas }),
+        body: JSON.stringify({ docente, anio_lectivo, estadisticas }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

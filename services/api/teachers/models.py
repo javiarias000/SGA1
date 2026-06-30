@@ -66,3 +66,27 @@ class Teacher(models.Model):
     def get_total_classes(self):
         from classes.models import Activity
         return Activity.objects.filter(student__teacher=self).count()
+
+
+class DirectorArea(models.Model):
+    """Tabla maestra de Directores de Área del Conservatorio.
+
+    Se usa para autocompletar los datos del director en el wizard de
+    Informe Final Docente: la búsqueda solo consulta esta tabla, no el
+    listado general de docentes.
+    """
+
+    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    area = models.CharField(max_length=120, blank=True, default='', verbose_name='Área')
+    telefono = models.CharField(max_length=30, blank=True, default='', verbose_name='Teléfono')
+    correo = models.EmailField(blank=True, default='', verbose_name='Correo electrónico')
+    activo = models.BooleanField(default=True, verbose_name='Activo')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Director de Área'
+        verbose_name_plural = 'Directores de Área'
+        ordering = ['nombre']
+
+    def __str__(self):
+        return f'{self.nombre} ({self.area})' if self.area else self.nombre

@@ -1,7 +1,15 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Teacher, TeacherSubject
+from .models import DirectorArea, Teacher, TeacherSubject
+
+
+@admin.register(DirectorArea)
+class DirectorAreaAdmin(admin.ModelAdmin):
+    list_display  = ['nombre', 'area', 'telefono', 'correo', 'activo']
+    list_filter   = ['activo', 'area']
+    search_fields = ['nombre', 'area', 'correo']
+    list_editable = ['activo']
 
 
 class TeacherSubjectInline(admin.TabularInline):

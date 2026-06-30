@@ -25,6 +25,7 @@ urlpatterns = [
     path('wizard/informe-final/', views.wizard_informe_final, name='wizard_informe_final'),
     path('wizard/informe-final/export/', views.export_informe_final, name='export_informe_final'),
     path('api/informe-narrative/', views.api_informe_narrative, name='api_informe_narrative'),
+    path('api/directores-area/buscar/', views.api_directores_area_buscar, name='api_directores_area_buscar'),
     
     # Clases teóricas (gestión)
     path('clases/', views.clases_dashboard_view, name='clases_dashboard'),

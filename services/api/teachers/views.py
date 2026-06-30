@@ -21,7 +21,7 @@ from decimal import Decimal
 from users.views.decorators import teacher_required, student_required
 
 # Importar modelos
-from teachers.models import Teacher
+from teachers.models import DirectorArea, Teacher
 from students.models import Student
 from subjects.models import Subject
 from classes.models import (
@@ -2844,12 +2844,58 @@ _IF_NARRATIVE_FIELDS = [
 _IF_TEMPLATE = os.path.join(os.path.dirname(__file__), 'data', 'informe-template-py.docx')
 
 
+def _anio_lectivo_actual():
+    """Año lectivo en curso (Ecuador, régimen Sierra: agosto-julio)."""
+    hoy = date.today()
+    return f'{hoy.year}-{hoy.year + 1}' if hoy.month >= 8 else f'{hoy.year - 1}-{hoy.year}'
+
+
+def _calcular_estadisticas_anuales(teacher_usuario):
+    """Estadísticas del año lectivo completo (Q1 + Q2) por asignatura del docente."""
+    clases = Clase.objects.filter(docente_base=teacher_usuario, active=True).select_related('subject')
+    estadisticas = []
+    for c in clases:
+        if not c.subject:
+            continue
+        enrollments_activos = list(c.enrollments.filter(estado='ACTIVO').select_related('estudiante'))
+        n_asignados = len(enrollments_activos)
+        n_retirados = c.enrollments.filter(estado='RETIRADO').count()
+        n_aprobados = 0
+        n_supletorio = 0
+        n_con_notas = 0
+        for enr in enrollments_activos:
+            student = getattr(enr.estudiante, 'student_profile', None) if enr.estudiante else None
+            if not student:
+                continue
+            prom_q1 = CalificacionParcial.calcular_promedio_quimestre(student, c.subject, 'Q1')
+            prom_q2 = CalificacionParcial.calcular_promedio_quimestre(student, c.subject, 'Q2')
+            promedios = [float(p) for p in (prom_q1, prom_q2) if p and p > 0]
+            if not promedios:
+                continue
+            n_con_notas += 1
+            promedio_anual = sum(promedios) / len(promedios)
+            if promedio_anual >= 7:
+                n_aprobados += 1
+            elif promedio_anual >= 4:
+                n_supletorio += 1
+        pct_avance = round(n_con_notas / n_asignados * 100) if n_asignados else 0
+        estadisticas.append({
+            'asignatura': c.subject.name,
+            'n_asignados': str(n_asignados),
+            'n_aprobados': str(n_aprobados),
+            'n_retirados': str(n_retirados),
+            'n_supletorio': str(n_supletorio),
+            'pct_avance': f'{pct_avance}%',
+        })
+    return estadisticas
+
+
 @login_required
 @teacher_required
 def wizard_informe_final(request):
     """
-    Wizard 5 pasos para generar el Informe Final Docente en DOCX.
-    1. Período y fechas  2. Director  3. Estadísticas  4. Narrativa  5. Exportar
+    Wizard 5 pasos para generar el Informe Final Docente en DOCX, resumen del año lectivo completo.
+    1. Año lectivo y fechas  2. Director  3. Estadísticas  4. Narrativa  5. Exportar
     """
     paso = int(request.GET.get('paso', 1))
     SK = _IF_SK
@@ -2859,27 +2905,31 @@ def wizard_informe_final(request):
     if request.method == 'POST':
 
         if paso == 1:
-            quimestre = request.POST.get('quimestre', '').strip()
+            anio_lectivo = request.POST.get('anio_lectivo', '').strip()
             fecha_informe = request.POST.get('fecha_informe', '').strip()
             fecha_firma = request.POST.get('fecha_firma', '').strip()
             fecha_aprobacion = request.POST.get('fecha_aprobacion', '').strip()
-            if not quimestre or not fecha_informe:
-                messages.error(request, 'Selecciona el quimestre y la fecha del informe.')
+            if not anio_lectivo or not fecha_informe:
+                messages.error(request, 'Ingresa el año lectivo y la fecha del informe.')
                 return redirect(f"{request.path}?paso=1")
-            request.session[f'{SK}_quimestre'] = quimestre
+            request.session[f'{SK}_anio_lectivo'] = anio_lectivo
             request.session[f'{SK}_fecha_informe'] = fecha_informe
             request.session[f'{SK}_fecha_firma'] = fecha_firma
             request.session[f'{SK}_fecha_aprobacion'] = fecha_aprobacion
             return redirect(f"{request.path}?paso=2")
 
         elif paso == 2:
+            director_id = request.POST.get('director_id', '').strip()
             director_nombre = request.POST.get('director_nombre', '').strip()
+            director_area = request.POST.get('director_area', '').strip()
             director_telefono = request.POST.get('director_telefono', '').strip()
             director_correo = request.POST.get('director_correo', '').strip()
-            if not director_nombre:
-                messages.error(request, 'Ingresa el nombre del director.')
+            if not director_id or not director_nombre:
+                messages.error(request, 'Busca y selecciona un director de área.')
                 return redirect(f"{request.path}?paso=2")
+            request.session[f'{SK}_director_id'] = director_id
             request.session[f'{SK}_director_nombre'] = director_nombre
+            request.session[f'{SK}_director_area'] = director_area
             request.session[f'{SK}_director_telefono'] = director_telefono
             request.session[f'{SK}_director_correo'] = director_correo
             return redirect(f"{request.path}?paso=3")
@@ -2918,13 +2968,15 @@ def wizard_informe_final(request):
 
     if paso == 1:
         ctx['today'] = date.today().strftime('%Y-%m-%d')
-        ctx['quimestre_sel'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['anio_lectivo_sel'] = request.session.get(f'{SK}_anio_lectivo', '') or _anio_lectivo_actual()
         ctx['fecha_informe_sel'] = request.session.get(f'{SK}_fecha_informe', '')
         ctx['fecha_firma_sel'] = request.session.get(f'{SK}_fecha_firma', '')
         ctx['fecha_aprobacion_sel'] = request.session.get(f'{SK}_fecha_aprobacion', '')
 
     elif paso == 2:
+        ctx['director_id_sel'] = request.session.get(f'{SK}_director_id', '')
         ctx['director_nombre_sel'] = request.session.get(f'{SK}_director_nombre', '')
+        ctx['director_area_sel'] = request.session.get(f'{SK}_director_area', '')
         ctx['director_telefono_sel'] = request.session.get(f'{SK}_director_telefono', '')
         ctx['director_correo_sel'] = request.session.get(f'{SK}_director_correo', '')
 
@@ -2933,29 +2985,18 @@ def wizard_informe_final(request):
         if saved:
             ctx['estadisticas'] = json.loads(saved)
         else:
-            clases = Clase.objects.filter(docente_base=teacher_usuario, active=True).select_related('subject')
-            auto = []
-            for c in clases:
-                auto.append({
-                    'asignatura': c.subject.name if c.subject else c.name,
-                    'n_asignados': str(c.enrollments.filter(estado='ACTIVO').count()),
-                    'n_aprobados': '0',
-                    'n_retirados': str(c.enrollments.filter(estado='RETIRADO').count()),
-                    'n_supletorio': '0',
-                    'pct_avance': '0%',
-                })
-            ctx['estadisticas'] = auto
+            ctx['estadisticas'] = _calcular_estadisticas_anuales(teacher_usuario)
 
     elif paso == 4:
         for field in _IF_NARRATIVE_FIELDS:
             ctx[field] = request.session.get(f'{SK}_{field}', '')
-        ctx['quimestre'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['anio_lectivo'] = request.session.get(f'{SK}_anio_lectivo', '')
         ctx['docente_nombre'] = teacher_usuario.nombre
         ctx['estadisticas_json'] = request.session.get(f'{SK}_estadisticas', '[]')
 
     elif paso == 5:
         ctx['docente_nombre'] = teacher_usuario.nombre
-        ctx['quimestre'] = request.session.get(f'{SK}_quimestre', '')
+        ctx['anio_lectivo'] = request.session.get(f'{SK}_anio_lectivo', '')
         ctx['fecha_informe'] = request.session.get(f'{SK}_fecha_informe', '')
         ctx['director_nombre'] = request.session.get(f'{SK}_director_nombre', '')
         ctx['estadisticas'] = json.loads(request.session.get(f'{SK}_estadisticas', '[]'))
@@ -3018,6 +3059,21 @@ def export_informe_final(request):
 
 @login_required
 @teacher_required
+def api_directores_area_buscar(request):
+    """Busca en la tabla de Directores de Área (paso 2 del Informe Final)."""
+    q = request.GET.get('q', '').strip()
+    qs = DirectorArea.objects.filter(activo=True)
+    if q:
+        qs = qs.filter(Q(nombre__icontains=q) | Q(area__icontains=q))
+    resultados = [
+        {'id': d.id, 'nombre': d.nombre, 'area': d.area, 'telefono': d.telefono, 'correo': d.correo}
+        for d in qs.order_by('nombre')[:15]
+    ]
+    return JsonResponse({'resultados': resultados})
+
+
+@login_required
+@teacher_required
 def api_informe_narrative(request):
     """Genera la narrativa del informe con IA (llamada AJAX desde paso 4)."""
     if request.method != 'POST':
@@ -3031,7 +3087,7 @@ def api_informe_narrative(request):
         return JsonResponse({'error': 'JSON inválido'}, status=400)
 
     docente = data.get('docente', '')
-    quimestre = data.get('quimestre', '')
+    anio_lectivo = data.get('anio_lectivo', '')
     estadisticas = data.get('estadisticas', [])
 
     stats_lines = '\n'.join(
@@ -3042,12 +3098,12 @@ def api_informe_narrative(request):
     )
 
     prompt = f"""Eres un asistente especializado en educación musical del Conservatorio Nacional de Música del Ecuador.
-Genera las secciones narrativas del informe final docente para el período {quimestre}.
+Genera las secciones narrativas del informe final docente correspondiente a TODO el año lectivo {anio_lectivo} (ambos quimestres, no un período parcial).
 Docente: {docente}
-Estadísticas académicas:
+Estadísticas académicas acumuladas del año lectivo completo:
 {stats_lines}
 
-Genera texto formal y detallado (100-200 palabras por sección) adaptado al contexto de un conservatorio de música.
+Genera texto formal y detallado (100-200 palabras por sección) que resuma el desempeño y trabajo pedagógico de todo el año lectivo, adaptado al contexto de un conservatorio de música.
 Responde SOLO con un objeto JSON con estas claves exactas:
 antecedentes, alcance, desarrollo, metodos, destrezas, tematicas,
 dificultades_pedagogicas, actividades_estrategias, conclusiones, recomendaciones"""

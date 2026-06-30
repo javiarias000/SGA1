@@ -117,6 +117,7 @@ class Command(BaseCommand):
         with transaction.atomic():
             self._step1_docentes()
             self._step2_estudiantes()
+            self._step2b_estudiantes_desde_asignaciones()
             self._step3_representantes()
             self._step4_instrumentos()
             self._step5_agrupaciones()
@@ -173,8 +174,14 @@ class Command(BaseCommand):
                 except Usuario.DoesNotExist:
                     pass
 
+            if not usuario and email and '@' in email:
+                try:
+                    usuario = Usuario.objects.get(email=email.strip())
+                    action = 'skipped'
+                except Usuario.DoesNotExist:
+                    pass
+
             if not usuario:
-                norm = _norm(nombre_completo)
                 try:
                     usuario = Usuario.objects.get(
                         nombre=nombre_completo, rol=Usuario.Rol.DOCENTE
@@ -286,6 +293,96 @@ class Command(BaseCommand):
             self._ok('estudiante', action)
             if action == 'created':
                 self.stdout.write(f'  + Estudiante: {nombre_completo} ({cedula})')
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PASO 2B: Estudiantes desde archivos de asignación (sin cédula)
+    # ─────────────────────────────────────────────────────────────────────────
+
+    def _step2b_estudiantes_desde_asignaciones(self):
+        self._head('Paso 2B: Estudiantes desde asignaciones')
+
+        ASIG_FILES = [
+            'asignacion_instrumento',
+            'asignacion_agrupacion',
+            'asignacion_complementario',
+            'asignacion_acompanamiento',
+        ]
+
+        # Collect unique (apellidos, nombres, curso_id, paralelo_id)
+        seen: Dict[str, tuple] = {}
+        for fname in ASIG_FILES:
+            for r in read_csv(csv_path(self.csv_dir, fname)):
+                ap = r.get('apellidos_estudiante', '').strip()
+                nm = r.get('nombres_estudiante', '').strip()
+                if not ap or not nm:
+                    continue
+                nombre_completo = _nombre_completo(ap, nm)
+                key = _norm(nombre_completo)
+                if key not in seen:
+                    seen[key] = (ap, nm, r.get('curso_id', ''), r.get('paralelo_id', ''))
+
+        cursos = {r['id']: r['anio'] for r in read_csv(csv_path(self.csv_dir, 'curso'))}
+        paralelos = {r['id']: r for r in read_csv(csv_path(self.csv_dir, 'paralelo'))}
+        ANIO_MAP = {
+            '1o':'1','2o':'2','3o':'3','4o':'4','5o':'5',
+            '6o':'6','7o':'7','8o':'8','9o':'9','10o':'10','11o':'11',
+        }
+
+        for norm_key, (ap, nm, curso_id, paralelo_id) in seen.items():
+            # Skip if already loaded
+            if norm_key in self._estudiantes_by_norm:
+                continue
+
+            nombre_completo = _nombre_completo(ap, nm)
+
+            # Try DB lookup by name
+            usuario = None
+            action = 'created'
+            try:
+                usuario = Usuario.objects.get(nombre=nombre_completo, rol=Usuario.Rol.ESTUDIANTE)
+                action = 'skipped'
+            except Usuario.DoesNotExist:
+                pass
+
+            if not usuario and not self.dry:
+                try:
+                    usuario = Usuario.objects.create(
+                        nombre=nombre_completo,
+                        rol=Usuario.Rol.ESTUDIANTE,
+                        cedula=None,
+                        email=None,
+                        phone=None,
+                    )
+                    action = 'created'
+                except Exception as e:
+                    self._err(f'Estudiante-asig {nombre_completo}: {e}')
+                    continue
+
+            if usuario:
+                if not self.dry:
+                    Student.objects.get_or_create(usuario=usuario)
+                    # Assign grade level directly from DB (self._gradelevels not yet populated)
+                    curso_id_str = str(curso_id).replace('.0', '').strip()
+                    paralelo_id_str = str(paralelo_id).replace('.0', '').strip()
+                    anio = cursos.get(curso_id_str, '')
+                    level_code = ANIO_MAP.get(anio)
+                    paralelo_r = paralelos.get(paralelo_id_str, {})
+                    section = (paralelo_r.get('letra') or '').strip()
+                    if level_code and section:
+                        try:
+                            gl = GradeLevel.objects.get(level=level_code, section=section)
+                            st = usuario.student_profile
+                            if not st.grade_level:
+                                st.grade_level = gl
+                                st.save()
+                        except GradeLevel.DoesNotExist:
+                            pass
+
+                self._estudiantes_by_norm[norm_key] = usuario
+
+            self._ok('estudiante_asig', action)
+            if action == 'created':
+                self.stdout.write(f'  + Estudiante (asig): {nombre_completo}')
 
     # ─────────────────────────────────────────────────────────────────────────
     # PASO 3: REPRESENTANTES → Student.parent_name / parent_phone
