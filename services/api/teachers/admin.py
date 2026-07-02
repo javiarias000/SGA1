@@ -1,15 +1,80 @@
 from django.contrib import admin
 from django.urls import reverse
-from django.utils.html import format_html
-from .models import DirectorArea, Teacher, TeacherSubject
+from django.utils.html import format_html, format_html_join
+from .models import DirectorArea, DocenteFuncion, Funcion, Teacher, TeacherSubject
+
+
+@admin.register(Funcion)
+class FuncionAdmin(admin.ModelAdmin):
+    list_display  = ['nombre', 'descripcion', 'activo']
+    list_editable = ['activo']
+    search_fields = ['nombre']
+
+
+class DocenteFuncionInline(admin.TabularInline):
+    """Funciones institucionales asignadas a este docente (Director de Área, Tutor, etc.)."""
+    model = DocenteFuncion
+    extra = 1
+    autocomplete_fields = ['funcion']
+    verbose_name = 'Función'
+    verbose_name_plural = '🏷️ Funciones institucionales'
+
+
+@admin.register(DocenteFuncion)
+class DocenteFuncionAdmin(admin.ModelAdmin):
+    list_display        = ['teacher', 'funcion', 'detalle', 'activo', 'created_at']
+    list_filter          = ['funcion', 'activo']
+    search_fields        = ['teacher__usuario__nombre', 'funcion__nombre', 'detalle']
+    list_editable        = ['activo']
+    autocomplete_fields = ['teacher', 'funcion']
 
 
 @admin.register(DirectorArea)
 class DirectorAreaAdmin(admin.ModelAdmin):
-    list_display  = ['nombre', 'area', 'telefono', 'correo', 'activo']
-    list_filter   = ['activo', 'area']
-    search_fields = ['nombre', 'area', 'correo']
-    list_editable = ['activo']
+    list_display       = ['nombre', 'area', 'telefono', 'correo', 'activo']
+    list_filter        = ['activo', 'area']
+    search_fields      = ['nombre', 'area', 'correo', 'docente__nombre']
+    list_editable      = ['activo']
+    autocomplete_fields = ['docente']
+
+    class Media:
+        js = ['teachers/js/directorarea_autofill.js']
+
+    def get_urls(self):
+        from django.urls import path
+        urls = super().get_urls()
+        return [
+            path('docente-data/', self.admin_site.admin_view(self._docente_data), name='directorarea_docente_data'),
+        ] + urls
+
+    def _docente_data(self, request):
+        from django.http import JsonResponse
+        from users.models import Usuario
+        uid = request.GET.get('id', '').strip()
+        if not uid:
+            return JsonResponse({'error': 'missing id'}, status=400)
+        try:
+            u = Usuario.objects.select_related('teacher_profile').get(pk=uid)
+            tp = getattr(u, 'teacher_profile', None)
+            return JsonResponse({
+                'nombre': u.nombre or '',
+                'telefono': u.phone or '',
+                'correo': u.email or '',
+                'area': (tp.specialization if tp else '') or '',
+            })
+        except Usuario.DoesNotExist:
+            return JsonResponse({'error': 'not found'}, status=404)
+
+    def save_model(self, request, obj, form, change):
+        if obj.docente:
+            u = obj.docente
+            tp = getattr(u, 'teacher_profile', None)
+            obj.nombre = u.nombre or obj.nombre
+            obj.telefono = u.phone or obj.telefono
+            obj.correo = u.email or obj.correo
+            if not obj.area and tp:
+                obj.area = tp.specialization or ''
+        super().save_model(request, obj, form, change)
 
 
 class TeacherSubjectInline(admin.TabularInline):
@@ -24,13 +89,13 @@ class TeacherSubjectInline(admin.TabularInline):
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
     list_display  = ['get_nombre', 'get_email', 'get_phone', 'specialization',
-                     'get_materias', 'get_clases_activas', 'get_estudiantes_count', 'created_at']
-    list_filter   = ['specialization', 'subjects', 'created_at']
+                     'get_materias', 'get_funciones', 'get_clases_activas', 'get_estudiantes_count', 'created_at']
+    list_filter   = ['specialization', 'subjects', 'funciones__funcion', 'created_at']
     search_fields = ['usuario__nombre', 'usuario__email', 'usuario__cedula', 'specialization']
     autocomplete_fields = ['usuario']
     readonly_fields    = ['created_at', 'get_clases_html', 'get_estudiantes_html']
     list_per_page      = 20
-    inlines            = [TeacherSubjectInline]
+    inlines            = [TeacherSubjectInline, DocenteFuncionInline]
 
     fieldsets = (
         ('Identidad', {
@@ -69,6 +134,17 @@ class TeacherAdmin(admin.ModelAdmin):
             return format_html('<span style="color:#9CA3AF">Sin materias</span>')
         return ', '.join(s.name for s in materias[:4])
     get_materias.short_description = 'Materias'
+
+    def get_funciones(self, obj):
+        funciones = obj.funciones.filter(activo=True).select_related('funcion')
+        if not funciones:
+            return format_html('<span style="color:#9CA3AF">—</span>')
+        return format_html_join(
+            ' ', '<span style="background:#EDE9FE;color:#6D28D9;padding:1px 6px;'
+                 'border-radius:4px;font-size:11px;font-weight:600;margin-right:2px">{}</span>',
+            ((f.funcion.nombre,) for f in funciones),
+        )
+    get_funciones.short_description = 'Funciones'
 
     def get_clases_activas(self, obj):
         if not obj.usuario:
@@ -152,4 +228,6 @@ class TeacherAdmin(admin.ModelAdmin):
     get_estudiantes_html.short_description = ''
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('usuario').prefetch_related('subjects')
+        return super().get_queryset(request).select_related('usuario').prefetch_related(
+            'subjects', 'funciones__funcion',
+        )

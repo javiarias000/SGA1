@@ -68,6 +68,61 @@ class Teacher(models.Model):
         return Activity.objects.filter(student__teacher=self).count()
 
 
+class Funcion(models.Model):
+    """Catálogo de funciones institucionales (Director de Área, Tutor, Coordinador, etc.).
+
+    Es un catálogo abierto: se administra desde el admin sin tocar código,
+    así nuevas funciones se agregan según las necesite la institución.
+    """
+
+    nombre = models.CharField(max_length=120, unique=True, verbose_name='Función')
+    descripcion = models.CharField(max_length=255, blank=True, default='', verbose_name='Descripción')
+    activo = models.BooleanField(default=True, verbose_name='Activo')
+
+    class Meta:
+        verbose_name = 'Función Institucional'
+        verbose_name_plural = 'Funciones Institucionales'
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
+
+class DocenteFuncion(models.Model):
+    """Asignación de una función institucional a un docente.
+
+    Un docente puede tener varias funciones a la vez (ej: ser Tutor de un
+    curso y además Director de Área), por eso es una relación N a N vía
+    este modelo intermedio en lugar de un campo único en Teacher.
+    """
+
+    teacher = models.ForeignKey(
+        Teacher,
+        on_delete=models.CASCADE,
+        related_name='funciones',
+        verbose_name='Docente',
+    )
+    funcion = models.ForeignKey(
+        Funcion,
+        on_delete=models.CASCADE,
+        related_name='asignaciones',
+        verbose_name='Función',
+    )
+    detalle = models.CharField(max_length=120, blank=True, default='', verbose_name='Detalle (ej: área, curso)')
+    activo = models.BooleanField(default=True, verbose_name='Activo')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Función Asignada'
+        verbose_name_plural = 'Funciones Asignadas'
+        unique_together = ('teacher', 'funcion', 'detalle')
+        ordering = ['teacher__usuario__nombre', 'funcion__nombre']
+
+    def __str__(self):
+        base = f'{self.teacher.full_name} — {self.funcion.nombre}'
+        return f'{base} ({self.detalle})' if self.detalle else base
+
+
 class DirectorArea(models.Model):
     """Tabla maestra de Directores de Área del Conservatorio.
 
@@ -76,7 +131,15 @@ class DirectorArea(models.Model):
     listado general de docentes.
     """
 
-    nombre = models.CharField(max_length=255, verbose_name='Nombre')
+    docente = models.ForeignKey(
+        'users.Usuario',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='director_areas',
+        verbose_name='Docente (buscar por nombre)',
+        limit_choices_to={'rol': 'DOCENTE'},
+    )
+    nombre = models.CharField(max_length=255, blank=True, default='', verbose_name='Nombre')
     area = models.CharField(max_length=120, blank=True, default='', verbose_name='Área')
     telefono = models.CharField(max_length=30, blank=True, default='', verbose_name='Teléfono')
     correo = models.EmailField(blank=True, default='', verbose_name='Correo electrónico')

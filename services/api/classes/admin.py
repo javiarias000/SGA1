@@ -298,7 +298,7 @@ class TipoAporteAdmin(admin.ModelAdmin):
 @admin.register(Clase)
 class ClaseAdmin(admin.ModelAdmin):
     list_display  = ['get_nombre', 'subject', 'get_nivel', 'docente_base',
-                     'ciclo_lectivo', 'get_inscritos', 'active']
+                     'ciclo_lectivo', 'get_inscritos', 'active', 'get_importar_link']
     list_filter   = ['active', 'ciclo_lectivo', 'subject__tipo_materia',
                      'grade_level__ciclo', 'grade_level']
     search_fields = ['name', 'subject__name', 'docente_base__nombre',
@@ -347,10 +347,85 @@ class ClaseAdmin(admin.ModelAdmin):
         )
     get_inscritos.short_description = 'Inscritos'
 
+    def get_importar_link(self, obj):
+        url = reverse('admin:classes_clase_importar_calificaciones', args=[obj.pk])
+        return format_html('<a href="{}">📥 Importar notas</a>', url)
+    get_importar_link.short_description = 'Calificaciones'
+
     def get_queryset(self, request):
         return super().get_queryset(request).select_related(
             'subject', 'grade_level', 'docente_base',
         ).annotate(total_inscritos=Count('enrollments'))
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path('<int:clase_id>/importar-calificaciones/',
+                 self.admin_site.admin_view(self.importar_calificaciones_view),
+                 name='classes_clase_importar_calificaciones'),
+        ]
+        return custom + urls
+
+    def importar_calificaciones_view(self, request, clase_id):
+        import json as json_lib
+        from informes.import_calificaciones import parse_workbook, importar_calificaciones
+
+        clase = self.get_object(request, clase_id)
+        if clase is None:
+            messages.error(request, 'Clase no encontrada.')
+            return HttpResponseRedirect(reverse('admin:classes_clase_changelist'))
+
+        ctx = {
+            **self.admin_site.each_context(request),
+            'title': f'Importar calificaciones — {clase}',
+            'clase': clase,
+            'opts': self.model._meta,
+            'resumen': None,
+            'confirmado': False,
+            'parsed_json': '',
+        }
+
+        if request.method == 'POST':
+            parsed_json = request.POST.get('parsed_json')
+            confirmar = request.POST.get('confirmar') == '1'
+
+            # Paso 2: ya hubo vista previa, el usuario confirmó la importación real.
+            if confirmar and parsed_json:
+                try:
+                    parsed = json_lib.loads(parsed_json)
+                except ValueError:
+                    messages.error(request, 'Datos de importación inválidos, vuelve a subir el archivo.')
+                    return render(request, 'admin/classes/importar_calificaciones.html', ctx)
+                resumen = importar_calificaciones(clase, parsed, dry_run=False)
+                ctx['resumen'] = resumen
+                ctx['confirmado'] = True
+                messages.success(
+                    request,
+                    f"Importación completada: {resumen['notas_creadas']} notas creadas, "
+                    f"{resumen['notas_actualizadas']} actualizadas, "
+                    f"{resumen['telefonos_actualizados']} teléfonos rellenados."
+                )
+                return render(request, 'admin/classes/importar_calificaciones.html', ctx)
+
+            # Paso 1: subieron un archivo nuevo, mostrar vista previa (dry run).
+            archivo = request.FILES.get('archivo')
+            if not archivo:
+                messages.error(request, 'Selecciona un archivo .xlsx para continuar.')
+                return render(request, 'admin/classes/importar_calificaciones.html', ctx)
+
+            import openpyxl
+            try:
+                wb = openpyxl.load_workbook(archivo, data_only=True)
+            except Exception as exc:
+                messages.error(request, f'No se pudo leer el archivo: {exc}')
+                return render(request, 'admin/classes/importar_calificaciones.html', ctx)
+
+            parsed = parse_workbook(wb)
+            resumen = importar_calificaciones(clase, parsed, dry_run=True)
+            ctx['resumen'] = resumen
+            ctx['parsed_json'] = json_lib.dumps(parsed, default=str)
+
+        return render(request, 'admin/classes/importar_calificaciones.html', ctx)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

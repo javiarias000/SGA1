@@ -1,0 +1,112 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Importar calificaciones — {{ site_title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .importar-container { max-width: 760px; }
+  .info-box {
+    background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #1E3A8A;
+  }
+  .upload-box {
+    background: white; border: 1px solid #E5E7EB; border-radius: 10px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .btn-primary-custom {
+    background: #3B82F6; color: white; border: none; padding: 9px 18px;
+    border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+  .btn-primary-custom:hover { background: #1D4ED8; }
+  .btn-success-custom {
+    background: #059669; color: white; border: none; padding: 9px 18px;
+    border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+  .btn-success-custom:hover { background: #047857; }
+  .resumen-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin-bottom: 16px;
+  }
+  .resumen-card {
+    background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px;
+    padding: 12px 14px; text-align: center;
+  }
+  .resumen-card .num { font-size: 22px; font-weight: 700; color: #111827; }
+  .resumen-card .label { font-size: 11px; color: #6B7280; }
+  .sin-match-list { background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 12px 16px; color: #991B1B; font-size: 13px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="importar-container">
+
+  <div class="info-box">
+    📋 Sube el Excel de calificaciones (formato oficial del Conservatorio: pestañas
+    <strong>1P, 2P, 3P, 4P, 1Q, 2Q, Contacto</strong>) para la clase
+    <strong>{{ clase }}</strong>. Las pestañas 1Q/2Q solo aportan la nota del
+    Examen Quimestral — el resto se calcula automáticamente a partir de los parciales.
+  </div>
+
+  {% if not resumen %}
+  <div class="upload-box">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <p><label for="archivo"><strong>Archivo .xlsx</strong></label></p>
+      <input type="file" name="archivo" id="archivo" accept=".xlsx" required>
+      <div style="margin-top:16px;">
+        <button type="submit" class="btn-primary-custom">Ver vista previa</button>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if resumen and not confirmado %}
+  <div class="upload-box">
+    <h3 style="margin-top:0;">Vista previa (sin guardar todavía)</h3>
+    <div class="resumen-grid">
+      <div class="resumen-card"><div class="num">{{ resumen.estudiantes_emparejados }}</div><div class="label">Estudiantes emparejados</div></div>
+      <div class="resumen-card"><div class="num">{{ resumen.notas_creadas }}</div><div class="label">Notas nuevas</div></div>
+      <div class="resumen-card"><div class="num">{{ resumen.notas_actualizadas }}</div><div class="label">Notas a actualizar</div></div>
+      <div class="resumen-card"><div class="num">{{ resumen.telefonos_actualizados }}</div><div class="label">Teléfonos a rellenar</div></div>
+    </div>
+
+    {% if resumen.sin_match %}
+    <div class="sin-match-list">
+      ⚠️ {{ resumen.sin_match|length }} nombre(s) del Excel no se encontraron entre los matriculados de esta clase:
+      <ul>
+        {% for nombre in resumen.sin_match %}<li>{{ nombre }}</li>{% endfor %}
+      </ul>
+      Revisa la ortografía o si el estudiante está matriculado en otra clase antes de confirmar.
+    </div>
+    {% endif %}
+
+    <form method="post" style="margin-top:16px;">
+      {% csrf_token %}
+      <textarea name="parsed_json" style="display:none">{{ parsed_json }}</textarea>
+      <input type="hidden" name="confirmar" value="1">
+      <button type="submit" class="btn-success-custom"
+              onclick="return confirm('¿Confirmar e importar estas calificaciones a la base de datos?')">
+        ✅ Confirmar e importar
+      </button>
+      <a href="{% url 'admin:classes_clase_importar_calificaciones' clase.pk %}" style="margin-left:10px;color:#6B7280;">Cancelar / subir otro archivo</a>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if confirmado %}
+  <div class="upload-box">
+    <h3 style="margin-top:0;">✅ Importación completada</h3>
+    <div class="resumen-grid">
+      <div class="resumen-card"><div class="num">{{ resumen.notas_creadas }}</div><div class="label">Notas creadas</div></div>
+      <div class="resumen-card"><div class="num">{{ resumen.notas_actualizadas }}</div><div class="label">Notas actualizadas</div></div>
+      <div class="resumen-card"><div class="num">{{ resumen.telefonos_actualizados }}</div><div class="label">Teléfonos rellenados</div></div>
+    </div>
+    <a href="{% url 'admin:classes_clase_importar_calificaciones' clase.pk %}" class="btn-primary-custom" style="text-decoration:none;display:inline-block;">Importar otro archivo</a>
+    <a href="{% url 'admin:classes_clase_changelist' %}" style="margin-left:10px;color:#6B7280;">Volver a Clases</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

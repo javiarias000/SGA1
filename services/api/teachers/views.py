@@ -68,6 +68,29 @@ def _teacher_clases_qs(teacher: Teacher):
     ).distinct()
 
 
+def _get_teacher_students(teacher: Teacher):
+    """Estudiantes del docente via Enrollment (modelo nuevo) + FK directo (modelo viejo)."""
+    tu = _teacher_usuario(teacher)
+    clases = _teacher_clases_qs(teacher)
+    ids_via_enrollment = Student.objects.filter(
+        usuario__enrollments_as_student__clase__in=clases,
+        usuario__enrollments_as_student__estado='ACTIVO',
+    ).values_list('id', flat=True).distinct()
+    ids_direct = teacher.students.values_list('id', flat=True)
+    all_ids = set(ids_via_enrollment) | set(ids_direct)
+    return Student.objects.filter(
+        id__in=all_ids, active=True
+    ).select_related('usuario', 'grade_level').order_by('usuario__nombre')
+
+
+def _get_teacher_subjects(teacher: Teacher):
+    """Materias del docente via Clases (modelo nuevo) + FK directo (modelo viejo)."""
+    clases = _teacher_clases_qs(teacher)
+    ids_via_clase = Subject.objects.filter(clases__in=clases).values_list('id', flat=True).distinct()
+    ids_direct = teacher.subjects.values_list('id', flat=True)
+    return Subject.objects.filter(id__in=set(ids_via_clase) | set(ids_direct)).distinct()
+
+
 def _coerce_subject(subject_value):
     """Acepta id o instancia; devuelve Subject o None."""
     if not subject_value:
@@ -224,23 +247,8 @@ def teacher_dashboard(request):
     # CONTEXTO DEL DASHBOARD
     # ==========================================
     
-    # Estudiantes activos (lógica mejorada)
-    teacher_usuario = teacher.usuario
-    
-    # Estudiantes directamente asignados al docente
-    directly_assigned_student_ids = teacher.students.filter(active=True).values_list('id', flat=True)
-    
-    # Estudiantes inscritos en clases impartidas por el docente
-    enrolled_student_ids = Student.objects.filter(
-        usuario__enrollments_as_student__docente=teacher_usuario,
-        usuario__enrollments_as_student__estado='ACTIVO',
-        active=True
-    ).values_list('id', flat=True)
-    
-    # Combinar IDs y obtener un queryset único de estudiantes
-    all_student_ids = set(list(directly_assigned_student_ids)) | set(list(enrolled_student_ids))
-    estudiantes = Student.objects.filter(id__in=all_student_ids).select_related('usuario').order_by('usuario__nombre')
-    
+    # Estudiantes via Enrollment (modelo nuevo) + FK directo (modelo viejo)
+    estudiantes = _get_teacher_students(teacher)
     total_students = estudiantes.count()
     
     # Actividades y clases (corregido para usar la lista de estudiantes correcta)
@@ -262,7 +270,7 @@ def teacher_dashboard(request):
     tipos_aportes = TipoAporte.objects.filter(activo=True).order_by('orden')
     
     # Materias disponibles (dinámicas)
-    materias = teacher.subjects.all()
+    materias = _get_teacher_subjects(teacher)
     
     # Calificaciones recientes (corregido)
     calificaciones_recientes = CalificacionParcial.objects.filter(
@@ -830,8 +838,8 @@ def estudiantes_view(request):
     search = request.GET.get('search', '')
     grade_filter = request.GET.get('grade_level', '')
     
-    students = teacher.students.filter(active=True)
-    
+    students = _get_teacher_students(teacher)
+
     # Opciones dinámicas de grados
     grade_choices = list(students.values_list('grade_level__level', flat=True).distinct())
     
@@ -865,7 +873,7 @@ def student_detail_view(request, student_id):
     grades = student.grades.all().order_by('-date')
     
     subjects_stats = {}
-    for subject in teacher.subjects.all():
+    for subject in _get_teacher_subjects(teacher):
         count = activities.filter(subject=subject).count()
         if count > 0:
             subjects_stats[subject.name] = count
@@ -1066,7 +1074,7 @@ def registro_view(request):
     
     return render(request, 'teachers/registro.html', {
         'form': form,
-        'students': teacher.students.filter(active=True)
+        'students': _get_teacher_students(teacher)
     })
 
 
@@ -1135,7 +1143,7 @@ def informes_view(request):
     
     return render(request, 'teachers/informes.html', {
         'activities': activities,
-        'students': teacher.students.filter(active=True),
+        'students': _get_teacher_students(teacher),
         'selected_student': student_id,
         'selected_subject': subject,
         'date_from': date_from,
@@ -1251,14 +1259,17 @@ def calificaciones_detalladas_view(request):
     parcial = request.GET.get('parcial', '1P')
     
     # Obtener estudiantes y tipos de aportes
-    estudiantes = teacher.students.filter(active=True).order_by('usuario__nombre')
+    estudiantes = _get_teacher_students(teacher)
     from classes.models import TipoAporte, CalificacionParcial
     tipos_aportes = TipoAporte.objects.filter(activo=True)
-    
+
     # Filtrar estudiantes si es necesario
     if student_id:
         estudiantes = estudiantes.filter(id=student_id)
-    
+
+    subjects_qs = _get_teacher_subjects(teacher)
+    default_subject = subjects_qs.first()
+
     # Preparar datos para la tabla
     datos_tabla = []
     for estudiante in estudiantes:
@@ -1267,45 +1278,41 @@ def calificaciones_detalladas_view(request):
             'aportes': {},
             'promedio': 0
         }
-        
+
         # Obtener calificaciones de cada aporte
         for tipo in tipos_aportes:
-            subjects_list = teacher.subjects.all()
-            default_subject = subjects_list.first() if subjects_list else subject
             calif = CalificacionParcial.objects.filter(
                 student=estudiante,
                 subject=subject or default_subject,
                 parcial=parcial,
                 tipo_aporte=tipo
             ).first()
-            
+
             fila['aportes'][tipo.codigo] = calif.calificacion if calif else 0
-        
+
         # Calcular promedio
-        subjects_list = teacher.subjects.all()
-        default_subject = subjects_list.first() if subjects_list else subject
         fila['promedio'] = CalificacionParcial.calcular_promedio_parcial(
-            estudiante, 
-            subject or default_subject, 
+            estudiante,
+            subject or default_subject,
             parcial
         )
-        
+
         datos_tabla.append(fila)
-    
+
     # Estadísticas
     total_estudiantes = len(datos_tabla)
     aprobados = sum(1 for d in datos_tabla if d['promedio'] >= 7)
     en_riesgo = sum(1 for d in datos_tabla if 4 <= d['promedio'] < 7)
     reprobados = sum(1 for d in datos_tabla if d['promedio'] < 4)
     promedio_general = sum(d['promedio'] for d in datos_tabla) / total_estudiantes if total_estudiantes > 0 else 0
-    
+
     context = {
         'datos_tabla': datos_tabla,
         'tipos_aportes': tipos_aportes,
         'parcial_actual': parcial,
         'subject_actual': subject,
         'estudiantes_lista': estudiantes,
-        'materias': teacher.subjects.all(),
+        'materias': subjects_qs,
         'estadisticas': {
             'total': total_estudiantes,
             'aprobados': aprobados,
@@ -1530,10 +1537,10 @@ def get_student_subjects(request):
         return JsonResponse({'subjects': []})
     
     try:
-        student = Student.objects.get(id=student_id, teacher=teacher)
+        student = _get_teacher_students(teacher).get(id=student_id)
         subjects = []
-        
-        for subject in teacher.subjects.all():
+
+        for subject in _get_teacher_subjects(teacher):
             if student.can_take_subject(subject):
                 class_count = student.get_class_count(subject)
                 subjects.append({
@@ -1541,7 +1548,7 @@ def get_student_subjects(request):
                     'name': subject.name,
                     'class_count': class_count
                 })
-        
+
         return JsonResponse({'subjects': subjects})
     except Student.DoesNotExist:
         return JsonResponse({'subjects': []})
@@ -1555,7 +1562,7 @@ def get_student_subjects(request):
 @teacher_required
 def api_estadisticas(request):
     teacher = request.user.teacher_profile
-    estudiantes = teacher.students.filter(active=True)
+    estudiantes = _get_teacher_students(teacher)
     datos = []
     for est in estudiantes:
         datos.append({
